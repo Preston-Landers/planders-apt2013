@@ -1,0 +1,13 @@
+diff --git a/lab1_git/HelloWorld/src/HelloWorld.java b/lab1_git/HelloWorld/src/HelloWorld.java
+index b316ea1..17e0676 100644
+--- a/lab1_git/HelloWorld/src/HelloWorld.java
++++ b/lab1_git/HelloWorld/src/HelloWorld.java
+@@ -1,7 +1,7 @@
+ 
+ public class HelloWorld {
+ 	public static void main( String [] args){
+-		System.out.println("Hello World!");
++		System.out.println("Bonjour, monde!");
+ 	}
+ 
+ }
