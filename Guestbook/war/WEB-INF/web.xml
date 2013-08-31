@@ -27,8 +27,8 @@
   <!-- Default page to serve -->
   <welcome-file-list>
     <!-- <welcome-file>Guestbook.html</welcome-file>  -->
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>guestbook</welcome-file>
+    <!-- <welcome-file>index.html</welcome-file> -->
+    <welcome-file>guestbook.jsp</welcome-file>
   </welcome-file-list>
 
 </web-app>
