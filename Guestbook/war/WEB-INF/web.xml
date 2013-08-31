@@ -24,6 +24,15 @@
     <url-pattern>/guestbook/greet</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>sign</servlet-name>
+    <servlet-class>guestbook.SignGuestbookServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>sign</servlet-name>
+    <url-pattern>/sign</url-pattern>
+  </servlet-mapping>
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <!-- <welcome-file>Guestbook.html</welcome-file>  -->
