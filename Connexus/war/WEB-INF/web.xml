@@ -26,7 +26,7 @@
 
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>Connexus.html</welcome-file>
+    <welcome-file>manage.jsp</welcome-file>
   </welcome-file-list>
 
   <listener>

@@ -1,3 +1,5 @@
+<!--  this is the main application layout -->
+
 <%@ tag description="Connexus Page template" language="java"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>

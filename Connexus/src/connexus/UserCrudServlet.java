@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import connexus.status.*;
+
 public class UserCrudServlet extends HttpServlet {
 
 	/**
@@ -30,9 +32,11 @@ public class UserCrudServlet extends HttpServlet {
 		User user = userService.getCurrentUser();
 		
 		HttpSession session = req.getSession(true);
-		String msg = "This is your POST msg.";
-		session.setAttribute("statusMessage", msg);
-		System.err.println(msg);
+		
+		StatusMessage msg = new StatusMessage(StatusMessageType.STATUS, "This is your POST status msg.");
+		StatusMessage err = new StatusMessage(StatusMessageType.ERROR, "This is your POST error msg.");
+		StatusHandler.addStatus(session, msg);
+		StatusHandler.addStatus(session, err);
 		
 		
 		// We have one entity group per Guestbook with all Greetings residing
