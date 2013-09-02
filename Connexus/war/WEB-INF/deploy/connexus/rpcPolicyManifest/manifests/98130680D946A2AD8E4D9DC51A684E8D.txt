@@ -1,0 +1,2 @@
+serviceClass: connexus.client.GreetingService
+path: 32EA5AEF5B898CD067BD118F70FB91CD.gwt.rpc
