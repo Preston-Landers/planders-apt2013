@@ -25,6 +25,7 @@
 		<t:menu></t:menu> 		
 	</div>
 	<div id="pageBody">
+		<t:status></t:status>
 		<jsp:doBody />
 	</div>
 	<div id="pageFooter">&copy; 2013 APT Industries, Inc.</div>

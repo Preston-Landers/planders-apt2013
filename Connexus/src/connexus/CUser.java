@@ -8,10 +8,9 @@ import com.googlecode.objectify.annotation.Id;
 @Entity
 
 public class CUser implements Comparable<CUser> {
-	@Id
-	Long id;
-	String realName; // full name
+	@Id Long id;
 	String userName; // Displayed username
+	String realName; // full name
 	User guser;      // google account
 	String content;
 	Date creationDate;

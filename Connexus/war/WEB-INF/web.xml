@@ -15,6 +15,15 @@
     <url-pattern>/connexus/greet</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>usercrud</servlet-name>
+    <servlet-class>connexus.UserCrudServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>usercrud</servlet-name>
+    <url-pattern>/usercrud</url-pattern>
+  </servlet-mapping>
+
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>Connexus.html</welcome-file>
