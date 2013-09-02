@@ -20,6 +20,9 @@
     <welcome-file>Connexus.html</welcome-file>
   </welcome-file-list>
 
+  <listener>
+    <listener-class>connexus.ConnexusServletContextListener</listener-class>
+  </listener>
 
   <filter>
     <filter-name>ObjectifyFilter</filter-name>

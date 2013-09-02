@@ -1,4 +1,8 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" language="java"%>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Collections"%>
 <%@ page import="com.google.appengine.api.users.User"%>
@@ -8,31 +12,26 @@
 <%@ page import="com.googlecode.objectify.ObjectifyService"%>
 <%@ page import="connexus.CUser"%>
 <%@ page import="connexus.Utils"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<%!
-	String productName = Utils.productName;
+<%
+	UserService userService = UserServiceFactory.getUserService();
+	User user = userService.getCurrentUser();
 %>
 
-<html>
-<head>
-<title><%=productName%></title>
-</head>
-<body>
+<t:connexus>
+	<jsp:body>
 	<%
-		String guestbookName = request.getParameter("guestbookName");
-		if (guestbookName == null) {
-			guestbookName = "default";
-		}
-		pageContext.setAttribute("guestbookName", guestbookName);
 		UserService userService = UserServiceFactory.getUserService();
-		User user = userService.getCurrentUser();
-		if (user != null) {
-			pageContext.setAttribute("user", user);
+			User user = userService.getCurrentUser();
+			if (user != null) {
+				pageContext.setAttribute("user", user);
+				// TODO: User is logged in - forward to manage page
 	%>
 	<p>
-		Hello, ${fn:escapeXml(user.nickname)}! You are already logged in. (You can <a
-			href="<%=userService.createLogoutURL(request.getRequestURI())%>">sign
+		Hello, ${fn:escapeXml(user.nickname)}! You are already logged in. (You
+		can <a
+				href="<%=userService.createLogoutURL(request
+							.getRequestURI())%>">sign
 			out</a>.)
 	</p>
 	<%
@@ -40,15 +39,17 @@
 	%>
 	<p>
 		Hello! <a
-			href="<%=userService.createLoginURL(request.getRequestURI())%>">Sign
+				href="<%=userService.createLoginURL(request
+							.getRequestURI())%>">Sign
 			in</a> to include your name with greetings you post.
 	</p>
 	<%
 		}
 	%>
-	<%
-		ObjectifyService.register(CUser.class);
-	%>
+	
+	</jsp:body>
+</t:connexus>
 
-</body>
-</html>
+<%
+	ObjectifyService.register(CUser.class);
+%>
