@@ -10,8 +10,10 @@
 		<c:forEach var="statusMessage"
 			items="${func:getAndClearAppStatus(pageContext.session)}">
 			<div
-				class="${statusMessage.type == 'ERROR' ? 'statusError' : 'statusOK' }">
-				${statusMessage.message}</div>
+				class="alert ${statusMessage.type == 'ERROR' ? 'alert-danger' : 'alert-success' } alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				${statusMessage.message}
+			</div>
 		</c:forEach>
 	</div>
 </c:if>

@@ -38,8 +38,7 @@ body {
 }
 
 #statusArea {
-	border: 1px solid black;
-	margin: 1em;
+	margin: 0.5em;
 }
 
 .statusError {
