@@ -27,7 +27,9 @@
 		<t:status></t:status>
 		<jsp:doBody />
 	</div>
-	<div id="pageFooter">&copy; 2013 The Human Fund&trade; <i>Money... for people.</i></div>
+	<div id="pageFooter">
+	 <div style="float: right;">&copy; 2013 The Human Fund&trade; <i>Money... for people.</i></div>
+	</div>
 
 <script src="js/jquery-1.10.2.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
