@@ -1,7 +1,7 @@
 body {
 	margin: 0px;
 	font-family: Georgia, serif;
-	background-color: #E5F5E0;
+	background-color: #F2FAEF;
 	color: #1E3E14;
 }
 
@@ -41,12 +41,9 @@ body {
 	margin: 0.5em;
 }
 
-.statusError {
-	
-}
-
-.statusOK {
-	
+.alert {
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 nav ul {

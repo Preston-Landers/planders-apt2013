@@ -33,10 +33,12 @@ public class UserCrudServlet extends HttpServlet {
 		
 		HttpSession session = req.getSession(true);
 		
-		StatusMessage msg = new StatusMessage(StatusMessageType.STATUS, "This is your POST status msg.");
-		StatusMessage err = new StatusMessage(StatusMessageType.ERROR, "This is your POST error msg.");
-		StatusHandler.addStatus(session, msg);
-		StatusHandler.addStatus(session, err);
+
+		// Test some status messages.
+		StatusHandler.addStatus(session, new StatusMessage(StatusMessageType.INFO, "This is your informational msg."));
+		StatusHandler.addStatus(session, new StatusMessage(StatusMessageType.WARNING, "This is your warning msg."));
+		StatusHandler.addStatus(session, new StatusMessage(StatusMessageType.ERROR, "This is your error msg."));
+		StatusHandler.addStatus(session, new StatusMessage(StatusMessageType.SUCCESS, "This is your success msg."));
 		
 		
 		// We have one entity group per Guestbook with all Greetings residing
