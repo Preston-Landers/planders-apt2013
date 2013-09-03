@@ -2,7 +2,8 @@
 
 <t:connexus>
 	<jsp:body>
-	Hello, world! This is the admin page.
+	${productName}
+	Administration
 	<t:usercrud></t:usercrud>
 	</jsp:body>
 </t:connexus>
