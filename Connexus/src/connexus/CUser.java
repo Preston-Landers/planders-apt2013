@@ -9,7 +9,7 @@ import com.googlecode.objectify.annotation.Id;
 
 public class CUser implements Comparable<CUser> {
 	@Id Long id;
-	String userName; // Displayed username
+	String accountName; // Displayed username
 	String realName; // full name
 	User guser;      // google account
 	String content;
@@ -18,11 +18,60 @@ public class CUser implements Comparable<CUser> {
 	private CUser() {
 	}
 
-	public CUser(User gUser, String content) {
-		this.guser = gUser;
-		this.content = content;
-		creationDate = new Date();
+	public CUser(String accountName, String realName) {
+		this.accountName = accountName;
+		this.realName = realName;
+		this.creationDate = new Date();
 	}
+	
+	public String toString() {
+		return "CUser " + accountName + " " + realName;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public User getGuser() {
+		return guser;
+	}
+
+	public void setGuser(User guser) {
+		this.guser = guser;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 
 	public User getGUser() {
 		return guser;

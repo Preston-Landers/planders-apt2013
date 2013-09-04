@@ -8,7 +8,7 @@
 		<li class="menu-item"><A HREF="/search.jsp">Search</A></li>
 		<li class="menu-item"><A HREF="/trending.jsp">Trending</A></li>
 		<li class="menu-item"><A HREF="/social.jsp">Social</A></li>
-		<li class="menu-item"><A HREF="/admin.jsp">Admin</A></li>
+		<li class="menu-item"><A HREF="/admin">Admin</A></li>
 		<li class="menu-item"><A HREF="/login.jsp">Login</A></li>
 	</ul>
 </nav>

@@ -2,8 +2,7 @@
 
 <t:connexus>
 	<jsp:body>
-	${productName}
-	Administration
+	<h3>${productName} Administration</h3>
 	<t:usercrud></t:usercrud>
 	</jsp:body>
 </t:connexus>
