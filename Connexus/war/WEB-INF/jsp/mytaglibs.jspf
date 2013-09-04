@@ -1,12 +1,9 @@
-<!--  Standard JSP tags to be included in every app page -->
-
-<!--  JSTL (not all included...) -->
+<%--  Standard JSP tags to be included in every app page --%>
+<%--  JSTL (not all included...) --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
-<!-- custom tags in WEB-INF/tags -->
+<%-- custom tags in WEB-INF/tags --%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-
-<!-- custom EL functions defined in WEB-INF/tlds -->
+<%-- custom EL functions defined in WEB-INF/tlds --%>
 <%@ taglib prefix="func" uri="/WEB-INF/tlds/functions.tld" %>

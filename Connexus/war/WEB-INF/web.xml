@@ -16,17 +16,71 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>usercrud</servlet-name>
-    <servlet-class>connexus.UserCrudServlet</servlet-class>
+    <servlet-name>manage</servlet-name>
+    <servlet-class>connexus.servlet.Manage</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>usercrud</servlet-name>
+    <servlet-name>manage</servlet-name>
+    <url-pattern>/manage</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>create</servlet-name>
+    <servlet-class>connexus.servlet.Create</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>create</servlet-name>
+    <url-pattern>/create</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>view</servlet-name>
+    <servlet-class>connexus.servlet.View</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>view</servlet-name>
+    <url-pattern>/view</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>search</servlet-name>
+    <servlet-class>connexus.servlet.Search</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>search</servlet-name>
+    <url-pattern>/search</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>trending</servlet-name>
+    <servlet-class>connexus.servlet.Trending</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>trending</servlet-name>
+    <url-pattern>/trending</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>social</servlet-name>
+    <servlet-class>connexus.servlet.Social</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>social</servlet-name>
+    <url-pattern>/social</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>admin</servlet-name>
+    <servlet-class>connexus.servlet.Admin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>admin</servlet-name>
     <url-pattern>/admin</url-pattern>
   </servlet-mapping>
 
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>manage.jsp</welcome-file>
+    <welcome-file>manage</welcome-file>
   </welcome-file-list>
 
   <listener>

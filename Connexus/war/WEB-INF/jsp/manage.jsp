@@ -2,7 +2,7 @@
 
 <t:connexus>
 	<jsp:body>
-	Hello, world! This is the manage page.
+	<h3>This is the manage page.</h3>
 	<t:streams user="asdf"></t:streams>
 	</jsp:body>
 </t:connexus>

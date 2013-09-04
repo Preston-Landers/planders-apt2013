@@ -1,4 +1,4 @@
-package connexus;
+package connexus.servlet;
 
 //import com.google.appengine.api.datastore.DatastoreService;
 //import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -23,12 +23,14 @@ import javax.servlet.http.HttpSession;
 import connexus.status.*;
 import connexus.CUser;
 
-public class UserCrudServlet extends HttpServlet {
+public class Admin extends HttpServlet {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6204953200057490592L;
+	public static final String uri = "/admin";
+	public static final String dispatcher = "/WEB-INF/jsp/admin.jsp";
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
@@ -42,7 +44,7 @@ public class UserCrudServlet extends HttpServlet {
 		// throw new ServletException("Retrieving products failed!", e);
 		
 		// Forward to JSP page to display them in a HTML table.
-		req.getRequestDispatcher("/WEB-INF/jsp/admin.jsp").forward(req, resp); 
+		req.getRequestDispatcher(dispatcher).forward(req, resp); 
 	}
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -55,7 +57,7 @@ public class UserCrudServlet extends HttpServlet {
 		}
 
 
-		resp.sendRedirect("/admin.jsp");
+		resp.sendRedirect(uri);
 	}
 	
 	private void createUser(HttpServletRequest req, HttpServletResponse resp) {

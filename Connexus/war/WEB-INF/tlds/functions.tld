@@ -20,10 +20,4 @@
         <function-signature>java.util.List getAppStatus(javax.servlet.http.HttpSession)</function-signature>
     </function>
     
-    <function>
-      <name>ofy</name>
-      <function-class>connexus.OfyService</function-class>
-      <function-signature>com.googlecode.objectify.Objectify ofy()</function-signature>
-    </function>
-    
 </taglib>

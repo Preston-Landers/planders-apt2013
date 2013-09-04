@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<!--  this is the main application layout -->
-
+<%--  this is the main application layout --%>
 <%@ tag description="Connexus Page template" language="java"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
@@ -20,19 +19,24 @@
 
 </head>
 <body>
-	<div id="pageHeader">
-		<div id="pageLogo">${productName}</div>
-		<!-- replace with logo? -->
+	<div id="mainContent">
+		<div class="container">
+<%-- 			<div id="pageLogo">${productName}</div> --%>
+			<!-- replace with logo? -->
+	
+			<t:menu></t:menu>
+	
+			<t:status></t:status>
 
-		<t:menu></t:menu>
+			<jsp:doBody />
+	
+		</div>
 	</div>
-	<div id="pageBody">
-		<t:status></t:status>
-		<jsp:doBody />
-	</div>
-	<div id="pageFooter">
-		<div style="float: right;">
-			&copy; 2013 The Human Fund&trade; <i>Money... for people.</i>
+	<div id="mainFooter">
+		<div class="container">
+			<div style="float: right;">
+			<p class="text-muted credit">&copy; 2013 The Human Fund&trade; <i>Money... for people.</i></p>
+			</div>		
 		</div>
 	</div>
 
