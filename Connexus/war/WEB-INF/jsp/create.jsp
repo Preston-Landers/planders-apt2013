@@ -2,7 +2,6 @@
 
 <t:connexus>
 	<jsp:body>
-	<h3>This is the create page.</h3>
-	<t:streams user="asdf"></t:streams>
+	<t:createStream></t:createStream>
 	</jsp:body>
 </t:connexus>

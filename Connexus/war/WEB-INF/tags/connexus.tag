@@ -15,14 +15,13 @@
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
 
-<link type="text/css" rel="stylesheet" href="Connexus.css">
+<link type="text/css" rel="stylesheet" href="css/Connexus.css">
 
 </head>
 <body>
 	<div id="mainContent">
 		<div class="container">
 <%-- 			<div id="pageLogo">${productName}</div> --%>
-			<!-- replace with logo? -->
 	
 			<t:menu></t:menu>
 	
@@ -40,7 +39,7 @@
 		</div>
 	</div>
 
-	<script src="js/jquery-1.10.2.js"></script>
+	<script src="js/jquery-1.10.2.min.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 
 </body>
