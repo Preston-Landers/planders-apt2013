@@ -3,9 +3,9 @@
 <%@ tag description="Connexus Page template" language="java"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<%@ tag import="connexus.Utils"%>
+<%@ tag import="connexus.Config"%>
 <%
-	request.setAttribute("productName", Utils.productName);
+	request.setAttribute("productName", Config.productName);
 %>
 
 <html lang="en">
@@ -35,7 +35,7 @@
 	<div id="mainFooter">
 		<div class="container">
 			<div style="float: right;">
-			<p class="text-muted credit">&copy; 2013 The Human Fund&trade; <i>Money... for people.</i></p>
+			<p class="text-muted credit">&copy; 2013 The Human Fund&trade; <em>Money... for people.</em></p>
 			</div>		
 		</div>
 	</div>

@@ -10,8 +10,8 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
 <%@ page import="com.googlecode.objectify.Objectify"%>
 <%@ page import="com.googlecode.objectify.ObjectifyService"%>
-<%@ page import="connexus.CUser"%>
-<%@ page import="connexus.Utils"%>
+<%@ page import="connexus.model.CUser"%>
+<%@ page import="connexus.Config"%>
 
 <%
 	UserService userService = UserServiceFactory.getUserService();

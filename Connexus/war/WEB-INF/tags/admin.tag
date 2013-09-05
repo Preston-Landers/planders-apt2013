@@ -8,6 +8,7 @@
 	<jsp:include page="/WEB-INF/jsp/userlist.jsp" />
 </div>
 
+<c:if test="${ editItem == null }">
 <div id="userCrud" class="panel panel-default">
 	<div class="panel-heading">Create User</div>
 	<div class="panel-body">
@@ -19,8 +20,9 @@
 				<label for="realName">And your name:</label> <input name="realName"
 					type="text" autofocus placeholder="Real Name"> 
 					
-				<button class="btn btn-primary btn-sm" type="submit" name="create">Create New User</button>
+				<button class="btn btn-primary btn-xs" type="submit" name="create">Create New User</button>
 			</fieldset>
 		</form>
 	</div>
 </div>
+</c:if>

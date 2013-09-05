@@ -1,24 +1,32 @@
-package connexus;
+package connexus.model;
 
 import java.util.Date;
+
 import com.google.appengine.api.users.User;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Parent;
 
 @Entity
 
 public class CUser implements Comparable<CUser> {
 	@Id Long id;
+	@Parent Key<Site> site;
 	String accountName; // Displayed username
-	String realName; // full name
+	@Index String realName; // full name
 	User guser;      // google account
 	String content;
 	Date creationDate;
 
+	@SuppressWarnings("unused")
 	private CUser() {
 	}
 
-	public CUser(String accountName, String realName) {
+	public CUser(Long id, Key<Site> site, String accountName, String realName) {
+		this.id = id;
+		this.site = site;
 		this.accountName = accountName;
 		this.realName = realName;
 		this.creationDate = new Date();
