@@ -7,14 +7,10 @@ package connexus.servlet;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import connexus.status.*;
-
-public class Search extends HttpServlet {
+public class Search extends ConnexusServletBase {
 
 	/**
 	 * 
@@ -26,6 +22,7 @@ public class Search extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
+		InitializeContext(req, resp); // Base site context initialization
 		
 //		List<CUser> allUsersList = ofy().load().type(CUser.class).list();
 //		for (CUser userRec : allUsersList) {
@@ -41,12 +38,8 @@ public class Search extends HttpServlet {
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		// UserService userService = UserServiceFactory.getUserService();
-		// User user = userService.getCurrentUser();
-		HttpSession session = req.getSession(true);
-		StatusHandler.addStatus(session, new StatusMessage(
-				StatusMessageType.INFO, "TODO: Not implemented yet."));
-
+		InitializeContext(req, resp); // Base site context initialization
+		alertInfo(req, "TODO: Not implemented yet.");
 		resp.sendRedirect(uri);
 	}
 }

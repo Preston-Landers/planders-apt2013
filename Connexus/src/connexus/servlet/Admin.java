@@ -1,17 +1,5 @@
 package connexus.servlet;
 
-//import com.google.appengine.api.datastore.DatastoreService;
-//import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-//import com.google.appengine.api.users.User;
-//import com.google.appengine.api.users.UserService;
-//import com.google.appengine.api.users.UserServiceFactory;
-
-
-import com.googlecode.objectify.Ref;
-
 import static connexus.OfyService.ofy;
 
 import java.io.IOException;
@@ -23,10 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import connexus.Config;
 import connexus.model.CUser;
-import connexus.model.Site;
-import connexus.status.*;
 
 public class Admin extends ConnexusServletBase {
 
@@ -34,12 +19,10 @@ public class Admin extends ConnexusServletBase {
 	public static final String uri = "/admin";
 	public static final String dispatcher = "/WEB-INF/jsp/admin.jsp";
 	
-	private Ref<Site> site; 
-	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
-		site = ofy().load().type(Site.class).id(Config.siteId);
+		InitializeContext(req, resp); // Base site context initialization
 		
 		if (req.getParameter("edit") != null) {
 			doShowEditScreen(req, resp);
@@ -60,15 +43,8 @@ public class Admin extends ConnexusServletBase {
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		// UserService userService = UserServiceFactory.getUserService();
-		// User user = userService.getCurrentUser();
-
-        site = ofy().load().type(Site.class).id(Config.siteId);
-        if (site == null) {
-        	// let's be as cryptic as possible...
-        	alertError(req, "An unfortunate occurence has occured.");
-        	return;
-        }
+		
+		InitializeContext(req, resp); // Base site context initialization
 
 		if (req.getParameter("create") != null) {
 			createUser(req, resp);

@@ -30,7 +30,7 @@
 		<!--     </form> -->
 		<ul class="nav navbar-nav navbar-right">
 			<t:menuTab label="Admin" triggerURIEnd="/admin.jsp" target="/admin"></t:menuTab>
-			<t:menuTab label="Login" triggerURIEnd="/login.jsp" target="/login"></t:menuTab>
+			<t:menuLoginTab></t:menuLoginTab>
 		</ul>
 	</div>
 	<!-- /.navbar-collapse -->

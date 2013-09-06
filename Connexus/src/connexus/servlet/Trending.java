@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import connexus.status.*;
 
-public class Trending extends HttpServlet {
+public class Trending extends ConnexusServletBase {
 
 	/**
 	 * 
@@ -26,7 +26,8 @@ public class Trending extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		
+		InitializeContext(req, resp); // Base site context initialization
+
 //		List<CUser> allUsersList = ofy().load().type(CUser.class).list();
 //		for (CUser userRec : allUsersList) {
 //			System.err.println("USER REC: " + userRec.toString());
@@ -41,12 +42,8 @@ public class Trending extends HttpServlet {
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		// UserService userService = UserServiceFactory.getUserService();
-		// User user = userService.getCurrentUser();
-		HttpSession session = req.getSession(true);
-		StatusHandler.addStatus(session, new StatusMessage(
-				StatusMessageType.INFO, "TODO: Not implemented yet."));
-
+		InitializeContext(req, resp); // Base site context initialization
+		alertInfo(req, "TODO: Not implemented yet.");
 		resp.sendRedirect(uri);
 	}
 }

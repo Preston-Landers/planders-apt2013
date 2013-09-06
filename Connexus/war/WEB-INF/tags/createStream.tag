@@ -14,7 +14,7 @@
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
-							<input type="text" class="form-control" id="createStreamName"
+							<input autofocus type="text" class="form-control" id="createStreamName"
 								name="name" placeholder="Give your stream a name">
 							<label for="createStreamName">Name your stream</label>						
 						</div>

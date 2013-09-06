@@ -16,7 +16,7 @@ public class CUser implements Comparable<CUser> {
 	@Parent Key<Site> site;
 	String accountName; // Displayed username
 	@Index String realName; // full name
-	User guser;      // google account
+	@Index User guser;      // google account
 	String content;
 	Date creationDate;
 

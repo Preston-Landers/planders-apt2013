@@ -1,6 +1,6 @@
 package connexus;
 
-import static connexus.OfyService.ofy;
+//import static connexus.OfyService.ofy;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
