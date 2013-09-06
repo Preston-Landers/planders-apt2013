@@ -27,6 +27,10 @@ public class Subscription implements Comparable<Subscription> {
 		creationDate = new Date();
 	}
 	
+	public Key<Subscription> getKey() {
+		return Key.create(owner, Subscription.class, id);
+	}
+
 	public String toString() {
 		return "Subscription " + id + " " + owner + " " +  stream;
 	}

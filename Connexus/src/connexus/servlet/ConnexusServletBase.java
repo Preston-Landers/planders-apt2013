@@ -21,6 +21,7 @@ import connexus.status.*;
 public abstract class ConnexusServletBase extends HttpServlet {
 	
 	protected User guser;
+	protected CUser cuser;
 	protected Ref<Site> site; 
 	
 	protected void InitializeContext (HttpServletRequest req, HttpServletResponse resp) {
@@ -39,7 +40,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
         
         // Automatically create a CUser for any Google Users we recognize
         if (guser != null) {
-			CUser cuser = ofy().load().type(CUser.class).ancestor(site)
+			cuser = ofy().load().type(CUser.class).ancestor(site)
 					.filter("guser", guser).first().get();
 			if (cuser == null) {
 				createUser(req, resp);

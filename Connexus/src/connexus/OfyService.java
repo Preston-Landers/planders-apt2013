@@ -6,14 +6,16 @@ import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 
-import connexus.model.CUser;
-import connexus.model.Site;
+import connexus.model.*;
 
 public class OfyService {
     static {
     	// Perform entity registrations here
     	factory().register(Site.class);
         factory().register(CUser.class);
+        factory().register(Media.class);
+        factory().register(Stream.class);
+        factory().register(Subscription.class);
         
         // Ensure that our logical site entity exists.
         // Ancestor entity for searching all root-less objects.

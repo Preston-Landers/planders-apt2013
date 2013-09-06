@@ -4,11 +4,19 @@ package connexus.servlet;
 //import java.util.List;
 //import connexus.CUser;
 
+import static connexus.OfyService.ofy;
+import connexus.model.Stream;
+
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.common.base.CharMatcher;
+import com.googlecode.objectify.Key;
 
 public class Create extends ConnexusServletBase {
 
@@ -33,6 +41,11 @@ public class Create extends ConnexusServletBase {
 
 		// throw new ServletException("Retrieving products failed!", e);
 		
+		// Force user to login screen before showing create
+		if (guser == null) {
+			resp.sendRedirect((String) req.getAttribute("loginURL"));
+		}
+		
 		// Forward to JSP page to display them in a HTML table.
 		req.getRequestDispatcher(dispatcher).forward(req, resp); 
 	}
@@ -40,9 +53,28 @@ public class Create extends ConnexusServletBase {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		InitializeContext(req, resp); // Base site context initialization
-		
-		alertInfo(req, "TODO: Not implemented yet.");
 
+		String streamName = req.getParameter("name");
+		String subscribersStr = req.getParameter("subscribers");
+		String subscribersNote = req.getParameter("subscribersNote");
+		String tags = req.getParameter("tags");
+		String coverURL = req.getParameter("cover");
+		
+		// TODO: more validation...
+		CharMatcher matcher = CharMatcher.is(' ');
+		streamName = matcher.trimFrom(streamName);
+
+		
+		List<String> tagsList = Arrays.asList(tags.split("\\s*,\\s*")); 
+				
+		Stream stream = new Stream(null, cuser.getKey(), streamName);
+		stream.setCoverURL(coverURL);
+		stream.setTags(tagsList);
+		
+		ofy().save().entities(stream).now();
+		
+		alertSuccess(req, "Created a stream named " + streamName);
+		
 		resp.sendRedirect(uri);
 	}
 }

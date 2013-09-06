@@ -4,10 +4,7 @@ import java.util.Date;
 
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.annotation.*;
 
 @Entity
 
@@ -30,6 +27,10 @@ public class CUser implements Comparable<CUser> {
 		this.accountName = accountName;
 		this.realName = realName;
 		this.creationDate = new Date();
+	}
+	
+	public Key<CUser> getKey() {
+		return Key.create(site, CUser.class, id);
 	}
 	
 	public String toString() {

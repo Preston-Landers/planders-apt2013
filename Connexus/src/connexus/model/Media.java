@@ -18,7 +18,7 @@ public class Media implements Comparable<Media> {
 	String mimeType;
 	Date creationDate; 
 	Key<CUser> uploader; // in theory, could upload to other users streams?
-	Long views;
+	@Index Long views;
 	byte[] blob; // the item itself
 
 	@SuppressWarnings("unused")
@@ -32,6 +32,10 @@ public class Media implements Comparable<Media> {
 		this.creationDate = new Date();
 	}
 	
+	public Key<Media> getKey() {
+		return Key.create(stream, Media.class, id);
+	}
+
 	public String toString() {
 		return "Media " + id + " : " + mimeType + " : " + fileName;
 	}

@@ -17,7 +17,7 @@ public class Stream implements Comparable<Stream> {
 	@Index String name; 
 	
 	String coverURL;
-	List<String> tags;
+	@Index List<String> tags;
 	Date creationDate;
 
 	@SuppressWarnings("unused")
@@ -31,6 +31,10 @@ public class Stream implements Comparable<Stream> {
 		this.creationDate = new Date();
 	}
 	
+	public Key<Stream> getKey() {
+		return Key.create(owner, Stream.class, id);
+	}
+
 	public String toString() {
 		return "Stream " + id + " : " + name;
 	}

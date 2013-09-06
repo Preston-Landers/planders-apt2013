@@ -2,6 +2,7 @@ package connexus.model;
 
 import java.util.Date;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
@@ -22,6 +23,10 @@ public class Site implements Comparable<Site> {
 		id = _id;
 		name = _name;
 		this.creationDate = new Date();
+	}
+
+	public Key<Site> getKey() {
+		return Key.create(Site.class, id);
 	}
 	
 	public String toString() {
