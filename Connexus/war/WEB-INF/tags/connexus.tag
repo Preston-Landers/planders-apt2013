@@ -25,9 +25,8 @@
 	
 			<t:menu></t:menu>
 	
-			<t:status></t:status>
-
 			<div class="container">
+				<t:status></t:status>
 				<jsp:doBody />
 			</div>
 		</div>

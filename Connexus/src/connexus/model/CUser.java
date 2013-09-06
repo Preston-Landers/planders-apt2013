@@ -1,5 +1,7 @@
 package connexus.model;
 
+import static connexus.OfyService.ofy;
+
 import java.util.Date;
 
 import com.google.appengine.api.users.User;
@@ -32,7 +34,7 @@ public class CUser implements Comparable<CUser> {
 	public Key<CUser> getKey() {
 		return Key.create(site, CUser.class, id);
 	}
-	
+		
 	public String toString() {
 		return "CUser " + accountName + " " + realName;
 	}

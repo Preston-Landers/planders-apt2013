@@ -10,10 +10,10 @@
 		<div class="panel-body">
 			<div class="container">
 				<c:choose>
-					<c:when test="${ not empty streamList }">
+					<c:when test="${ not empty myStreamList }">
 
 						<div class="row">
-							<div class="col-md-8">
+							<div class="col-md-10">
 								<TABLE class="table">
 									<thead>
 										<tr>
@@ -23,12 +23,12 @@
 											<TH>Delete</TH>
 										</tr>
 									</thead>
-									<c:forEach var='stream' items='${ streamList }'>
+									<c:forEach var='stream' items='${ myStreamList }'>
 										<TR>
 											<TD>${stream.name}</TD>
 											<TD>${stream.lastNewMedia}</TD>
 											<TD>${stream.numberOfMedia}</TD>
-											<TD><input type="checkbox" name="delete_${ stream.id }"></TD>
+											<TD><input type="checkbox" name="delete" value="${ stream.id }"></TD>
 										</TR>
 									</c:forEach>
 								</TABLE>
@@ -36,7 +36,7 @@
 						</div>
 						<div class="row">
 							<div class="col-md-6">
-								<button class="btn btn-primary" type="submit">
+								<button class="btn btn-primary" name="delete" type="submit">
 									<span class="glyphicon glyphicon-remove-circle"></span>&nbsp;
 									Delete Checked
 								</button>

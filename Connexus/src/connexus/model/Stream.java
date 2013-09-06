@@ -88,6 +88,14 @@ public class Stream implements Comparable<Stream> {
 		this.tags = tags;
 	}
 
+	public String getLastNewMedia() {
+		return "LAST NEW MEDIA";
+	}
+	
+	public String getNumberOfMedia() {
+		return "NUM OF ITEMS";
+	}
+	
 	@Override
 	public int compareTo(Stream other) {
 		if (creationDate.after(other.creationDate)) {

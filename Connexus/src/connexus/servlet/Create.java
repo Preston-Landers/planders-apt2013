@@ -64,6 +64,7 @@ public class Create extends ConnexusServletBase {
 		CharMatcher matcher = CharMatcher.is(' ');
 		streamName = matcher.trimFrom(streamName);
 
+		// TODO: deal with subscribers emails
 		
 		List<String> tagsList = Arrays.asList(tags.split("\\s*,\\s*")); 
 				
@@ -75,6 +76,6 @@ public class Create extends ConnexusServletBase {
 		
 		alertSuccess(req, "Created a stream named " + streamName);
 		
-		resp.sendRedirect(uri);
+		resp.sendRedirect(Manage.uri);
 	}
 }
