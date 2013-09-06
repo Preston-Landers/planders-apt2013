@@ -27,8 +27,9 @@
 	
 			<t:status></t:status>
 
-			<jsp:doBody />
-	
+			<div class="container">
+				<jsp:doBody />
+			</div>
 		</div>
 	</div>
 	<div id="mainFooter">

@@ -2,7 +2,7 @@
 
 <t:connexus>
 	<jsp:body>
-	Hello, world! This is the view page.
-	<t:streams user="asdf"></t:streams>
+	Jumbotron here
+	<t:uploadMedia stream="${ streamId }"></t:uploadMedia>
 	</jsp:body>
 </t:connexus>
