@@ -1,5 +1,7 @@
 package connexus.model;
 
+import static connexus.OfyService.ofy;
+
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +47,11 @@ public class Media implements Comparable<Media> {
 	public Key<Media> getKey() {
 		return Key.create(stream, Media.class, id);
 	}
+	
+	public static Media getById(Long objectId, Stream stream) {	
+		return ofy().load().type(Media.class).parent(stream).id(objectId).get();
+	}
+
 
 	public String toString() {
 		return "Media " + id + " : " + mimeType + " : " + fileName;

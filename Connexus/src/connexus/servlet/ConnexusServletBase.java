@@ -53,19 +53,22 @@ public abstract class ConnexusServletBase extends HttpServlet {
 			cuser = ofy().load().type(CUser.class).ancestor(site)
 					.filter("guser", guser).first().get();
 			if (cuser == null) {
-				createUser(req, resp);
+				cuser = createUser(req, resp);
+			}
+			if (cuser != null) {
+				req.setAttribute("cuser", cuser);
 			}
     	
         }
 	}
 	
-	private void createUser(HttpServletRequest req, HttpServletResponse resp) {
+	private CUser createUser(HttpServletRequest req, HttpServletResponse resp) {
 		String accountName = guser.getEmail(); 
 		String realName = guser.getNickname();
 		
 		if (accountName.length() == 0 || realName.length() == 0) {
 			alertError(req, "You must provide an account name and a real name.");
-			return;			
+			return null;			
 		}
 		
 		CUser thisUser = new CUser(null, site.getKey(), accountName, realName);
@@ -74,7 +77,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
 
 //		alertSuccess(req, "Created an account for " + realName + " : "
 //				+ accountName);
-		
+		return thisUser;
 	}
 	
 	private static final long serialVersionUID = 7414103509881465189L;

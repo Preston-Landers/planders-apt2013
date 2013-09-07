@@ -66,6 +66,8 @@ public class View extends ConnexusServletBase {
 
 		if (req.getParameter("upload") != null) {
 			uploadMedia(req, resp);
+		} else if (req.getParameter("delete") != null) {
+			deleteMedia(req, resp);
 		} else {
 			alertInfo(req, "TODO: Not implemented yet.");	
 		}
@@ -96,6 +98,16 @@ public class View extends ConnexusServletBase {
 				.offset(offset).limit(limit).list();
 	}
 
+	private void deleteMedia(HttpServletRequest req, HttpServletResponse resp) {
+		Media media = Media.getById(Long.parseLong(req.getParameter("delete")),
+				viewingStream);
+		if (media == null) {
+			alertError(req, "Cannot find media to delete.");
+			return;
+		}
+		ofy().delete().entities(media).now();
+		alertWarning(req, "Image was deleted.");
+	}
 	
 	private void uploadMedia(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		// TODO: verify user is logged in?

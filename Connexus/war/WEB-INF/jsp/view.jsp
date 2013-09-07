@@ -43,6 +43,16 @@
 <!--           	Close -->
 <!--           </button> -->
         </div>
+        <%-- Allow delete if it's my image --%>
+        <c:if test="${media.uploader == cuser.key}">
+			<div class="modal-footer">
+				<form action="/view" method="post" role="form">
+					<input type="hidden" name="v" value="${ viewingStream.id }" />
+					<input type="hidden" name="delete" value="${ media.id }" />
+					<button type="submit" class="btn btn-default">Delete</button>
+				</form>
+			</div>
+		</c:if>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
