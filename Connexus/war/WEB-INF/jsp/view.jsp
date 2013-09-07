@@ -15,23 +15,54 @@
 					</c:when>
 				<c:otherwise>
 					<div class="row">
-  						<div class="col-sm-6 col-md-3">
-  							<c:forEach items="${ mediaList }" var="media">
-	    						<a href="#" class="thumbnail">
+						<c:forEach items="${ mediaList }" var="media">
+	  						<div class="col-sm-6 col-md-4">
+  								<div id="thumb-div-${media.id}" class="thumbnail">
+	    						<a id="thumb-a-${media.id}" data-toggle="modal" href="#thumb-viewer-${media.id}" class="thumbnail">
     	  							<img src="${media.mediaServingURL}">
 <%--     	  								alt="${fn:escapeXML(media.comments)}"> --%>
 <%-- XXX TODO: why isn't escapeXML working here? --%>
     							</a>
-  							</c:forEach>
-  						</div>
+								<div class="caption">
+									<h6>
+       								 ${media.comments }
+       								</h6>
+							    </div>
+							    </div>
+							    
+<!-- Modal image popup -->
+  <div class="modal fade" id="thumb-viewer-${media.id}" tabindex="-1" role="dialog" aria-labelledby="thumb-title-${media.id}" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+<!--           <button type="button" class="btn btn-default" data-dismiss="modal"> -->
+			<a data-dismiss="modal">
+			<%-- TODO: add =s0 but only in production?! doesn't work on test server --%>
+          	<img class="img-thumbnail" src="${media.mediaServingURL}">
+          	</a>          
+<!--           	Close -->
+<!--           </button> -->
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  							    
+  							</div>
+						</c:forEach>
 					</div>		
 				</c:otherwise>
 			</c:choose>
 		</div>
-		<ul class="pager">
-			<li class="next"><a href="#">Newer &rarr;</a></li>
-			<li class="previous"><a href="#">&larr; Older</a></li>
-		</ul>
+		
+		<c:if test="${fn:length(mediaList) > 0 }">
+			<ul class="pager">
+				<c:if test="${ offset > limit }">
+					<li class="previous"><a href="#">&larr; Newer</a></li>
+				</c:if>
+				<%-- TODO: only show older when they exist --%>
+				<li class="next"><a href="#">Older &rarr;</a></li>
+			</ul>		
+		</c:if>
 
 	</div>
 		

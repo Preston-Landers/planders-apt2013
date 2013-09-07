@@ -23,11 +23,11 @@
 								<textarea id="createStreamSubscribers" name="subscribers"
 									class="field"
 									rows="${ txtRows }"
-									placeholder="adnan@aziz.com, billg@microsoft.com"></textarea>
+									placeholder="adnan@aziz.com, billg@microsoft.com">${param['subscribers']}</textarea>
 								<textarea id="createStreamSubscribersNote"
 									class="field"
 									name="subscribersNote" rows="${ txtRows }" 
-									placeholder="Optional message for invite"></textarea>
+									placeholder="Optional message for invite">${param['subscribersNote']}</textarea>
 							</div>
 							<label for="createStreamSubscribers">Add Subscribers</label>						
 						</div>
@@ -37,13 +37,13 @@
 							<div>
 								<textarea id="createStreamTags" name="tags" class="field"
 									rows="${ txtRows }"
-									placeholder="#PacificOcean, #FriendsOfAziz, #music"></textarea>
+									placeholder="#PacificOcean, #FriendsOfAziz, #music">${param['tags']}</textarea>
 							</div>
 							<label for="createStreamTags">Tag your stream</label>						
 						</div>
 						<div class="form-group">
 							<input type="text" class="form-control" id="createStreamCoverURL"
-								name="cover" placeholder="Optional URL of cover image">
+								name="cover" placeholder="Optional URL of cover image" value="${param['cover']}">
 							<label for="createStreamCoverURL">URL to cover image</label>
 						</div>
 					</div>

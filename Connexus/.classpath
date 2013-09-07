@@ -8,5 +8,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.servlet.jsp.jstl-api-1.2.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-4.0b1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-14.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/httpclient-4.2.5.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/httpcore-4.2.4.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

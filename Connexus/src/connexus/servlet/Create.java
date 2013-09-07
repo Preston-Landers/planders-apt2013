@@ -1,9 +1,11 @@
 package connexus.servlet;
 
 import static connexus.OfyService.ofy;
+import connexus.Config;
 import connexus.model.Stream;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,8 +57,25 @@ public class Create extends ConnexusServletBase {
 		String tags = req.getParameter("tags");
 		String coverURL = req.getParameter("cover");
 		
+		// Look for any streams of this name. 
+		List<Stream> existingStreams = ofy().load().type(Stream.class)
+				.ancestor(site).filter("name ==", streamName).list();
+		if (existingStreams.size() > 0) {
+			alertError(req, "Sorry, but a stream of that name already exists. Please select another name.");
+			
+			List<String[]> params = new ArrayList<String[]>();
+			params.add(new String[]{"subscribers", subscribersStr});
+			params.add(new String[]{"subscribersNote", subscribersNote});
+			params.add(new String[]{"tags", tags});
+			params.add(new String[]{"cover", coverURL});
+			
+			String newUri = Config.getURIWithParams(params);
+			resp.sendRedirect(newUri);
+			return;
+		}
+		
+		
 		// TODO: more validation...
-		// DO we care about duplicate names?
 		CharMatcher matcher = CharMatcher.is(' ');
 		streamName = matcher.trimFrom(streamName);
 

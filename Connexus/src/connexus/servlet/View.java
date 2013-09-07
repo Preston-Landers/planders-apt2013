@@ -44,7 +44,9 @@ public class View extends ConnexusServletBase {
 		// How many images to show
 		int offset = 0;
 		int limit = 3;
-		
+		req.setAttribute("offset", offset);
+		req.setAttribute("limit", limit);
+
 		// List<String> 
 		if (viewingStream != null) {
 			req.setAttribute("mediaList", getMedia(viewingStream, offset, limit));
