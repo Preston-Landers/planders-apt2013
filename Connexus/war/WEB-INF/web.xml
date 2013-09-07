@@ -6,16 +6,6 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>connexus.server.GreetingServiceImpl</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/connexus/greet</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>manage</servlet-name>
     <servlet-class>connexus.servlet.Manage</servlet-class>
   </servlet>
