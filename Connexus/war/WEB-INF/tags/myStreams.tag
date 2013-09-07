@@ -26,7 +26,8 @@
 									<c:forEach var='stream' items='${ myStreamList }'>
 										<TR>
 											<TD><A HREF="/view?v=${ stream.id }">${stream.name}</A></TD>
-											<TD>${stream.lastNewMedia}</TD>
+											<TD>
+${fn:length(stream.lastNewMedia) > 0  ? stream.lastNewMedia : '<small><em>(None)</em></small>'}</TD>
 											<TD>${stream.numberOfMedia}</TD>
 											<TD><input type="checkbox" name="delete" value="${ stream.id }"></TD>
 										</TR>

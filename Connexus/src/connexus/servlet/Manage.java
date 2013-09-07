@@ -77,12 +77,12 @@ public class Manage extends ConnexusServletBase {
 				return;
 			}
 			
-			// TODO: logging
-			System.err.println("Deleting stream: " + stream);
-			
-			// Nuke it
-			ofy().delete().entities(stream).now();
-			alertSuccess(req, "Stream deleted: " + stream.getName());
+			if (stream.deleteStream()) {
+				alertSuccess(req, "Stream deleted: " + stream.getName());
+				
+			} else {
+				alertError(req, "Stream could not be deleted: " + stream.getName());
+			}
 
 		}
 

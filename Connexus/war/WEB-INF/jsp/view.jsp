@@ -38,10 +38,13 @@
 <!--           <button type="button" class="btn btn-default" data-dismiss="modal"> -->
 			<a data-dismiss="modal">
 			<%-- TODO: add =s0 but only in production?! doesn't work on test server --%>
-          	<img class="img-thumbnail" src="${media.mediaServingURL}">
+          	<img class="img-thumbnail"
+          	 	alt="${media.comments}" 
+          		src="${media.mediaServingURL}">
           	</a>          
 <!--           	Close -->
 <!--           </button> -->
+          		<H5>${media.comments}</H5>
         </div>
         <%-- Allow delete if it's my image --%>
         <c:if test="${media.uploader == cuser.key}">

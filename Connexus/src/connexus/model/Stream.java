@@ -96,12 +96,32 @@ public class Stream implements Comparable<Stream> {
 		this.tags = tags;
 	}
 
+	
 	public String getLastNewMedia() {
-		return "LAST NEW MEDIA";
+		List<Media> ml = getMedia(0, 1);
+		if (ml == null || ml.isEmpty()) {
+			return "";
+		}
+		Media lastMedia = ml.get(0);
+		return lastMedia.getCreationDate().toString();
 	}
 	
 	public String getNumberOfMedia() {
-		return "NUM OF ITEMS";
+		return Integer.toString(ofy().load().type(Media.class).ancestor(this).count());
+	}
+	
+	public boolean deleteStream() {
+		// TODO: logging and TRANSACTION...
+		System.err.println("Deleting stream and all its media: " + this);
+		
+		// TODO Delete all Media in this stream
+		for (Media media : getMedia(0, 0)) {
+			media.deleteMedia();
+		}
+		
+		// Nuke it
+		ofy().delete().entities(this).now();
+		return true;
 	}
 	
 	@Override
@@ -112,5 +132,13 @@ public class Stream implements Comparable<Stream> {
 			return -1;
 		}
 		return 0;
+	}
+
+	/*
+	 * Get a list of media for this stream sorted by creation date
+	 */
+	public List<Media> getMedia(int offset, int limit) {
+		return ofy().load().type(Media.class).ancestor(this).order("creationDate")
+				.offset(offset).limit(limit).list();
 	}
 }

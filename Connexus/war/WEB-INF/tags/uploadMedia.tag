@@ -17,7 +17,7 @@
 					<div style="padding-top: 10px;" class="col-md-4">
 						<div class="form-group">
 							<%-- <span class="btn btn-file">Upload<input type="file" name="media" /></span>  --%>
-							<input type="file" name="media">
+							<input id="uploadMediaFile" type="file" name="media">
 						</div>
 					</div>
 					<div class="col-md-6">

@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
+
 import static connexus.OfyService.ofy;
+
 
 
 
@@ -49,7 +51,7 @@ public class View extends ConnexusServletBase {
 
 		// List<String> 
 		if (viewingStream != null) {
-			req.setAttribute("mediaList", getMedia(viewingStream, offset, limit));
+			req.setAttribute("mediaList", viewingStream.getMedia(offset, limit));
 		}
 		
 		// Get the Blobstore upload URL.
@@ -93,11 +95,6 @@ public class View extends ConnexusServletBase {
 		req.setAttribute("viewingStream", viewingStream);
 	}
 	
-	private List<Media> getMedia(Stream viewingStream, int offset, int limit) {
-		return ofy().load().type(Media.class).ancestor(viewingStream)
-				.offset(offset).limit(limit).list();
-	}
-
 	private void deleteMedia(HttpServletRequest req, HttpServletResponse resp) {
 		Media media = Media.getById(Long.parseLong(req.getParameter("delete")),
 				viewingStream);
@@ -105,7 +102,7 @@ public class View extends ConnexusServletBase {
 			alertError(req, "Cannot find media to delete.");
 			return;
 		}
-		ofy().delete().entities(media).now();
+		media.deleteMedia();
 		alertWarning(req, "Image was deleted.");
 	}
 	
@@ -115,6 +112,10 @@ public class View extends ConnexusServletBase {
 		Map<String,List<BlobKey>> uploadMap = blobstoreService.getUploads(req);
 		
         List<BlobKey> blobKeyList = uploadMap.get("media");
+        if (blobKeyList == null) {
+        	alertError(req, "I'm sorry, there was a problem with your upload.");
+        	return;
+        }
         BlobKey bkey = blobKeyList.get(0);
         String bkeyStr = bkey.getKeyString();
         String comments = req.getParameter("comments");
@@ -131,13 +132,6 @@ public class View extends ConnexusServletBase {
         
         System.err.println("MEDIA was into space!" + media);
         
-        
-        
-//        if (blobKeyList == null || blobKeyList.size() == 0) {
-//            resp.sendRedirect("/");
-//        } else {
-//            resp.sendRedirect("/serve?blob-key=" + blobKeyList.get(0).getKeyString());
-//        }
 	}
 
 	

@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreFailureException;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.googlecode.objectify.Key;
@@ -152,6 +155,35 @@ public class Media implements Comparable<Media> {
 		this.comments = comments;
 	}
 
+	public boolean deleteMedia() {
+		// TODO: logging
+		System.err.println("Deleting media: " + this);
+		
+		// ignoring error result here...
+		deleteBlob();
+		ofy().delete().entities(this).now();
+		return true;
+	}
+
+	private boolean deleteBlob() {
+		BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+		try {
+			blobstoreService.delete(getBlobKey());
+		} catch (BlobstoreFailureException e) {
+			// TODO: don't know if it's just the development environment 
+			// but often the blobstore delete fails... I get this:
+			//
+			// WARNING: Could not delete blob: <BlobKey: PEyjT0AA8BOvzTqVuWoCvw>
+			// java.io.IOException: Could not delete: D:\APTWorkspace\preston_landers\Connexus\war\WEB-INF\appengine-generated\PEyjT0AA8BOvzTqVuWoCvw
+			e.printStackTrace(System.err);
+			return false;
+		}
+		
+		//ImagesService imagesService = ImagesServiceFactory.getImagesService();
+		//imagesService.deleteServingUrl(getBlobKey());
+		return true;
+	}
+	
 	@Override
 	public int compareTo(Media other) {
 		if (creationDate.after(other.creationDate)) {
