@@ -44,14 +44,52 @@ public class View extends ConnexusServletBase {
 		InitializeContext(req, resp); // Base site context initialization
 		
 		// How many images to show
-		int offset = 0;
-		int limit = 3;
+		int offset;
+		int limit;
+		try {
+			offset = Integer.parseInt(req.getParameter("offset"));
+		} catch (NumberFormatException e) {
+			offset = 0;
+		}
+		try {
+			limit = Integer.parseInt(req.getParameter("limit"));
+		}
+		catch (NumberFormatException e) {
+			limit = 3;
+		}
+		
 		req.setAttribute("offset", offset);
 		req.setAttribute("limit", limit);
 
 		// List<String> 
 		if (viewingStream != null) {
 			req.setAttribute("mediaList", viewingStream.getMedia(offset, limit));
+			int numberOfMedia = viewingStream.getNumberOfMedia();
+			
+			int newerOffset = Math.max((offset - limit), 0);
+			int newerLimit = limit;
+			int olderOffset = Math.min((offset + limit), (numberOfMedia-limit));
+			int olderLimit = limit;
+			
+			boolean showNewerButton = false;
+			boolean showOlderButton = false;
+			if (offset > 0) {
+				showNewerButton = true;
+			}
+			if (offset + limit < numberOfMedia) {
+				showOlderButton = true;
+			}
+
+			req.setAttribute("numberOfMedia", numberOfMedia);
+
+			req.setAttribute("olderOffset", olderOffset);
+			req.setAttribute("olderLimit", olderLimit);
+			req.setAttribute("newerOffset", newerOffset);
+			req.setAttribute("newerLimit", newerLimit);
+			
+			req.setAttribute("showNewerButton", showNewerButton);
+			req.setAttribute("showOlderButton", showOlderButton);
+			
 		}
 		
 		// Get the Blobstore upload URL.

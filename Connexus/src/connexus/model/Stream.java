@@ -106,8 +106,8 @@ public class Stream implements Comparable<Stream> {
 		return lastMedia.getCreationDate().toString();
 	}
 	
-	public String getNumberOfMedia() {
-		return Integer.toString(ofy().load().type(Media.class).ancestor(this).count());
+	public int getNumberOfMedia() {
+		return ofy().load().type(Media.class).ancestor(this).count();
 	}
 	
 	public boolean deleteStream() {
@@ -138,7 +138,7 @@ public class Stream implements Comparable<Stream> {
 	 * Get a list of media for this stream sorted by creation date
 	 */
 	public List<Media> getMedia(int offset, int limit) {
-		return ofy().load().type(Media.class).ancestor(this).order("creationDate")
+		return ofy().load().type(Media.class).ancestor(this).order("-creationDate")
 				.offset(offset).limit(limit).list();
 	}
 }

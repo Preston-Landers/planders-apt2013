@@ -85,7 +85,16 @@ public class Media implements Comparable<Media> {
 		this.creationDate = creationDate;
 	}
 
-	
+	public String getThumbnailDescription() {
+		// TODO: get rid of yucky HTML
+		StringBuilder rv = new StringBuilder();
+		rv.append("<h6>");
+		rv.append("<em>Uploaded on:</em><BR>" + creationDate);
+		rv.append("<BR><BR><em>Uploaded by:</em><BR>");
+		rv.append(getUploaderNow().getRealName());
+		rv.append("</h6>" );
+		return rv.toString();
+	}
 
 	public Key<Stream> getStream() {
 		return stream;
@@ -105,6 +114,9 @@ public class Media implements Comparable<Media> {
 
 	public Key<CUser> getUploader() {
 		return uploader;
+	}
+	public CUser getUploaderNow() {
+		return ofy().load().key(getUploader()).get();
 	}
 
 	public void setUploader(Key<CUser> uploader) {
