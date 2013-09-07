@@ -3,6 +3,7 @@ package connexus.servlet;
 import static connexus.OfyService.ofy;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
-import com.googlecode.objectify.Key;
 
 import connexus.model.*;
 
@@ -34,10 +34,15 @@ public class Manage extends ConnexusServletBase {
 		
 		InitializeContext(req, resp); // Base site context initialization
 
-		List<Stream> myStreams = ofy().load().type(Stream.class).ancestor(cuser.getKey()).list();
-//		for (Stream stream : myStreams ) {
-//			System.err.println("STREAM REC: " + stream.toString());
-//		}
+		List<Stream> myStreams;
+		if (cuser != null) {
+			myStreams = ofy().load().type(Stream.class).ancestor(cuser.getKey()).list();
+			// for (Stream stream : myStreams ) {
+			// System.err.println("STREAM REC: " + stream.toString());
+			// }
+		} else {
+			myStreams = new ArrayList<Stream>();
+		}
 		req.setAttribute("myStreamList", myStreams);
 
 		// Forward to JSP page to display them in a HTML table.
@@ -45,7 +50,7 @@ public class Manage extends ConnexusServletBase {
 	}
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
+			throws IOException, ServletException {
 		
 		InitializeContext(req, resp); // Base site context initialization
 
@@ -66,7 +71,7 @@ public class Manage extends ConnexusServletBase {
 			}
 			Long objectId = Long.parseLong(objectIdStr);
 
-			Stream stream = getStreamById(objectId);
+			Stream stream = Stream.getById(objectId, cuser);
 			if (stream == null){
 				alertError(req, "Stream does not exist.");
 				return;
@@ -83,9 +88,7 @@ public class Manage extends ConnexusServletBase {
 
 	}
 	
-	// TODO: move to model class? same for user?
-	private Stream getStreamById(Long objectId) {	
-		return ofy().load().type(Stream.class).parent(cuser).id(objectId).get();
-	}
+	
+
 
 }

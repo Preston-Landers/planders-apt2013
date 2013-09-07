@@ -1,9 +1,5 @@
 package connexus.servlet;
 
-//import static connexus.OfyService.ofy;
-//import java.util.List;
-//import connexus.CUser;
-
 import static connexus.OfyService.ofy;
 import connexus.model.Stream;
 
@@ -16,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.CharMatcher;
-import com.googlecode.objectify.Key;
 
 public class Create extends ConnexusServletBase {
 
@@ -51,7 +46,7 @@ public class Create extends ConnexusServletBase {
 	}
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
+			throws IOException, ServletException {
 		InitializeContext(req, resp); // Base site context initialization
 
 		String streamName = req.getParameter("name");
@@ -61,6 +56,7 @@ public class Create extends ConnexusServletBase {
 		String coverURL = req.getParameter("cover");
 		
 		// TODO: more validation...
+		// DO we care about duplicate names?
 		CharMatcher matcher = CharMatcher.is(' ');
 		streamName = matcher.trimFrom(streamName);
 

@@ -25,7 +25,7 @@
 									</thead>
 									<c:forEach var='stream' items='${ myStreamList }'>
 										<TR>
-											<TD>${stream.name}</TD>
+											<TD><A HREF="/view?v=${ stream.id }">${stream.name}</A></TD>
 											<TD>${stream.lastNewMedia}</TD>
 											<TD>${stream.numberOfMedia}</TD>
 											<TD><input type="checkbox" name="delete" value="${ stream.id }"></TD>

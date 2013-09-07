@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+//import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+//import javax.servlet.http.HttpSession;
 
 import connexus.model.CUser;
 
@@ -42,7 +42,7 @@ public class Admin extends ConnexusServletBase {
 	}
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
+			throws IOException, ServletException {
 		
 		InitializeContext(req, resp); // Base site context initialization
 
@@ -62,7 +62,7 @@ public class Admin extends ConnexusServletBase {
 		Long editId = Long.parseLong(req.getParameter("edit"));
 		req.setAttribute("editItem", editId);
 		
-		CUser theUser = getUserById(editId);
+		CUser theUser = CUser.getById(editId, site.get());
 		if (theUser == null){
 			alertError(req, "User does not exist.");
 			return;
@@ -73,7 +73,7 @@ public class Admin extends ConnexusServletBase {
 	private void deleteUser(HttpServletRequest req, HttpServletResponse resp) {
 		Long objectId = Long.parseLong(req.getParameter("id"));
 		
-		CUser theUser = getUserById(objectId);
+		CUser theUser = CUser.getById(objectId, site.get());
 		if (theUser == null){
 			alertError(req, "User does not exist.");
 			return;
@@ -91,9 +91,6 @@ public class Admin extends ConnexusServletBase {
 		return existingUser;
 	}
 
-	private CUser getUserById(Long userId) {		
-		return ofy().load().type(CUser.class).parent(site).id(userId).get();
-	}
 
 	private void createUser(HttpServletRequest req, HttpServletResponse resp) {
 		String accountName = req.getParameter("accountName");

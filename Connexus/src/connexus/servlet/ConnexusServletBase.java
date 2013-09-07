@@ -2,6 +2,8 @@ package connexus.servlet;
 
 import static connexus.OfyService.ofy;
 
+import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +22,19 @@ import connexus.status.*;
 
 public abstract class ConnexusServletBase extends HttpServlet {
 	
-	protected User guser;
-	protected CUser cuser;
-	protected Ref<Site> site; 
+	protected Ref<Site> site; // The "Site" entity (usually just one exists)
+	protected User guser;     // The Google User object - MAY BE NULL! if not logged in
+	protected CUser cuser;    // The Connexus User object - MAY BE NULL! if not logged in
 	
-	protected void InitializeContext (HttpServletRequest req, HttpServletResponse resp) {
+	/**
+	 * Set up things that are common to all pages including the currently logged in user, if any.
+	 * @param req
+	 * @param resp
+	 */
+	protected void InitializeContext(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException, ServletException {
+		cuser = null;
+		guser = null;
         UserService userService = UserServiceFactory.getUserService();
         guser = userService.getCurrentUser();
         req.setAttribute("guser", guser);

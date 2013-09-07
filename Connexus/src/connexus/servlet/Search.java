@@ -37,7 +37,7 @@ public class Search extends ConnexusServletBase {
 	}
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
+			throws IOException, ServletException {
 		InitializeContext(req, resp); // Base site context initialization
 		alertInfo(req, "TODO: Not implemented yet.");
 		resp.sendRedirect(uri);

@@ -1,13 +1,15 @@
 <%@ tag description="My Streams" language="java"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
+<%-- NOTE: not actually using this attribute ... probably remove --%>
 <%@ attribute name="stream" required="true" %>
 
-<form action="/view" method="post" role="form">
-	<input type="hidden" name="stream" value="${ stream }">
+<form action="${ uploadURL }" method="post" role="form" enctype="multipart/form-data">
+	<%-- All the cool kids use single letter keys --%>
+	<input type="hidden" name="v" value="${ viewingStream.id }">
 	<div id="createStreamPanel" class="panel panel-default">
 		<div class="panel-heading">
-			<H3 class="panel-title">Add an image</H3>
+			<H3 class="panel-title">Add an image to ${ viewingStream.name }</H3>
 		</div>
 		<div class="panel-body">
 			<div class="container">
@@ -32,7 +34,7 @@
 				</div>
 				<div class="row">
 					<div class="col-md-6">
-						<button class="btn btn-primary" type="submit">
+						<button class="btn btn-primary" name="upload" type="submit">
 							<span class="glyphicon glyphicon-remove-circle"></span>&nbsp;
 							Upload File
 						</button>

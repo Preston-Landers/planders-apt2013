@@ -1,35 +1,45 @@
 package connexus.model;
 
 import java.util.Date;
+import java.util.List;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.condition.IfNotNull;
 
 @Entity
 
 public class Media implements Comparable<Media> {
 	@Id Long id;
 	@Parent Key<Stream> stream;
-	@Index String fileName; 
-	
+	@Index({IfNotNull.class}) String fileName; 
+	@Index BlobKey blobKey;
+	@Index String blobKeyString;
 	String mimeType;
-	Date creationDate; 
+	Long size;
+	@Index({IfNotNull.class}) String comments;
+	@Index Date creationDate; 
 	Key<CUser> uploader; // in theory, could upload to other users streams?
 	@Index Long views;
-	byte[] blob; // the item itself
 
 	@SuppressWarnings("unused")
 	private Media() {
 	}
 
-	public Media(Long id, Key<Stream> stream, String fileName) {
+	public Media(Long id, Key<Stream> stream, BlobKey blobKey, String blobKeyString, Key<CUser> cuser) {
 		this.id = id;
 		this.stream = stream;
-		this.fileName = fileName;
+		this.blobKey = blobKey;
+		this.blobKeyString = blobKeyString;
+		this.uploader = cuser;
 		this.creationDate = new Date();
+		this.views = (long) 0;
 	}
 	
 	public Key<Media> getKey() {
@@ -99,12 +109,40 @@ public class Media implements Comparable<Media> {
 		this.views = views;
 	}
 
-	public byte[] getBlob() {
-		return blob;
+	public BlobKey getBlobKey() {
+		return blobKey;
 	}
 
-	public void setBlob(byte[] blob) {
-		this.blob = blob;
+	public void setBlobKey(BlobKey blobKey) {
+		this.blobKey = blobKey;
+	}
+
+	public Long getSize() {
+		return size;
+	}
+	
+	public void setSize(Long size) {
+		this.size = size;
+	}
+	
+	
+	/**
+	 * Return a list of image serving URLs for the given media 
+	 * @WARNING: does not check whether the media is actually an image! 
+	 */
+	@SuppressWarnings("deprecation")
+	public String getMediaServingURL() {
+		// TODO: check if not image and use the other service
+		ImagesService imagesService = ImagesServiceFactory.getImagesService();
+		return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "127.0.0.1");
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 	@Override

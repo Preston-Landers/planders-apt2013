@@ -34,7 +34,12 @@ public class CUser implements Comparable<CUser> {
 	public Key<CUser> getKey() {
 		return Key.create(site, CUser.class, id);
 	}
-		
+	
+	public static CUser getById(Long userId, Site site) {		
+		return ofy().load().type(CUser.class).parent(site).id(userId).get();
+	}
+
+	
 	public String toString() {
 		return "CUser " + accountName + " " + realName;
 	}

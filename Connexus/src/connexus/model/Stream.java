@@ -1,5 +1,7 @@
 package connexus.model;
 
+import static connexus.OfyService.ofy;
+
 import java.util.Date;
 import java.util.List;
 
@@ -8,16 +10,17 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.condition.IfNotNull;
 
 @Entity
 
 public class Stream implements Comparable<Stream> {
 	@Id Long id;
 	@Parent Key<CUser> owner;
-	@Index String name; 
+	@Index({IfNotNull.class}) String name; 
 	
 	String coverURL;
-	@Index List<String> tags;
+	@Index({IfNotNull.class}) List<String> tags;
 	Date creationDate;
 
 	@SuppressWarnings("unused")
@@ -34,6 +37,11 @@ public class Stream implements Comparable<Stream> {
 	public Key<Stream> getKey() {
 		return Key.create(owner, Stream.class, id);
 	}
+	
+	public static Stream getById(Long objectId, CUser cuser) {	
+		return ofy().load().type(Stream.class).parent(cuser).id(objectId).get();
+	}
+
 
 	public String toString() {
 		return "Stream " + id + " : " + name;
