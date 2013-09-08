@@ -4,11 +4,13 @@ import static connexus.OfyService.ofy;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.datanucleus.Utils;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
@@ -16,6 +18,8 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfNotNull;
+
+import connexus.Config;
 
 @Entity
 
@@ -52,12 +56,13 @@ public class Stream implements Comparable<Stream> {
 
 	public String getViewURI() {
 		// Use URIBuilder?
-		return "/view?v=" + id + "&vu=" + owner.getId();
+		List<String[]> params = new ArrayList<String[]>();
+		params.add(new String[] {"v", getObjectURI()});
+		return Config.getURIWithParams("/view", params);
 	}
 	
-	// TODO: unify with getViewURI
-	public String getUnsubURI() {
-		return "vvu=" + owner.getId() + "%3A" + id;  
+	public String getObjectURI() {
+		return owner.getId() + ":" + id;  
 	}
 	
 	public String toString() {

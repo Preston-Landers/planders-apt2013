@@ -3,6 +3,7 @@
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
 
 <form action="/subscribe" method="post" role="form">
+	<input type="hidden" name="redir" value="/manage">
 	<div id="createStreamPanel" class="panel panel-default">
 		<div class="panel-heading">
 			<H3 class="panel-title">Streams I subscribe to</H3>
@@ -34,7 +35,7 @@
 ${fn:length(stream.lastNewMedia) > 0 ? stream.lastNewMedia: '<small><em>(None)</em></small>'}</TD>
 											<TD>${stream.numberOfMedia}</TD>
 											<TD>${stream.views}</TD>
-											<TD><input type="checkbox" name="vvu" value="${ stream.unsubURI }"></TD>
+											<TD><input type="checkbox" name="v" value="${ stream.objectURI }"></TD>
 										</TR>
 									</c:forEach>
 								</TABLE>

@@ -39,16 +39,26 @@ public class StreamHandle {
 	}
 
 	// TODO: fix exception class?
+	// Get a valid StreamHandle if available from the HTTP Request
+	// Otherwise you get null
 	public static StreamHandle getStreamHandleFromRequest(
 			HttpServletRequest req, Ref<Site> site) throws RuntimeException {
 
-		String streamId = req.getParameter("v");
+		String streamUserAndId = req.getParameter("v");
+		if (streamUserAndId == null) {
+			throw new RuntimeException("No stream ID (v) in request.");
+		}
+		String[] splitStreamId = streamUserAndId.split("[:]", 2);
+		if (splitStreamId.length < 2) {
+			throw new RuntimeException("Invalid stream ID (v) in request.");
+		}
+		String streamUserId = splitStreamId[0];
+		String streamId = splitStreamId[1];		
 		if (streamId == null) {
 			throw new RuntimeException("No stream ID (v) in request.");
 		}
-		String streamUserId = req.getParameter("vu");
 		if (streamUserId == null) {
-			throw new RuntimeException("No stream User ID (vu) in request.");
+			throw new RuntimeException("No stream ID (v) in request.");
 		}
 
 		CUser viewingStreamUser = CUser.getById(Long.parseLong(streamUserId),

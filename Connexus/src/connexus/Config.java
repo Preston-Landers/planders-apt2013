@@ -15,10 +15,10 @@ public class Config {
 	/*
 	 * TODO: move somewhere else
 	 */
-	public static String getURIWithParams(List<String[]> params) {
+	public static String getURIWithParams(String uri, List<String[]> params) {
 		URIBuilder builder;
 		try {
-			builder = new URIBuilder(Create.uri);
+			builder = new URIBuilder(uri);
 			for (String[] paramKV: params) {
 				if (paramKV[1].length() > 0) {
 					builder.setParameter(paramKV[0], paramKV[1]);
@@ -30,7 +30,7 @@ public class Config {
 			// TODO Auto-generated catch block
 			e.printStackTrace(System.err);
 		}
-		return Create.uri;
+		return uri;
 	}
     
 }

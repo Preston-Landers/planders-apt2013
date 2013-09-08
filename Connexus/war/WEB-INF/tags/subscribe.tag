@@ -16,8 +16,7 @@
 <%-- TODO: don't show if already subscribed... --%>
 <form action="/subscribe" method="post" role="form">
 	<%-- All the cool kids use single letter keys --%>
-	<input type="hidden" name="v" value="${ stream }">
-	<input type="hidden" name="vu" value="${ streamUser }">
+	<input type="hidden" name="v" value="${ viewingStream.objectURI }">
 	<div id="createStreamPanel" class="panel panel-default">
 		<div class="panel-heading">
 			<H3 class="panel-title">

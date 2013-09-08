@@ -84,6 +84,12 @@ public class Subscribe extends ConnexusServletBase {
 	public void doUnsubscribe(HttpServletRequest req, HttpServletResponse resp,
 			StreamHandle viewingStreamHandle) throws IOException {
 
+		// See if we want to be redirected anywhere after this.
+		String redirectURI = doneUri;
+		if (req.getParameter("redir") != null) {
+			redirectURI = req.getParameter("redir");
+		}
+		
 		Subscription thisSub = null;
 		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser);
 		for (Subscription sub : mySubs) {
@@ -95,7 +101,7 @@ public class Subscribe extends ConnexusServletBase {
 		}
 		if (thisSub == null) {
 			alertWarning(req, "You are not subscribed to that stream.");
-			resp.sendRedirect(doneUri);
+			resp.sendRedirect(redirectURI);
 			return;					
 		}
 		// Get the view link before we delete.
@@ -103,16 +109,19 @@ public class Subscribe extends ConnexusServletBase {
 		Stream subStream = ofy().load().key(thisSub.getStream()).get();
 		if (subStream == null) {
 			alertWarning(req, "Internal error: cannot load stream from subscription.");
-			resp.sendRedirect(doneUri);
+			resp.sendRedirect(redirectURI);
 			return;								
 		}
-		String viewURI = subStream.getViewURI();
+		
+		if (req.getParameter("redir") == null) {
+			redirectURI = subStream.getViewURI();
+		}
 		
 		// Delete the sub.
 		ofy().delete().entities(thisSub).now();
 		
-		alertWarning(req, "You have unsubscribed from this stream.");
-		resp.sendRedirect(viewURI);
+		alertWarning(req, "You have unsubscribed from the stream " + subStream.getName() + ".");
+		resp.sendRedirect(redirectURI);
 		return;		
 	}
 	
