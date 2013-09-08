@@ -28,6 +28,10 @@ div.thumbnail, img.img-thumbnail {
 	margin-top: 0px;
 }
 
+.tags-well a:hover {
+	text-decoration: none;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 

@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="func" uri="/WEB-INF/tlds/functions.tld" %>
 <t:connexus><jsp:body>
 <c:choose>
 <%-- VIEWING A SINGLE STREAM --%>
@@ -20,7 +21,7 @@
 			</table>
 		</div>
 		<div class="container">
-			<div class="jumbotron" style="text-align: center">
+			<div class="jumbotron" style="text-align: center;">
 				<c:choose>
 					<c:when test="${ (mediaList == null) or ( fn:length(mediaList) == 0 )}">
 						<h1>Stream is empty</h1> <small><em>Upload something below!</em></small>			
@@ -124,6 +125,29 @@
 			</ul>		
 		</c:if>
 
+	</div>
+	<%-- Show the stream's tags --%>
+	<div class="container">
+		<div class="well tags-well" style="padding: 10px;">
+			<p class="text-center" style="margin: 2px;">
+				<c:choose>
+					<c:when test="${fn:length(viewingStream.tags) > 0 }">
+						<c:forEach var="tag" items="${ viewingStream.tags }">
+							<c:if test="${ fn:length(tag) > 0 }">
+								<a href="${func:getSearchURI(tag)}"><span style="margin: 0px 5px;" class="stream-tag">
+									<span class="badge" style="padding: 8px">
+										<c:out value="${tag}"></c:out>
+									</span>						
+								</span></a>					
+							</c:if>
+						</c:forEach>				
+					</c:when>
+					<c:otherwise>
+						<em>(No tags set)</em>
+					</c:otherwise>
+				</c:choose>
+			</p>
+		</div>
 	</div>
 		
 	<%-- If this is your stream, show the upload widget. Otherwise show the subscribe widget. --%>

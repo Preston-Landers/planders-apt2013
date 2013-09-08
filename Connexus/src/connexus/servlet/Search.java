@@ -40,7 +40,7 @@ public class Search extends ConnexusServletBase {
 
 		// throw new ServletException("Retrieving products failed!", e);
 		
-		if (req.getParameter("search") != null) {
+		if (req.getParameter("q") != null) {
 			doHandleSearch(req, resp);
 		}
 		

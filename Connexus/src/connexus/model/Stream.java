@@ -2,6 +2,7 @@ package connexus.model;
 
 import static connexus.OfyService.ofy;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,6 +64,16 @@ public class Stream implements Comparable<Stream> {
 	
 	public String getObjectURI() {
 		return owner.getId() + ":" + id;  
+	}
+	
+	// Doesn't really belong here...
+	public static String getSearchURI(String term) {
+		try {
+			return "/search?q=" + java.net.URLEncoder.encode(term, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// Good luck!
+			return "/search?q=" + term;
+		}
 	}
 	
 	public String toString() {
