@@ -171,7 +171,7 @@ public class Media implements Comparable<Media> {
 	public String getMediaServingURL() {
 		// TODO: check if not image and use the other service
 		ImagesService imagesService = ImagesServiceFactory.getImagesService();
-		return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "127.0.0.1");
+		return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "192.168.1.99");
 	}
 
 	public String getComments() {

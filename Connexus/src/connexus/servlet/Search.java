@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.CharMatcher;
 
+import connexus.Config;
 import connexus.model.Stream;
 
 public class Search extends ConnexusServletBase {
@@ -77,7 +78,12 @@ public class Search extends ConnexusServletBase {
 
 	public List<Stream> performStreamSearch(String queryTerm) {
 		List<Stream> rv = new ArrayList<Stream>();
+		int hits = 0;
+		int max = Config.getMaxSearchResults();
 		for (Stream stream : Stream.getAllStreams(site)) {
+			if (hits > max) {
+				break;
+			}
 			boolean match = false;
 			// Check the stream name
 			if (matchString(queryTerm, stream.getName()))
@@ -96,8 +102,10 @@ public class Search extends ConnexusServletBase {
 			}
 			// Now check the media comments??
 			
-			if (match)
-				rv.add(stream);					
+			if (match) {
+				rv.add(stream);
+				hits++;
+			}
 			
 		}
 		return rv;

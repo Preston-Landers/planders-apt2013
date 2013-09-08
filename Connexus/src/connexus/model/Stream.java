@@ -171,6 +171,9 @@ public class Stream implements Comparable<Stream> {
 		return true;
 	}
 	
+	/**
+	 * Returns ALL streams available in the system, sorted by most recently updated first.
+	 */
 	public static List<Stream> getAllStreams(Ref<Site> site) {
 		// order by getLastNewMedia()
 		List<Stream> rv = ofy().load().type(Stream.class).ancestor(site).list();

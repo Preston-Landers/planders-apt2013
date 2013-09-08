@@ -11,7 +11,14 @@ public class Config {
 	public static final String productName = "Connexus";
 	
     public static final long siteId = 1;
+    
+    // Maximum search results to show
+    public static final int maxSearchResults = 5;
 
+    public static int getMaxSearchResults() {
+    	return maxSearchResults;
+    }
+    
 	/*
 	 * TODO: move somewhere else
 	 */
