@@ -69,7 +69,7 @@ public class Create extends ConnexusServletBase {
 			params.add(new String[]{"tags", tags});
 			params.add(new String[]{"cover", coverURL});
 			
-			String newUri = Config.getURIWithParams(params);
+			String newUri = Config.getURIWithParams(uri, params);
 			resp.sendRedirect(newUri);
 			return;
 		}
