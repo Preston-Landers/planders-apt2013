@@ -85,6 +85,10 @@ public class Subscription implements Comparable<Subscription> {
 	public Key<Stream> getStream() {
 		return stream;
 	}
+	
+	public Stream getStreamLoaded() {
+		return ofy().load().key(getStream()).get();
+	}
 
 	public void setStream(Key<Stream> stream) {
 		this.stream = stream;

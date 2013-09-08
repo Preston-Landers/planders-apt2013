@@ -44,7 +44,7 @@ public class Media implements Comparable<Media> {
 		this.blobKeyString = blobKeyString;
 		this.uploader = cuser;
 		this.creationDate = new Date();
-		this.views = (long) 0;
+		this.views = new Long(0);
 	}
 	
 	public Key<Media> getKey() {
@@ -129,6 +129,21 @@ public class Media implements Comparable<Media> {
 
 	public void setViews(Long views) {
 		this.views = views;
+	}
+	
+	public Long getAndIncrementViews() {
+		Long views = getViews();
+		if (views == null) {
+			views = new Long(0);
+		}
+		views++;
+		setViews(views);
+		save();
+		return views;		
+	}
+	
+	public void save() {
+		ofy().save().entities(this).now();
 	}
 
 	public BlobKey getBlobKey() {

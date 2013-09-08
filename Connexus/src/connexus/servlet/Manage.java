@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
+
 import connexus.model.*;
 
 public class Manage extends ConnexusServletBase {
@@ -44,6 +45,14 @@ public class Manage extends ConnexusServletBase {
 			myStreams = new ArrayList<Stream>();
 		}
 		req.setAttribute("myStreamList", myStreams);
+		
+		// initialize my subscriptions (cuser could be null, you get an empty
+		// list)
+		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser);
+//		if (mySubs.size() < 1) {
+//			System.err.println("User has no subs. " + cuser);
+//		}
+		req.setAttribute("mySubscriptions", mySubs);
 
 		// Forward to JSP page to display them in a HTML table.
 		req.getRequestDispatcher(dispatcher).forward(req, resp); 

@@ -56,9 +56,11 @@ public class View extends ConnexusServletBase {
 		req.setAttribute("offset", offset);
 		req.setAttribute("limit", limit);
 
-		// List<String>
+		
 		if (viewingStream != null) {
-			req.setAttribute("mediaList", viewingStream.getMedia(offset, limit));
+			// We are viewing a stream, so set some variables for the JSP
+			List<Media> mediaList = viewingStream.getMedia(offset, limit);
+			req.setAttribute("mediaList", mediaList);
 			int numberOfMedia = viewingStream.getNumberOfMedia();
 
 			int newerOffset = Math.max((offset - limit), 0);
@@ -86,6 +88,12 @@ public class View extends ConnexusServletBase {
 			req.setAttribute("showNewerButton", showNewerButton);
 			req.setAttribute("showOlderButton", showOlderButton);
 
+			// Media and streams have separate view counts.
+			for (Media media: mediaList) {
+				media.getAndIncrementViews();
+			}
+			viewingStream.getAndIncrementViews();
+			
 		} else {
 			// No stream selected... let them browse all streams.
 			List<Stream> allStreams = Stream.getAllStreams(site);
@@ -120,12 +128,6 @@ public class View extends ConnexusServletBase {
 			HttpServletResponse resp) throws IOException, ServletException {
 		super.InitializeContext(req, resp);
 
-		// initialize my subscriptions (cuser could be null, you get an empty
-		// list)
-		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser);
-		if (mySubs.size() < 1) {
-			System.err.println("User has no subs. " + cuser);
-		}
 
 		viewingStreamHandle = null;
 		viewingStream = null;
@@ -157,32 +159,6 @@ public class View extends ConnexusServletBase {
 					+ " is NOT subscribed to this stream! " + viewingStream);
 		}
 
-		//
-		//
-		// viewingStream = null;
-		// if (req.getParameter("v") != null) {
-		//
-		// CUser viewingStreamUser = null;
-		// if (req.getParameter("vu") != null) {
-		// viewingStreamUser =
-		// CUser.getById(Long.parseLong(req.getParameter("vu")), site.get());
-		// }
-		// req.setAttribute("viewingStreamUser", viewingStreamUser);
-		// if (viewingStreamUser == null) {
-		// alertError(req,
-		// "The stream you requested does not exist (cannot locate user).");
-		// // throw new ServletException("Invalid stream requested");
-		// } else {
-		// viewingStream = Stream.getById(
-		// Long.parseLong(req.getParameter("v")),
-		// viewingStreamUser);
-		// if (viewingStream == null) {
-		// alertError(req, "The stream you requested does not exist.");
-		// // throw new ServletException("Invalid stream requested");
-		// }
-		// }
-		// }
-		// req.setAttribute("viewingStream", viewingStream);
 	}
 
 	private void deleteMedia(HttpServletRequest req, HttpServletResponse resp) {

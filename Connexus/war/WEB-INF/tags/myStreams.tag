@@ -37,7 +37,7 @@ ${fn:length(stream.lastNewMedia) > 0  ? stream.lastNewMedia : '<small><em>(None)
 						</div>
 						<div class="row">
 							<div class="col-md-6">
-								<button class="btn btn-primary" name="delete" type="submit">
+								<button class="btn btn-danger" name="delete" type="submit">
 									<span class="glyphicon glyphicon-remove-circle"></span>&nbsp;
 									Delete Checked
 								</button>

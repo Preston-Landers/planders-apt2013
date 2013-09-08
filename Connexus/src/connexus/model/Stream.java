@@ -28,6 +28,8 @@ public class Stream implements Comparable<Stream> {
 	@Index({IfNotNull.class}) List<String> tags;
 	@Index Date creationDate;
 
+	@Index Long views;
+	
 	@SuppressWarnings("unused")
 	private Stream() {
 	}
@@ -51,6 +53,11 @@ public class Stream implements Comparable<Stream> {
 	public String getViewURI() {
 		// Use URIBuilder?
 		return "/view?v=" + id + "&vu=" + owner.getId();
+	}
+	
+	// TODO: unify with getViewURI
+	public String getUnsubURI() {
+		return "vvu=" + owner.getId() + "%3A" + id;  
 	}
 	
 	public String toString() {
@@ -164,6 +171,29 @@ public class Stream implements Comparable<Stream> {
 				.offset(offset).limit(limit).list();
 	}
 	
+	
+	public Long getViews() {
+		return views;
+	}
+
+	public void setViews(Long views) {
+		this.views = views;
+	}
+	
+	public Long getAndIncrementViews() {
+		Long views = getViews();
+		if (views == null) {
+			views = new Long(0);
+		}
+		views++;
+		setViews(views);
+		save();
+		return views;
+	}
+
+	public void save() {
+		ofy().save().entities(this).now();
+	}
 	
 	@Override
 	public int compareTo(Stream other) {

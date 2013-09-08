@@ -9,11 +9,11 @@
 			<table width="100%">
 				<TR>
 					<TD>
-						<small><em>currently viewing photos of</em></small> 
+						<small><em>currently viewing stream of</em></small> 
 							<strong>${ viewingStreamUser.realName }</strong> 
 					</TD>
 					<TD style="text-align: right">					
-					<small><em>${ numberOfMedia } total images</em></small> &mdash;
+					<small><em>${ numberOfMedia } images total</em></small> &mdash;
 					<small><em>Last updated: ${ viewingStream.lastNewMedia} </em></small>
 					</TD>
 				</TR>
@@ -147,7 +147,7 @@
 			<div class="panel-heading">
 				<H3 class="panel-title">
 					Browse available streams &ndash;
-					<small><em>Newest first</em></small>	
+					<small><em>Most recently updated first</em></small>	
 				</H3>
 				
 			</div>
@@ -162,7 +162,8 @@
     							</h4>
    								<p class="list-group-item-text">
    									${ stream.numberOfMedia } images &ndash;
-   								 	last updated: ${ stream.lastNewMedia }
+   								 	last updated: ${ stream.lastNewMedia } &ndash;
+   								 	${ stream.views } view${ stream.views > 1 ? 's' : '' }
    								</p>
   							</a>
 						</c:forEach>
