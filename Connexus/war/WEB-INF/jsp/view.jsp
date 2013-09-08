@@ -2,17 +2,19 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <t:connexus><jsp:body>
 <c:choose>
-	<%-- VIEWING A SINGLE STREAM --%>
+<%-- VIEWING A SINGLE STREAM --%>
 	<c:when test="${ viewingStream ne null }">
 		<div class="page-header" >
 			<h1>${ viewingStream.name }</h1>
 			<table width="100%">
 				<TR>
 					<TD>
-					<small><em>currently viewing</em></small>
+						<small><em>currently viewing photos of</em></small> 
+							<strong>${ viewingStreamUser.realName }</strong> 
 					</TD>
-					<TD style="text-align: right">
-					<small><em>${ numberOfMedia } total images</em></small>
+					<TD style="text-align: right">					
+					<small><em>${ numberOfMedia } total images</em></small> &mdash;
+					<small><em>Last updated: ${ viewingStream.lastNewMedia} </em></small>
 					</TD>
 				</TR>
 			</table>
@@ -65,6 +67,7 @@
        		</div>
         </div>
         <%-- Allow delete if it's my image --%>
+        <%-- TODO: still need to show info tooltip even if not your image --%>
         <c:if test="${media.uploader == cuser.key}">
 			<div class="modal-footer" style="margin-top: 0px;">
 				<span style="float: left" rel="popover" data-toggle="popover" data-placement="bottom" 
@@ -105,7 +108,7 @@
 			<ul class="pager">
 				<c:if test="${ showNewerButton }">
 					<li class="previous">
-						<a href="/view?v=${viewingStream.id }&offset=${newerOffset}&limit=${newerLimit}">&larr; Newer</a>
+						<a href="${viewingStream.viewURI }&offset=${newerOffset}&limit=${newerLimit}">&larr; Newer</a>
 					</li>
 				</c:if>
 
@@ -113,7 +116,7 @@
 
 					<%-- only show older when they exist --%>
 					<li class="next">
-						<a href="/view?v=${viewingStream.id }&offset=${olderOffset}&limit=${olderLimit}">Older &rarr;</a>
+						<a href="${viewingStream.viewURI }&offset=${olderOffset}&limit=${olderLimit}">Older &rarr;</a>
 					</li>
 
 				</c:if>
@@ -123,9 +126,15 @@
 
 	</div>
 		
-	<%-- TODO: only show if this is your stream? --%>
-	<t:uploadMedia stream="${ viewingStream.id }"></t:uploadMedia>
-		
+	<%-- If this is your stream, show the upload widget. Otherwise show the subscribe widget. --%>
+	<c:choose>
+		<c:when test="${ viewingStreamUser == cuser }">
+			<t:uploadMedia stream="${ viewingStream.id }" streamUser="${ viewingStreamUser.id }"></t:uploadMedia>
+		</c:when>
+		<c:otherwise>
+			<t:subscribe stream="${ viewingStream.id }" streamUser="${ viewingStreamUser.id }"></t:subscribe>
+		</c:otherwise>
+	</c:choose>
 	</c:when>
 	
 	<%-- BROWSE AVAILABLE STREAMS --%>
@@ -136,16 +145,25 @@
 		</div>
 		<div id="browseStreamPanel" class="panel panel-default">
 			<div class="panel-heading">
-				<H3 class="panel-title">Browse Streams</H3>
+				<H3 class="panel-title">
+					Browse available streams &ndash;
+					<small><em>Newest first</em></small>	
+				</H3>
+				
 			</div>
 			<div class="panel-body">
 				<c:choose><c:when test="${ not empty allStreamsList }">
 					<div class="container list-group">
 						<c:forEach var='stream' items='${ allStreamsList }'>
 							<a href="${ stream.viewURI }" class="list-group-item">
-    							<h4 class="list-group-item-heading">${ stream.name }</h4>
-   								<p class="list-group-item-text">Owner: ${ stream.owner.name }</p>
-   								<p class="list-group-item-text">${ stream.numberOfMedia } images.</p>
+    							<h4 class="list-group-item-heading">
+    								${ stream.name }
+    								<small>by <strong>${ stream.ownerName }</strong></small>
+    							</h4>
+   								<p class="list-group-item-text">
+   									${ stream.numberOfMedia } images &ndash;
+   								 	last updated: ${ stream.lastNewMedia }
+   								</p>
   							</a>
 						</c:forEach>
 					</div>

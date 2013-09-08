@@ -3,6 +3,7 @@
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
 <%-- NOTE: not actually using this attribute ... probably remove --%>
 <%@ attribute name="stream" required="true" %>
+<%@ attribute name="streamUser" required="true" %>
 
 <form action="${ uploadURL }" method="post" role="form" enctype="multipart/form-data">
 	<%-- All the cool kids use single letter keys --%>

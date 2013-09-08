@@ -3,7 +3,7 @@ package connexus.model;
 import static connexus.OfyService.ofy;
 
 import java.util.Date;
-import java.util.List;
+// import java.util.List;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreFailureException;

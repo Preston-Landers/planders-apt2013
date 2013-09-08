@@ -18,7 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
+
 import static connexus.OfyService.ofy;
+
 
 
 
@@ -30,6 +32,7 @@ import static connexus.OfyService.ofy;
 
 import com.google.appengine.api.blobstore.*;
 
+import connexus.StreamHandle;
 import connexus.model.*;
 
 public class View extends ConnexusServletBase {
@@ -44,6 +47,8 @@ public class View extends ConnexusServletBase {
 	private final BlobInfoFactory blobInfoFactory = new BlobInfoFactory();
 	
 	private Stream viewingStream;
+	private CUser viewingStreamUser;
+	private StreamHandle viewingStreamHandle;
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
@@ -130,29 +135,49 @@ public class View extends ConnexusServletBase {
 			HttpServletResponse resp) throws IOException, ServletException {
 		super.InitializeContext(req, resp);
 
-		viewingStream = null;
-		if (req.getParameter("v") != null) {
-			
-			CUser viewingStreamUser = null;
-			if (req.getParameter("vu") != null) {
-				viewingStreamUser = CUser.getById(Long.parseLong(req.getParameter("vu")), site.get());
-			}
-			req.setAttribute("viewingStreamUser", viewingStreamUser);
-			if (viewingStreamUser == null) {
-				alertError(req, "The stream you requested does not exist (cannot locate user).");
-				// throw new ServletException("Invalid stream requested");
-			} else {
-				viewingStream = Stream.getById(
-						Long.parseLong(req.getParameter("v")),
-						viewingStreamUser);
-				if (viewingStream == null) {
-					alertError(req, "The stream you requested does not exist.");
-					// throw new ServletException("Invalid stream requested");
-				}
-			}
+		// initialize my subscriptions (cuser could be null, you get an empty list)
+		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser);
+		if (mySubs.size() < 1) {
+			System.err.println("User has no subs. " + cuser);
 		}
-		req.setAttribute("viewingStream", viewingStream);
+		
+		try {
+			viewingStreamHandle = StreamHandle.getStreamHandleFromRequest(req, site);
+			viewingStream = viewingStreamHandle.getStream();
+			viewingStreamUser = viewingStreamHandle.getCuser();
+			req.setAttribute("viewingStream", viewingStream);
+			req.setAttribute("viewingStreamUser", viewingStreamUser);
+		} catch (RuntimeException e) {
+			viewingStreamHandle = null;
+			alertError(req, e.toString());
+		}
+		
+//		
+//		
+//		viewingStream = null;
+//		if (req.getParameter("v") != null) {
+//			
+//			CUser viewingStreamUser = null;
+//			if (req.getParameter("vu") != null) {
+//				viewingStreamUser = CUser.getById(Long.parseLong(req.getParameter("vu")), site.get());
+//			}
+//			req.setAttribute("viewingStreamUser", viewingStreamUser);
+//			if (viewingStreamUser == null) {
+//				alertError(req, "The stream you requested does not exist (cannot locate user).");
+//				// throw new ServletException("Invalid stream requested");
+//			} else {
+//				viewingStream = Stream.getById(
+//						Long.parseLong(req.getParameter("v")),
+//						viewingStreamUser);
+//				if (viewingStream == null) {
+//					alertError(req, "The stream you requested does not exist.");
+//					// throw new ServletException("Invalid stream requested");
+//				}
+//			}
+//		}
+//		req.setAttribute("viewingStream", viewingStream);
 	}
+	
 	
 	private void deleteMedia(HttpServletRequest req, HttpServletResponse resp) {
 		Media media = Media.getById(Long.parseLong(req.getParameter("delete")),

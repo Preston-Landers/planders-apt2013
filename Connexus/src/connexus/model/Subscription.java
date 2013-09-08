@@ -1,6 +1,10 @@
 package connexus.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import static connexus.OfyService.ofy;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
@@ -26,6 +30,15 @@ public class Subscription implements Comparable<Subscription> {
 		id = _id;
 		owner = _owner;
 		creationDate = new Date();
+	}
+	
+	public static List<Subscription> getSubscriptionsForUser(CUser user) {
+		if (user == null) {
+			return new ArrayList<Subscription>();
+		}
+		//List<Subscription> mySubs = new ArrayList<Subscription>();
+		//return mySubs;
+		return ofy().load().type(Subscription.class).ancestor(user).list();
 	}
 	
 	public Key<Subscription> getKey() {

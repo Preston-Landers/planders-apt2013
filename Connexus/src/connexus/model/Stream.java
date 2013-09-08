@@ -2,6 +2,9 @@ package connexus.model;
 
 import static connexus.OfyService.ofy;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +26,7 @@ public class Stream implements Comparable<Stream> {
 	
 	String coverURL;
 	@Index({IfNotNull.class}) List<String> tags;
-	Date creationDate;
+	@Index Date creationDate;
 
 	@SuppressWarnings("unused")
 	private Stream() {
@@ -44,11 +47,6 @@ public class Stream implements Comparable<Stream> {
 		return ofy().load().type(Stream.class).parent(cuser).id(objectId).get();
 	}
 
-	// TODO: this is bad
-	public static Stream getById(Long objectId, Ref<Site> site) {
-		Key objKey = Key.create(Stream.class, objectId);
-		return (Stream) ofy().load().key(objKey).get();
-	}
 
 	public String getViewURI() {
 		// Use URIBuilder?
@@ -109,13 +107,27 @@ public class Stream implements Comparable<Stream> {
 	}
 
 	
-	public String getLastNewMedia() {
+	public String getOwnerName() {
+		return ofy().load().key(owner).get().getRealName();
+	}
+
+	public Date getLastNewMediaDate() {
 		List<Media> ml = getMedia(0, 1);
 		if (ml == null || ml.isEmpty()) {
-			return "";
+			return null;
 		}
 		Media lastMedia = ml.get(0);
-		return lastMedia.getCreationDate().toString();
+		return lastMedia.getCreationDate();
+	}
+	
+	
+	public String getLastNewMedia() {
+		Date lnmDate = getLastNewMediaDate();
+		if (lnmDate == null) {
+			return "";
+		}
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		return df.format(lnmDate);
 	}
 	
 	public int getNumberOfMedia() {
@@ -137,17 +149,11 @@ public class Stream implements Comparable<Stream> {
 	}
 	
 	public static List<Stream> getAllStreams(Ref<Site> site) {
-		return ofy().load().type(Stream.class).ancestor(site).list();		
-	}
-	
-	@Override
-	public int compareTo(Stream other) {
-		if (creationDate.after(other.creationDate)) {
-			return 1;
-		} else if (creationDate.before(other.creationDate)) {
-			return -1;
-		}
-		return 0;
+		// order by getLastNewMedia()
+		List<Stream> rv = ofy().load().type(Stream.class).ancestor(site).list();
+		Collections.sort(rv);
+		Collections.reverse(rv);
+		return rv;	
 	}
 
 	/*
@@ -157,4 +163,16 @@ public class Stream implements Comparable<Stream> {
 		return ofy().load().type(Media.class).ancestor(this).order("-creationDate")
 				.offset(offset).limit(limit).list();
 	}
+	
+	
+	@Override
+	public int compareTo(Stream other) {
+		if (getLastNewMediaDate().after(other.getLastNewMediaDate())) {
+			return 1;
+		} else if (getLastNewMediaDate().before(other.getLastNewMediaDate())) {
+			return -1;
+		}
+		return 0;
+	}
+
 }
