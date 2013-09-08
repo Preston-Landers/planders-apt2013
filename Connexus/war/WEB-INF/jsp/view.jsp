@@ -2,8 +2,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <t:connexus><jsp:body>
 <c:choose>
+	<%-- VIEWING A SINGLE STREAM --%>
 	<c:when test="${ viewingStream ne null }">
-		<div class="page-header" style="margin-top: 5px">
+		<div class="page-header" >
 			<h1>${ viewingStream.name }</h1>
 			<table width="100%">
 				<TR>
@@ -66,7 +67,7 @@
         <%-- Allow delete if it's my image --%>
         <c:if test="${media.uploader == cuser.key}">
 			<div class="modal-footer" style="margin-top: 0px;">
-				<span style="float: left" rel="popover" data-toggle="popover" data-placement="left" 
+				<span style="float: left" rel="popover" data-toggle="popover" data-placement="bottom" 
 					data-html="true" data-trigger="hover" data-content="${ media.thumbnailDescription }">
 					<button type="button" onClick="return false;" class="btn btn-info" >
 						<span class="glyphicon glyphicon-info-sign"></span>
@@ -125,14 +126,45 @@
 	<%-- TODO: only show if this is your stream? --%>
 	<t:uploadMedia stream="${ viewingStream.id }"></t:uploadMedia>
 		
-		
 	</c:when>
+	
+	<%-- BROWSE AVAILABLE STREAMS --%>
 	<c:otherwise>
 		<div class="page-header">
-			<h1>You have not selected a stream to view.</h1>
-			<small><em style="font-variant: small-caps">TODO: Implement Me</em></small>
+			<h3>Available Streams</h3>
+			<small><em>Subscribe to your favorite streams!</em></small>
 		</div>
-	 	(TODO!)
+		<div id="browseStreamPanel" class="panel panel-default">
+			<div class="panel-heading">
+				<H3 class="panel-title">Browse Streams</H3>
+			</div>
+			<div class="panel-body">
+				<c:choose><c:when test="${ not empty allStreamsList }">
+					<div class="container list-group">
+						<c:forEach var='stream' items='${ allStreamsList }'>
+							<a href="/view?v=${ stream.id }" class="list-group-item">
+    							<h4 class="list-group-item-heading">${ stream.name }</h4>
+   								<p class="list-group-item-text">Owner: ${ stream.owner.name }</p>
+   								<p class="list-group-item-text">${ stream.numberOfMedia } images.</p>
+  							</a>
+						</c:forEach>
+					</div>
+				</c:when><c:otherwise>
+					<div class="well text-center">
+						<H2>I can't find any photo streams yet!</H2> 
+					</div>
+					<div class="text-center">
+						<a href="/create" >
+							<button type="button" class="btn btn-primary btn-lg">Create a Stream Now!</button>
+						</a>
+					</div>
+										
+				</c:otherwise>
+				</c:choose>
+			</div>
+		
+		</div>
+		
 	</c:otherwise>
 </c:choose>
 </jsp:body>

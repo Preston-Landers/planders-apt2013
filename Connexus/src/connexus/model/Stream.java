@@ -5,7 +5,9 @@ import static connexus.OfyService.ofy;
 import java.util.Date;
 import java.util.List;
 
+import com.google.appengine.api.datastore.KeyFactory;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -40,6 +42,11 @@ public class Stream implements Comparable<Stream> {
 	
 	public static Stream getById(Long objectId, CUser cuser) {	
 		return ofy().load().type(Stream.class).parent(cuser).id(objectId).get();
+	}
+
+	public static Stream getById(Long objectId, Ref<Site> site) {
+		Key objKey = Key.create(Stream.class, objectId);
+		return (Stream) ofy().load().key(objKey).get();
 	}
 
 
@@ -122,6 +129,10 @@ public class Stream implements Comparable<Stream> {
 		// Nuke it
 		ofy().delete().entities(this).now();
 		return true;
+	}
+	
+	public static List<Stream> getAllStreams(Ref<Site> site) {
+		return ofy().load().type(Stream.class).ancestor(site).list();		
 	}
 	
 	@Override

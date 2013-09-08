@@ -3,12 +3,18 @@ window.cx = (function (cx, $, window, undefined) {
 	
 	$(document).ready(function() {
 		
+		// Reparent modals to BODY so when they pop up they don't mess with the main content 
+		// (was causing a little jumpiness when popping up)
+		// $("body").append($("div.modal"));
+		
+		// Activate tooltip and popover features
 		$(function () {
 	        $("[rel='tooltip']").tooltip();
 	    });
 		$(function () {
 	        $("[rel='popover']").popover();
 	    });
+		
 		
 		// When uploading a file, automatically set the comment to the filename
 		$("#uploadMediaFile").change(function() {

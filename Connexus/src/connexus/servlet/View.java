@@ -1,6 +1,8 @@
 package connexus.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
+
+
 import static connexus.OfyService.ofy;
+
+
 
 
 
@@ -90,6 +96,10 @@ public class View extends ConnexusServletBase {
 			req.setAttribute("showNewerButton", showNewerButton);
 			req.setAttribute("showOlderButton", showOlderButton);
 			
+		} else {
+			// No stream selected... let them browse all streams.
+			List<Stream> allStreams = Stream.getAllStreams(site);
+			req.setAttribute("allStreamsList", allStreams);
 		}
 		
 		// Get the Blobstore upload URL.
@@ -122,12 +132,11 @@ public class View extends ConnexusServletBase {
 
 		viewingStream = null;
 		if (req.getParameter("v") != null) {
-			viewingStream = Stream.getById(Long.parseLong(req.getParameter("v")), cuser);
+			// viewingStream = Stream.getById(Long.parseLong(req.getParameter("v")), cuser);
+			viewingStream = Stream.getById(Long.parseLong(req.getParameter("v")), site);
 			if (viewingStream == null) {
 				alertError(req, "The stream you requested does not exist.");
-				// TODO: ERROR SCREEN?
-				req.getRequestDispatcher(dispatcher).forward(req, resp); 
-				return;
+				// throw new ServletException("Invalid stream requested");
 			}
 		}
 		req.setAttribute("viewingStream", viewingStream);

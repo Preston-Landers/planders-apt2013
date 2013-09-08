@@ -24,6 +24,10 @@ div.thumbnail, img.img-thumbnail {
 	box-shadow: 7px 7px 5px #ccc;
 }
 
+.page-header {
+	margin-top: 0px;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 
