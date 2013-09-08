@@ -5,6 +5,7 @@ import java.util.Date;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
 
 @Entity
@@ -15,7 +16,7 @@ public class Subscription implements Comparable<Subscription> {
 	@Id Long id;
 	@Parent Key<CUser> owner;
 	Key<Stream> stream;
-	Date creationDate;
+	@Index Date creationDate;
 
 	@SuppressWarnings("unused")
 	private Subscription() {

@@ -142,7 +142,7 @@
 				<c:choose><c:when test="${ not empty allStreamsList }">
 					<div class="container list-group">
 						<c:forEach var='stream' items='${ allStreamsList }'>
-							<a href="/view?v=${ stream.id }" class="list-group-item">
+							<a href="${ stream.viewURI }" class="list-group-item">
     							<h4 class="list-group-item-heading">${ stream.name }</h4>
    								<p class="list-group-item-text">Owner: ${ stream.owner.name }</p>
    								<p class="list-group-item-text">${ stream.numberOfMedia } images.</p>

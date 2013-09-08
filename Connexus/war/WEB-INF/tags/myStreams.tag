@@ -25,7 +25,7 @@
 									</thead>
 									<c:forEach var='stream' items='${ myStreamList }'>
 										<TR>
-											<TD><A HREF="/view?v=${ stream.id }">${stream.name}</A></TD>
+											<TD><A HREF="${ stream.viewURI }">${stream.name}</A></TD>
 											<TD>
 ${fn:length(stream.lastNewMedia) > 0  ? stream.lastNewMedia : '<small><em>(None)</em></small>'}</TD>
 											<TD>${stream.numberOfMedia}</TD>

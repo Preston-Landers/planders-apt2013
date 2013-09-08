@@ -122,7 +122,7 @@ public class View extends ConnexusServletBase {
 			alertInfo(req, "TODO: Not implemented yet.");	
 		}
 				
-		resp.sendRedirect(uri + "?v=" + viewingStream.getId());
+		resp.sendRedirect(viewingStream.getViewURI());
 	}
 
 	@Override
@@ -132,11 +132,23 @@ public class View extends ConnexusServletBase {
 
 		viewingStream = null;
 		if (req.getParameter("v") != null) {
-			// viewingStream = Stream.getById(Long.parseLong(req.getParameter("v")), cuser);
-			viewingStream = Stream.getById(Long.parseLong(req.getParameter("v")), site);
-			if (viewingStream == null) {
-				alertError(req, "The stream you requested does not exist.");
+			
+			CUser viewingStreamUser = null;
+			if (req.getParameter("vu") != null) {
+				viewingStreamUser = CUser.getById(Long.parseLong(req.getParameter("vu")), site.get());
+			}
+			req.setAttribute("viewingStreamUser", viewingStreamUser);
+			if (viewingStreamUser == null) {
+				alertError(req, "The stream you requested does not exist (cannot locate user).");
 				// throw new ServletException("Invalid stream requested");
+			} else {
+				viewingStream = Stream.getById(
+						Long.parseLong(req.getParameter("v")),
+						viewingStreamUser);
+				if (viewingStream == null) {
+					alertError(req, "The stream you requested does not exist.");
+					// throw new ServletException("Invalid stream requested");
+				}
 			}
 		}
 		req.setAttribute("viewingStream", viewingStream);
@@ -177,7 +189,7 @@ public class View extends ConnexusServletBase {
         
         ofy().save().entities(media).now();
         
-        System.err.println("MEDIA was into space!" + media);
+        System.err.println("MEDIA was into space! " + media);
         
 	}
 

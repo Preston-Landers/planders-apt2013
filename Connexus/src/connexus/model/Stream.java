@@ -44,12 +44,17 @@ public class Stream implements Comparable<Stream> {
 		return ofy().load().type(Stream.class).parent(cuser).id(objectId).get();
 	}
 
+	// TODO: this is bad
 	public static Stream getById(Long objectId, Ref<Site> site) {
 		Key objKey = Key.create(Stream.class, objectId);
 		return (Stream) ofy().load().key(objKey).get();
 	}
 
-
+	public String getViewURI() {
+		// Use URIBuilder?
+		return "/view?v=" + id + "&vu=" + owner.getId();
+	}
+	
 	public String toString() {
 		return "Stream " + id + " : " + name;
 	}

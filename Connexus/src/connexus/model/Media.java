@@ -57,7 +57,7 @@ public class Media implements Comparable<Media> {
 
 
 	public String toString() {
-		return "Media " + id + " : " + mimeType + " : " + fileName;
+		return "Media " + id + " U: " + uploader.getId() + " : " + mimeType + " : " + fileName;
 	}
 	
 	public Long getId() {
