@@ -12,6 +12,8 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
 
+import connexus.StreamHandle;
+
 @Entity
 /**
  * A user's subscription to a stream which could potentially belong to another user.
@@ -19,16 +21,17 @@ import com.googlecode.objectify.annotation.Parent;
 public class Subscription implements Comparable<Subscription> {
 	@Id Long id;
 	@Parent Key<CUser> owner;
-	Key<Stream> stream;
+	@Index Key<Stream> stream;
 	@Index Date creationDate;
 
 	@SuppressWarnings("unused")
 	private Subscription() {
 	}
 
-	public Subscription(Long _id, Key<CUser> _owner) {
+	public Subscription(Long _id, Key<CUser> _owner, Key<Stream> _stream) {
 		id = _id;
 		owner = _owner;
+		stream = _stream;
 		creationDate = new Date();
 	}
 	
@@ -39,6 +42,16 @@ public class Subscription implements Comparable<Subscription> {
 		//List<Subscription> mySubs = new ArrayList<Subscription>();
 		//return mySubs;
 		return ofy().load().type(Subscription.class).ancestor(user).list();
+	}
+	
+	/**
+	 * Load the given user's subscription for this stream. If none exists, returns null.
+	 */
+	public static Subscription getUserSubscriptionFromStreamHandle(CUser user, StreamHandle streamHandle) {
+		return ofy().load().type(Subscription.class).ancestor(user)
+				.filter("stream ==", streamHandle.getStream().getKey()).first()
+				.get();
+		
 	}
 	
 	public Key<Subscription> getKey() {

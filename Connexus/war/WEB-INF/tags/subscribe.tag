@@ -4,6 +4,15 @@
 <%@ attribute name="stream" required="true" %>
 <%@ attribute name="streamUser" required="true" %>
 
+<c:choose>
+	<c:when test="${ mySubForStream != null }">
+		<c:set var="subActionVerb" value="Unsubscribe from" scope="page" />
+	</c:when>
+	<c:otherwise>
+		<c:set var="subActionVerb" value="Subscribe to" scope="page" />
+	</c:otherwise>
+</c:choose>
+
 <%-- TODO: don't show if already subscribed... --%>
 <form action="/subscribe" method="post" role="form">
 	<%-- All the cool kids use single letter keys --%>
@@ -12,7 +21,8 @@
 	<div id="createStreamPanel" class="panel panel-default">
 		<div class="panel-heading">
 			<H3 class="panel-title">
-				Subscribe to <strong>${ viewingStream.name }</strong> from 
+				<c:out value="${ subActionVerb }" />
+				<strong>${ viewingStream.name }</strong> from 
 				<em>${ viewingStreamUser.realName }</em>
 			</H3>
 		</div>
@@ -20,10 +30,22 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<button class="btn btn-success" name="subscribe" type="submit">
-							<span class="glyphicon glyphicon-check"></span>&nbsp;
-							Subscribe
-						</button>
+					
+						<c:choose>
+							<c:when test="${ mySubForStream != null }">
+								<button class="btn btn-warning" name="unsubscribe" type="submit">
+									<span class="glyphicon glyphicon-remove-circle"></span>&nbsp;
+									Unsubscribe
+								</button>
+							</c:when>
+							<c:otherwise>
+								<button class="btn btn-success" name="subscribe" type="submit">
+									<span class="glyphicon glyphicon-star-empty"></span>&nbsp;
+									Subscribe
+								</button>
+							</c:otherwise>
+						</c:choose>					
+					
 					</div>
 				</div>
 			</div>

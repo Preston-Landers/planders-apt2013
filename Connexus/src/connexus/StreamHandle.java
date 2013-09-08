@@ -41,26 +41,28 @@ public class StreamHandle {
 	// TODO: fix exception class?
 	public static StreamHandle getStreamHandleFromRequest(
 			HttpServletRequest req, Ref<Site> site) throws RuntimeException {
-		Stream viewingStream = null;
-		CUser viewingStreamUser = null;
-		if (req.getParameter("v") != null) {
 
-			if (req.getParameter("vu") != null) {
-				viewingStreamUser = CUser.getById(
-						Long.parseLong(req.getParameter("vu")), site.get());
-			}
-			if (viewingStreamUser == null) {
-				throw new RuntimeException(
-						"The stream you requested does not exist (cannot locate user).");
-			} else {
-				viewingStream = Stream.getById(
-						Long.parseLong(req.getParameter("v")),
-						viewingStreamUser);
-				if (viewingStream == null) {
-					throw new RuntimeException(
-							"The stream you requested does not exist.");
-				}
-			}
+		String streamId = req.getParameter("v");
+		if (streamId == null) {
+			throw new RuntimeException("No stream ID (v) in request.");
+		}
+		String streamUserId = req.getParameter("vu");
+		if (streamUserId == null) {
+			throw new RuntimeException("No stream User ID (vu) in request.");
+		}
+
+		CUser viewingStreamUser = CUser.getById(Long.parseLong(streamUserId),
+				site.get());
+		if (viewingStreamUser == null) {
+			throw new RuntimeException(
+					"The stream you requested does not exist (cannot locate user).");
+		}
+
+		Stream viewingStream = Stream.getById(Long.parseLong(streamId),
+				viewingStreamUser);
+		if (viewingStream == null) {
+			throw new RuntimeException(
+					"The stream you requested does not exist.");
 		}
 		return new StreamHandle(viewingStream, viewingStreamUser);
 	}
