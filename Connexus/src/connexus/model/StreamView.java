@@ -1,11 +1,17 @@
 package connexus.model;
 
+import static connexus.OfyService.ofy;
+
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+
+import connexus.Config;
 
 @Entity
 /**
@@ -48,6 +54,20 @@ public class StreamView implements Comparable<StreamView> {
 		return date;
 	}
 
+	/**
+	 * Delete all StreamView instances that are older than our maintenance period.
+	 * (Async)
+	 */
+	public static void cleanupStreamViews () {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		
+		cal.add(Calendar.SECOND, Config.safeLongToInt(-Leaderboard.lbKeepViewsTimeSec));
+		Date keepViewsTime = cal.getTime();
+
+		List<StreamView> viewList = ofy().load().type(StreamView.class).filter("date <=", keepViewsTime).list();
+		ofy().delete().entities(viewList);
+	}
 
 	@Override
 	public int compareTo(StreamView other) {

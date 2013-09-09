@@ -181,6 +181,9 @@ public class Stream implements Comparable<Stream> {
 	 * Returns ALL streams available in the system, sorted by most recently updated first.
 	 */
 	public static List<Stream> getAllStreams(Key<Site> site) {
+		if (site == null) {
+			site = Site.load(null).getKey();
+		}
 		// order by getLastNewMedia()
 		List<Stream> rv = ofy().load().type(Stream.class).ancestor(site).list();
 		Collections.sort(rv);
@@ -234,13 +237,17 @@ public class Stream implements Comparable<Stream> {
 
 	/**
 	 * Discover and set the views of this stream within the last hour (does a save)
+	 * 
+	 * Fix to use the constants
 	 */
 	public void generateTrendingViews() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		cal.add(Calendar.HOUR, -1);
-		Date oneHourAgo = cal.getTime();
-		long views = ofy().load().type(StreamView.class).filter("stream ==", getKey()).filter("date >=", oneHourAgo).count();
+		
+		// dis cast ok?
+		cal.add(Calendar.SECOND, Config.safeLongToInt(-Leaderboard.lbTimeWindowSec));
+		Date timeWindow = cal.getTime();
+		long views = ofy().load().type(StreamView.class).filter("stream ==", getKey()).filter("date >=", timeWindow).count();
 		setTrendingViews(views);
 		save();
 	}

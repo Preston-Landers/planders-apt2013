@@ -3,11 +3,11 @@ package connexus.model;
 import static connexus.OfyService.ofy;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import com.google.common.collect.Ordering;
-
 import com.google.common.primitives.Longs;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
@@ -15,6 +15,9 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
+
+import connexus.Config;
+import connexus.EmailHelper;
 
 @Entity
 /**
@@ -29,6 +32,8 @@ public class Leaderboard implements Comparable<Leaderboard> {
 	List<Ref<Stream>> leaderBoard;
 	@Index
 	Long reportFrequencySec;
+	@Index
+	Date reportLastRun;
 
 	// Report frequency options
 	public static final long FREQ_NONE = 0;
@@ -54,6 +59,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 	private Leaderboard() {
 	}
 
+	@SuppressWarnings("deprecation")
 	public Leaderboard(Long id, Key<Site> site) {
 		this.id = id;
 		if (id == null) {
@@ -63,6 +69,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		this.lastUpdated = new Date();
 		this.leaderBoard = new ArrayList<Ref<Stream>>();
 		this.reportFrequencySec = FREQ_NONE;
+		this.reportLastRun = new Date(90,1,1);
 	}
 
 	public Key<Leaderboard> getKey() {
@@ -98,6 +105,9 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		if (id == null) {
 			id = lbId;
 		}
+		if (site == null) {
+			site = Site.load(null).getKey();
+		}
 		return ofy().load().type(Leaderboard.class).parent(site).id(id).get();
 	}
 
@@ -118,14 +128,33 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		this.leaderBoard = leaderBoard;
 	}
 
+	public Long getReportFrequencySec() {
+		return reportFrequencySec;
+	}
+
+	public void setReportFrequencySec(Long reportFrequencySec) {
+		this.reportFrequencySec = reportFrequencySec;
+	}
+
+	public Date getReportLastRun() {
+		return reportLastRun;
+	}
+
+	public void setReportLastRun(Date reportLastRun) {
+		this.reportLastRun = reportLastRun;
+	}
+
+	public Key<Site> getSite() {
+		return site;
+	}
+
 	public void save() {
 		updateNow();
 		ofy().save().entities(this).now();
 	}
 
 	/**
-	 * This is what the cron job will run to generate leaderboard stats TODO:
-	 * separate function to clean out old stats
+	 * This is what the cron job runs to generate leaderboard stats
 	 */
 	public static void generateLeaderBoard() {
 		Site site = Site.load(null);
@@ -151,8 +180,8 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		int i = 0;
 		for (Stream stream : sortedStreams) {
 			i++;
-			System.err.println("SETTING LEADERBOARD " + i + " "
-					+ stream.getName() + " -- " + stream.getTrendingViews());
+//			System.err.println("SETTING LEADERBOARD " + i + " "
+//					+ stream.getName() + " -- " + stream.getTrendingViews());
 			rv.add(stream.getRef());
 			if (i > lbSize) {
 				break;
@@ -163,6 +192,56 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		LB.save();
 	}
 
+	@SuppressWarnings("deprecation")
+	public void maybeRunTrendingReport() {
+		Date lastRun = getReportLastRun();
+		if (lastRun == null) {
+			lastRun = new Date(90, 1, 1);
+		}
+		Long reportFreqSec = getReportFrequencySec();
+		if (reportFreqSec == null || reportFreqSec.equals(FREQ_NONE)) {
+			System.err.println("Email Report is disabled. Last run: " + lastRun);
+			return;
+		}
+		Date now = new Date();
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(lastRun);
+		
+		cal.add(Calendar.SECOND, Config.safeLongToInt(reportFreqSec));
+		Date nextReportTime = cal.getTime();
+		
+		if ( now.compareTo(nextReportTime) < 0 ) {
+			System.err.println("Not time for report yet. Next report time is: " + nextReportTime);
+			return;
+		}
+		// 
+		System.err.println(now
+				+ " It's time to run the report. Report Interval: "
+				+ reportFreqSec + " sec. Last run " + lastRun);
+		runTrendingReport();
+	}
+	
+	public void runTrendingReport() {
+		List<Stream> lbStreams = getLeaderBoardList();
+		StringBuilder sb = new StringBuilder();
+		sb.append("Trending Streams report for connexus-apt.appspot.com.\n\n\n");
+		int i = 0;
+		for (Stream stream : lbStreams ) {
+			i++;
+			sb.append("#" + i + " : " + stream.getName() + " has " + stream.getTrendingViews() + " views in last hour\n\n");	
+		}
+		sb.append("\n\n (end of report)\n\n");
+
+		// Indicate that the report ran ... even if the email doesn't actually fire off...
+		setReportLastRun(new Date());
+		save();
+		
+		
+		String subject = Config.emailSubject;
+		EmailHelper.sendEmail(subject, sb.toString());
+	}
+	
 	@Override
 	public int compareTo(Leaderboard other) {
 		if (lastUpdated.after(other.getLastUpdated())) {

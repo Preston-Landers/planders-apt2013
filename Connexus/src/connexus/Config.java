@@ -12,11 +12,21 @@ public class Config {
 	
     public static final long siteId = 1;
     
+    public static final String emailSubject = "[APT-Preston Landers] Trending streams for connexus-apt.appspot.com";
+    
     // Maximum search results to show
     public static final int maxSearchResults = 5;
 
     public static int getMaxSearchResults() {
     	return maxSearchResults;
+    }
+    
+    public static int safeLongToInt(long l) {
+        if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException
+                (l + " cannot be cast to int without changing its value.");
+        }
+        return (int) l;
     }
     
 	/*
