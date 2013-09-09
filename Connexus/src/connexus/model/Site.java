@@ -1,10 +1,13 @@
 package connexus.model;
 
 import java.util.Date;
+import static connexus.OfyService.ofy;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+
+import connexus.Config;
 
 @Entity
 /**
@@ -25,6 +28,12 @@ public class Site implements Comparable<Site> {
 		this.creationDate = new Date();
 	}
 
+	public static Site load(Long _id) {
+		if (_id == null)
+			_id = Config.siteId;
+        return ofy().load().type(Site.class).id(_id).get();
+	}
+	
 	public Key<Site> getKey() {
 		return Key.create(Site.class, id);
 	}

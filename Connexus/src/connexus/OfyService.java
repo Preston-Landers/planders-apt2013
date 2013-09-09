@@ -12,6 +12,8 @@ public class OfyService {
     static {
     	// Perform entity registrations here
     	factory().register(Site.class);
+    	factory().register(Leaderboard.class);
+    	factory().register(StreamView.class);
         factory().register(CUser.class);
         factory().register(Media.class);
         factory().register(Stream.class);
@@ -20,10 +22,17 @@ public class OfyService {
         // Ensure that our logical site entity exists.
         // Ancestor entity for searching all root-less objects.
 
-        Site theSite = ofy().load().type(Site.class).id(Config.siteId).get();
-        if (theSite == null) {
-        	theSite = new Site(Config.siteId, "Primary site");
-        	ofy().save().entity(theSite).now();
+        Site site = Site.load(Config.siteId);
+        if (site == null) {
+        	site = new Site(Config.siteId, "Primary site");
+        	ofy().save().entity(site).now();
+        }
+        
+        // Create the leaderboard if needed
+        Leaderboard lb = Leaderboard.load(null, site.getKey());
+        if (lb == null) {
+        	lb = new Leaderboard(Leaderboard.lbId, site.getKey());
+        	ofy().save().entity(lb).now();
         }
     }
 

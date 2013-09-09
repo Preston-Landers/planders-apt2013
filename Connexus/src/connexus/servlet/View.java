@@ -96,7 +96,7 @@ public class View extends ConnexusServletBase {
 			
 		} else {
 			// No stream selected... let them browse all streams.
-			List<Stream> allStreams = Stream.getAllStreams(site);
+			List<Stream> allStreams = Stream.getAllStreams(site.getKey());
 			req.setAttribute("allStreamsList", allStreams);
 		}
 

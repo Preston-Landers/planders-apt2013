@@ -33,7 +33,8 @@ public class Stream implements Comparable<Stream> {
 	@Index({IfNotNull.class}) List<String> tags;
 	@Index Date creationDate;
 
-	@Index Long views;
+	@Index Long views;   // all time views
+	long trendingViews;  // views only within the trending window
 	
 	@SuppressWarnings("unused")
 	private Stream() {
@@ -174,7 +175,7 @@ public class Stream implements Comparable<Stream> {
 	/**
 	 * Returns ALL streams available in the system, sorted by most recently updated first.
 	 */
-	public static List<Stream> getAllStreams(Ref<Site> site) {
+	public static List<Stream> getAllStreams(Key<Site> site) {
 		// order by getLastNewMedia()
 		List<Stream> rv = ofy().load().type(Stream.class).ancestor(site).list();
 		Collections.sort(rv);
@@ -207,13 +208,25 @@ public class Stream implements Comparable<Stream> {
 		views++;
 		setViews(views);
 		save();
+		
+		StreamView streamView = new StreamView(null, getKey());
+		ofy().save().entities(streamView);  // async
 		return views;
 	}
 
 	public void save() {
+		// could be async but nah...
 		ofy().save().entities(this).now();
 	}
 	
+	public long getTrendingViews() {
+		return trendingViews;
+	}
+
+	public void setTrendingViews(long trendingViews) {
+		this.trendingViews = trendingViews;
+	}
+
 	@Override
 	public int compareTo(Stream other) {
 		if (getLastNewMediaDate().after(other.getLastNewMediaDate())) {

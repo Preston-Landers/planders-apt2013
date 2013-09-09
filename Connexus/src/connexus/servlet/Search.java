@@ -80,7 +80,7 @@ public class Search extends ConnexusServletBase {
 		List<Stream> rv = new ArrayList<Stream>();
 		int hits = 0;
 		int max = Config.getMaxSearchResults();
-		for (Stream stream : Stream.getAllStreams(site)) {
+		for (Stream stream : Stream.getAllStreams(site.getKey())) {
 			if (hits > max) {
 				break;
 			}

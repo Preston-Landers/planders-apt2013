@@ -1,10 +1,15 @@
 package connexus.servlet;
 
-//import static connexus.OfyService.ofy;
+import static connexus.OfyService.ofy;
 //import java.util.List;
 //import connexus.CUser;
 
+
+
+
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import connexus.model.Leaderboard;
+import connexus.model.Stream;
 import connexus.status.*;
 
 public class Trending extends ConnexusServletBase {
@@ -28,22 +35,25 @@ public class Trending extends ConnexusServletBase {
 			throws IOException, ServletException {
 		InitializeContext(req, resp); // Base site context initialization
 
-//		List<CUser> allUsersList = ofy().load().type(CUser.class).list();
-//		for (CUser userRec : allUsersList) {
-//			System.err.println("USER REC: " + userRec.toString());
-//		}
-//		req.setAttribute("userList", allUsersList);
-
-		// throw new ServletException("Retrieving products failed!", e);
+		req.setAttribute("leaderBoardSize", Leaderboard.lbSize);
+		
+		// Get the leaderboard
+		// Leaderboard lb = ofy().load().type(Leaderboard.class).parent(site).id(Leaderboard.lbId).get();
+		Leaderboard lb = Leaderboard.load(null, site.getKey());
+		
+		// TODO: move to cron job!
+		
+		List<Stream> leaderBoard = lb.getLeaderBoard();
+		req.setAttribute("leaderBoard", leaderBoard);
 		
 		// Forward to JSP page to display them in a HTML table.
 		req.getRequestDispatcher(dispatcher).forward(req, resp); 
 	}
 	
-	public void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException, ServletException {
-		InitializeContext(req, resp); // Base site context initialization
-		alertInfo(req, "TODO: Not implemented yet.");
-		resp.sendRedirect(uri);
-	}
+//	public void doPost(HttpServletRequest req, HttpServletResponse resp)
+//			throws IOException, ServletException {
+//		InitializeContext(req, resp); // Base site context initialization
+//		alertInfo(req, "TODO: Not implemented yet.");
+//		resp.sendRedirect(uri);
+//	}
 }
