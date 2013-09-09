@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -49,6 +50,10 @@ public class Stream implements Comparable<Stream> {
 	
 	public Key<Stream> getKey() {
 		return Key.create(owner, Stream.class, id);
+	}
+	
+	public Ref<Stream> getRef() {
+		return Ref.create(getKey(), this);
 	}
 	
 	public static Stream getById(Long objectId, CUser cuser) {	
@@ -227,6 +232,19 @@ public class Stream implements Comparable<Stream> {
 		this.trendingViews = trendingViews;
 	}
 
+	/**
+	 * Discover and set the views of this stream within the last hour (does a save)
+	 */
+	public void generateTrendingViews() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.HOUR, -1);
+		Date oneHourAgo = cal.getTime();
+		long views = ofy().load().type(StreamView.class).filter("stream ==", getKey()).filter("date >=", oneHourAgo).count();
+		setTrendingViews(views);
+		save();
+	}
+	
 	@Override
 	public int compareTo(Stream other) {
 		if (getLastNewMediaDate().after(other.getLastNewMediaDate())) {

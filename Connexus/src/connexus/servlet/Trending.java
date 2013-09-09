@@ -42,8 +42,9 @@ public class Trending extends ConnexusServletBase {
 		Leaderboard lb = Leaderboard.load(null, site.getKey());
 		
 		// TODO: move to cron job!
+		Leaderboard.generateLeaderBoard();
 		
-		List<Stream> leaderBoard = lb.getLeaderBoard();
+		List<Stream> leaderBoard = lb.getLeaderBoardList();
 		req.setAttribute("leaderBoard", leaderBoard);
 		
 		// Forward to JSP page to display them in a HTML table.
