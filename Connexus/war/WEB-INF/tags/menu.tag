@@ -29,7 +29,7 @@
 		<!--       <button type="submit" class="btn btn-default">Submit</button> -->
 		<!--     </form> -->
 		<ul class="nav navbar-nav navbar-right">
-			<t:menuTab label="Admin" triggerURIEnd="/admin.jsp" target="/admin"></t:menuTab>
+			<%-- <t:menuTab label="Admin" triggerURIEnd="/admin.jsp" target="/admin"></t:menuTab>  --%>
 			<t:menuLoginTab></t:menuLoginTab>
 		</ul>
 	</div>
