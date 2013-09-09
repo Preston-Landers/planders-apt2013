@@ -183,7 +183,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 //			System.err.println("SETTING LEADERBOARD " + i + " "
 //					+ stream.getName() + " -- " + stream.getTrendingViews());
 			rv.add(stream.getRef());
-			if (i > lbSize) {
+			if (i >= lbSize) {
 				break;
 			}
 		}

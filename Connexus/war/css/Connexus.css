@@ -32,6 +32,11 @@ div.thumbnail, img.img-thumbnail {
 	text-decoration: none;
 }
 
+#formReportFreq .radio {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 

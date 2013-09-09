@@ -143,7 +143,8 @@ public class Stream implements Comparable<Stream> {
 	public Date getLastNewMediaDate() {
 		List<Media> ml = getMedia(0, 1);
 		if (ml == null || ml.isEmpty()) {
-			return null;
+			// kind of bogus but I hate nulls
+			return getCreationDate();
 		}
 		Media lastMedia = ml.get(0);
 		return lastMedia.getCreationDate();
@@ -254,9 +255,11 @@ public class Stream implements Comparable<Stream> {
 	
 	@Override
 	public int compareTo(Stream other) {
-		if (getLastNewMediaDate().after(other.getLastNewMediaDate())) {
+		Date myDate = getLastNewMediaDate();
+		Date otherDate = other.getLastNewMediaDate(); 
+		if (myDate.after(otherDate)) {
 			return 1;
-		} else if (getLastNewMediaDate().before(other.getLastNewMediaDate())) {
+		} else if (myDate.before(otherDate)) {
 			return -1;
 		}
 		return 0;

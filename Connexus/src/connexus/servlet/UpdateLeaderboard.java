@@ -21,7 +21,10 @@ public class UpdateLeaderboard extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 4152585588958400842L;
-	
+
+	/**
+	 * Runs the cron job to update the leaderboard.  (/cron/updatelb is the URL)
+	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
@@ -36,11 +39,6 @@ public class UpdateLeaderboard extends HttpServlet {
         }        
 		
         Leaderboard LB = Leaderboard.load(null, null); // uses defaults
-        
-        // LB.setReportFrequencySec(Leaderboard.FREQ_5MIN);
-        // LB.save();
-        
-        // LB = Leaderboard.load(null, null); // uses defaults
         
 		Leaderboard.generateLeaderBoard();
 		

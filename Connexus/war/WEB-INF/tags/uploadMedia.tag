@@ -7,8 +7,7 @@
 
 <form action="${ uploadURL }" method="post" role="form" enctype="multipart/form-data">
 	<%-- All the cool kids use single letter keys --%>
-	<input type="hidden" name="v" value="${ viewingStream.id }">
-	<input type="hidden" name="vu" value="${ viewingStream.owner.id }">
+	<input type="hidden" name="v" value="${ viewingStream.objectURI }">
 	<div id="createStreamPanel" class="panel panel-default">
 		<div class="panel-heading">
 			<H3 class="panel-title">Add an image to ${ viewingStream.name }</H3>

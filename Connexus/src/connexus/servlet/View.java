@@ -174,6 +174,7 @@ public class View extends ConnexusServletBase {
 
 	private void uploadMedia(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
+		
 		// TODO: verify user is logged in?
 
 		Map<String, List<BlobKey>> uploadMap = blobstoreService.getUploads(req);
