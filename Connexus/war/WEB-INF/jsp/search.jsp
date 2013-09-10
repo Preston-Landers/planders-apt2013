@@ -43,23 +43,8 @@
 		
 	</div>
 	<div class="panel-body">
-		<c:choose><c:when test="${ not empty searchResultsList }">
-			<div class="container list-group">
-				<c:forEach var='stream' items='${ searchResultsList }'>
-					<t:stream stream="${ stream }"></t:stream>
-				</c:forEach>
-			</div>
-		</c:when><c:otherwise>
-			<div class="well text-center">
-				<H4>I can't find any streams that match your search terms.</H4> 
-			</div>
-			<div class="text-center">
-				<a href="/create" >
-					<button type="button" class="btn btn-primary btn-lg">Create a Stream Now!</button>
-				</a>
-			</div>
-								
-		</c:otherwise></c:choose>
+		<t:streamList streamList="${searchResultsList }"
+							emptyText="I can't find any streams that match your search terms."></t:streamList>
 	</div>
 
 </div>

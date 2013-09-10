@@ -3,9 +3,10 @@
 <%@ taglib prefix="func" uri="/WEB-INF/tlds/functions.tld" %>
 <t:connexus><jsp:body>
 <c:choose>
-<%-- VIEWING A SINGLE STREAM --%>
+<%-- VIEWING A SINGLE STREAM   style="background: url(${ viewingStream.coverURL });" --%>
 	<c:when test="${ viewingStream ne null }">
-		<div class="page-header" >
+		<div class="stream-cover-bg" >
+		<div class="page-header stream-page-header" >
 			<h1>${ viewingStream.name }</h1>
 			<table width="100%">
 				<TR>
@@ -15,7 +16,8 @@
 					</TD>
 					<TD style="text-align: right">					
 					<small><em>${ numberOfMedia } images total</em></small> &mdash;
-					<small><em>Last updated: ${ viewingStream.lastNewMedia} </em></small>
+					<small><em>Last updated: ${ viewingStream.lastNewMedia} </em></small> &mdash;
+					<small><em> ${ viewingStream.views } views</em></small>
 					</TD>
 				</TR>
 			</table>
@@ -164,6 +166,7 @@
 				</c:choose>
 			</p>
 		</div>
+		</div>
 	</div>
 		
 	<%-- If this is your stream, show the upload widget. Otherwise show the subscribe widget. --%>
@@ -192,24 +195,7 @@
 				
 			</div>
 			<div class="panel-body">
-				<c:choose><c:when test="${ not empty allStreamsList }">
-					<div class="container list-group">
-						<c:forEach var='stream' items='${ allStreamsList }'>
-							<t:stream stream="${ stream }"></t:stream>
-						</c:forEach>
-					</div>
-				</c:when><c:otherwise>
-					<div class="well text-center">
-						<H2>I can't find any photo streams yet!</H2> 
-					</div>
-					<div class="text-center">
-						<a href="/create" >
-							<button type="button" class="btn btn-primary btn-lg">Create a Stream Now!</button>
-						</a>
-					</div>
-										
-				</c:otherwise>
-				</c:choose>
+				<t:streamList streamList="${ allStreamsList }"></t:streamList>
 			</div>
 		
 		</div>

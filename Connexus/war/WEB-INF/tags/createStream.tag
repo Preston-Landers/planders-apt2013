@@ -39,18 +39,27 @@
 									rows="${ txtRows }"
 									placeholder="#PacificOcean, #FriendsOfAziz, #music">${param['tags']}</textarea>
 							</div>
-							<label for="createStreamTags">Tag your stream</label>						
+							<label for="createStreamTags">
+								Tag your stream
+							</label>						
 						</div>
 						<div class="form-group">
 							<input type="text" class="form-control" id="createStreamCoverURL"
 								name="cover" placeholder="Optional URL of cover image" value="${param['cover']}">
-							<label for="createStreamCoverURL">URL to cover image</label>
+							<label for="createStreamCoverURL">
+								URL to cover image
+								<BR />
+								<h6>
+									<em>Tip: you can set a cover later after you upload some pictures</em>
+								</h6>
+								
+							</label>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-6">
-						<button class="btn btn-primary btn-lg" type="submit">Create Stream</button>
+						<button class="btn btn-success btn-lg" type="submit">Create Stream</button>
 					</div>
 				</div>
 			</div>

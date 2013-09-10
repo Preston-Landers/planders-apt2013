@@ -14,7 +14,7 @@
 
 						<div class="row">
 							<div class="col-md-10">
-								<TABLE class="table">
+								<TABLE class="table table-striped">
 									<thead>
 										<tr>
 											<TH>Name</TH>

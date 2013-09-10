@@ -17,7 +17,7 @@
 						<div class="row">
 							<div class="col-md-10">
 								<div class="form-group">
-								<TABLE class="table">
+								<TABLE class="table table-striped">
 									<thead>
 										<tr>
 											<TH>Name</TH>

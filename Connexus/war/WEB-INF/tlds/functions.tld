@@ -26,4 +26,10 @@
         <function-signature>java.lang.String getSearchURI(java.lang.String)</function-signature>
     </function>
     
+    <function>
+        <name>partition</name>
+        <function-class>com.google.common.collect.Lists</function-class>
+        <function-signature>java.util.List partition(java.util.List, int)</function-signature>
+    </function>
+    
 </taglib>
