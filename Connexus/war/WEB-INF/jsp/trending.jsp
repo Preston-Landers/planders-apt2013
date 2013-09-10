@@ -19,9 +19,9 @@
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<c:forEach items="${ leaderBoard }" var="stream">
-						<div class="col-md-3">		
-							Top Streams: ${ stream.name } @ ${ stream.trendingViews } views
+					<c:forEach items="${ leaderBoard }" var="stream">	
+						<div class="col-md-4">
+							<t:stream stream="${ stream }" trending="true"></t:stream>
 						</div>
 					</c:forEach>
 				</div>

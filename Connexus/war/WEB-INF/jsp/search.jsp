@@ -46,17 +46,7 @@
 		<c:choose><c:when test="${ not empty searchResultsList }">
 			<div class="container list-group">
 				<c:forEach var='stream' items='${ searchResultsList }'>
-					<a href="${ stream.viewURI }" class="list-group-item">
-  							<h4 class="list-group-item-heading">
-  								${ stream.name }
-  								<small>by <strong>${ stream.ownerName }</strong></small>
-  							</h4>
- 								<p class="list-group-item-text">
- 									${ stream.numberOfMedia } images &ndash;
- 								 	last updated: ${ stream.lastNewMedia } &ndash;
- 								 	${ stream.views } view${ stream.views > 1 ? 's' : '' }
- 								</p>
-							</a>
+					<t:stream stream="${ stream }"></t:stream>
 				</c:forEach>
 			</div>
 		</c:when><c:otherwise>
