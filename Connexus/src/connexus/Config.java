@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.apache.http.client.utils.URIBuilder;
 
-import connexus.servlet.Create;
-
 public class Config {
 	public static final String productName = "Connexus";
+	public static final String productURL = "http://connexus-apt.appspot.com";
+	public static final String productDomain = "connexus-apt.appspot.com";
 	
     public static final long siteId = 1;
     

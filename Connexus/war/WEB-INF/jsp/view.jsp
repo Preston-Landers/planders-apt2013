@@ -166,9 +166,9 @@
 				</c:choose>
 			</p>
 		</div>
-		</div>
 	</div>
-		
+	</div> <%-- stream cover (curently unused) --%>
+
 	<%-- If this is your stream, show the upload widget. Otherwise show the subscribe widget. --%>
 	<c:choose>
 		<c:when test="${ viewingStreamUser == cuser }">
@@ -201,6 +201,7 @@
 		</div>
 		
 	</c:otherwise>
+	
 </c:choose>
 </jsp:body>
 </t:connexus>
