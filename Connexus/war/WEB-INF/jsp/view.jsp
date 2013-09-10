@@ -71,16 +71,30 @@
         <%-- TODO: still need to show info tooltip even if not your image --%>
         <c:if test="${media.uploader == cuser.key}">
 			<div class="modal-footer" style="margin-top: 0px;">
+			
+				<%-- INFO TOOLTIP --%>
 				<span style="float: left" rel="popover" data-toggle="popover" data-placement="bottom" 
 					data-html="true" data-trigger="hover" data-content="${ media.thumbnailDescription }">
 					<button type="button" onClick="return false;" class="btn btn-info" >
 						<span class="glyphicon glyphicon-info-sign"></span>
 					</button>
 				</span>
-
-
+				
+				<%-- SET COVER IMAGE --%>
 				<form action="/view" method="post" role="form" style="display: inline">
-					<input type="hidden" name="v" value="${ viewingStream.id }" />
+					<input type="hidden" name="v" value="${ viewingStream.objectURI }" />
+					<input type="hidden" name="m" value="${ media.id }" />
+					<span style="float: left; margin-left: 10px" rel="popover" data-toggle="popover" data-placement="bottom" 
+						data-html="true" data-trigger="hover" data-content="<h5>Set as Cover Image For Stream</h5>">
+						<button name="setCover" value="go" type="submit" class="btn btn-success" >
+							<span class="glyphicon glyphicon-pushpin"></span>
+						</button>
+					</span>
+				</form>
+
+				<%-- DELETE OPTION --%>
+				<form action="/view" method="post" role="form" style="display: inline">
+					<input type="hidden" name="v" value="${ viewingStream.objectURI }" />
 					<input type="hidden" name="delete" value="${ media.id }" />
 					<span rel="tooltip" title="Permanently delete this file">
 						<button type="submit" class="btn btn-danger" >
@@ -88,6 +102,8 @@
 						</button>
 					</span>
 				</form>
+				
+				<%-- CLOSE BUTTON --%>
 				<button style="margin-left: 20px" type="button" class="btn btn-primary" data-dismiss="modal">
 					<span class="close"></span>&nbsp;Close
 				</button>

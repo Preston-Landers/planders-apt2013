@@ -116,6 +116,8 @@ public class View extends ConnexusServletBase {
 			uploadMedia(req, resp);
 		} else if (req.getParameter("delete") != null) {
 			deleteMedia(req, resp);
+		} else if (req.getParameter("setCover") != null) {
+			setCover(req, resp);
 		} else {
 			alertInfo(req, "TODO: Not implemented yet.");
 		}
@@ -159,6 +161,19 @@ public class View extends ConnexusServletBase {
 					+ " is NOT subscribed to this stream! " + viewingStream);
 		}
 
+	}
+
+	private void setCover(HttpServletRequest req, HttpServletResponse resp) {
+		Media media = Media.getById(Long.parseLong(req.getParameter("m")),
+				viewingStream);
+		if (media == null) {
+			alertError(req, "Cannot find media to pin.");
+			return;
+		}
+		String mediaURL = media.getMediaServingURL();
+		viewingStream.setCoverURL(mediaURL);
+		viewingStream.save();
+		alertWarning(req, "Set new cover image.");
 	}
 
 	private void deleteMedia(HttpServletRequest req, HttpServletResponse resp) {
