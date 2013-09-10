@@ -16,6 +16,7 @@ import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.Parent;
 
 import connexus.Config;
@@ -31,7 +32,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 	@Parent
 	Key<Site> site;
 	Date lastUpdated;
-	List<Ref<Stream>> leaderBoard;
+	@Load List<Ref<Stream>> leaderBoard;
 	@Index
 	Long reportFrequencySec;
 	@Index
@@ -120,10 +121,13 @@ public class Leaderboard implements Comparable<Leaderboard> {
 	public List<Stream> getLeaderBoardList() {
 		// This is surely not the best way to do this...
 		List<Stream> rv = new ArrayList<Stream>();
-		for (Ref<Stream> streamRef : getLeaderBoard()) {
-			rv.add(streamRef.get());
+		List<Ref<Stream>> lbList = getLeaderBoard();
+		if (lbList != null && lbList.size() > 0) {
+			for (Ref<Stream> streamRef : getLeaderBoard()) {
+				rv.add(streamRef.get());
+			}
 		}
-		return rv;
+		return rv;		
 	}
 
 	public void setLeaderBoard(List<Ref<Stream>> leaderBoard) {
@@ -161,6 +165,9 @@ public class Leaderboard implements Comparable<Leaderboard> {
 	public static void generateLeaderBoard() {
 		Site site = Site.load(null);
 		Leaderboard LB = load(null, site.getKey());
+		if (LB == null) {
+			System.err.println("Error: leaderboard is missing!");
+		}
 
 		Ordering<Stream> byTrendingViewsOrdering = new Ordering<Stream>() {
 			public int compare(Stream left, Stream right) {

@@ -214,6 +214,12 @@ public class View extends ConnexusServletBase {
 
 		ofy().save().entities(media).now();
 
+		// If the stream does not already have a cover, make this the cover.
+		if (viewingStream.getCoverURL() == null || viewingStream.getCoverURL().length() == 0) {
+			viewingStream.setCoverURL(media.getMediaServingURL());
+			viewingStream.save();
+		}
+		
 		System.err.println("MEDIA was into space! " + media);
 
 	}

@@ -28,22 +28,22 @@
 					<c:when test="${ (mediaList == null) or ( fn:length(mediaList) == 0 )}">
 						<h1>Stream is empty</h1> <small><em>Upload something below!</em></small>			
 					</c:when>
-				<c:otherwise>
-					<div class="row">
-						<c:forEach items="${ mediaList }" var="media">
-	  						<div class="col-sm-6 col-md-4">
-  								<div id="thumb-div-${media.id}" class="thumbnail">
-	    						<a id="thumb-a-${media.id}" data-toggle="modal" href="#thumb-viewer-${media.id}" class="thumbnail">
-    	  							<img src="${media.mediaServingURL}=s300">
-<%--     	  								alt="${fn:escapeXML(media.comments)}"> --%>
-<%-- XXX TODO: why isn't escapeXML working here? --%>
-									<span style="display: block;">
-										<h6>
-    	   								 ${media.comments }
-       									</h6>
-									</span>
-    							</a>
-						    </div>
+					<c:otherwise>
+						<div class="row">
+							<c:forEach items="${ mediaList }" var="media">
+		  						<div class="col-sm-6 col-md-4">
+	  								<div id="thumb-div-${media.id}" class="thumbnail">
+		    						<a id="thumb-a-${media.id}" data-toggle="modal" href="#thumb-viewer-${media.id}" class="thumbnail">
+	    	  							<img src="${media.mediaServingURL}=s300">
+	<%--     	  								alt="${fn:escapeXML(media.comments)}"> --%>
+	<%-- XXX TODO: why isn't escapeXML working here? --%>
+										<span style="display: block;">
+											<h6>
+	    	   								 ${media.comments }
+	       									</h6>
+										</span>
+	    							</a>
+							    </div>
 							    
 <!-- Modal image popup -->
   <div class="modal fade thumb-viewer" id="thumb-viewer-${media.id}" tabindex="-1" role="dialog" aria-labelledby="thumb-title-${media.id}" aria-hidden="true">

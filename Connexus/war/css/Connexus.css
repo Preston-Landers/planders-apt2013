@@ -37,6 +37,10 @@ div.thumbnail, img.img-thumbnail {
 	margin-bottom: 0px;
 }
 
+.no-cover-image, .no-cover-image:hover  {
+	text-decoration: none;
+	color: gray;
+}
 
 /* Sticky footer styles
 -------------------------------------------------- */

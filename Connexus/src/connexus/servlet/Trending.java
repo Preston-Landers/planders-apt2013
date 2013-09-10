@@ -44,7 +44,7 @@ public class Trending extends ConnexusServletBase {
 		Leaderboard lb = Leaderboard.load(null, site.getKey());
 		
 		// TODO: move to cron job! (doesn't run on dev server)
-		Leaderboard.generateLeaderBoard();
+		// Leaderboard.generateLeaderBoard();
 		
 		Long reportFreq = lb.getReportFrequencySec();
 		if (reportFreq.equals(Leaderboard.FREQ_NONE)) {
