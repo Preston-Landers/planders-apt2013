@@ -50,7 +50,7 @@ public class EmailHelper {
 					newAddr = new InternetAddress(subscriberEmail);
 					toList.add(newAddr);
 				} catch (AddressException e) {
-					System.err.print(e);
+					e.printStackTrace(System.err);
 				}
 			}
 		}
@@ -67,7 +67,7 @@ public class EmailHelper {
 //			INSTRUCTOR = new InternetAddress("kamran.ks+aptmini@gmail.com", "Kamran Saleem");
 //		} catch (UnsupportedEncodingException e) {
 //			System.err.println("Can't get TO address for INSTRUCTOR");
-//			System.err.print(e);
+//			e.printStackTrace(System.err);
 //			return;
 //		}
 		//// XXX TODO: add for final DEPLOYMENT
@@ -79,7 +79,7 @@ public class EmailHelper {
 			toList.add(PRESTON);
 		} catch (UnsupportedEncodingException e) {
 			System.err.println("Can't get TO address for INSTRUCTOR");
-			System.err.print(e);
+			e.printStackTrace(System.err);
 		}
 	
 		return toList;
@@ -91,10 +91,10 @@ public class EmailHelper {
 		
 		InternetAddress from;
 		try {
-			from = new InternetAddress("admin@connexus-apt.appspot.com", "Connexus Admin");
+			from = new InternetAddress("planders@gmail.com", "Connexus Admin");
 		} catch (UnsupportedEncodingException e) {
 			System.err.println("Can't get FROM address for email");
-			System.err.print(e);
+			e.printStackTrace(System.err);
 			return;
 		}
 		
@@ -117,7 +117,7 @@ public class EmailHelper {
 		    Transport.send(msg);
 		} catch (MessagingException e) {
 			System.err.println("ERROR: unable to send mail!!!");
-			System.err.print(e);
+			e.printStackTrace(System.err);
 		}
 	}
 }

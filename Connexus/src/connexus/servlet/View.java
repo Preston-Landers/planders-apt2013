@@ -153,13 +153,13 @@ public class View extends ConnexusServletBase {
 					cuser, viewingStreamHandle);
 		}
 		req.setAttribute("mySubForStream", mySubForStream);
-		if (mySubForStream != null) {
-			System.err.println("User " + cuser
-					+ " is subscribed to this stream! " + viewingStream);
-		} else {
-			System.err.println("User " + cuser
-					+ " is NOT subscribed to this stream! " + viewingStream);
-		}
+//		if (mySubForStream != null) {
+//			System.err.println("User " + cuser
+//					+ " is subscribed to this stream! " + viewingStream);
+//		} else {
+//			System.err.println("User " + cuser
+//					+ " is NOT subscribed to this stream! " + viewingStream);
+//		}
 
 	}
 
