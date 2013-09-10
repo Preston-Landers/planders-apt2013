@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.internet.InternetAddress;
+
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
 import com.googlecode.objectify.Key;
@@ -239,7 +241,8 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		
 		
 		String subject = Config.emailSubject;
-		EmailHelper.sendEmail(subject, sb.toString());
+		List<InternetAddress> toAddr = EmailHelper.getReportToAddresses();
+		EmailHelper.sendEmail(toAddr, null, subject, sb.toString());
 	}
 	
 	@Override

@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.datanucleus.Utils;
+import com.google.common.base.CharMatcher;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
@@ -132,7 +133,17 @@ public class Stream implements Comparable<Stream> {
 	}
 
 	public void setTags(List<String> tags) {
-		this.tags = tags;
+		CharMatcher wspace = CharMatcher.is(' ');
+
+		// Ensure trimmed tags
+		List<String> newTags = new ArrayList<String>();
+		for (String tag : tags) {
+			String newTag = wspace.trimFrom(tag);
+			if (newTag.length() > 0) {
+				newTags.add(newTag);
+			}
+		}
+		this.tags = newTags;
 	}
 
 	

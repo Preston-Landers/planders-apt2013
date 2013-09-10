@@ -2,6 +2,7 @@ package connexus.servlet;
 
 import static connexus.OfyService.ofy;
 import connexus.Config;
+import connexus.EmailHelper;
 import connexus.model.Stream;
 
 import java.io.IOException;
@@ -50,6 +51,7 @@ public class Create extends ConnexusServletBase {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		InitializeContext(req, resp); // Base site context initialization
+		CharMatcher wspace = CharMatcher.is(' ');
 
 		String streamName = req.getParameter("name");
 		String subscribersStr = req.getParameter("subscribers");
@@ -76,18 +78,21 @@ public class Create extends ConnexusServletBase {
 		
 		
 		// TODO: more validation...
-		CharMatcher matcher = CharMatcher.is(' ');
-		streamName = matcher.trimFrom(streamName);
+		streamName = wspace.trimFrom(streamName);
 
 		// TODO: deal with subscribers emails
 		
 		List<String> tagsList = Arrays.asList(tags.split("\\s*,\\s*")); 
-				
+
 		Stream stream = new Stream(null, cuser.getKey(), streamName);
 		stream.setCoverURL(coverURL);
 		stream.setTags(tagsList);
 		
 		ofy().save().entities(stream).now();
+		
+		if (subscribersStr != null && subscribersStr.length() > 0) {
+			EmailHelper.sendStreamCreateInvitation(stream, subscribersStr, subscribersNote);
+		}
 		
 		alertSuccess(req, "Created a stream named " + streamName);
 		
