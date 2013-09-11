@@ -249,6 +249,11 @@ public class Media implements Comparable<Media> {
 		
 		// return ofy().load().type(Media.class).parent(stream).id(objectId).get();
 		Stream myStream = ofy().load().key(getStream()).get();
+		if (myStream.getCoverURL().equals(getThumbURL())) {
+			// String newCoverURL = myStream.getMedia(0, 1);
+			String newCoverURL = null;
+			myStream.setCoverURL(newCoverURL);
+		}
 		myStream.decNumberOfMedia();
 		myStream.save();
 		// ignoring error result here...
