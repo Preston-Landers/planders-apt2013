@@ -112,7 +112,7 @@ public class Admin extends ConnexusServletBase {
 
 		CUser existingUser = getUserByAccountName(accountName);
 		if (existingUser != null) {
-			alertError(req, "An account of that name already exists.");
+			alertError(req, "I'm sorry, but an account of that name already exists.");
 			return;
 		}
 		

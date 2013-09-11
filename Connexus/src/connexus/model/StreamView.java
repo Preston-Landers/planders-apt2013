@@ -67,8 +67,9 @@ public class StreamView implements Comparable<StreamView> {
 		cal.add(Calendar.SECOND, Config.safeLongToInt(-Leaderboard.lbKeepViewsTimeSec));
 		Date keepViewsTime = cal.getTime();
 
-		List<StreamView> viewList = ofy().load().type(StreamView.class).filter("date <=", keepViewsTime).list();
-		ofy().delete().entities(viewList);
+		ofy().delete().entities(
+				ofy().load().type(StreamView.class)
+						.filter("date <=", keepViewsTime));
 	}
 
 	@Override

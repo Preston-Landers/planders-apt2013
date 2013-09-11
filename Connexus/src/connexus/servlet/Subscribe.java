@@ -14,9 +14,7 @@ import connexus.model.Stream;
 import connexus.model.Subscription;
 
 public class Subscribe extends ConnexusServletBase {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -4578267704775630816L;
 	public static final String uri = "/subscribe";
 	public static final String dispatcher = "/WEB-INF/jsp/view.jsp";
@@ -25,14 +23,6 @@ public class Subscribe extends ConnexusServletBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		InitializeContext(req, resp); // Base site context initialization
-
-		// List<CUser> allUsersList = ofy().load().type(CUser.class).list();
-		// for (CUser userRec : allUsersList) {
-		// System.err.println("USER REC: " + userRec.toString());
-		// }
-		// req.setAttribute("userList", allUsersList);
-
-		// throw new ServletException("Retrieving products failed!", e);
 
 		// Forward to JSP page to display them in a HTML table.
 		req.getRequestDispatcher(dispatcher).forward(req, resp);
@@ -121,6 +111,7 @@ public class Subscribe extends ConnexusServletBase {
 		
 		// Delete the sub.
 		ofy().delete().entities(thisSub).now();
+		Subscription.clearCacheForSubscription(cuser, viewingStreamHandle);
 		
 		alertWarning(req, "You have unsubscribed from the stream " + subStream.getName() + ".");
 		resp.sendRedirect(redirectURI);
@@ -144,6 +135,7 @@ public class Subscribe extends ConnexusServletBase {
 		Subscription newSub = new Subscription(null, cuser.getKey(),
 				viewingStreamHandle.getStream().getKey());
 		ofy().save().entities(newSub).now();
+		Subscription.clearCacheForSubscription(cuser, viewingStreamHandle);
 
 		alertSuccess(req, "You are now subscribed to this stream.");
 		resp.sendRedirect(viewingStreamHandle.getStream().getViewURI());

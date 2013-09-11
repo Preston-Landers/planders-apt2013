@@ -4,13 +4,14 @@ import static connexus.OfyService.ofy;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.mail.internet.InternetAddress;
 
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Longs;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
@@ -22,6 +23,7 @@ import com.googlecode.objectify.annotation.Parent;
 
 import connexus.Config;
 import connexus.EmailHelper;
+import connexus.model.Stream;
 
 @Entity
 @Cache
@@ -175,27 +177,40 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		Leaderboard LB = load(null, site.getKey());
 		if (LB == null) {
 			System.err.println("Error: leaderboard is missing!");
+			return;
 		}
 
-		Ordering<Stream> byTrendingViewsOrdering = new Ordering<Stream>() {
-			public int compare(Stream left, Stream right) {
-				return Longs.compare(left.getTrendingViews(),
-						right.getTrendingViews());
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		
+		cal.add(Calendar.SECOND, Config.safeLongToInt(-Leaderboard.lbTimeWindowSec));
+		Date timeWindow = cal.getTime();
+
+		Map<Key<Stream>, Long> streamToTrendViews = new HashMap<Key<Stream>, Long>();
+		for (StreamView view: ofy().load().type(StreamView.class).filter("date >=", timeWindow)) {
+			Key<Stream> streamKey = view.stream;
+			Long count = streamToTrendViews.get(streamKey);
+			if (count == null) {
+				count = new Long(0);
 			}
-		};
-		// For each stream in the system, generate its trending views (those
-		// within the last hour), then sort those streams by views and make a
-		// new list only of the top 3.
-		List<Stream> allStreams = Stream.getAllStreams(site.getKey());
-		for (Stream stream : allStreams) {
-			stream.generateTrendingViews();
+			count++;
+			streamToTrendViews.put(streamKey, count);
 		}
-		List<Stream> sortedStreams = byTrendingViewsOrdering.reverse()
-				.sortedCopy(allStreams);
+		
+		List<Stream> allStreams = new ArrayList<Stream>();
+		
+		for (Key<Stream> streamKey : streamToTrendViews.keySet()) {			
+			Stream stream = ofy().load().key(streamKey).get();
+			stream.setTrendingViews(streamToTrendViews.get(streamKey));
+			stream.save();
+			allStreams.add(stream);
+		}
+
+		Collections.sort(allStreams, new Stream.TrendingComparator());
 
 		List<Ref<Stream>> rv = new ArrayList<Ref<Stream>>();
 		int i = 0;
-		for (Stream stream : sortedStreams) {
+		for (Stream stream : allStreams) {
 			i++;
 //			System.err.println("SETTING LEADERBOARD " + i + " "
 //					+ stream.getName() + " -- " + stream.getTrendingViews());

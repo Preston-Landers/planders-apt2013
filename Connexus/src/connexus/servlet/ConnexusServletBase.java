@@ -3,6 +3,7 @@ package connexus.servlet;
 import static connexus.OfyService.ofy;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,9 +11,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+
+// import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.Expiration;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 
 import connexus.Config;
@@ -26,6 +35,12 @@ public abstract class ConnexusServletBase extends HttpServlet {
 	protected User guser;     // The Google User object - MAY BE NULL! if not logged in
 	protected CUser cuser;    // The Connexus User object - MAY BE NULL! if not logged in
 	protected final static UserService userService = UserServiceFactory.getUserService();
+	protected final static MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	
+	static {
+		syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+	}
+	
 	/**
 	 * Set up things that are common to all pages including the currently logged in user, if any.
 	 * @param req
@@ -35,28 +50,55 @@ public abstract class ConnexusServletBase extends HttpServlet {
 			HttpServletResponse resp) throws IOException, ServletException {
 		cuser = null;
 		guser = null;
-        
+		
         guser = userService.getCurrentUser();
         req.setAttribute("guser", guser);
-        req.setAttribute("loginURL", userService.createLoginURL(req.getRequestURI()));
-        req.setAttribute("logoutURL", userService.createLogoutURL(req.getRequestURI()));
+        if (guser == null) {
+        	req.setAttribute("loginURL", userService.createLoginURL(req.getRequestURI()));
+        } else {
+        	String logoutURLCacheKey = guser.getUserId() + "_logoutURL";
+        	String logoutURL = (String) syncCache.get(logoutURLCacheKey);
+        	if (logoutURL == null) {
+        		logoutURL = userService.createLogoutURL(req.getRequestURI());
+        		syncCache.put(logoutURLCacheKey, logoutURL, Expiration.byDeltaSeconds(60 * 20));
+        	}
+        	req.setAttribute("logoutURL", logoutURL);	
+        }        
+        
         // Parent entity for the entire site
         site = ofy().load().type(Site.class).id(Config.siteId);
         if (site == null) {
         	// Should probably be logging something somewhere...
-        	alertError(req, "Internal error: site entity was not initialized.");
+        	String errorMsg = "Internal error: site entity was not initialized.";
+        	System.err.println(errorMsg);
+        	alertError(req, errorMsg);
         	return;
         }        
         
         // Automatically create a CUser for any Google Users we recognize
         if (guser != null) {
-			cuser = ofy().load().type(CUser.class).ancestor(site)
-					.filter("guser", guser).first().get();
+        	// Try memcache before doing a query
+        	boolean doSetMemcache = false;
+        	String cuserIdCacheKey = guser.getUserId() + "_cuserId";
+        	Long cuserId = (Long) syncCache.get(cuserIdCacheKey); 
+        	if (cuserId == null) {
+    			cuser = ofy().load().type(CUser.class).ancestor(site)
+    					.filter("guser", guser).first().get();
+    			doSetMemcache = true;
+        	} else {
+				// System.err.println("user id cache hit : " + guser + " : " + cuserId);
+        		Key<CUser>  cuserKey = com.googlecode.objectify.Key.create(site.getKey(), CUser.class, cuserId);
+        		cuser = ofy().load().key(cuserKey).get();
+        	}
 			if (cuser == null) {
 				cuser = createUser(req, resp);
 			}
 			if (cuser != null) {
 				req.setAttribute("cuser", cuser);
+				if (doSetMemcache) {
+					// System.err.println("Setting user id into cache: " + guser + " : " + cuser.getId());
+					syncCache.put(cuserIdCacheKey, cuser.getId());
+				}
 			}
     	
         }

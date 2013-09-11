@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class Stream implements Comparable<Stream> {
 	String coverURL;
 	@Index({IfNotNull.class}) List<String> tags;
 	@Index Date creationDate;
+	@Index Long numberOfMedia;
 
 	@Index Long views;   // all time views
 	long trendingViews;  // views only within the trending window
@@ -173,8 +175,24 @@ public class Stream implements Comparable<Stream> {
 		return df.format(lnmDate);
 	}
 	
-	public int getNumberOfMedia() {
-		return ofy().load().type(Media.class).ancestor(this).count();
+	public void incNumberOfMedia() {
+		Long num = getNumberOfMedia();
+		num++;
+		setNumberOfMedia(num);		
+	}
+	
+	public void setNumberOfMedia(Long num) {
+		numberOfMedia = num;
+	}
+	
+	public Long getNumberOfMedia() {
+		if (numberOfMedia != null) {
+			return numberOfMedia;
+		}
+		int rvi = ofy().load().type(Media.class).ancestor(this).count();
+		Long rv = new Long(rvi); 
+		setNumberOfMedia(rv);
+		return rv;
 	}
 	
 	public boolean deleteStream() {
@@ -193,6 +211,7 @@ public class Stream implements Comparable<Stream> {
 	
 	/**
 	 * Returns ALL streams available in the system, sorted by most recently updated first.
+	 * TODO: memcache?
 	 */
 	public static List<Stream> getAllStreams(Key<Site> site) {
 		if (site == null) {
@@ -276,6 +295,13 @@ public class Stream implements Comparable<Stream> {
 			return -1;
 		}
 		return 0;
+	}
+	
+	public static class TrendingComparator implements Comparator<Stream> {
+		public int compare(Stream p1, Stream p2) {
+			// REVERSE order (highest first)
+			return (int) (p2.getTrendingViews() - p1.getTrendingViews());
+		}
 	}
 
 }

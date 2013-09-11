@@ -6,6 +6,15 @@
 
   <!-- Servlets -->
   <servlet>
+    <servlet-name>welcome</servlet-name>
+    <servlet-class>connexus.servlet.Welcome</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>welcome</servlet-name>
+    <url-pattern>/welcome</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>manage</servlet-name>
     <servlet-class>connexus.servlet.Manage</servlet-class>
   </servlet>
@@ -107,8 +116,8 @@
   <error-page>
     <error-code>500</error-code>
     <location>/error</location>
-   </error-page>
-
+  </error-page>
+  
   <!--   APP STATS -->
   
   <filter>
@@ -147,7 +156,7 @@
 
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>manage</welcome-file>
+    <welcome-file>welcome</welcome-file>
   </welcome-file-list>
 
   <!-- Restrict /cron/* URLs to admins only -->

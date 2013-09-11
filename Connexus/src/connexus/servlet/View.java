@@ -14,6 +14,7 @@ import com.google.appengine.api.blobstore.*;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 
+import connexus.Config;
 import connexus.StreamHandle;
 import connexus.model.*;
 
@@ -59,7 +60,7 @@ public class View extends ConnexusServletBase {
 			// We are viewing a stream, so set some variables for the JSP
 			List<Media> mediaList = viewingStream.getMedia(offset, limit);
 			req.setAttribute("mediaList", mediaList);
-			int numberOfMedia = viewingStream.getNumberOfMedia();
+			int numberOfMedia = Config.safeLongToInt(viewingStream.getNumberOfMedia());
 
 			int newerOffset = Math.max((offset - limit), 0);
 			int newerLimit = limit;
@@ -217,6 +218,7 @@ public class View extends ConnexusServletBase {
 			ImagesService imagesService = ImagesServiceFactory.getImagesService();
 			try {
 			viewingStream.setCoverURL(imagesService.getServingUrl(bkey));
+			viewingStream.incNumberOfMedia();
 			viewingStream.save();
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace(System.err);

@@ -1,9 +1,5 @@
 package connexus.servlet;
 
-//import static connexus.OfyService.ofy;
-//import java.util.List;
-//import connexus.CUser;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +28,6 @@ public class Search extends ConnexusServletBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		InitializeContext(req, resp); // Base site context initialization
-		
-//		List<CUser> allUsersList = ofy().load().type(CUser.class).list();
-//		for (CUser userRec : allUsersList) {
-//			System.err.println("USER REC: " + userRec.toString());
-//		}
-//		req.setAttribute("userList", allUsersList);
-
-		// throw new ServletException("Retrieving products failed!", e);
 		
 		if (req.getParameter("q") != null) {
 			doHandleSearch(req, resp);

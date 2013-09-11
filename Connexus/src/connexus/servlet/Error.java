@@ -31,8 +31,13 @@ public class Error extends ConnexusServletBase {
 			requestUri = "Unknown";
 		}
 		
-		req.setAttribute("errorMessage", throwable.getMessage());
-		req.setAttribute("stackTrace", Throwables.getStackTraceAsString(throwable));
+		if (throwable != null) {
+			req.setAttribute("errorMessage", throwable.getMessage());
+			req.setAttribute("stackTrace", Throwables.getStackTraceAsString(throwable));
+		} else {
+			req.setAttribute("errorMessage", "There was a problem handling your request.");
+			req.setAttribute("stackTrace", "(None available)");
+		}
 		
 		// Forward to JSP page to display them in a HTML table.
 		req.getRequestDispatcher(dispatcher).forward(req, resp); 

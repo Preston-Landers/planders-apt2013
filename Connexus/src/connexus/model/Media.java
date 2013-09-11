@@ -2,9 +2,12 @@ package connexus.model;
 
 import static connexus.OfyService.ofy;
 
+import java.io.Serializable;
 import java.util.Date;
 // 
 
+
+import java.util.logging.Level;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreFailureException;
@@ -12,6 +15,9 @@ import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
@@ -36,7 +42,25 @@ public class Media implements Comparable<Media> {
 	@Index Long views;
 
 	private static final ImagesService imagesService = ImagesServiceFactory.getImagesService();
-
+	protected final static MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	
+	static {
+		syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+	}
+	
+	// memcache key for image URL
+	private static class CacheKeyImageURL implements Serializable {
+		private static final long serialVersionUID = 5690465575728397584L;
+		@SuppressWarnings("unused")
+		private final BlobKey blobKey;
+		@SuppressWarnings("unused")
+		private final int size;
+		public CacheKeyImageURL(BlobKey blobKey, int size) {
+			this.blobKey = blobKey;
+			this.size = size;
+		}
+	}
+	
 	@SuppressWarnings("unused")
 	private Media() {
 	}
@@ -176,28 +200,33 @@ public class Media implements Comparable<Media> {
 	 * @WARNING: does not check whether the media is actually an image! 
 	 */
 	@SuppressWarnings("deprecation")
-	public String getMediaServingURL() {
+	public String getMediaURLHelper(BlobKey blobKey, int size) {
+		CacheKeyImageURL cacheKeyImageURL = new CacheKeyImageURL(blobKey, size);
+		// syncCache
+		String cachedURL = (String) syncCache.get(cacheKeyImageURL);
+		if (cachedURL != null) {
+			System.err.println("Cache hit on image " + cachedURL);
+			return cachedURL;
+		}
 		// TODO: check if not image and use the other service
 		// return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "192.168.1.99");
 		try {
-			return imagesService.getServingUrl(getBlobKey(), 800, false);
+			String rv = imagesService.getServingUrl(blobKey, size, false);
+			System.err.println("Cache miss on image " + rv);
+			syncCache.put(cacheKeyImageURL, rv);
+			return rv;
 		} catch (RuntimeException e) {
 			e.printStackTrace(System.err);
 			return "";
 		}
-		
+			
+	}
+	public String getMediaServingURL() {
+		return getMediaURLHelper(getBlobKey(), 800);
 	}
 
-	@SuppressWarnings("deprecation")
 	public String getThumbURL() {
-		// TODO: check if not image and use the other service
-		// return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "192.168.1.99");
-		try {
-			return imagesService.getServingUrl(getBlobKey(), 400, false);
-		} catch (RuntimeException e) {
-			e.printStackTrace(System.err);
-			return "";
-		}
+		return getMediaURLHelper(getBlobKey(), 400);
 		
 	}
 

@@ -1,11 +1,17 @@
 package connexus.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 
 import static connexus.OfyService.ofy;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
@@ -26,6 +32,13 @@ public class Subscription implements Comparable<Subscription> {
 	@Index Key<Stream> stream;
 	@Index Date creationDate;
 
+	protected final static MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	
+	static {
+		syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+	}
+
+	
 	@SuppressWarnings("unused")
 	private Subscription() {
 	}
@@ -48,12 +61,28 @@ public class Subscription implements Comparable<Subscription> {
 	
 	/**
 	 * Load the given user's subscription for this stream. If none exists, returns null.
+	 * TODO: move to CUser object!
 	 */
 	public static Subscription getUserSubscriptionFromStreamHandle(CUser user, StreamHandle streamHandle) {
-		return ofy().load().type(Subscription.class).ancestor(user)
+//		String cacheKey = getSubscriptionCacheKey(user, streamHandle);
+//		Subscription rv = (Subscription) syncCache.get(cacheKey);
+//		if (rv != null) 
+//			return rv;
+		
+		Subscription rv =ofy().load().type(Subscription.class).ancestor(user)
 				.filter("stream ==", streamHandle.getStream().getKey()).first()
 				.get();
 		
+//		syncCache.put(cacheKey, rv);
+		return rv;		
+	}
+	
+	public static void clearCacheForSubscription(CUser user, StreamHandle streamHandle) {
+		syncCache.delete(getSubscriptionCacheKey(user, streamHandle));
+	}
+	
+	public static String getSubscriptionCacheKey(CUser user, StreamHandle streamHandle) {
+		return user.getId() + "_" + streamHandle.getStream().getId();
 	}
 	
 	public Key<Subscription> getKey() {

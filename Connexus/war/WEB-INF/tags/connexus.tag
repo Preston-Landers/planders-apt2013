@@ -23,6 +23,8 @@
 <link type="text/css" rel="stylesheet" href="/css/Connexus.css">
 <link type="text/css" rel="stylesheet" href="/css/colorbox.css">
 
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
 <%-- allow users of this tag to include stuff in the head --%>
 <jsp:invoke fragment="head" />
 
