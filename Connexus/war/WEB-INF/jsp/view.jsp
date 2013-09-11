@@ -6,7 +6,7 @@
 <jsp:attribute name="head">	
 	<%-- put some attributes in the HEAD tag for Facebook likes  --%>
 	<c:if test="${ viewingStream ne null }">
-		<%-- TODO: hostname and move to stream view --%>
+		<%-- Facebook / OpenGraph properties for this stream --%>
 		<meta property="og:url"             content="${ viewingStream.absoluteViewURI }" /> 
 		<meta property="og:title"           content="${ viewingStream.name }" /> 
 		<meta property="og:image"           content="${ viewingStream.coverURL }" />
@@ -29,11 +29,8 @@
 					</td>
 					<td style="vertical-align: middle; text-align: right;">
 						<div style="float: right;">
-<!-- 							<div class="fb-like" -->
-<%-- 											data-href="${ viewingStream.absoluteViewURI }" --%>
-<!-- 											data-width="300" data-show-faces="false" data-send="true"></div> -->
 							<fb:like href="${ viewingStream.absoluteViewURI }" layout="standard"
-											show-faces="true" send="true" width="450" action="like"
+											show-faces="true" send="true" width="400" action="like"
 											colorscheme="light"></fb:like>
 										
 						</div>										
@@ -68,7 +65,7 @@
 		  						<div class="col-sm-6 col-md-4">
 	  								<div id="thumb-div-${media.id}" class="thumbnail">
 		    						<a id="thumb-a-${media.id}" data-toggle="modal" href="#thumb-viewer-${media.id}" class="thumbnail">
-	    	  							<img src="${media.mediaServingURL}=s300">
+	    	  							<img src="${media.mediaServingURL}">
 	<%--     	  								alt="${fn:escapeXML(media.comments)}"> --%>
 	<%-- XXX TODO: why isn't escapeXML working here? --%>
 										<span style="display: block;">
@@ -80,7 +77,7 @@
 							    </div>
 							    
 <!-- Modal image popup -->
-  <div class="modal fade thumb-viewer" id="thumb-viewer-${media.id}" tabindex="-1" role="dialog" aria-labelledby="thumb-title-${media.id}" aria-hidden="true">
+  <div class="modal modal-large fade thumb-viewer" id="thumb-viewer-${media.id}" tabindex="-1" role="dialog" aria-labelledby="thumb-title-${media.id}" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">
@@ -89,8 +86,8 @@
 <!--           <button type="button" class="btn btn-default" data-dismiss="modal"> -->
 			<a data-dismiss="modal">
 			<%-- TODO: add =s0 but only in production?! doesn't work on test server --%>
-          		<img class="img-thumbnail"
-	          	 	alt="${media.comments}" 
+          		<img class="connexus-imgview"
+	          	 	title="${media.comments}" 
           			src="${media.mediaServingURL}">
        		</a>          
 <!--           	Close -->

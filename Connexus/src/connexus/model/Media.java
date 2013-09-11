@@ -175,7 +175,7 @@ public class Media implements Comparable<Media> {
 		// TODO: check if not image and use the other service
 		// return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "192.168.1.99");
 		try {
-			return imagesService.getServingUrl(getBlobKey());
+			return imagesService.getServingUrl(getBlobKey(), 800, false);
 		} catch (RuntimeException e) {
 			e.printStackTrace(System.err);
 			return "";

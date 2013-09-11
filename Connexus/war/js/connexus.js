@@ -50,7 +50,7 @@ window.cx = (function (cx, $, window, undefined) {
 		  
 		// Reparent modals to BODY so when they pop up they don't mess with the main content 
 		// (was causing a little jumpiness when popping up)
-		// $("body").append($("div.modal"));
+		$("body").append($("div.modal"));
 		
 		// Activate tooltip and popover features
 		$(function () {
