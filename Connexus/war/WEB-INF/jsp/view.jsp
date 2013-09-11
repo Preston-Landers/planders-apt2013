@@ -1,13 +1,47 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="func" uri="/WEB-INF/tlds/functions.tld" %>
-<t:connexus><jsp:body>
+<t:connexus>
+
+<jsp:attribute name="head">	
+	<%-- put some attributes in the HEAD tag for Facebook likes  --%>
+	<c:if test="${ viewingStream ne null }">
+		<%-- TODO: hostname and move to stream view --%>
+		<meta property="og:url"             content="${ viewingStream.absoluteViewURI }" /> 
+		<meta property="og:title"           content="${ viewingStream.name }" /> 
+		<meta property="og:image"           content="${ viewingStream.coverURL }" />
+		<meta property="og:type"            content="article"/> 
+		<meta property="fb:app_id"          content="194168720763795"/>
+	</c:if>
+</jsp:attribute>
+
+<jsp:body>
 <c:choose>
 <%-- VIEWING A SINGLE STREAM   style="background: url(${ viewingStream.coverURL });" --%>
 	<c:when test="${ viewingStream ne null }">
 		<div class="stream-cover-bg" >
 		<div class="page-header stream-page-header" >
-			<h1>${ viewingStream.name }</h1>
+		
+			<table width=100%>
+				<tr>
+					<td>
+						<h1>${ viewingStream.name }</h1>
+					</td>
+					<td style="vertical-align: middle; text-align: right;">
+						<div style="float: right;">
+<!-- 							<div class="fb-like" -->
+<%-- 											data-href="${ viewingStream.absoluteViewURI }" --%>
+<!-- 											data-width="300" data-show-faces="false" data-send="true"></div> -->
+							<fb:like href="${ viewingStream.absoluteViewURI }" layout="standard"
+											show-faces="true" send="true" width="450" action="like"
+											colorscheme="light"></fb:like>
+										
+						</div>										
+					</td>
+				</tr>
+			</table>
+		
+
 			<table width="100%">
 				<TR>
 					<TD>

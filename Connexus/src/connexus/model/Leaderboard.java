@@ -37,6 +37,8 @@ public class Leaderboard implements Comparable<Leaderboard> {
 	Long reportFrequencySec;
 	@Index
 	Date reportLastRun;
+	
+	Date lastClean;
 
 	// Report frequency options
 	public static final long FREQ_NONE = 0;
@@ -57,6 +59,9 @@ public class Leaderboard implements Comparable<Leaderboard> {
 
 	// Amount of time to keep StreamView objects before deleting them
 	public static final long lbKeepViewsTimeSec = 3600 * 48;
+	
+	// How often to clean up StreamView objects
+	public static final long lbCleanTimeSec = 3600 * 24;
 
 	@SuppressWarnings("unused")
 	private Leaderboard() {
@@ -73,6 +78,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		this.leaderBoard = new ArrayList<Ref<Stream>>();
 		this.reportFrequencySec = FREQ_NONE;
 		this.reportLastRun = new Date(90,1,1);
+		this.lastClean = new Date(90,1,1);
 	}
 
 	public Key<Leaderboard> getKey() {
@@ -202,6 +208,43 @@ public class Leaderboard implements Comparable<Leaderboard> {
 	}
 
 	@SuppressWarnings("deprecation")
+	public void maybeRunStreamViewCleanup() {
+		Date lastClean = getLastClean();
+		if (lastClean == null) {
+			lastClean = new Date(90, 1, 1);
+		}
+		Long cleanFreqSec = lbCleanTimeSec;
+		if (cleanFreqSec == null || cleanFreqSec.equals(0)) {
+			System.err.println("Cleanup disabled. Last run: " + lastClean);
+			return;
+		}
+		Date now = new Date();
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(lastClean);
+		
+		cal.add(Calendar.SECOND, Config.safeLongToInt(cleanFreqSec));
+		Date nextCleanTime = cal.getTime();
+		
+		if ( now.compareTo(nextCleanTime) < 0 ) {
+			// System.err.println("Not time for cleaning yet. Next report time is: " + nextCleanTime);
+			return;
+		}
+		// 
+		StreamView.cleanupStreamViews();
+		setLastClean(new Date());
+		save();
+	}
+	
+	public Date getLastClean() {
+		return lastClean;
+	}
+
+	public void setLastClean(Date lastClean) {
+		this.lastClean = lastClean;
+	}
+
+	@SuppressWarnings("deprecation")
 	public void maybeRunTrendingReport() {
 		Date lastRun = getReportLastRun();
 		if (lastRun == null) {
@@ -221,13 +264,13 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		Date nextReportTime = cal.getTime();
 		
 		if ( now.compareTo(nextReportTime) < 0 ) {
-			System.err.println("Not time for report yet. Next report time is: " + nextReportTime);
+			// System.err.println("Not time for report yet. Next report time is: " + nextReportTime);
 			return;
 		}
 		// 
-		System.err.println(now
-				+ " It's time to run the report. Report Interval: "
-				+ reportFreqSec + " sec. Last run " + lastRun);
+//		System.err.println(now
+//				+ " It's time to run the report. Report Interval: "
+//				+ reportFreqSec + " sec. Last run " + lastRun);
 		runTrendingReport();
 	}
 	

@@ -12,9 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 // import javax.servlet.http.HttpSession;
 
+
 import static connexus.OfyService.ofy;
 
 import com.google.appengine.api.blobstore.*;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
 
 import connexus.StreamHandle;
 import connexus.model.*;
@@ -216,8 +219,13 @@ public class View extends ConnexusServletBase {
 
 		// If the stream does not already have a cover, make this the cover.
 		if (viewingStream.getCoverURL() == null || viewingStream.getCoverURL().length() == 0) {
-			viewingStream.setCoverURL(media.getMediaServingURL());
+			ImagesService imagesService = ImagesServiceFactory.getImagesService();
+			try {
+			viewingStream.setCoverURL(imagesService.getServingUrl(bkey));
 			viewingStream.save();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace(System.err);
+			}
 		}
 		
 		System.err.println("MEDIA was into space! " + media);

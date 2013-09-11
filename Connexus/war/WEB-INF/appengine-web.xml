@@ -40,5 +40,7 @@
   -->
   <sessions-enabled>true</sessions-enabled>
   <async-session-persistence enabled="true" />
-
+<admin-console>
+  <page name="Appstats" url="/appstats" />
+</admin-console>
 </appengine-web-app>

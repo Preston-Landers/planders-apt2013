@@ -33,6 +33,8 @@ public class Media implements Comparable<Media> {
 	Key<CUser> uploader; // in theory, could upload to other users streams?
 	@Index Long views;
 
+	private static final ImagesService imagesService = ImagesServiceFactory.getImagesService();
+
 	@SuppressWarnings("unused")
 	private Media() {
 	}
@@ -170,8 +172,14 @@ public class Media implements Comparable<Media> {
 	@SuppressWarnings("deprecation")
 	public String getMediaServingURL() {
 		// TODO: check if not image and use the other service
-		ImagesService imagesService = ImagesServiceFactory.getImagesService();
-		return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "192.168.1.99");
+		// return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "192.168.1.99");
+		try {
+			return imagesService.getServingUrl(getBlobKey());
+		} catch (RuntimeException e) {
+			e.printStackTrace(System.err);
+			return "";
+		}
+		
 	}
 
 	public String getComments() {

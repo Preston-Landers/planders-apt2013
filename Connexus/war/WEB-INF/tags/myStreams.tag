@@ -52,9 +52,7 @@ ${fn:length(stream.lastNewMedia) > 0  ? stream.lastNewMedia : '<small><em>(None)
 						</div>
 						<div class="row">
 							<div class="col-md-6">
-								<a href="/create">
-									<button class="btn btn-primary" type="button">Create Stream</button>
-								</a>
+								<button onClick="window.location.href='/create'" class="btn btn-primary" type="button">Create Stream</button>
 							</div>
 						</div>
 						

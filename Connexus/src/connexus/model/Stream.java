@@ -61,7 +61,10 @@ public class Stream implements Comparable<Stream> {
 		return ofy().load().type(Stream.class).parent(cuser).id(objectId).get();
 	}
 
-
+	public String getAbsoluteViewURI() {
+		return Config.productURL + getViewURI();
+	}
+	
 	public String getViewURI() {
 		// Use URIBuilder?
 		List<String[]> params = new ArrayList<String[]>();
