@@ -3,7 +3,7 @@
 <t:connexus>
 	<jsp:body>
 		<div class="jumbotron">
-			<h1>Welcome to Connexus!</h1>
+			<h1><strong>Welcome to Connexus!</strong></h1>
 			<p class="text-center"  style="margin-top: 30px">
 			The world's best* photo sharing website!
 			</p>
@@ -46,5 +46,8 @@
 			
 		</div>
 		
+		<h6>
+			<em><strong>*</strong>Limitations may apply</em> 
+		</h6>
 	</jsp:body>
 </t:connexus>

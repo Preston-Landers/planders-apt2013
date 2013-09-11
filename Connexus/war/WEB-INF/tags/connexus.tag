@@ -10,6 +10,9 @@
 <%
 	request.setAttribute("productName", Config.productName);
 	request.setAttribute("productURL", Config.productURL);
+	request.setAttribute("aboutText", "<center><h4>Preston Landers</h4><H5>Advanced Programming Tools 2013</H5>" + 
+							"<H6>The University of Texas at Austin</H6>" +
+							"<h5><small>Department of Computer and<BR>Electrical Engineering</small></H5></center>");
 %>
 
 <!DOCTYPE html>
@@ -47,10 +50,22 @@
 	</div>
 	<div id="mainFooter">
 		<div class="container">
-			<div style="float: right;">
-				<p class="text-muted credit">
-					&copy; 2013 The Human Fund&trade; <em>Money... for people.</em>
-				</p>
+			<div style="float: right; margin-top: 15px;">
+
+				<div class="thumb-tb" style="float: left" rel="popover"
+					data-toggle="popover" data-placement="top" data-html="true"
+					data-trigger="hover" data-content="${aboutText }">
+					<button type="button" onClick="return false;"
+						class="btn btn-large btn-info">
+						<span class="glyphicon glyphicon-info-sign"></span>
+						About This Site
+					</button>
+				</div>
+
+
+<!-- 				<p class="text-muted credit"> -->
+<!-- 					&copy; 2013 The Human Fund&trade; <em>Money... for people.</em> -->
+<!-- 				</p> -->
 			</div>
 		</div>
 	</div>

@@ -30,6 +30,8 @@ public class UpdateLeaderboard extends HttpServlet {
         
 		Leaderboard.generateLeaderBoard();
 
+        // clean up job will do this periodically
+        // LB.fixAllStreamMediaCounts();
 		LB.maybeRunStreamViewCleanup();
 			
 		// Run the leaderboard report email if necessary

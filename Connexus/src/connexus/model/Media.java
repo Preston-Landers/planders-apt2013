@@ -247,6 +247,10 @@ public class Media implements Comparable<Media> {
 		// TODO: logging
 		System.err.println("Deleting media: " + this);
 		
+		// return ofy().load().type(Media.class).parent(stream).id(objectId).get();
+		Stream myStream = ofy().load().key(getStream()).get();
+		myStream.decNumberOfMedia();
+		myStream.save();
 		// ignoring error result here...
 		deleteBlob();
 		ofy().delete().entities(this).now();

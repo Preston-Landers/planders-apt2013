@@ -181,6 +181,12 @@ public class Stream implements Comparable<Stream> {
 		setNumberOfMedia(num);		
 	}
 	
+	public void decNumberOfMedia() {
+		Long num = getNumberOfMedia();
+		num--;
+		setNumberOfMedia(num);		
+	}
+	
 	public void setNumberOfMedia(Long num) {
 		numberOfMedia = num;
 	}
@@ -189,10 +195,14 @@ public class Stream implements Comparable<Stream> {
 		if (numberOfMedia != null) {
 			return numberOfMedia;
 		}
+		fixNumMedia();
+		return numberOfMedia;
+	}
+		
+	public void fixNumMedia() {
 		int rvi = ofy().load().type(Media.class).ancestor(this).count();
 		Long rv = new Long(rvi); 
 		setNumberOfMedia(rv);
-		return rv;
 	}
 	
 	public boolean deleteStream() {

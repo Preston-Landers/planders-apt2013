@@ -248,6 +248,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 			return;
 		}
 		// 
+		fixAllStreamMediaCounts();
 		StreamView.cleanupStreamViews();
 		setLastClean(new Date());
 		save();
@@ -259,6 +260,14 @@ public class Leaderboard implements Comparable<Leaderboard> {
 
 	public void setLastClean(Date lastClean) {
 		this.lastClean = lastClean;
+	}
+	
+	public void fixAllStreamMediaCounts() {
+		for (Stream stream : Stream.getAllStreams(site)) {
+			stream.fixNumMedia();
+			stream.save();
+		}
+		
 	}
 
 	@SuppressWarnings("deprecation")

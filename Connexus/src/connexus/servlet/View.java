@@ -171,6 +171,7 @@ public class View extends ConnexusServletBase {
 		}
 		String mediaURL = media.getThumbURL();
 		viewingStream.setCoverURL(mediaURL);
+		viewingStream.fixNumMedia();
 		viewingStream.save();
 		alertWarning(req, "Set new cover image.");
 	}
@@ -187,9 +188,14 @@ public class View extends ConnexusServletBase {
 	}
 
 	private void uploadMedia(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
+			throws IOException, ServletException {
 		
-		// TODO: verify user is logged in?
+		if (viewingStream == null) {
+			throw new ServletException("Internal error in upload.");			
+		}
+		if (guser == null) {
+			throw new ServletException("Internal error in upload: not logged in.");			
+		}
 
 		Map<String, List<BlobKey>> uploadMap = blobstoreService.getUploads(req);
 
@@ -212,18 +218,18 @@ public class View extends ConnexusServletBase {
 		media.setComments(comments);
 
 		ofy().save().entities(media).now();
+		viewingStream.incNumberOfMedia();
 
 		// If the stream does not already have a cover, make this the cover.
 		if (viewingStream.getCoverURL() == null || viewingStream.getCoverURL().length() == 0) {
 			ImagesService imagesService = ImagesServiceFactory.getImagesService();
 			try {
 			viewingStream.setCoverURL(imagesService.getServingUrl(bkey));
-			viewingStream.incNumberOfMedia();
-			viewingStream.save();
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace(System.err);
 			}
 		}
+		viewingStream.save();
 		
 		// System.err.println("MEDIA was into space! " + media);
 
