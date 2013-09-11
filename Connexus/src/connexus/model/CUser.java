@@ -9,7 +9,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.*;
 
 @Entity
-
+@Cache
 public class CUser implements Comparable<CUser> {
 	@Id Long id;
 	@Parent Key<Site> site;

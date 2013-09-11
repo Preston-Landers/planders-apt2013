@@ -3,7 +3,7 @@ package connexus.model;
 import static connexus.OfyService.ofy;
 
 import java.util.Date;
-// import java.util.List;
+// 
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreFailureException;
@@ -12,6 +12,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -19,7 +20,7 @@ import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfNotNull;
 
 @Entity
-
+@Cache
 public class Media implements Comparable<Media> {
 	@Id Long id;
 	@Parent Key<Stream> stream;

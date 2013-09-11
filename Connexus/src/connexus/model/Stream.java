@@ -11,11 +11,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.datanucleus.Utils;
 import com.google.common.base.CharMatcher;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -25,7 +24,7 @@ import com.googlecode.objectify.condition.IfNotNull;
 import connexus.Config;
 
 @Entity
-
+@Cache
 public class Stream implements Comparable<Stream> {
 	@Id Long id;
 	@Parent Key<CUser> owner;

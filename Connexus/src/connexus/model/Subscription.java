@@ -7,6 +7,7 @@ import java.util.List;
 import static connexus.OfyService.ofy;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -15,6 +16,7 @@ import com.googlecode.objectify.annotation.Parent;
 import connexus.StreamHandle;
 
 @Entity
+@Cache
 /**
  * A user's subscription to a stream which could potentially belong to another user.
  */

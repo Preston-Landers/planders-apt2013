@@ -13,6 +13,7 @@ import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -23,6 +24,7 @@ import connexus.Config;
 import connexus.EmailHelper;
 
 @Entity
+@Cache
 /**
  * Represents the top streams by views within a certain time window.
  */

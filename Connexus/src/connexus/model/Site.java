@@ -1,15 +1,18 @@
 package connexus.model;
 
 import java.util.Date;
+
 import static connexus.OfyService.ofy;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
 import connexus.Config;
 
 @Entity
+@Cache
 /**
  * Ancestor entity for everything within a logical site
  */
