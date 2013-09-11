@@ -64,16 +64,64 @@
 							<c:forEach items="${ mediaList }" var="media">
 		  						<div class="col-sm-6 col-md-4">
 	  								<div id="thumb-div-${media.id}" class="thumbnail">
-		    						<a id="thumb-a-${media.id}" data-toggle="modal" href="#thumb-viewer-${media.id}" class="thumbnail">
-	    	  							<img src="${media.mediaServingURL}">
+<%-- 		    						<a id="thumb-a-${media.id}" data-toggle="modal" href="#thumb-viewer-${media.id}" class="thumbnail"> --%>
+										<a title="${ media.comments }" class='group1 gallery' href='${media.mediaServingURL}'> 
+	    	  							<img class="thumbnail" src="${media.thumbURL}">
 	<%--     	  								alt="${fn:escapeXML(media.comments)}"> --%>
 	<%-- XXX TODO: why isn't escapeXML working here? --%>
-										<span style="display: block;">
-											<h6>
-	    	   								 ${media.comments }
-	       									</h6>
-										</span>
-	    							</a>
+										</a>
+
+
+										<%-- INFO TOOLTIP --%>
+										<div class="thumb-tb" style="float: left" rel="popover" data-toggle="popover" data-placement="bottom" 
+											data-html="true" data-trigger="hover" data-content="${ media.thumbnailDescription }">
+											<button type="button" onClick="return false;" class="btn btn-xs btn-info" >
+												<span class="glyphicon glyphicon-info-sign"></span>
+											</button>
+										</div>
+										
+        <%-- Allow delete if it's my image --%>
+        <%-- TODO: still need to show info tooltip even if not your image --%>
+        <c:if test="${media.uploader == cuser.key}">
+			
+				
+				<%-- SET COVER IMAGE --%>
+				<div class="thumb-tb" style="float: left" >
+				
+				<form action="/view" method="post" role="form" style="display: inline">
+					<input type="hidden" name="v" value="${ viewingStream.objectURI }" />
+					<input type="hidden" name="m" value="${ media.id }" />
+					<span style="float: left; margin-left: 10px" rel="popover" data-toggle="popover" data-placement="bottom" 
+						data-html="true" data-trigger="hover" data-content="<h5>Set as Cover Image For Stream</h5>">
+						<button name="setCover" value="go" type="submit" class="btn btn-xs btn-success" >
+							<span class="glyphicon glyphicon-pushpin"></span>
+						</button>
+					</span>
+				</form>
+				</div>
+				
+<!-- 				<div class="thumb-tb thumb-tb-text" style=""> -->
+<%-- 					<c:out value="${ media.comments }"/> --%>
+<!-- 				</div> -->
+
+
+				<%-- DELETE OPTION --%>
+				<div class="thumb-tb" style="float:right">
+				<form action="/view" method="post" role="form" style="display: inline">
+					<input type="hidden" name="v" value="${ viewingStream.objectURI }" />
+					<input type="hidden" name="delete" value="${ media.id }" />
+					<span rel="tooltip" title="Permanently delete this file">
+						<button type="submit" class="btn btn-xs btn-danger" >
+							<span class="glyphicon glyphicon-remove-trash"></span>&nbsp;Delete
+						</button>
+					</span>
+				</form>
+				</div>
+				
+		</c:if>
+										<div style="clear: both">
+										</div> 
+										
 							    </div>
 							    
 <!-- Modal image popup -->
@@ -86,7 +134,7 @@
 <!--           <button type="button" class="btn btn-default" data-dismiss="modal"> -->
 			<a data-dismiss="modal">
 			<%-- TODO: add =s0 but only in production?! doesn't work on test server --%>
-          		<img class="connexus-imgview"
+          		<img class="img-thumbnail"
 	          	 	title="${media.comments}" 
           			src="${media.mediaServingURL}">
        		</a>          

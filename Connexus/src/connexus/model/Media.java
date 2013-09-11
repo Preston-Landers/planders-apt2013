@@ -5,6 +5,7 @@ import static connexus.OfyService.ofy;
 import java.util.Date;
 // 
 
+
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreFailureException;
 import com.google.appengine.api.blobstore.BlobstoreService;
@@ -91,6 +92,10 @@ public class Media implements Comparable<Media> {
 	public String getThumbnailDescription() {
 		// TODO: get rid of yucky HTML
 		StringBuilder rv = new StringBuilder();
+		rv.append("<h4>");
+		rv.append(getComments());
+		rv.append("</h4>");
+		
 		rv.append("<h6>");
 		rv.append("<em>Uploaded on:</em><BR>" + creationDate);
 		rv.append("<BR><BR><em>Uploaded by:</em><BR>");
@@ -176,6 +181,19 @@ public class Media implements Comparable<Media> {
 		// return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "192.168.1.99");
 		try {
 			return imagesService.getServingUrl(getBlobKey(), 800, false);
+		} catch (RuntimeException e) {
+			e.printStackTrace(System.err);
+			return "";
+		}
+		
+	}
+
+	@SuppressWarnings("deprecation")
+	public String getThumbURL() {
+		// TODO: check if not image and use the other service
+		// return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "192.168.1.99");
+		try {
+			return imagesService.getServingUrl(getBlobKey(), 400, false);
 		} catch (RuntimeException e) {
 			e.printStackTrace(System.err);
 			return "";

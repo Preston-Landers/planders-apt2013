@@ -41,7 +41,14 @@ div.thumbnail, img.img-thumbnail {
 	text-decoration: none;
 	color: gray;
 }
+.thumb-tb {
+	display: inline;
+}
 
+.thumb-tb-text {
+	font-size: 11pt;
+}
+ 
 /* Sticky footer styles
 -------------------------------------------------- */
 

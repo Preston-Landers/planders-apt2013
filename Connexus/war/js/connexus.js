@@ -47,6 +47,16 @@ window.cx = (function (cx, $, window, undefined) {
 		    FB.getLoginStatus(cx.FBLoginStatusCallback);
 		  });
 
+
+		// Activate image viewing galleries
+		$('a.gallery').colorbox({ 
+			 opacity:0.5,
+			 rel: 'group1',
+			 photo: true,
+//			 transition: "fade",
+			 speed: 450,
+		});
+
 		  
 		// Reparent modals to BODY so when they pop up they don't mess with the main content 
 		// (was causing a little jumpiness when popping up)

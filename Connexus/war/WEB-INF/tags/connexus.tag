@@ -14,11 +14,6 @@
 
 <!DOCTYPE html>
 <html>
-<!-- <html lang="en" xmlns="http://www.w3.org/1999/xhtml" -->
-<!-- 	xmlns:og="http://ogp.me/ns#" -->
-<!-- 	xmlns:fb="https://www.facebook.com/2008/fbml"> -->
-
-
 <head>
 <title>${productName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,6 +21,7 @@
 	media="screen">
 
 <link type="text/css" rel="stylesheet" href="/css/Connexus.css">
+<link type="text/css" rel="stylesheet" href="/css/colorbox.css">
 
 <%-- allow users of this tag to include stuff in the head --%>
 <jsp:invoke fragment="head" />
@@ -58,6 +54,7 @@
 	</div>
 
 	<script src="/js/jquery-1.10.2.min.js"></script>
+	<script src="/js/jquery.colorbox.js"></script>
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/js/connexus.js"></script>
 
