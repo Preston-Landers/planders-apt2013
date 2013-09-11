@@ -25,7 +25,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
 	protected Ref<Site> site; // The "Site" entity (usually just one exists)
 	protected User guser;     // The Google User object - MAY BE NULL! if not logged in
 	protected CUser cuser;    // The Connexus User object - MAY BE NULL! if not logged in
-	
+	protected final static UserService userService = UserServiceFactory.getUserService();
 	/**
 	 * Set up things that are common to all pages including the currently logged in user, if any.
 	 * @param req
@@ -35,7 +35,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
 			HttpServletResponse resp) throws IOException, ServletException {
 		cuser = null;
 		guser = null;
-        UserService userService = UserServiceFactory.getUserService();
+        
         guser = userService.getCurrentUser();
         req.setAttribute("guser", guser);
         req.setAttribute("loginURL", userService.createLoginURL(req.getRequestURI()));

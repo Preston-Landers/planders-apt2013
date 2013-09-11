@@ -42,12 +42,6 @@ public class Subscribe extends ConnexusServletBase {
 			throws IOException, ServletException {
 		InitializeContext(req, resp); // Base site context initialization
 
-		if (cuser == null) {
-			alertError(req, "Please log in to subscribe to streams.");
-			resp.sendRedirect(doneUri);
-			return;
-		}
-
 		StreamHandle viewingStreamHandle;
 		try {
 			viewingStreamHandle = StreamHandle.getStreamHandleFromRequest(req,
@@ -68,6 +62,14 @@ public class Subscribe extends ConnexusServletBase {
 
 		}
 
+		if (cuser == null) {
+			String redir = userService.createLoginURL(viewingStreamHandle.getStream().getViewURI());
+			alertError(req, "<A HREF=\"" + redir + "\">Please log in to subscribe to streams.</A>");
+			resp.sendRedirect(doneUri);
+			return;
+		}
+		
+		
 		// Handle the request
 		if (req.getParameter("subscribe") != null) {
 			doSubscribe(req, resp, viewingStreamHandle);
