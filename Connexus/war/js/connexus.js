@@ -92,7 +92,12 @@ window.cx = (function (cx, $, window, undefined) {
 					.select().focus();
 		});
 
-		
+		$("#uploadButton").click(function() {
+			if (!$("#uploadMediaFile").val()) {
+				return false;
+			}
+		});
+
 	});
 
 	return cx;

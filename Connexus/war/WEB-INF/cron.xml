@@ -3,6 +3,6 @@
   <cron>
     <url>/cron/updatelb</url>
     <description>Update the leaderboard statistics and email reports.</description>
-    <schedule>every 60 minutes</schedule>
+    <schedule>every 5 minutes</schedule>
   </cron>
 </cronentries>

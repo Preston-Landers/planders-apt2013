@@ -205,14 +205,14 @@ public class Media implements Comparable<Media> {
 		// syncCache
 		String cachedURL = (String) syncCache.get(cacheKeyImageURL);
 		if (cachedURL != null) {
-			System.err.println("Cache hit on image " + cachedURL);
+			// System.err.println("Cache hit on image " + cachedURL);
 			return cachedURL;
 		}
 		// TODO: check if not image and use the other service
 		// return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "192.168.1.99");
 		try {
 			String rv = imagesService.getServingUrl(blobKey, size, false);
-			System.err.println("Cache miss on image " + rv);
+			// System.err.println("Cache miss on image " + rv);
 			syncCache.put(cacheKeyImageURL, rv);
 			return rv;
 		} catch (RuntimeException e) {
@@ -221,8 +221,13 @@ public class Media implements Comparable<Media> {
 		}
 			
 	}
+
+	public String getMediaServingURLRaw() {
+		return getMediaURLHelper(getBlobKey(), 0);
+	}
+
 	public String getMediaServingURL() {
-		return getMediaURLHelper(getBlobKey(), 800);
+		return getMediaURLHelper(getBlobKey(), 768);
 	}
 
 	public String getThumbURL() {

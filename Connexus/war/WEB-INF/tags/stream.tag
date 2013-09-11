@@ -13,7 +13,7 @@
 	<span style="display: block;" class="thumbnail stream-thumbnail">
 		<c:choose>
 			<c:when test="${ fn:length(stream.coverURL) > 0 }">
-				<img src="${  stream.coverURL }=s230">
+				<img src="${  stream.coverURL }">
 			</c:when>
 			<c:otherwise>
 				<div class="jumbotron">

@@ -47,7 +47,7 @@ public class Search extends ConnexusServletBase {
 	public void doHandleSearch(HttpServletRequest req, HttpServletResponse resp) {
 		String queryTerm = req.getParameter("q");
 		queryTerm = CharMatcher.WHITESPACE.trimFrom(queryTerm);
-		System.err.println("User " + cuser + " searched for " + queryTerm);
+		// System.err.println("User " + cuser + " searched for " + queryTerm);
 		if (queryTerm == null || queryTerm.length() < 1) {
 			alertInfo(req, "Please type a search term.");
 			return;

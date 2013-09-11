@@ -130,8 +130,6 @@ public class Subscribe extends ConnexusServletBase {
 			}
 		}
 
-		System.err.println("Ready to create a subscription!");
-
 		Subscription newSub = new Subscription(null, cuser.getKey(),
 				viewingStreamHandle.getStream().getKey());
 		ofy().save().entities(newSub).now();

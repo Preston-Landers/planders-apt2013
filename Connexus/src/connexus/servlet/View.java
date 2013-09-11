@@ -169,7 +169,7 @@ public class View extends ConnexusServletBase {
 			alertError(req, "Cannot find media to pin.");
 			return;
 		}
-		String mediaURL = media.getMediaServingURL();
+		String mediaURL = media.getThumbURL();
 		viewingStream.setCoverURL(mediaURL);
 		viewingStream.save();
 		alertWarning(req, "Set new cover image.");
@@ -225,7 +225,7 @@ public class View extends ConnexusServletBase {
 			}
 		}
 		
-		System.err.println("MEDIA was into space! " + media);
+		// System.err.println("MEDIA was into space! " + media);
 
 	}
 
