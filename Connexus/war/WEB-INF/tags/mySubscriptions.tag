@@ -17,7 +17,7 @@
 						<div class="row">
 							<div class="col-md-10">
 								<div class="form-group">
-								<TABLE class="table table-striped">
+								<TABLE id="mySubsTable" class="table table-striped tablesorter">
 									<thead>
 										<tr>
 											<TH>Name</TH>
@@ -27,17 +27,19 @@
 											<TH>Unsubscribe</TH>
 										</tr>
 									</thead>
-									<c:forEach var='sub' items='${ mySubscriptions }'>
-										<c:set var="stream" value="${ sub.streamLoaded }"></c:set>
-										<TR>
-											<TD><A HREF="${ stream.viewURI }">${ stream.name}</A></TD>
-											<TD>
+									<tbody>
+										<c:forEach var='sub' items='${ mySubscriptions }'>
+											<c:set var="stream" value="${ sub.streamLoaded }"></c:set>
+											<TR>
+												<TD><A HREF="${ stream.viewURI }">${ stream.name}</A></TD>
+												<TD>
 ${fn:length(stream.lastNewMedia) > 0 ? stream.lastNewMedia: '<small><em>(None)</em></small>'}</TD>
-											<TD>${stream.numberOfMedia}</TD>
-											<TD>${stream.views}</TD>
-											<TD><input type="checkbox" name="v" value="${ stream.objectURI }"></TD>
-										</TR>
-									</c:forEach>
+												<TD>${stream.numberOfMedia}</TD>
+												<TD>${stream.views}</TD>
+												<TD><input type="checkbox" name="v" value="${ stream.objectURI }"></TD>
+											</TR>
+										</c:forEach>
+									</tbody>
 								</TABLE>
 								
 								</div>

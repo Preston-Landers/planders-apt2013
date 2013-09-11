@@ -14,7 +14,7 @@
 
 						<div class="row">
 							<div class="col-md-10">
-								<TABLE class="table table-striped">
+								<TABLE id="myStreamsTable" class="table table-striped tablesorter">
 									<thead>
 										<tr>
 											<TH>Name</TH>
@@ -23,15 +23,17 @@
 											<TH>Delete</TH>
 										</tr>
 									</thead>
-									<c:forEach var='stream' items='${ myStreamList }'>
-										<TR>
-											<TD><A HREF="${ stream.viewURI }">${stream.name}</A></TD>
-											<TD>
+									<tbody>
+										<c:forEach var='stream' items='${ myStreamList }'>
+											<TR>
+												<TD><A HREF="${ stream.viewURI }">${stream.name}</A></TD>
+												<TD>
 ${fn:length(stream.lastNewMedia) > 0  ? stream.lastNewMedia : '<small><em>(None)</em></small>'}</TD>
-											<TD>${stream.numberOfMedia}</TD>
-											<TD><input type="checkbox" name="delete" value="${ stream.id }"></TD>
-										</TR>
-									</c:forEach>
+												<TD>${stream.numberOfMedia}</TD>
+												<TD><input type="checkbox" name="delete" value="${ stream.id }"></TD>
+											</TR>
+										</c:forEach>
+									</tbody>
 								</TABLE>
 							</div>
 						</div>
