@@ -8,7 +8,7 @@
 	<c:if test="${ viewingStream ne null }">
 		<%-- Facebook / OpenGraph properties for this stream --%>
 		<meta property="og:url"             content="${ viewingStream.absoluteViewURI }" /> 
-		<meta property="og:title"           content="${ viewingStream.name }" /> 
+		<meta property="og:title"           content="${ fn:escapeXml(viewingStream.name) }" /> 
 		<meta property="og:image"           content="${ viewingStream.coverURL }" />
 		<meta property="og:type"            content="article"/> 
 		<meta property="fb:app_id"          content="194168720763795"/>
@@ -25,7 +25,7 @@
 			<table width=100%>
 				<tr>
 					<td>
-						<h1>${ viewingStream.name }</h1>
+						<h1>${fn:escapeXml(viewingStream.name )}</h1>
 					</td>
 					<td style="vertical-align: middle; text-align: right;">
 						<div style="float: right;">
@@ -43,7 +43,7 @@
 				<TR>
 					<TD>
 						<small><em>currently viewing stream of</em></small> 
-							<strong>${ viewingStreamUser.realName }</strong> 
+							<strong>${ fn:escapeXml(viewingStreamUser.realName) }</strong> 
 					</TD>
 					<TD style="text-align: right">					
 					<small><em>${ numberOfMedia } images total</em></small> &mdash;
@@ -64,17 +64,14 @@
 							<c:forEach items="${ mediaList }" var="media">
 		  						<div class="col-sm-6 col-md-4">
 	  								<div id="thumb-div-${media.id}" class="thumbnail">
-<%-- 		    						<a id="thumb-a-${media.id}" data-toggle="modal" href="#thumb-viewer-${media.id}" class="thumbnail"> --%>
-										<a title="${ media.comments }" class='group1 gallery' href='${media.mediaServingURL}'> 
+										<a title="${fn:escapeXml(media.comments) }" class='group1 gallery' href='${media.mediaServingURL}'> 
 	    	  							<img class="thumbnail" src="${media.thumbURL}">
-	<%--     	  								alt="${fn:escapeXML(media.comments)}"> --%>
-	<%-- XXX TODO: why isn't escapeXML working here? --%>
 										</a>
 
 
 										<%-- INFO TOOLTIP --%>
 										<div class="thumb-tb" style="float: left" rel="popover" data-toggle="popover" data-placement="bottom" 
-											data-html="true" data-trigger="hover" data-content="${ media.thumbnailDescription }">
+											data-html="true" data-trigger="hover" data-content="${ fn:escapeXml(media.thumbnailDescription) }">
 											<button type="button" onClick="return false;" class="btn btn-xs btn-info" >
 												<span class="glyphicon glyphicon-info-sign"></span>
 											</button>

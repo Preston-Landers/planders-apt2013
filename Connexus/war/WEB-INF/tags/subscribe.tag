@@ -21,8 +21,8 @@
 		<div class="panel-heading">
 			<H3 class="panel-title">
 				<c:out value="${ subActionVerb }" />
-				<strong>${ viewingStream.name }</strong> from 
-				<em>${ viewingStreamUser.realName }</em>
+				<strong>${ fn:escapeXml(viewingStream.name) }</strong> from 
+				<em>${ fn:escapeXml(viewingStreamUser.realName) }</em>
 			</H3>
 		</div>
 		<div class="panel-body">

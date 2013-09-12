@@ -13,6 +13,7 @@
 				class="alert alert-dismissable fade in ${statusMessage.CSSClass}">
 				<span class="${statusMessage.iconClass}" style="padding-right: 5px"></span>
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<%-- shouldn't be user controlled, so don't need to escape Xml --%>
 				${statusMessage.message}
 			</div>
 		</c:forEach>

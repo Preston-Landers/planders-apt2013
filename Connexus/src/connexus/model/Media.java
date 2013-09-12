@@ -4,9 +4,6 @@ import static connexus.OfyService.ofy;
 
 import java.io.Serializable;
 import java.util.Date;
-// 
-
-
 import java.util.logging.Level;
 
 import com.google.appengine.api.blobstore.BlobKey;
@@ -25,6 +22,8 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfNotNull;
+
+import connexus.Config;
 
 @Entity
 @Cache
@@ -117,13 +116,13 @@ public class Media implements Comparable<Media> {
 		// TODO: get rid of yucky HTML
 		StringBuilder rv = new StringBuilder();
 		rv.append("<h4>");
-		rv.append(getComments());
+		rv.append(Config.escapeHTML(getComments()));
 		rv.append("</h4>");
 		
 		rv.append("<h6>");
 		rv.append("<em>Uploaded on:</em><BR>" + creationDate);
 		rv.append("<BR><BR><em>Uploaded by:</em><BR>");
-		rv.append(getUploaderNow().getRealName());
+		rv.append(Config.escapeHTML(getUploaderNow().getRealName()));
 		rv.append("</h6>" );
 		return rv.toString();
 	}

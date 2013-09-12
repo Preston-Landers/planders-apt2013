@@ -18,7 +18,7 @@
 			<div class="row"><div class="col-md-8">		
 					<label for="q">Search:</label>		
 					<input style="margin-left: 5px" size=50 id="q" type="text" name="q"
-							value="${q}" ${ showSearchResults ? '': 'autofocus' } placeholder="Type search terms here" />
+							value="${fn:escapeXml(q)}" ${ showSearchResults ? '': 'autofocus' } placeholder="Type search terms here" />
 			</div></div>
 			<div class="row"><div class="col-md-8">
 				<button style="margin-top: 20px" name="search" value="go" class="btn btn-success" type="submit">
@@ -37,7 +37,7 @@
 	<div class="panel-heading">
 		<H3 class="panel-title">
 			${ fn:length(searchResultsList) } search results for  
-			<strong> ${ q } </strong>
+			<strong> ${ fn:escapeXml(q) } </strong>
 <!-- 			<small><em>&ndash; Most recently updated first</em></small>	 -->
 		</H3>
 		

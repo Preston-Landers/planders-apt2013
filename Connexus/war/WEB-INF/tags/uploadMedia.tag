@@ -10,7 +10,7 @@
 	<input type="hidden" name="v" value="${ viewingStream.objectURI }">
 	<div id="createStreamPanel" class="panel panel-default">
 		<div class="panel-heading">
-			<H3 class="panel-title">Add an image to ${ viewingStream.name }</H3>
+			<H3 class="panel-title">Add an image to ${ fn:escapeXml(viewingStream.name) }</H3>
 		</div>
 		<div class="panel-body">
 			<div class="container">

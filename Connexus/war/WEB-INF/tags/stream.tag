@@ -30,11 +30,11 @@
 		<div class="caption">
 			<h4 class="list-group-item-heading">
 				<strong>
-					${ stream.name }
+					${ fn:escapeXml(stream.name) }
 				</strong>
 				<BR> 
 				<small>
-					by <strong><em>${ stream.ownerName }</em></strong>
+					by <strong><em>${ fn:escapeXml(stream.ownerName) }</em></strong>
 				</small>
 				
 			</h4>

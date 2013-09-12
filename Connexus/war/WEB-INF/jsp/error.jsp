@@ -21,6 +21,7 @@
     </div>
     <div id="collapseOne" class="panel-collapse collapse in">
       <div class="panel-body">
+<%--       	<PRE>${ fn:escapeXml(errorMessage) }</PRE> --%>
       	<PRE>${ errorMessage }</PRE>
       </div>
     </div>

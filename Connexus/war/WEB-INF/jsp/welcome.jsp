@@ -5,7 +5,7 @@
 		<div class="jumbotron">
 			<h1><strong>Welcome to Connexus!</strong></h1>
 			<p class="text-center"  style="margin-top: 30px">
-			The world's best* photo sharing website!
+			The world's best* photo sharing site!
 			</p>
 			
 			<c:choose>

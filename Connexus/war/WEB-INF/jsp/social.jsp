@@ -11,8 +11,6 @@ window.cx.SocialPageFBReady = function SocialPageFBReady () {
 	} else {		
 		$("#fbNotLoggedIn").show();
 		$("#fbLoggedIn").hide();
-// 		$("#fbNotLoggedIn").hide();
-// 		$("#fbLoggedIn3").show();
 	}
 }
 </script>
@@ -52,19 +50,14 @@ window.cx.SocialPageFBReady = function SocialPageFBReady () {
 								<h2>
 									Successfully logged in with Facebook&trade;.
 								</h2>
-								<h4>
-									<A HREF="/view">Post streams</A> as status updates.
-								</h4>
+								<A class="btn btn-success" HREF="/view">Post streams as status updates.</A> 
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-	
 		</div>
-	
 	</div>	
-
 
 </jsp:body>
 </t:connexus>

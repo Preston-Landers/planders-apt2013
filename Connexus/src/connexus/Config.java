@@ -49,5 +49,9 @@ public class Config {
 		}
 		return uri;
 	}
+
+	public static String escapeHTML(String inp) {
+		return inp.replace("<", "&lt;").replace(">","&gt;");
+	}
     
 }

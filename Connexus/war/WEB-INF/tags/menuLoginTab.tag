@@ -4,10 +4,13 @@
 <c:choose>
 	<c:when test="${ guser ne null }">
 		<li class="dropdown">
-			<a data-toggle="dropdown" href="#"><strong>${ guser.email }</strong></a>
+			<a data-toggle="dropdown" href="#"><strong>${ fn:escapeXml(guser.email) }</strong></a>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="#">Logged in as ${ guser.nickname } </a></li>
+				<li role="presentation">
+					<a role="menuitem" tabindex="-1" href="#">
+						Logged in as ${ fn:escapeXml(guser.nickname) } 
+					</a>
+				</li>
 				<li role="presentation"><a role="menuitem" tabindex="-1"
 					href="${ logoutURL }">Logout</a></li>
 			</ul>
