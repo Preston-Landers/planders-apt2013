@@ -12,6 +12,11 @@
 		<meta property="og:image"           content="${ viewingStream.coverURL }" />
 		<meta property="og:type"            content="article"/> 
 		<meta property="fb:app_id"          content="194168720763795"/>
+		
+		<script>
+			var USE_FB = true;	
+		</script>			
+		
 	</c:if>
 </jsp:attribute>
 
@@ -28,8 +33,9 @@
 				 speed: 450,
 				 current: "", // disable the "image X of Y"
 			});
-		});
+		});		
 	</script>
+	
 </jsp:attribute>
 
 <jsp:body>

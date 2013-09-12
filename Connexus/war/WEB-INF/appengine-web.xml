@@ -16,7 +16,10 @@
     <include path="**.nocache.*" expiration="0s" />
 
     <include path="**.cache.*" expiration="365d" />
-    <include path="**bootstrap*.css" expiration="365d" />
+    <include path="/**bootstrap*.css" expiration="365d" />
+    <include path="/**bootstrap/fonts/*" expiration="365d" />
+    
+    <include path="/**jquery*.js" expiration="365d" />
     <exclude path="**.gwt.rpc" />
   </static-files>
 

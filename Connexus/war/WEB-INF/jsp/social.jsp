@@ -2,6 +2,12 @@
 
 <t:connexus>
 
+ <jsp:attribute name="head">
+	<script>
+		var USE_FB = true;	
+	</script>			
+ </jsp:attribute>
+
 	<jsp:attribute name="tail">
 <script>
 window.cx.SocialPageFBReady = function SocialPageFBReady () {

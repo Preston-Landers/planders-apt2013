@@ -6,14 +6,13 @@ window.cx = (function (cx, $, window, undefined) {
 		var cookieTheme = $.cookie("css"); 
 		if (curTheme != cookieTheme) {
 			$("#bootswatch-theme").attr("href", cookieTheme);
-			// window.alert("SWITCH " + cookieTheme + "  " + curTheme);
 		}
 		
 	}
 	
 	$(document).ready(function() {
 
-		// THEME
+		// THEME selector
 		$("#mainMenu .theme-dropdown-menu li a").click(function() { 
 			$("#bootswatch-theme").attr("href",$(this).attr('rel'));
 			$.cookie("css",$(this).attr('rel'), {expires: 365, path: '/'});
@@ -54,17 +53,21 @@ window.cx = (function (cx, $, window, undefined) {
 		}
 		window.FBLoginStatusCallback = cx.FBLoginStatusCallback;
 		
-		  $.ajaxSetup({ cache: true });
-		  $.getScript('//connect.facebook.net/en_US/all.js', function(){
-			FB.init({
-			  appId: '194168720763795',
-			  channelUrl: '//connexus-apt.appspot.com/channel.html', // Channel file for x-domain comms
-			  status     : true,                                 // Check Facebook Login status
-			  xfbml      : true                                  // Look for social plugins on the page
-			});     
-		$('#loginbutton,#feedbutton').removeAttr('disabled');
-		    FB.getLoginStatus(cx.FBLoginStatusCallback);
-		  });
+		$.ajaxSetup({ cache: true });
+		
+		if ((window['USE_FB'] != undefined) && USE_FB) {
+			$.getScript('//connect.facebook.net/en_US/all.js', function(){
+				FB.init({
+				  appId: '194168720763795',
+				  channelUrl: '//connexus-apt.appspot.com/channel.html', // Channel file for x-domain comms
+				  status     : true,                                 // Check Facebook Login status
+				  xfbml      : true                                  // Look for social plugins on the page
+				});     
+			
+				$('#loginbutton,#feedbutton').removeAttr('disabled');
+			    FB.getLoginStatus(cx.FBLoginStatusCallback);
+			});
+		}
 
 		
 		// Activate tooltip and popover features
@@ -74,11 +77,6 @@ window.cx = (function (cx, $, window, undefined) {
 		$(function () {
 	        $("[rel='popover']").popover();
 	    });
-		
-//		//for each element that is classed as 'pull-down', set its margin-top to the difference between its own height and the height of its parent
-//		$('.pull-down').each(function() {
-//		    $(this).css('margin-top', $(this).parent().height()-$(this).height())
-//		});
 		
 		// When uploading a file, automatically set the comment to the filename
 		$("#uploadMediaFile").change(function() {
