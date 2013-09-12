@@ -46,8 +46,17 @@ public class Subscribe extends ConnexusServletBase {
 
 		// Validate that we have a stream to deal with at this point
 		if (viewingStreamHandle.getStream() == null) {
-			alertError(req, "Stream not found.");
-			resp.sendRedirect(doneUri);
+			String redirUri = doneUri;
+			if (req.getParameter("unsubscribe") != null) {
+				// See if we want to be redirected anywhere after this.
+				if (req.getParameter("redir") != null) {
+					redirUri = req.getParameter("redir");
+				}
+				alertError(req, "You must select a stream to unsubscribe from.");
+			} else {
+				alertError(req, "Stream not found.");
+			}
+			resp.sendRedirect(redirUri);
 			return;
 
 		}

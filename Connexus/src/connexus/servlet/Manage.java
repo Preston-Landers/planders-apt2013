@@ -63,7 +63,12 @@ public class Manage extends ConnexusServletBase {
 		
 		InitializeContext(req, resp); // Base site context initialization
 
-		if (req.getParameter("delete") != null) {
+		if (req.getParameter("doDelete") != null) {
+			if (req.getParameter("delete") == null) {
+				alertError(req, "You must select a stream to delete first.");
+				resp.sendRedirect(uri);
+				return;
+			}
 			deleteStream(req, resp);
 		} else {
 			alertWarning(req, "Internal error: command not implemented yet.");
@@ -73,9 +78,8 @@ public class Manage extends ConnexusServletBase {
 	}
 	
 	private void deleteStream(HttpServletRequest req, HttpServletResponse resp) {
-		// todo: delete_%id
 		for (String objectIdStr : req.getParameterValues("delete")) {
-			if (objectIdStr.length() < 1) {
+			if (objectIdStr == null || objectIdStr.length() < 1) {
 				continue;
 			}
 			Long objectId = Long.parseLong(objectIdStr);

@@ -18,12 +18,14 @@
 	
 	String cssTheme = "/bootstrap/css/bootstrap.spacelab.min.css";
 	Cookie[] cookies = request.getCookies();
-	for (int i=0; i<cookies.length; i++) {
-		if (cookies[i].getName().equals("css")) {
-			cssTheme = URLDecoder.decode(cookies[i].getValue(), "UTF-8");
+	if (cookies != null) {
+		for (int i=0; i<cookies.length; i++) {
+			if (cookies[i].getName().equals("css")) {
+				cssTheme = URLDecoder.decode(cookies[i].getValue(), "UTF-8");
+			}
 		}
+		request.setAttribute("bootswatchTheme", cssTheme);
 	}
-	request.setAttribute("bootswatchTheme", cssTheme);
 %>
 
 <!DOCTYPE html>
