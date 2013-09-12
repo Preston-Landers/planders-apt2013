@@ -15,7 +15,7 @@
 					<c:when test="${ not empty mySubscriptions }">
 
 						<div class="row">
-							<div class="col-md-10">
+							<div class="col-md-12">
 								<div class="form-group">
 								<TABLE id="mySubsTable" class="table table-striped tablesorter">
 									<thead>

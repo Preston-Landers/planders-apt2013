@@ -2,7 +2,13 @@
 window.cx = (function (cx, $, window, undefined) {
 
 	if($.cookie("css")) {
-		$("#bootswatch-theme").attr("href",$.cookie("css"));
+		var curTheme = $("#bootswatch-theme").attr("href");
+		var cookieTheme = $.cookie("css"); 
+		if (curTheme != cookieTheme) {
+			$("#bootswatch-theme").attr("href", cookieTheme);
+			// window.alert("SWITCH " + cookieTheme + "  " + curTheme);
+		}
+		
 	}
 	
 	$(document).ready(function() {

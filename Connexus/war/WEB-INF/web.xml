@@ -170,9 +170,9 @@
       </auth-constraint>
   </security-constraint>  
   
-  <listener>
-    <listener-class>connexus.ConnexusServletContextListener</listener-class>
-  </listener>
+<!--   <listener> -->
+<!--     <listener-class>connexus.ConnexusServletContextListener</listener-class> -->
+<!--   </listener> -->
 
   <filter>
     <filter-name>ObjectifyFilter</filter-name>

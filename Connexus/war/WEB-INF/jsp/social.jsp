@@ -39,7 +39,7 @@ window.cx.SocialPageFBReady = function SocialPageFBReady () {
 						</div>
 						<div class="col-md-8">
 							<div id="fbNotLoggedIn" style="">
-								<div style="padding-top: 20px">
+								<div class="social-buttons" style="height: 60px; padding-top: 20px">
 									<fb:login-button data-onlogin="FBLoginStatusCallback" size="large" show-faces="true" width="400" max-rows="1"></fb:login-button>
 								</div>
 								<h4 style="padding-top:20px">

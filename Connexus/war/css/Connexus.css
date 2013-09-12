@@ -19,6 +19,10 @@ ul.dropdown-menu>li {
 	width: 100%;
 }
 
+.thumbnail {
+	padding-top: 10px;
+}
+
 div.thumbnail, img.img-thumbnail {
 	-webkit-box-shadow: 7px 7px 5px #ccc;
 	box-shadow: 7px 7px 5px #ccc;

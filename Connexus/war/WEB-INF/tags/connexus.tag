@@ -1,3 +1,4 @@
+<%@tag import="java.net.URLDecoder"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%--  this is the main application layout --%>
 <%@ tag description="Connexus Page template" language="java" pageEncoding="UTF-8"%>
@@ -18,11 +19,11 @@
 	String cssTheme = "/bootstrap/css/bootstrap.spacelab.min.css";
 	Cookie[] cookies = request.getCookies();
 	for (int i=0; i<cookies.length; i++) {
-		if (cookies[i].getName() == "css") {
-			cssTheme = cookies[i].getValue();
+		if (cookies[i].getName().equals("css")) {
+			cssTheme = URLDecoder.decode(cookies[i].getValue(), "UTF-8");
 		}
 	}
-	request.setAttribute("bootswatch-theme", cssTheme);
+	request.setAttribute("bootswatchTheme", cssTheme);
 %>
 
 <!DOCTYPE html>
@@ -32,7 +33,7 @@
 <title>${productName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link id="bootswatch-theme" href="${ bootswatch-theme }" rel="stylesheet" media="screen">
+<link id="bootswatch-theme" href="${ bootswatchTheme }" rel="stylesheet" media="screen">
  
 <link type="text/css" rel="stylesheet" href="/css/Connexus.css">
 <link type="text/css" rel="stylesheet" href="/css/colorbox.css">
