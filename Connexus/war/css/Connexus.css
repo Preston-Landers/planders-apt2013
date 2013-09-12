@@ -51,6 +51,12 @@ div.thumbnail, img.img-thumbnail {
  
  .social-buttons { opacity: 0; }
  
+ .about-col { margin-top: 5px; }
+  
+ .modal-about-content {
+   min-width: 650px;
+ }
+  
 /* Sticky footer styles
 -------------------------------------------------- */
 

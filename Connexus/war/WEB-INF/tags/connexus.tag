@@ -66,17 +66,8 @@
 
 			<div style="float: right; margin-top: 15px;">
 
-				<div class="thumb-tb" style="float: left;" rel="popover"
-					data-toggle="popover" data-placement="top" data-html="true"
-					data-trigger="hover" data-content="<t:about></t:about>">
-					<button type="button" onClick="return false;"
-						class="btn btn-large btn-info">
-						<span class="glyphicon glyphicon-info-sign"></span>
-						Tools Used
-					</button>
-				</div>
-
-
+				<t:about></t:about>
+				
 				<div class="thumb-tb" style="float: left;  margin-left: 25px" rel="popover"
 					data-toggle="popover" data-placement="top" data-html="true"
 					data-trigger="hover" data-content="${aboutText }">
