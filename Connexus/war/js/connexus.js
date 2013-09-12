@@ -1,8 +1,19 @@
 // sets up a JS namespace called cx
 window.cx = (function (cx, $, window, undefined) {
+
+	if($.cookie("css")) {
+		$("#bootswatch-theme").attr("href",$.cookie("css"));
+	}
 	
 	$(document).ready(function() {
 
+		// THEME
+		$("#mainMenu .theme-dropdown-menu li a").click(function() { 
+			$("#bootswatch-theme").attr("href",$(this).attr('rel'));
+			$.cookie("css",$(this).attr('rel'), {expires: 365, path: '/'});
+			return false;
+		});
+		
 		window.cx.FBUSERID = null;
 		window.cx.FBTOKEN = null;
 		window.cx.FBNOTAUTH = null;

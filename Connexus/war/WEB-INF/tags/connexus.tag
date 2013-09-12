@@ -17,10 +17,12 @@
 // 	request.setAttribute("toolsText", "<table class='table table-striped'><tbody>" +
 // 			"<td>Google App Engine</td>" +
 // 			"</tr></tbody></table>");
-	request.setAttribute("toolsText", "<table class='table table-striped'><tbody>" +
+	request.setAttribute("toolsText", "<table class='table table-striped'><thead>" + 
+							"<tr><th>Tools and Plugins Used</th></tr>" +
+							"</thead><tbody>" +
 							"<tr><td>Google App Engine</td></tr>" +
 							"<tr><td>JavaServer Faces & HTML5</td></tr>" +
-							"<tr><td>Bootstrap CSS</td></tr>" +
+							"<tr><td>Twitter Bootstrap</td></tr>" +
 							"<tr><td>Bootswatch Themes</td></tr>" +
 							"<tr><td>jQuery</td></tr>" +
 							"<tr><td>Colorbox Plugin</td></tr>" +
@@ -34,14 +36,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>${productName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<%-- The default theme is selected here. --%>
 <%-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"> --%>
-<!-- <link href="/bootstrap/css/bootstrap.cosmo.min.css" rel="stylesheet" media="screen"> -->
-<!-- <link href="/bootstrap/css/bootstrap.flatly.min.css" rel="stylesheet" media="screen"> -->
-<!-- <link href="/bootstrap/css/bootstrap.journal.min.css" rel="stylesheet" media="screen"> -->
-<!-- <link href="/bootstrap/css/bootstrap.readable.min.css" rel="stylesheet" media="screen"> -->
-<!-- <link href="/bootstrap/css/bootstrap.simplex.min.css" rel="stylesheet" media="screen"> -->
-<!-- <link href="/bootstrap/css/bootstrap.slate.min.css" rel="stylesheet" media="screen"> -->
-<link href="/bootstrap/css/bootstrap.spacelab.min.css" rel="stylesheet" media="screen">
+<%-- <link href="/bootstrap/css/bootstrap.cosmo.min.css" rel="stylesheet" media="screen"> --%>
+<%-- <link href="/bootstrap/css/bootstrap.flatly.min.css" rel="stylesheet" media="screen"> --%>
+<%-- <link href="/bootstrap/css/bootstrap.journal.min.css" rel="stylesheet" media="screen"> --%>
+<%-- <link href="/bootstrap/css/bootstrap.readable.min.css" rel="stylesheet" media="screen"> --%>
+<%-- <link href="/bootstrap/css/bootstrap.simplex.min.css" rel="stylesheet" media="screen"> --%>
+<%-- <link href="/bootstrap/css/bootstrap.slate.min.css" rel="stylesheet" media="screen"> --%>
+<link id="bootswatch-theme" href="/bootstrap/css/bootstrap.spacelab.min.css" rel="stylesheet" media="screen">
 
 <link type="text/css" rel="stylesheet" href="/css/Connexus.css">
 <link type="text/css" rel="stylesheet" href="/css/colorbox.css">
@@ -72,6 +76,7 @@
 	<%-- FOOTER --%>
 	<div id="mainFooter">
 		<div class="container">
+
 			<div style="float: right; margin-top: 15px;">
 
 				<div class="thumb-tb" style="float: left;" rel="popover"
@@ -107,6 +112,7 @@
 <!--  Please send your answer to Old Pink, care of the Funny Farm, Chalfontay -->
 
 	<script src="/js/jquery-1.10.2.min.js"></script>
+	<script src="/js/jquery.cookie.js"></script>
 	<script src="/js/jquery.colorbox.js"></script>
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/js/connexus.js"></script>

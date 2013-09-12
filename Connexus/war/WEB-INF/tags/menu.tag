@@ -29,6 +29,71 @@
 		<!--       <button type="submit" class="btn btn-default">Submit</button> -->
 		<!--     </form> -->
 		<ul class="nav navbar-nav navbar-right">
+			<li class="dropdown">
+				<a data-toggle="dropdown" href="#">Theme</a>
+				<ul class="dropdown-menu theme-dropdown-menu" role="menu" aria-labelledby="dLabel">
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.amelia.min.css">
+							Amelia
+						</a>
+					</li>
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.cerulean.min.css">
+							Cerulean
+						</a>
+					</li>
+					
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.cosmo.min.css">
+							Cosmo
+						</a>
+					</li>
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.cyborg.min.css">
+							Cyborg
+						</a>
+					</li>
+					
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.flatly.min.css">
+							Flatly
+						</a>
+					</li>
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.journal.min.css">
+							Journal
+						</a>
+					</li>
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.readable.min.css">
+							Readable
+						</a>
+					</li>
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.simplex.min.css">
+							Simplex
+						</a>
+					</li>
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.slate.min.css">
+							Slate
+						</a>
+					</li>
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.spacelab.min.css">
+							Spacelab
+						</a>
+					</li>
+					<li role="presentation">
+						<a role="menuitem" tabindex="-1" href="#" rel="/bootstrap/css/bootstrap.united.min.css">
+							United
+						</a>
+					</li>
+				</ul>
+			</li>
+		
+		
+		
 			<%-- <t:menuTab label="Admin" triggerURIEnd="/admin.jsp" target="/admin"></t:menuTab>  --%>
 			<t:menuLoginTab></t:menuLoginTab>
 		</ul>
