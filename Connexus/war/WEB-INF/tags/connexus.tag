@@ -13,6 +13,19 @@
 	request.setAttribute("aboutText", "<center><h4>Preston Landers</h4><H5>Advanced Programming Tools 2013</H5>" + 
 							"<H6>The University of Texas at Austin</H6>" +
 							"<h5><small>Department of Computer and<BR>Electrical Engineering</small></H5></center>");
+	
+// 	request.setAttribute("toolsText", "<table class='table table-striped'><tbody>" +
+// 			"<td>Google App Engine</td>" +
+// 			"</tr></tbody></table>");
+	request.setAttribute("toolsText", "<table class='table table-striped'><tbody>" +
+							"<tr><td>Google App Engine</td></tr>" +
+							"<tr><td>JavaServer Faces & HTML5</td></tr>" +
+							"<tr><td>Bootstrap CSS</td></tr>" +
+							"<tr><td>Bootswatch Themes</td></tr>" +
+							"<tr><td>jQuery</td></tr>" +
+							"<tr><td>Colorbox Plugin</td></tr>" +
+							"<tr><td>Tablesorter Plugin</td></tr>" +
+							"</tbody></table>");
 %>
 
 <!DOCTYPE html>
@@ -22,13 +35,13 @@
 <title>${productName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <%-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"> --%>
-<!-- <link href="/css/themes/bootstrap.cosmo.min.css" rel="stylesheet" media="screen"> -->
-<!-- <link href="/css/themes/bootstrap.flatly.min.css" rel="stylesheet" media="screen"> -->
-<!-- <link href="/css/themes/bootstrap.journal.min.css" rel="stylesheet" media="screen"> -->
-<!-- <link href="/css/themes/bootstrap.readable.min.css" rel="stylesheet" media="screen"> -->
-<!-- <link href="/css/themes/bootstrap.simplex.min.css" rel="stylesheet" media="screen"> -->
-<!-- <link href="/css/themes/bootstrap.slate.min.css" rel="stylesheet" media="screen"> -->
-<link href="/css/themes/bootstrap.spacelab.min.css" rel="stylesheet" media="screen">
+<!-- <link href="/bootstrap/css/bootstrap.cosmo.min.css" rel="stylesheet" media="screen"> -->
+<!-- <link href="/bootstrap/css/bootstrap.flatly.min.css" rel="stylesheet" media="screen"> -->
+<!-- <link href="/bootstrap/css/bootstrap.journal.min.css" rel="stylesheet" media="screen"> -->
+<!-- <link href="/bootstrap/css/bootstrap.readable.min.css" rel="stylesheet" media="screen"> -->
+<!-- <link href="/bootstrap/css/bootstrap.simplex.min.css" rel="stylesheet" media="screen"> -->
+<!-- <link href="/bootstrap/css/bootstrap.slate.min.css" rel="stylesheet" media="screen"> -->
+<link href="/bootstrap/css/bootstrap.spacelab.min.css" rel="stylesheet" media="screen">
 
 <link type="text/css" rel="stylesheet" href="/css/Connexus.css">
 <link type="text/css" rel="stylesheet" href="/css/colorbox.css">
@@ -55,15 +68,28 @@
 			</div>
 		</div>
 	</div>
+	
+	<%-- FOOTER --%>
 	<div id="mainFooter">
 		<div class="container">
 			<div style="float: right; margin-top: 15px;">
 
-				<div class="thumb-tb" style="float: left" rel="popover"
+				<div class="thumb-tb" style="float: left;" rel="popover"
+					data-toggle="popover" data-placement="top" data-html="true"
+					data-trigger="hover" data-content="${toolsText }">
+					<button type="button" onClick="return false;"
+						class="btn btn-large btn-info">
+						<span class="glyphicon glyphicon-info-sign"></span>
+						Tools Used
+					</button>
+				</div>
+
+
+				<div class="thumb-tb" style="float: left;  margin-left: 25px" rel="popover"
 					data-toggle="popover" data-placement="top" data-html="true"
 					data-trigger="hover" data-content="${aboutText }">
 					<button type="button" onClick="return false;"
-						class="btn btn-large btn-info">
+						class="btn btn-large btn-warning">
 						<span class="glyphicon glyphicon-info-sign"></span>
 						About This Site
 					</button>
@@ -76,6 +102,9 @@
 			</div>
 		</div>
 	</div>
+
+<!--  Congratulations. You have just discovered the secret message. -->
+<!--  Please send your answer to Old Pink, care of the Funny Farm, Chalfontay -->
 
 	<script src="/js/jquery-1.10.2.min.js"></script>
 	<script src="/js/jquery.colorbox.js"></script>
