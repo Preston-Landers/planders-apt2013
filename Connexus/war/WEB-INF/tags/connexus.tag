@@ -34,11 +34,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>${productName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link id="bootswatch-theme" href="${ bootswatchTheme }" rel="stylesheet" media="screen">
+
+<%-- Inlining the small, un-minified CSS files --%>
+<style>
  
-<link type="text/css" rel="stylesheet" href="/css/Connexus.css">
-<link type="text/css" rel="stylesheet" href="/css/colorbox.css">
+<%@ include file="/css/Connexus.css"%>
+<%@ include file="/css/colorbox.css"%>
+
+</style>
+ 
 
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
