@@ -68,15 +68,6 @@
 
 				<t:about></t:about>
 				
-				<div class="thumb-tb" style="float: left;  margin-left: 25px" rel="popover"
-					data-toggle="popover" data-placement="top" data-html="true"
-					data-trigger="hover" data-content="${aboutText }">
-					<button type="button" onClick="return false;"
-						class="btn btn-large btn-warning">
-						<span class="glyphicon glyphicon-info-sign"></span>
-						About This Site
-					</button>
-				</div>
 			</div>
 		</div>
 	</div>

@@ -4,9 +4,19 @@
 
 <div class="thumb-tb" style="float: left;">
 	<button type="button" onClick="$('#modal-about').modal({});return false;"
-		class="btn btn-large btn-info">
+		class="btn btn-sm btn-info">
 		<span class="glyphicon glyphicon-info-sign"></span>
 		Tools Used
+	</button>
+</div>
+
+<div class="thumb-tb" style="float: left;  margin-left: 25px" rel="popover"
+	data-toggle="popover" data-placement="top" data-html="true"
+	data-trigger="hover" data-content="${aboutText }">
+	<button type="button" onClick="return false;"
+		class="btn btn-sm btn-warning">
+		<span class="glyphicon glyphicon-info-sign"></span>
+		About This Site
 	</button>
 </div>
 

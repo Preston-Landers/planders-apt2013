@@ -230,7 +230,7 @@ public class Media implements Comparable<Media> {
 	}
 
 	public String getThumbURL() {
-		return getMediaURLHelper(getBlobKey(), 400);
+		return getMediaURLHelper(getBlobKey(), 300);
 		
 	}
 

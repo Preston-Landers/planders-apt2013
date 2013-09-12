@@ -15,12 +15,12 @@
 	</div>
 	<div class="panel-body">
 		<form role="form" action="/search" method="get" style="display: inline">
-			<div class="row"><div class="col-md-8">		
+			<div class="row"><div class="col-md-12">		
 					<label for="q">Search:</label>		
-					<input style="margin-left: 5px" size=50 id="q" type="text" name="q"
+					<input style="margin-left: 5px" class="form-control" id="q" type="text" name="q"
 							value="${fn:escapeXml(q)}" ${ showSearchResults ? '': 'autofocus' } placeholder="Type search terms here" />
 			</div></div>
-			<div class="row"><div class="col-md-8">
+			<div class="row"><div class="col-md-12">
 				<button style="margin-top: 20px" name="search" value="go" class="btn btn-success" type="submit">
 					Search
 				</button>		

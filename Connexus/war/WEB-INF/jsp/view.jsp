@@ -82,7 +82,7 @@
 							<c:forEach items="${ mediaList }" var="media">
 		  						<div class="col-sm-6 col-md-4">
 	  								<div id="thumb-div-${media.id}" class="thumbnail">
-										<a title="${fn:escapeXml(media.comments) }" class='group1 gallery' href='${media.mediaServingURL}'> 
+										<a title="${fn:escapeXml(fn:escapeXml(media.comments)) }" class='group1 gallery' href='${media.mediaServingURL}'> 
 	    	  							<img class="thumbnail" src="${media.thumbURL}">
 										</a>
 
