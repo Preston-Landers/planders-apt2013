@@ -41,6 +41,8 @@ window.cx = (function (cx, $, window, undefined) {
 			    // the user isn't logged in to Facebook.
 				  // window.alert("You are not logged into FB");
 			  }
+		      $(".social-buttons").css("opacity", "1");
+
 		  	  if (cx.SocialPageFBReady) { cx.SocialPageFBReady(); }
 		  	  
 		}
@@ -57,16 +59,6 @@ window.cx = (function (cx, $, window, undefined) {
 		$('#loginbutton,#feedbutton').removeAttr('disabled');
 		    FB.getLoginStatus(cx.FBLoginStatusCallback);
 		  });
-
-
-		// Activate image viewing galleries
-		$('a.gallery').colorbox({ 
-			 opacity:0.5,
-			 rel: 'group1',
-			 photo: true,
-//			 transition: "fade",
-			 speed: 450,
-		});
 
 		
 		// Activate tooltip and popover features

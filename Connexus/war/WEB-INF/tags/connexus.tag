@@ -13,21 +13,16 @@
 	request.setAttribute("aboutText", "<center><h4>Preston Landers</h4><H5>Advanced Programming Tools 2013</H5>" + 
 							"<H6>The University of Texas at Austin</H6>" +
 							"<h5><small>Department of Computer and<BR>Electrical Engineering</small></H5></center>");
+
 	
-// 	request.setAttribute("toolsText", "<table class='table table-striped'><tbody>" +
-// 			"<td>Google App Engine</td>" +
-// 			"</tr></tbody></table>");
-	request.setAttribute("toolsText", "<table class='table table-striped'><thead>" + 
-							"<tr><th>Tools and Plugins Used</th></tr>" +
-							"</thead><tbody>" +
-							"<tr><td>Google App Engine</td></tr>" +
-							"<tr><td>JavaServer Faces & HTML5</td></tr>" +
-							"<tr><td>Twitter Bootstrap</td></tr>" +
-							"<tr><td>Bootswatch Themes</td></tr>" +
-							"<tr><td>jQuery</td></tr>" +
-							"<tr><td>Colorbox Plugin</td></tr>" +
-							"<tr><td>Tablesorter Plugin</td></tr>" +
-							"</tbody></table>");
+	String cssTheme = "/bootstrap/css/bootstrap.spacelab.min.css";
+	Cookie[] cookies = request.getCookies();
+	for (int i=0; i<cookies.length; i++) {
+		if (cookies[i].getName() == "css") {
+			cssTheme = cookies[i].getValue();
+		}
+	}
+	request.setAttribute("bootswatch-theme", cssTheme);
 %>
 
 <!DOCTYPE html>
@@ -37,16 +32,8 @@
 <title>${productName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<%-- The default theme is selected here. --%>
-<%-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"> --%>
-<%-- <link href="/bootstrap/css/bootstrap.cosmo.min.css" rel="stylesheet" media="screen"> --%>
-<%-- <link href="/bootstrap/css/bootstrap.flatly.min.css" rel="stylesheet" media="screen"> --%>
-<%-- <link href="/bootstrap/css/bootstrap.journal.min.css" rel="stylesheet" media="screen"> --%>
-<%-- <link href="/bootstrap/css/bootstrap.readable.min.css" rel="stylesheet" media="screen"> --%>
-<%-- <link href="/bootstrap/css/bootstrap.simplex.min.css" rel="stylesheet" media="screen"> --%>
-<%-- <link href="/bootstrap/css/bootstrap.slate.min.css" rel="stylesheet" media="screen"> --%>
-<link id="bootswatch-theme" href="/bootstrap/css/bootstrap.spacelab.min.css" rel="stylesheet" media="screen">
-
+<link id="bootswatch-theme" href="${ bootswatch-theme }" rel="stylesheet" media="screen">
+ 
 <link type="text/css" rel="stylesheet" href="/css/Connexus.css">
 <link type="text/css" rel="stylesheet" href="/css/colorbox.css">
 
@@ -81,7 +68,7 @@
 
 				<div class="thumb-tb" style="float: left;" rel="popover"
 					data-toggle="popover" data-placement="top" data-html="true"
-					data-trigger="hover" data-content="${toolsText }">
+					data-trigger="hover" data-content="<t:about></t:about>">
 					<button type="button" onClick="return false;"
 						class="btn btn-large btn-info">
 						<span class="glyphicon glyphicon-info-sign"></span>
@@ -99,11 +86,6 @@
 						About This Site
 					</button>
 				</div>
-
-
-<!-- 				<p class="text-muted credit"> -->
-<!-- 					&copy; 2013 The Human Fund&trade; <em>Money... for people.</em> -->
-<!-- 				</p> -->
 			</div>
 		</div>
 	</div>
@@ -113,7 +95,6 @@
 
 	<script src="/js/jquery-1.10.2.min.js"></script>
 	<script src="/js/jquery.cookie.js"></script>
-	<script src="/js/jquery.colorbox.js"></script>
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
 	<script src="/js/connexus.js"></script>
 

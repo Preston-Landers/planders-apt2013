@@ -15,6 +15,23 @@
 	</c:if>
 </jsp:attribute>
 
+<jsp:attribute name="tail">
+	<script src="/js/jquery.colorbox.js"></script>
+	<script>
+		$(document).ready(function() {
+			// Activate image viewing galleries
+			$('a.gallery').colorbox({ 
+				 opacity:0.5,
+				 rel: 'group1',
+				 photo: true,
+	//			 transition: "fade",
+				 speed: 450,
+				 current: "", // disable the "image X of Y"
+			});
+		});
+	</script>
+</jsp:attribute>
+
 <jsp:body>
 <c:choose>
 <%-- VIEWING A SINGLE STREAM   style="background: url(${ viewingStream.coverURL });" --%>
@@ -22,13 +39,14 @@
 		<div class="stream-cover-bg" >
 		<div class="page-header stream-page-header" >
 		
+			<%-- should get rid of table here --%>
 			<table width=100%>
 				<tr>
 					<td>
 						<h1>${fn:escapeXml(viewingStream.name )}</h1>
 					</td>
 					<td style="vertical-align: middle; text-align: right;">
-						<div style="float: right;">
+						<div class="social-buttons" style="float: right;">
 							<fb:like href="${ viewingStream.absoluteViewURI }" layout="standard"
 											show-faces="true" send="true" width="400" action="like"
 											colorscheme="light"></fb:like>
@@ -78,7 +96,6 @@
 										</div>
 										
         <%-- Allow delete if it's my image --%>
-        <%-- TODO: still need to show info tooltip even if not your image --%>
         <c:if test="${media.uploader == cuser.key}">
 			
 				
@@ -96,10 +113,6 @@
 					</span>
 				</form>
 				</div>
-				
-<!-- 				<div class="thumb-tb thumb-tb-text" style=""> -->
-<%-- 					<c:out value="${ media.comments }"/> --%>
-<!-- 				</div> -->
 
 
 				<%-- DELETE OPTION --%>

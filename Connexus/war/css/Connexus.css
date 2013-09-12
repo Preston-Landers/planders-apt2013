@@ -49,6 +49,8 @@ div.thumbnail, img.img-thumbnail {
 	font-size: 11pt;
 }
  
+ .social-buttons { opacity: 0; }
+ 
 /* Sticky footer styles
 -------------------------------------------------- */
 
