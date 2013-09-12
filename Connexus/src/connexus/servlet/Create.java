@@ -58,18 +58,18 @@ public class Create extends ConnexusServletBase {
 		String subscribersNote = req.getParameter("subscribersNote");
 		String tags = req.getParameter("tags");
 		String coverURL = req.getParameter("cover");
+
+		List<String[]> params = new ArrayList<String[]>();
+		params.add(new String[]{"subscribers", subscribersStr});
+		params.add(new String[]{"subscribersNote", subscribersNote});
+		params.add(new String[]{"tags", tags});
+		params.add(new String[]{"cover", coverURL});
 		
 		// Look for any streams of this name. 
 		List<Stream> existingStreams = ofy().load().type(Stream.class)
 				.ancestor(site).filter("name ==", streamName).list();
 		if (existingStreams.size() > 0) {
 			alertError(req, "Sorry, but a stream of that name already exists. Please select another name.");
-			
-			List<String[]> params = new ArrayList<String[]>();
-			params.add(new String[]{"subscribers", subscribersStr});
-			params.add(new String[]{"subscribersNote", subscribersNote});
-			params.add(new String[]{"tags", tags});
-			params.add(new String[]{"cover", coverURL});
 			
 			String newUri = Config.getURIWithParams(uri, params);
 			resp.sendRedirect(newUri);
@@ -79,6 +79,12 @@ public class Create extends ConnexusServletBase {
 		
 		// TODO: more validation...
 		streamName = wspace.trimFrom(streamName);
+		if (streamName == null || streamName.length() < 1) {
+			alertError(req, "I'm sorry but you need to give your stream a name. Any name will do.");
+			String newUri = Config.getURIWithParams(uri, params);
+			resp.sendRedirect(newUri);
+			return;
+		}
 
 		// TODO: deal with subscribers emails
 		
