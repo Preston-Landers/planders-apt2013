@@ -21,8 +21,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>${productName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet"
-	media="screen">
+<%-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"> --%>
+<!-- <link href="/css/themes/bootstrap.cosmo.min.css" rel="stylesheet" media="screen"> -->
+<!-- <link href="/css/themes/bootstrap.flatly.min.css" rel="stylesheet" media="screen"> -->
+<!-- <link href="/css/themes/bootstrap.journal.min.css" rel="stylesheet" media="screen"> -->
+<!-- <link href="/css/themes/bootstrap.readable.min.css" rel="stylesheet" media="screen"> -->
+<!-- <link href="/css/themes/bootstrap.simplex.min.css" rel="stylesheet" media="screen"> -->
+<!-- <link href="/css/themes/bootstrap.slate.min.css" rel="stylesheet" media="screen"> -->
+<link href="/css/themes/bootstrap.spacelab.min.css" rel="stylesheet" media="screen">
 
 <link type="text/css" rel="stylesheet" href="/css/Connexus.css">
 <link type="text/css" rel="stylesheet" href="/css/colorbox.css">
