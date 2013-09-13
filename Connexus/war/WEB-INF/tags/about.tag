@@ -15,7 +15,7 @@
 	data-trigger="hover" data-content="${aboutText }">
 	<button type="button" onClick="return false;"
 		class="btn btn-sm btn-warning">
-		<span class="glyphicon glyphicon-info-sign"></span>
+		<span class="glyphicon glyphicon-fire"></span>
 		About This Site
 	</button>
 </div>
