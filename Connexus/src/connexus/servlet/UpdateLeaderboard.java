@@ -12,9 +12,6 @@ import connexus.model.Leaderboard;
 
 public class UpdateLeaderboard extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4152585588958400842L;
 
 	/**

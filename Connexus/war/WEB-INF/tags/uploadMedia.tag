@@ -35,7 +35,7 @@
 				</div>
 				<div class="row">
 					<div class="col-md-6">
-						<button onClick="$('button').html('Please wait...').prop('disabled', true);return true;" id="uploadButton" class="btn btn-primary" name="upload" type="submit">
+						<button onClick="$(this).html('Please wait...');return true;" id="uploadButton" class="btn btn-primary" name="upload" type="submit">
 							<span class="glyphicon glyphicon-remove-circle"></span>&nbsp;
 							Upload File
 						</button>
