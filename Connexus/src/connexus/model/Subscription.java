@@ -1,6 +1,5 @@
 package connexus.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.logging.Level;
 
 import static connexus.OfyService.ofy;
 
-import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;

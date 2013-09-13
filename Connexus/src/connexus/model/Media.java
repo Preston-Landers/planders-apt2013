@@ -207,8 +207,6 @@ public class Media implements Comparable<Media> {
 			// System.err.println("Cache hit on image " + cachedURL);
 			return cachedURL;
 		}
-		// TODO: check if not image and use the other service
-		// return imagesService.getServingUrl(getBlobKey()).replace("0.0.0.0", "192.168.1.99");
 		try {
 			String rv = imagesService.getServingUrl(blobKey, size, false);
 			// System.err.println("Cache miss on image " + rv);
@@ -266,17 +264,10 @@ public class Media implements Comparable<Media> {
 		try {
 			blobstoreService.delete(getBlobKey());
 		} catch (BlobstoreFailureException e) {
-			// TODO: don't know if it's just the development environment 
-			// but often the blobstore delete fails... I get this:
-			//
-			// WARNING: Could not delete blob: <BlobKey: PEyjT0AA8BOvzTqVuWoCvw>
-			// java.io.IOException: Could not delete: D:\APTWorkspace\preston_landers\Connexus\war\WEB-INF\appengine-generated\PEyjT0AA8BOvzTqVuWoCvw
 			e.printStackTrace(System.err);
 			return false;
 		}
 		
-		//ImagesService imagesService = ImagesServiceFactory.getImagesService();
-		//imagesService.deleteServingUrl(getBlobKey());
 		return true;
 	}
 	

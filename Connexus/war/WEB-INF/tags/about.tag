@@ -25,7 +25,7 @@
     <div class="modal-content modal-about-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Powered By</h4>
+        <h4 class="modal-title"><strong>${productName } Is Powered By:</strong></h4>
       </div>
       <div class="modal-body">
         <p>This site was created with the following tools:</p>
@@ -59,7 +59,7 @@
 	       		<a href="http://tablesorter.com/docs/" target="_blank">Tablesorter plugin for jQuery</a>        		
         	</div>
         	<div class="col-md-6 about-col">
-        		 
+        		 <a href="http://eclipse.org" target="_blank">Eclipse</a> 
         	</div>
         </div>
 

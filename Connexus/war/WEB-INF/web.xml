@@ -169,10 +169,6 @@
           <role-name>admin</role-name>
       </auth-constraint>
   </security-constraint>  
-  
-<!--   <listener> -->
-<!--     <listener-class>connexus.ConnexusServletContextListener</listener-class> -->
-<!--   </listener> -->
 
   <filter>
     <filter-name>ObjectifyFilter</filter-name>

@@ -36,10 +36,6 @@ public class Subscribe extends ConnexusServletBase {
 		try {
 			viewingStreamHandle = StreamHandle.getStreamHandleFromRequest(req,
 					site);
-			// viewingStream = viewingStreamHandle.getStream();
-			// viewingStreamUser = viewingStreamHandle.getCuser();
-			// req.setAttribute("viewingStream", viewingStream);
-			// req.setAttribute("viewingStreamUser", viewingStreamUser);
 		} catch (RuntimeException e) {
 			viewingStreamHandle = new StreamHandle();
 		}

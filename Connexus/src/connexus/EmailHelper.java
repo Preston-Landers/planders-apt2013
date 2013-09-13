@@ -91,7 +91,7 @@ public class EmailHelper {
 		
 		InternetAddress from;
 		try {
-			from = new InternetAddress("planders@gmail.com", "Connexus Admin");
+			from = new InternetAddress(Config.productAdminEmail, Config.productName + " Admin");
 		} catch (UnsupportedEncodingException e) {
 			System.err.println("Can't get FROM address for email");
 			e.printStackTrace(System.err);

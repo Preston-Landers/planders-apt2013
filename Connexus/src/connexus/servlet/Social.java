@@ -24,14 +24,6 @@ public class Social extends ConnexusServletBase {
 			throws IOException, ServletException {
 		InitializeContext(req, resp); // Base site context initialization
 		
-//		List<CUser> allUsersList = ofy().load().type(CUser.class).list();
-//		for (CUser userRec : allUsersList) {
-//			System.err.println("USER REC: " + userRec.toString());
-//		}
-//		req.setAttribute("userList", allUsersList);
-
-		// throw new ServletException("Retrieving products failed!", e);
-		
 		// Forward to JSP page to display them in a HTML table.
 		req.getRequestDispatcher(dispatcher).forward(req, resp); 
 	}

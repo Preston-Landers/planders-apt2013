@@ -4,7 +4,6 @@ import static connexus.OfyService.ofy;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cache;
@@ -46,10 +45,6 @@ public class StreamView implements Comparable<StreamView> {
 	public Long getId() {
 		return id;
 	}
-
-//	public void setId(Long id) {
-//		this.id = id;
-//	}
 
 
 	public Date getDate() {

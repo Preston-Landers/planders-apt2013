@@ -152,13 +152,6 @@ public class View extends ConnexusServletBase {
 					cuser, viewingStreamHandle);
 		}
 		req.setAttribute("mySubForStream", mySubForStream);
-//		if (mySubForStream != null) {
-//			System.err.println("User " + cuser
-//					+ " is subscribed to this stream! " + viewingStream);
-//		} else {
-//			System.err.println("User " + cuser
-//					+ " is NOT subscribed to this stream! " + viewingStream);
-//		}
 
 	}
 
@@ -173,7 +166,7 @@ public class View extends ConnexusServletBase {
 		viewingStream.setCoverURL(mediaURL);
 		viewingStream.fixNumMedia();
 		viewingStream.save();
-		alertWarning(req, "Set new cover image.");
+		alertInfo(req, "Set new cover image.");
 	}
 
 	private void deleteMedia(HttpServletRequest req, HttpServletResponse resp) {

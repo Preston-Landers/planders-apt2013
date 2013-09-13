@@ -49,11 +49,6 @@ public class Site implements Comparable<Site> {
 		return id;
 	}
 
-//	public void setId(Long id) {
-//		this.id = id;
-//	}
-
-
 	public Date getCreationDate() {
 		return creationDate;
 	}

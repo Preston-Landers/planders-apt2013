@@ -9,7 +9,7 @@
 			<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
 			<span class="icon-bar"></span> <span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" href="/">Connexus</a>
+		<a class="navbar-brand" href="/">${productName }</a>
 	</div>
 
 	<!-- Collect the nav links, forms, and other content for toggling -->

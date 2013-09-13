@@ -40,10 +40,9 @@ public class Trending extends ConnexusServletBase {
 		req.setAttribute("leaderBoardSize", Leaderboard.lbSize);
 		
 		// Get the leaderboard
-		// Leaderboard lb = ofy().load().type(Leaderboard.class).parent(site).id(Leaderboard.lbId).get();
 		Leaderboard lb = Leaderboard.load(null, site.getKey());
 		
-		// TODO: move to cron job! (doesn't run on dev server)
+		// Now in cron job.
 		// Leaderboard.generateLeaderBoard();
 		
 		Long reportFreq = lb.getReportFrequencySec();

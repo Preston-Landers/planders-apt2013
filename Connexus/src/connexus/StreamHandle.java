@@ -38,7 +38,6 @@ public class StreamHandle {
 		return cuser;
 	}
 
-	// TODO: fix exception class?
 	// Get a valid StreamHandle if available from the HTTP Request
 	// Otherwise you get null
 	public static StreamHandle getStreamHandleFromRequest(

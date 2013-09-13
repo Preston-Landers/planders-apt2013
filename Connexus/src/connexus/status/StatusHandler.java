@@ -39,21 +39,4 @@ public class StatusHandler {
 		clearStatus(session);
 		return messageList;
 	}
-	//
-	// // TODO: probably remove
-	// public static String getAndClearAppStatusString(HttpSession session) {
-	// List<StatusMessage> messageList = getStatus(session);
-	// if (messageList == null || messageList.size() < 1) {
-	// return "";
-	// }
-	// StringBuilder rv = new StringBuilder();
-	// for (StatusMessage statusMessage : messageList) {
-	// String msg = statusMessage.getMessage();
-	// if (statusMessage.getType() == StatusMessageType.STATUS) {
-	// rv.append("<div>"+ msg + "</div>");
-	// }
-	//
-	// }
-	// return rv.toString();
-	// }
 }

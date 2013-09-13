@@ -3,7 +3,7 @@
 <t:connexus>
 	<jsp:body>
 		<div class="jumbotron">
-			<h1><strong>Welcome to Connexus!</strong></h1>
+			<h1><strong>Welcome to ${productName}!</strong></h1>
 			<p class="text-center"  style="margin-top: 30px">
 			The world's best* photo sharing site!
 			</p>
@@ -41,7 +41,7 @@
 				<c:otherwise>
 					<p style="margin-top: 100px">
 						<small><em>
-							Connexus uses Google Accounts.
+							${productName } uses Google Accounts.
 						</em></small>
 					</p>
 					<p style="margin-top: 30px">

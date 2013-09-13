@@ -6,13 +6,13 @@ import java.util.List;
 import org.apache.http.client.utils.URIBuilder;
 
 public class Config {
-	public static final String productName = "Connexus";
-	public static final String productURL = "http://connexus-apt.appspot.com";
+	public static final String productName = "Connex.us";
 	public static final String productDomain = "connexus-apt.appspot.com";
+	public static final String productURL = "http://" + productDomain;
 	
     public static final long siteId = 1;
     
-    public static final String emailSubject = "[APT-Preston Landers] Trending streams for connexus-apt.appspot.com";
+    public static final String emailSubject = "[APT-Preston Landers] Trending streams for " + productDomain;
     
     // Maximum search results to show
     public static final int maxSearchResults = 5;
@@ -53,5 +53,7 @@ public class Config {
 	public static String escapeHTML(String inp) {
 		return inp.replace("<", "&lt;").replace(">","&gt;");
 	}
+
+	static final String productAdminEmail = "planders@gmail.com";
     
 }
