@@ -13,7 +13,7 @@
 					<c:when test="${ not empty myStreamList }">
 
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-12 table-responsive">
 								<TABLE id="myStreamsTable" class="table table-striped tablesorter">
 									<thead>
 										<tr>

@@ -7,12 +7,14 @@
 			<a data-toggle="dropdown" href="#"><strong>${ fn:escapeXml(guser.email) }</strong></a>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 				<li role="presentation">
-					<a role="menuitem" tabindex="-1" href="#">
-						Logged in as ${ fn:escapeXml(guser.nickname) } 
-					</a>
+					<div class="container">
+<!-- 					<a role="menuitem" tabindex="-1" href="#"> -->
+						<P>Signed in as <strong>${ fn:escapeXml(guser.nickname) }</strong></P> 
+<!-- 					</a> -->
+					</div>
 				</li>
 				<li role="presentation"><a role="menuitem" tabindex="-1"
-					href="${ logoutURL }">Logout</a></li>
+					href="${ logoutURL }">Sign out of Google</a></li>
 			</ul>
 		</li>
 	</c:when>

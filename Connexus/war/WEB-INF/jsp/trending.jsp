@@ -19,11 +19,20 @@
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<c:forEach items="${ leaderBoard }" var="stream">	
-						<div class="col-md-4">
-							<t:stream stream="${ stream }" trending="true"></t:stream>
-						</div>
-					</c:forEach>
+					<c:choose>
+						<c:when test="${ (leaderBoard eq null) or (fn:length(leaderBoard) == 0) }">
+							<P>
+								<em>No streams have been viewed in the last hour. Sure seems quiet around here.)</em>
+							</P>
+						</c:when>
+						<c:otherwise>
+							<c:forEach items="${ leaderBoard }" var="stream">	
+								<div class="col-md-4">
+									<t:stream stream="${ stream }" trending="true"></t:stream>
+								</div>
+							</c:forEach>						
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>

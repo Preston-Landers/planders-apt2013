@@ -16,7 +16,7 @@
 
 						<div class="row">
 							<div class="col-md-12">
-								<div class="form-group">
+								<div class="form-group table-responsive">
 								<TABLE id="mySubsTable" class="table table-striped tablesorter">
 									<thead>
 										<tr>

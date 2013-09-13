@@ -10,6 +10,8 @@
 		<meta property="og:url"             content="${ viewingStream.absoluteViewURI }" /> 
 		<meta property="og:title"           content="${ fn:escapeXml(viewingStream.name) }" /> 
 		<meta property="og:image"           content="${ viewingStream.coverURL }" />
+		<meta property="og:description"     
+				content="${ fn:escapeXml(viewingStream.name) } is a ${productName } photo stream created by ${ fn:escapeXml(viewingStream.ownerName) }" />
 		<meta property="og:type"            content="article"/> 
 		<meta property="fb:app_id"          content="194168720763795"/>
 		
