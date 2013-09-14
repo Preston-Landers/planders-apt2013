@@ -40,7 +40,8 @@
 									placeholder="#PacificOcean, #FriendsOfAziz, #music">${param['tags']}</textarea>
 							</div>
 							<label for="createStreamTags">
-								Tag your stream
+								Tag your stream 
+								<span class="help-block">(comma separated)</span>
 							</label>						
 						</div>
 						<div class="form-group">
@@ -48,11 +49,7 @@
 								name="cover" placeholder="Optional URL of cover image" value="${param['cover']}">
 							<label for="createStreamCoverURL">
 								URL to cover image
-								<BR />
-								<h6>
-									<em>Tip: you can set a cover later after you upload some pictures</em>
-								</h6>
-								
+								<span class="help-block">Tip: you can set a cover later after you upload some pictures</span>
 							</label>
 						</div>
 					</div>

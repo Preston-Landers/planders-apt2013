@@ -24,7 +24,7 @@ window.cx = (function (cx, $, window, undefined) {
 		window.cx.FBNOTAUTH = null;
 		window.cx.FBSTATUS = 'You are not logged into FB.';
 		window.cx.FBLoginStatusCallback = function FBLoginStatusCallback(response) {
-		  if (response.status === 'connected') {
+			if (response.status === 'connected') {
 			    // the user is logged in and has authenticated your
 			    // app, and response.authResponse supplies
 			    // the user's ID, a valid access token, a signed
@@ -45,12 +45,11 @@ window.cx = (function (cx, $, window, undefined) {
 			  } else {
 			    // the user isn't logged in to Facebook.
 				  // window.alert("You are not logged into FB");
-			  }
-		      $(".social-buttons").css("opacity", "1");
+			}
+			$(".social-buttons").css("opacity", "1");
 
-		  	  if (cx.SocialPageFBReady) { cx.SocialPageFBReady(); }
-		  	  
-		}
+			if (cx.SocialPageFBReady) { cx.SocialPageFBReady(); }		  	  
+		}		
 		window.FBLoginStatusCallback = cx.FBLoginStatusCallback;
 		
 		$.ajaxSetup({ cache: true });
@@ -71,12 +70,8 @@ window.cx = (function (cx, $, window, undefined) {
 
 		
 		// Activate tooltip and popover features
-		$(function () {
-	        $("[rel='tooltip']").tooltip();
-	    });
-		$(function () {
-	        $("[rel='popover']").popover();
-	    });
+        $("[rel='tooltip']").tooltip();
+        $("[rel='popover']").popover();
 		
 		// When uploading a file, automatically set the comment to the filename
 		$("#uploadMediaFile").change(function() {

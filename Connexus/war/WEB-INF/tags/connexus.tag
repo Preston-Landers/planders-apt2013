@@ -46,7 +46,7 @@
 </style>
  
 
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <%-- allow users of this tag to include stuff in the head --%>
 <jsp:invoke fragment="head" />
