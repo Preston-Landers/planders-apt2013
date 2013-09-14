@@ -28,10 +28,10 @@ public class Social extends ConnexusServletBase {
 		req.getRequestDispatcher(dispatcher).forward(req, resp); 
 	}
 	
-	public void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException, ServletException {
-		InitializeContext(req, resp); // Base site context initialization
-		alertInfo(req, "TODO: Not implemented yet.");
-		resp.sendRedirect(uri);
-	}
+//	public void doPost(HttpServletRequest req, HttpServletResponse resp)
+//			throws IOException, ServletException {
+//		InitializeContext(req, resp); // Base site context initialization
+//		alertInfo(req, "TODO: Not implemented yet.");
+//		resp.sendRedirect(uri);
+//	}
 }

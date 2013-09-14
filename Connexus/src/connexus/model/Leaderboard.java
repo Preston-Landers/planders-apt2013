@@ -278,7 +278,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		}
 		Long reportFreqSec = getReportFrequencySec();
 		if (reportFreqSec == null || reportFreqSec.equals(FREQ_NONE)) {
-			System.err.println("Email Report is disabled. Last run: " + lastRun);
+			// System.err.println("Email Report is disabled. Last run: " + lastRun);
 			return;
 		}
 		Date now = new Date();

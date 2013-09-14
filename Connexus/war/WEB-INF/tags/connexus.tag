@@ -1,13 +1,12 @@
-<%@tag import="java.net.URLDecoder"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%--  this is the main application layout --%>
 <%@ tag description="Connexus Page template" language="java" pageEncoding="UTF-8"%>
+<%@ tag trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<%@ tag import="connexus.Config"%>
 <%@ attribute name="head" required="false" fragment="true"%>
 <%@ attribute name="bodyHead" required="false" fragment="true"%>
 <%@ attribute name="tail" required="false" fragment="true"%>
-<%@ tag trimDirectiveWhitespaces="true" %>
+<%@ tag import="connexus.Config"%>
+<%@ tag import="java.net.URLDecoder"%>
 <%
 	request.setAttribute("productName", Config.productName);
 	request.setAttribute("productURL", Config.productURL);
@@ -86,9 +85,18 @@
 <!--  Please send your answer to Old Pink, care of the Funny Farm, Chalfontay -->
 
 <script src="/js/jquery-1.10.2.min.js"></script>
-<script src="/js/jquery.cookie.js"></script>
+<!-- <script src="/js/jquery.cookie.js"></script> -->
+<script>
+<%@ include file="/js/jquery.cookie.js"%>
+</script>
+
 <script src="/bootstrap/js/bootstrap.min.js"></script>
-<script src="/js/connexus.js"></script>
+
+
+<!-- <script src="/js/connexus.js"> -->
+<script>
+<%@ include file="/js/connexus.js"%>
+</script>
 
 <script>
  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
