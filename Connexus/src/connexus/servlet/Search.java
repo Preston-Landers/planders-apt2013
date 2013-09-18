@@ -100,8 +100,8 @@ public class Search extends ConnexusServletBase {
 	}
 	
 	public boolean matchString(String queryTerm, String test) {
-		Pattern pattern = Pattern.compile(queryTerm, Pattern.CASE_INSENSITIVE);
 		for (String term : queryTerm.split("\\s")) {
+			Pattern pattern = Pattern.compile(term, Pattern.CASE_INSENSITIVE);
 			Matcher matcher = pattern.matcher(test);
 			if (matcher.find())
 				return true;			

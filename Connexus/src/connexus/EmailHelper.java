@@ -61,21 +61,16 @@ public class EmailHelper {
 	public static List<InternetAddress> getReportToAddresses() {
 		List<InternetAddress> toList = new ArrayList<InternetAddress>();
 		
-		
-//		InternetAddress INSTRUCTOR;
-//		try {
-//			INSTRUCTOR = new InternetAddress("kamran.ks+aptmini@gmail.com", "Kamran Saleem");
-//		} catch (UnsupportedEncodingException e) {
-//			System.err.println("Can't get TO address for INSTRUCTOR");
-//			e.printStackTrace(System.err);
-//			return;
-//		}
-		//// XXX TODO: add for final DEPLOYMENT
-		// toList.add(INSTRUCTOR);
-
-		InternetAddress PRESTON;
 		try {
-			PRESTON = new InternetAddress("planders+aptmini@gmail.com", "Preston Landers");
+			InternetAddress INSTRUCTOR = new InternetAddress("kamran.ks+aptmini@gmail.com", "Kamran Saleem");
+			toList.add(INSTRUCTOR);
+		} catch (UnsupportedEncodingException e) {
+			System.err.println("Can't get TO address for INSTRUCTOR");
+			e.printStackTrace(System.err);
+		}
+
+		try {
+			InternetAddress PRESTON = new InternetAddress("planders+aptmini@gmail.com", "Preston Landers");
 			toList.add(PRESTON);
 		} catch (UnsupportedEncodingException e) {
 			System.err.println("Can't get TO address for INSTRUCTOR");

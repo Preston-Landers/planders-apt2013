@@ -7,24 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
-//import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-//import javax.servlet.http.HttpSession;
-
-
-
-
-
-
 
 import connexus.model.*;
 
 public class Manage extends ConnexusServletBase {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1609921843328426049L;
 	public static final String uri = "/manage";
 	public static final String dispatcher = "/WEB-INF/jsp/manage.jsp";
@@ -38,9 +27,6 @@ public class Manage extends ConnexusServletBase {
 		List<Stream> myStreams;
 		if (cuser != null) {
 			myStreams = ofy().load().type(Stream.class).ancestor(cuser.getKey()).list();
-			// for (Stream stream : myStreams ) {
-			// System.err.println("STREAM REC: " + stream.toString());
-			// }
 		} else {
 			myStreams = new ArrayList<Stream>();
 		}
@@ -49,9 +35,6 @@ public class Manage extends ConnexusServletBase {
 		// initialize my subscriptions (cuser could be null, you get an empty
 		// list)
 		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser);
-//		if (mySubs.size() < 1) {
-//			System.err.println("User has no subs. " + cuser);
-//		}
 		req.setAttribute("mySubscriptions", mySubs);
 
 		// Forward to JSP page to display them in a HTML table.

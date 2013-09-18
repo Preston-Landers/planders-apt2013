@@ -31,14 +31,6 @@ public class Create extends ConnexusServletBase {
 		
 		InitializeContext(req, resp); // Base site context initialization
 		
-//		List<CUser> allUsersList = ofy().load().type(CUser.class).list();
-//		for (CUser userRec : allUsersList) {
-//			System.err.println("USER REC: " + userRec.toString());
-//		}
-//		req.setAttribute("userList", allUsersList);
-
-		// throw new ServletException("Retrieving products failed!", e);
-		
 		// Force user to login screen before showing create
 		if (guser == null) {
 			resp.sendRedirect((String) req.getAttribute("loginURL"));
@@ -77,7 +69,7 @@ public class Create extends ConnexusServletBase {
 		}
 		
 		
-		// TODO: more validation...
+		// TODO: more validation?
 		streamName = wspace.trimFrom(streamName);
 		if (streamName == null || streamName.length() < 1) {
 			alertError(req, "I'm sorry but you need to give your stream a name. Any name will do.");
@@ -86,8 +78,6 @@ public class Create extends ConnexusServletBase {
 			return;
 		}
 
-		// TODO: deal with subscribers emails
-		
 		List<String> tagsList = Arrays.asList(tags.split("\\s*,\\s*")); 
 
 		Stream stream = new Stream(null, cuser.getKey(), streamName);

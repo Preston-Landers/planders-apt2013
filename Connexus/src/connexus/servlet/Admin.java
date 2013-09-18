@@ -6,10 +6,8 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-//import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-//import javax.servlet.http.HttpSession;
 
 import connexus.model.CUser;
 
@@ -27,7 +25,6 @@ public class Admin extends ConnexusServletBase {
 		if (req.getParameter("edit") != null) {
 			doShowEditScreen(req, resp);
 		} else {
-			// order("realName").
 			List<CUser> allUsersList = ofy().load().type(CUser.class)
 					.ancestor(site).list();
 			for (CUser userRec : allUsersList) {
@@ -35,7 +32,6 @@ public class Admin extends ConnexusServletBase {
 			}
 			req.setAttribute("userList", allUsersList);
 		}
-		// throw new ServletException("Retrieving products failed!", e);
 		
 		// Forward to JSP page to display them in a HTML table.
 		req.getRequestDispatcher(dispatcher).forward(req, resp); 

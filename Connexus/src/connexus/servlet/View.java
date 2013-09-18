@@ -180,6 +180,7 @@ public class View extends ConnexusServletBase {
 		alertWarning(req, "Image was deleted.");
 	}
 
+	@SuppressWarnings("deprecation")
 	private void uploadMedia(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		

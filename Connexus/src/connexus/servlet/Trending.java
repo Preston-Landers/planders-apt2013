@@ -1,27 +1,14 @@
 package connexus.servlet;
 
-import static connexus.OfyService.ofy;
-//import java.util.List;
-//import connexus.CUser;
-
-
-
-
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import connexus.Config;
 import connexus.model.Leaderboard;
 import connexus.model.Stream;
-import connexus.status.*;
 
 public class Trending extends ConnexusServletBase {
 

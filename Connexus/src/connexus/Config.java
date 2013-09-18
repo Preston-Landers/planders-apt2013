@@ -9,6 +9,8 @@ public class Config {
 	public static final String productName = "Connex.us";
 	public static final String productDomain = "connexus-apt.appspot.com";
 	public static final String productURL = "http://" + productDomain;
+
+	public static final String productAdminEmail = "planders@gmail.com";
 	
     public static final long siteId = 1;
     
@@ -29,9 +31,6 @@ public class Config {
         return (int) l;
     }
     
-	/*
-	 * TODO: move somewhere else
-	 */
 	public static String getURIWithParams(String uri, List<String[]> params) {
 		URIBuilder builder;
 		try {
@@ -53,7 +52,5 @@ public class Config {
 	public static String escapeHTML(String inp) {
 		return inp.replace("<", "&lt;").replace(">","&gt;");
 	}
-
-	static final String productAdminEmail = "planders@gmail.com";
     
 }
