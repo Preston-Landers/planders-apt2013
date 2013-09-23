@@ -40,7 +40,7 @@
 	
 </jsp:attribute>
 
-<jsp:body>
+<jsp:body xmlns:fb="http://www.facebook.com/2008/fbml">
 <c:choose>
 <%-- VIEWING A SINGLE STREAM   style="background: url(${ viewingStream.coverURL });" --%>
 	<c:when test="${ viewingStream ne null }">

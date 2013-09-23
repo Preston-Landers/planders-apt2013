@@ -22,7 +22,7 @@ window.cx.SocialPageFBReady = function SocialPageFBReady () {
 </script>
 </jsp:attribute>	
 	
-<jsp:body>
+<jsp:body xmlns:fb="http://www.facebook.com/2008/fbml">
 	<div class="page-header">
 		<h2>Social</h2>
 		
