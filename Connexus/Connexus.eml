@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inheritJdk="true">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="javax.servlet.jsp.jstl-1.2.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/war/WEB-INF/lib/javax.servlet.jsp.jstl-1.2.1.jar!/"/>
+	</lib>
+	<lib name="javax.servlet.jsp.jstl-api-1.2.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/war/WEB-INF/lib/javax.servlet.jsp.jstl-api-1.2.1.jar!/"/>
+	</lib>
+	<lib name="objectify-4.0b1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/war/WEB-INF/lib/objectify-4.0b1.jar!/"/>
+	</lib>
+	<lib name="guava-14.0.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/war/WEB-INF/lib/guava-14.0.1.jar!/"/>
+	</lib>
+	<lib name="httpclient-4.2.5.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/war/WEB-INF/lib/httpclient-4.2.5.jar!/"/>
+	</lib>
+	<lib name="httpcore-4.2.4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/war/WEB-INF/lib/httpcore-4.2.4.jar!/"/>
+	</lib>
+	<levels>
+		<level name="AppEngine API" value="project"/>
+		<level name="AppEngine Dev" value="project"/>
+	</levels>
+</component>
