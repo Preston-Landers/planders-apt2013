@@ -33,7 +33,7 @@
 				 photo: true,
 	//			 transition: "fade",
 				 speed: 450,
-				 current: "", // disable the "image X of Y"
+				 current: "" // disable the "image X of Y"
 			});
 		});		
 	</script>
