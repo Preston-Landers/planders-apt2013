@@ -103,6 +103,8 @@ class BearMater:
         compatibleMates = set()
         for thisName, this in self.bearDict.iteritems():
             for otherName, other in self.bearDict.iteritems():
+                if thisName == otherName:
+                    continue
                 if (this, other) in compatibleMates or (other, this) in compatibleMates:
                     continue
                 if self.compatible(this, other):
