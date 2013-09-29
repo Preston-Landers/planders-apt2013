@@ -9,6 +9,7 @@
         <webroots>
           <root url="file://$MODULE_DIR$/ConnexusWeb/war" relative="/" />
         </webroots>
+        <sourceRoots />
       </configuration>
       <facet type="google-app-engine" name="Google App Engine">
         <configuration>

@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="/ConnexusWeb/src"/>
-	<classpathentry kind="src" path="/ConnexusWeb/test"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="src" path="ConnexusWeb/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/ConnexusWeb/war/WEB-INF/lib/javax.servlet.jsp.jstl-1.2.1.jar"/>
-	<classpathentry kind="lib" path="/ConnexusWeb/war/WEB-INF/lib/javax.servlet.jsp.jstl-api-1.2.1.jar"/>
-	<classpathentry kind="lib" path="/ConnexusWeb/war/WEB-INF/lib/objectify-4.0b1.jar"/>
-	<classpathentry kind="lib" path="/ConnexusWeb/war/WEB-INF/lib/guava-14.0.1.jar"/>
-	<classpathentry kind="lib" path="/ConnexusWeb/war/WEB-INF/lib/httpclient-4.2.5.jar"/>
-	<classpathentry kind="lib" path="/ConnexusWeb/war/WEB-INF/lib/httpcore-4.2.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/AppEngine API"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/AppEngine Dev"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ConnexusWebLib"/>
+	<classpathentry kind="output" path="out/production/ConnexusWeb"/>
 </classpath>
