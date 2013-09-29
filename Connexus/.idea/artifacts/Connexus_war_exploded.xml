@@ -4,20 +4,20 @@
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="Connexus" />
+          <element id="module-output" name="ConnexusWeb" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="module" name="javax.servlet.jsp.jstl-1.2.1.jar" module-name="Connexus" />
-          <element id="library" level="module" name="javax.servlet.jsp.jstl-api-1.2.1.jar" module-name="Connexus" />
-          <element id="library" level="module" name="objectify-4.0b1.jar" module-name="Connexus" />
-          <element id="library" level="module" name="guava-14.0.1.jar" module-name="Connexus" />
-          <element id="library" level="module" name="httpclient-4.2.5.jar" module-name="Connexus" />
-          <element id="library" level="module" name="httpcore-4.2.4.jar" module-name="Connexus" />
           <element id="library" level="project" name="AppEngine API" />
           <element id="library" level="project" name="AppEngine Dev" />
+          <element id="library" level="module" name="httpcore-4.2.4.jar" module-name="ConnexusWeb" />
+          <element id="library" level="module" name="httpclient-4.2.5.jar" module-name="ConnexusWeb" />
+          <element id="library" level="module" name="guava-14.0.1.jar" module-name="ConnexusWeb" />
+          <element id="library" level="module" name="objectify-4.0b1.jar" module-name="ConnexusWeb" />
+          <element id="library" level="module" name="javax.servlet.jsp.jstl-api-1.2.1.jar" module-name="ConnexusWeb" />
+          <element id="library" level="module" name="javax.servlet.jsp.jstl-1.2.1.jar" module-name="ConnexusWeb" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="Connexus/web/Web" />
+      <element id="javaee-facet-resources" facet="ConnexusWeb/web/Web" />
     </root>
   </artifact>
 </component>

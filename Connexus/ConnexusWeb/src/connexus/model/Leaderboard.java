@@ -23,7 +23,6 @@ import com.googlecode.objectify.annotation.Parent;
 
 import connexus.Config;
 import connexus.EmailHelper;
-import connexus.model.Stream;
 
 @Entity
 @Cache
