@@ -49,13 +49,13 @@ class BearMater:
             grandParents = []
             for parentType in ("mother", "father"):
                 parentName = getattr(bear, parentType, None)
-                if parentName:
+                if parentName and parentName != "nil":
                     grandParents.append(parentName)
                     if parentName in self.bearDict:
                         parent = self.bearDict[parentName]
-                        if parent.father:
+                        if parent.father and parent.father != "nil":
                             grandParents.append(parent.father)
-                        if parent.mother:
+                        if parent.mother and parent.mother != "nil":
                             grandParents.append(parent.mother)
 
             if grandParents:
