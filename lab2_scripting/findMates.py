@@ -12,11 +12,11 @@ def debug(msg):
 
 class Bear:
     def __init__(self, name, sex, mother, father, age):
-        self.name = name.lower()
-        self.originalName = name
-        self.sex = sex
-        self.mother = mother.lower()
-        self.father = father.lower()
+        self.originalName = name.strip()
+        self.name = name.strip().lower().replace(" ", "")
+        self.sex = sex.strip().lower()
+        self.mother = mother.strip().lower().replace(" ", "")
+        self.father = father.strip().lower().replace(" ", "")
         self.age = float(age)
 
     def __str__(self):
@@ -38,12 +38,8 @@ class BearMater:
             if not line:
                 break
             cols = line.split(":")
-            name = cols[0].strip()
-            sex = cols[1].strip()
-            mother = cols[2].strip()
-            father = cols[3].strip()
-            age = cols[4].strip()
-            self.bearDict[name.lower()] = Bear(name, sex, mother, father, age)
+            bear = Bear(cols[0], cols[1], cols[2], cols[3], cols[4])
+            self.bearDict[bear.name] = bear
 
         for bearName, bear in self.bearDict.iteritems():
             grandParents = []
@@ -115,7 +111,9 @@ class BearMater:
     def printMates(self):
         if self.compatibleMates:
             for mateSet in self.compatibleMates:
-                print("{0:s} + {1:s}".format(mateSet[0].originalName, mateSet[1].originalName))
+                # Not sure which way you want it...
+                #print("{0:s} + {1:s}".format(mateSet[0].originalName, mateSet[1].originalName))
+                print("{0:s} + {1:s}".format(mateSet[0].name, mateSet[1].name))
 
 
 def main():
