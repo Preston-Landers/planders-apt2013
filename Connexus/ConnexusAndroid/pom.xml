@@ -31,12 +31,26 @@
             <version>2.1</version>
         </dependency>
 
+        <!-- not 100% sure I need these 2 -->
+        <!--<dependency>-->
+            <!--<groupId>com.google.code.gson</groupId>-->
+            <!--<artifactId>gson</artifactId>-->
+            <!--<version>2.2.4</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.google.guava</groupId>-->
+            <!--<artifactId>guava</artifactId>-->
+            <!--<version>15.0</version>-->
+        <!--</dependency>-->
+
+
         <!-- Play Framework needed for making authenticated endpoint calls -->
-        <!-- <dependency> -->
-        <!--     <groupId>com.google.code.maven-play-plugin.org.playframework</groupId> -->
-        <!--     <artifactId>play</artifactId> -->
-        <!--     <version>1.2.7</version> -->
-        <!-- </dependency> -->
+        <dependency>
+            <groupId>com.google.code.maven-play-plugin.org.playframework</groupId>
+            <artifactId>play</artifactId>
+            <version>1.2.7</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!--  the following are for Cloud Endpoint support  -->
         <!-- <dependency> -->
@@ -44,11 +58,11 @@
         <!--     <artifactId>google-api-client</artifactId> -->
         <!--     <version>1.17.0-rc</version> -->
         <!-- </dependency> -->
-        <!-- <dependency> -->
-        <!--     <groupId>com.google.api-client</groupId> -->
-        <!--     <artifactId>google-api-client-android</artifactId> -->
-        <!--     <version>1.17.0-rc</version> -->
-        <!-- </dependency> -->
+         <dependency>
+             <groupId>com.google.api-client</groupId>
+             <artifactId>google-api-client-android</artifactId>
+             <version>1.17.0-rc</version>
+         </dependency>
         <!-- <dependency> -->
         <!--     <groupId>com.google.http-client</groupId> -->
         <!--     <artifactId>google-http-client</artifactId> -->
@@ -64,21 +78,11 @@
         <!--     <artifactId>google-http-client-gson</artifactId> -->
         <!--     <version>1.17.0-rc</version> -->
         <!-- </dependency> -->
-        <!-- <dependency> -->
-        <!--     <groupId>com.google.oauth-client</groupId> -->
-        <!--     <artifactId>google-oauth-client</artifactId> -->
-        <!--     <version>1.17.0-rc</version> -->
-        <!-- </dependency> -->
-        <!-- <dependency> -->
-        <!--     <groupId>com.google.code.gson</groupId> -->
-        <!--     <artifactId>gson</artifactId> -->
-        <!--     <version>2.2.4</version> -->
-        <!-- </dependency> -->
-        <!-- <dependency> -->
-        <!--     <groupId>com.google.guava</groupId> -->
-        <!--     <artifactId>guava</artifactId> -->
-        <!--     <version>15.0</version> -->
-        <!-- </dependency> -->
+         <!--<dependency>-->
+             <!--<groupId>com.google.oauth-client</groupId>-->
+             <!--<artifactId>google-oauth-client</artifactId>-->
+             <!--<version>1.17.0-rc</version>-->
+         <!--</dependency>-->
         <!-- <dependency> -->
         <!--     <groupId>com.google.code.findbugs</groupId> -->
         <!--     <artifactId>jsr305</artifactId> -->

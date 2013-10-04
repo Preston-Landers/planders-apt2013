@@ -6,10 +6,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import org.joda.time.DateTime;
+import com.appspot.connexus_apt.helloworld.Helloworld;
+
 
 public class WelcomeActivity extends Activity {
 
+    Helloworld service;
     /**
      * Called when the activity is first created.
      *
@@ -36,6 +41,10 @@ public class WelcomeActivity extends Activity {
         DateTime now = new DateTime();
         textView.setText("yeah, I did it: " + now);
 
+        Helloworld.Builder builder = new Helloworld.Builder(
+                AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null);
+        service = builder.build();
+        service.greetings();
     }
 }
 
