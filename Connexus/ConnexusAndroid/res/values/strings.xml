@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Maven Quickstart</string>
-    <string name="hello">Hello ConnexusAndroid!</string>
+    <string name="app_name">Connex.us</string>
+    <string name="hello">Hello Connex.us Android app!</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">Hello, Connex.us!</string><string name="welcome_header">Welcome to Connex.us for Android</string><string name="welcome_login_button">Sign in with Google</string>
 
 </resources>
