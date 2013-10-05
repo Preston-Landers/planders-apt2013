@@ -15,8 +15,8 @@ import connexus.Config;
         scopes = {Config.EMAIL_SCOPE},
         clientIds = {
                 com.google.api.server.spi.Constant.API_EXPLORER_CLIENT_ID,
-                Config.ANDROID_APP_KEY,
-                Config.WEB_APP_KEY
+                Config.ANDROID_CLIENT_ID,
+                Config.WEB_CLIENT_ID
         },
         audiences = {Config.ANDROID_AUDIENCE})
 public class Greetings {

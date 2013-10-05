@@ -17,10 +17,10 @@ public class Config {
     public static final String emailSubject = "[APT-Preston Landers] Trending streams for " + productDomain;
 
     // For the endpoints
-    public static final String ANDROID_APP_KEY = "AIzaSyDTvOzFc1iL7wUbJG1j-qUimsUTs7z8RbI";
-    public static final String WEB_APP_KEY = "AIzaSyAdpjTdpypCdAKA9NLKTphBXajfQNsRD4g";
+    public static final String ANDROID_CLIENT_ID = "771214203866-9vmc9ha8rvco92ul4dfc74r00t0nj6ls.apps.googleusercontent.com";
+    public static final String WEB_CLIENT_ID = "771214203866-7btn313m3jrh49s1dhd837ssm1n1lrd0.apps.googleusercontent.com";
     public static final String EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
-    public static final String ANDROID_AUDIENCE = WEB_APP_KEY;
+    public static final String ANDROID_AUDIENCE = WEB_CLIENT_ID;
 
     // Maximum search results to show
     public static final int maxSearchResults = 5;

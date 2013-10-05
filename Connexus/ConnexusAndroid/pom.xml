@@ -45,12 +45,12 @@
 
 
         <!-- Play Framework needed for making authenticated endpoint calls -->
-        <dependency>
-            <groupId>com.google.code.maven-play-plugin.org.playframework</groupId>
-            <artifactId>play</artifactId>
-            <version>1.2.7</version>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.google.code.maven-play-plugin.org.playframework</groupId>-->
+            <!--<artifactId>play</artifactId>-->
+            <!--<version>1.2.7</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 
         <!--  the following are for Cloud Endpoint support  -->
         <!-- <dependency> -->

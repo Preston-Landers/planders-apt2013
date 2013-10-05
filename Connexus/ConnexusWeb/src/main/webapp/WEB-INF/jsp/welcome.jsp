@@ -55,7 +55,7 @@
 		</div>
 		
 		<h6>
-			<em><strong>*</strong>Limitations may apply</em> 
+			<em><strong>*</strong>Limitations may apply. Do not upload personal or private photos.</em>
 		</h6>
 	</jsp:body>
 </t:connexus>

@@ -6,6 +6,7 @@ LIBZIP=${LIBNAME}-${VER}-java.zip
 SRCJAR=${CLIENTTMP}/${LIBNAME}/*jar
 ANDROIDSRC=../ConnexusAndroid/src/main/java
 
+rm -rf ${CLIENTTMP}
 mkdir -p ${CLIENTTMP}
 
 # -o == overwrite w/o asking
