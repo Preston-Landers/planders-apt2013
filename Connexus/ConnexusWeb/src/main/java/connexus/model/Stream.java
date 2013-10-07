@@ -29,8 +29,8 @@ import connexus.Config;
 public class Stream implements Comparable<Stream> {
 	@Id Long id;
 	@Parent Key<CUser> owner;
-	@Index({IfNotNull.class}) String name; 
-	
+	@Index({IfNotNull.class}) String name;
+
 	String coverURL;
 	@Index({IfNotNull.class}) List<String> tags;
 	@Index Date creationDate;
@@ -38,7 +38,7 @@ public class Stream implements Comparable<Stream> {
 
 	@Index Long views;   // all time views
 	long trendingViews;  // views only within the trending window
-	
+
 	@SuppressWarnings("unused")
 	private Stream() {
 	}
@@ -49,34 +49,34 @@ public class Stream implements Comparable<Stream> {
 		this.name = name;
 		this.creationDate = new Date();
 	}
-	
+
 	public Key<Stream> getKey() {
 		return Key.create(owner, Stream.class, id);
 	}
-	
+
 	public Ref<Stream> getRef() {
 		return Ref.create(getKey(), this);
 	}
-	
-	public static Stream getById(Long objectId, CUser cuser) {	
+
+	public static Stream getById(Long objectId, CUser cuser) {
 		return ofy().load().type(Stream.class).parent(cuser).id(objectId).get();
 	}
 
 	public String getAbsoluteViewURI() {
 		return Config.productURL + getViewURI();
 	}
-	
+
 	public String getViewURI() {
 		// Use URIBuilder?
 		List<String[]> params = new ArrayList<String[]>();
 		params.add(new String[] {"v", getObjectURI()});
 		return Config.getURIWithParams("/view", params);
 	}
-	
+
 	public String getObjectURI() {
-		return owner.getId() + ":" + id;  
+		return owner.getId() + ":" + id;
 	}
-	
+
 	// Doesn't really belong here...
 	public static String getSearchURI(String term) {
 		try {
@@ -86,11 +86,11 @@ public class Stream implements Comparable<Stream> {
 			return "/search?q=" + term;
 		}
 	}
-	
+
 	public String toString() {
 		return "Stream " + id + " : " + name;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -150,7 +150,7 @@ public class Stream implements Comparable<Stream> {
 		this.tags = newTags;
 	}
 
-	
+
 	public String getOwnerName() {
 		return ofy().load().key(owner).get().getRealName();
 	}
@@ -164,8 +164,8 @@ public class Stream implements Comparable<Stream> {
 		Media lastMedia = ml.get(0);
 		return lastMedia.getCreationDate();
 	}
-	
-	
+
+
 	public String getLastNewMedia() {
 		Date lnmDate = getLastNewMediaDate();
 		if (lnmDate == null) {
@@ -174,23 +174,23 @@ public class Stream implements Comparable<Stream> {
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		return df.format(lnmDate);
 	}
-	
+
 	public void incNumberOfMedia() {
 		Long num = getNumberOfMedia();
 		num++;
-		setNumberOfMedia(num);		
+		setNumberOfMedia(num);
 	}
-	
+
 	public void decNumberOfMedia() {
 		Long num = getNumberOfMedia();
 		num--;
-		setNumberOfMedia(num);		
+		setNumberOfMedia(num);
 	}
-	
+
 	public void setNumberOfMedia(Long num) {
 		numberOfMedia = num;
 	}
-	
+
 	public Long getNumberOfMedia() {
 		if (numberOfMedia != null) {
 			return numberOfMedia;
@@ -198,51 +198,58 @@ public class Stream implements Comparable<Stream> {
 		fixNumMedia();
 		return numberOfMedia;
 	}
-		
+
 	public void fixNumMedia() {
 		int rvi = ofy().load().type(Media.class).ancestor(this).count();
-		Long rv = new Long(rvi); 
+		Long rv = new Long(rvi);
 		setNumberOfMedia(rv);
 	}
-	
+
 	public boolean deleteStream() {
 		// TODO: logging and TRANSACTION...
 		System.err.println("Deleting stream and all its media: " + this);
-		
+
 		// TODO Delete all Media in this stream
 		for (Media media : getMedia(0, 0)) {
 			media.deleteMedia();
 		}
-		
+
 		// Nuke it
 		ofy().delete().entities(this).now();
 		return true;
 	}
-	
+
 	/**
 	 * Returns ALL streams available in the system, sorted by most recently updated first.
 	 * TODO: memcache?
 	 */
 	public static List<Stream> getAllStreams(Key<Site> site) {
-		if (site == null) {
-			site = Site.load(null).getKey();
-		}
-		// order by getLastNewMedia()
-		List<Stream> rv = ofy().load().type(Stream.class).ancestor(site).list();
-		Collections.sort(rv);
-		Collections.reverse(rv);
-		return rv;	
+        return getAllStreams(site, 0, 0);
 	}
 
-	/*
+    public static List<Stream> getAllStreams(Key<Site> site, int limit, int offset) {
+        if (site == null) {
+            site = Site.load(null).getKey();
+        }
+        // order by getLastNewMedia()
+        List<Stream> rv = ofy().load().type(Stream.class).ancestor(site)
+                .limit(limit).offset(offset).list();
+        Collections.sort(rv);
+        Collections.reverse(rv);
+        return rv;
+    }
+
+
+
+    /*
 	 * Get a list of media for this stream sorted by creation date
 	 */
 	public List<Media> getMedia(int offset, int limit) {
 		return ofy().load().type(Media.class).ancestor(this).order("-creationDate")
 				.offset(offset).limit(limit).list();
 	}
-	
-	
+
+
 	public Long getViews() {
 		return views;
 	}
@@ -250,7 +257,7 @@ public class Stream implements Comparable<Stream> {
 	public void setViews(Long views) {
 		this.views = views;
 	}
-	
+
 	public Long getAndIncrementViews() {
 		Long views = getViews();
 		if (views == null) {
@@ -259,7 +266,7 @@ public class Stream implements Comparable<Stream> {
 		views++;
 		setViews(views);
 		save();
-		
+
 		StreamView streamView = new StreamView(null, getKey());
 		ofy().save().entities(streamView);  // async
 		return views;
@@ -269,7 +276,7 @@ public class Stream implements Comparable<Stream> {
 		// could be async but nah...
 		ofy().save().entities(this).now();
 	}
-	
+
 	public long getTrendingViews() {
 		return trendingViews;
 	}
@@ -280,13 +287,13 @@ public class Stream implements Comparable<Stream> {
 
 	/**
 	 * Discover and set the views of this stream within the last hour (does a save)
-	 * 
+	 *
 	 * Fix to use the constants
 	 */
 	public void generateTrendingViews() {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		
+
 		// dis cast ok?
 		cal.add(Calendar.SECOND, Config.safeLongToInt(-Leaderboard.lbTimeWindowSec));
 		Date timeWindow = cal.getTime();
@@ -294,11 +301,11 @@ public class Stream implements Comparable<Stream> {
 		setTrendingViews(views);
 		save();
 	}
-	
+
 	@Override
 	public int compareTo(Stream other) {
 		Date myDate = getLastNewMediaDate();
-		Date otherDate = other.getLastNewMediaDate(); 
+		Date otherDate = other.getLastNewMediaDate();
 		if (myDate.after(otherDate)) {
 			return 1;
 		} else if (myDate.before(otherDate)) {
@@ -306,7 +313,7 @@ public class Stream implements Comparable<Stream> {
 		}
 		return 0;
 	}
-	
+
 	public static class TrendingComparator implements Comparator<Stream> {
 		public int compare(Stream p1, Stream p2) {
 			// REVERSE order (highest first)

@@ -35,7 +35,7 @@ public class CUser implements Comparable<CUser> {
 		return Key.create(site, CUser.class, id);
 	}
 	
-	public static CUser getById(Long userId, Site site) {		
+	public static CUser getById(Long userId, Key<Site> site) {
 		return ofy().load().type(CUser.class).parent(site).id(userId).get();
 	}
 

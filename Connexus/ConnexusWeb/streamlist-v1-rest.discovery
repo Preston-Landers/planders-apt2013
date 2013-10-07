@@ -1,0 +1,326 @@
+{
+ "kind": "discovery#restDescription",
+ "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/wa75jjatI4KvHF0AAUkvs779nqk\"",
+ "discoveryVersion": "v1",
+ "id": "streamlist:v1",
+ "name": "streamlist",
+ "version": "v1",
+ "description": "This is an API",
+ "icons": {
+  "x16": "http://www.google.com/images/icons/product/search-16.gif",
+  "x32": "http://www.google.com/images/icons/product/search-32.gif"
+ },
+ "protocol": "rest",
+ "baseUrl": "https://connexus-apt.appspot.com/_ah/api/streamlist/v1/",
+ "basePath": "/_ah/api/streamlist/v1/",
+ "rootUrl": "https://connexus-apt.appspot.com/_ah/api/",
+ "servicePath": "streamlist/v1/",
+ "batchPath": "batch",
+ "parameters": {
+  "alt": {
+   "type": "string",
+   "description": "Data format for the response.",
+   "default": "json",
+   "enum": [
+    "json"
+   ],
+   "enumDescriptions": [
+    "Responses with Content-Type of application/json"
+   ],
+   "location": "query"
+  },
+  "fields": {
+   "type": "string",
+   "description": "Selector specifying which fields to include in a partial response.",
+   "location": "query"
+  },
+  "key": {
+   "type": "string",
+   "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+   "location": "query"
+  },
+  "oauth_token": {
+   "type": "string",
+   "description": "OAuth 2.0 token for the current user.",
+   "location": "query"
+  },
+  "prettyPrint": {
+   "type": "boolean",
+   "description": "Returns response with indentations and line breaks.",
+   "default": "true",
+   "location": "query"
+  },
+  "quotaUser": {
+   "type": "string",
+   "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. Overrides userIp if both are provided.",
+   "location": "query"
+  },
+  "userIp": {
+   "type": "string",
+   "description": "IP address of the site where the request originates. Use this if you want to enforce per-user limits.",
+   "location": "query"
+  }
+ },
+ "auth": {
+  "oauth2": {
+   "scopes": {
+    "https://www.googleapis.com/auth/userinfo.email": {
+     "description": "View your email address"
+    }
+   }
+  }
+ },
+ "schemas": {
+  "Media": {
+   "id": "Media",
+   "type": "object",
+   "properties": {
+    "comments": {
+     "type": "string"
+    },
+    "creationDate": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "fileName": {
+     "type": "string"
+    },
+    "id": {
+     "type": "string",
+     "format": "int64"
+    },
+    "mimeType": {
+     "type": "string"
+    },
+    "ownerId": {
+     "type": "string",
+     "format": "int64"
+    },
+    "queryIndex": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "queryLimit": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "queryOffset": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "size": {
+     "type": "string",
+     "format": "int64"
+    },
+    "streamId": {
+     "type": "string",
+     "format": "int64"
+    },
+    "thumbUrl": {
+     "type": "string"
+    },
+    "uploader": {
+     "type": "string"
+    },
+    "url": {
+     "type": "string"
+    },
+    "views": {
+     "type": "string",
+     "format": "int64"
+    }
+   }
+  },
+  "MediaCollection": {
+   "id": "MediaCollection",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "Media"
+     }
+    }
+   }
+  },
+  "Stream": {
+   "id": "Stream",
+   "type": "object",
+   "properties": {
+    "coverURL": {
+     "type": "string"
+    },
+    "creationDate": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "id": {
+     "type": "string",
+     "format": "int64"
+    },
+    "lastNewMedia": {
+     "type": "string",
+     "format": "date-time"
+    },
+    "mediaLimit": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "mediaList": {
+     "type": "array",
+     "items": {
+      "$ref": "Media"
+     }
+    },
+    "mediaOffset": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "name": {
+     "type": "string"
+    },
+    "numberOfMedia": {
+     "type": "string",
+     "format": "int64"
+    },
+    "ownerEmail": {
+     "type": "string"
+    },
+    "ownerId": {
+     "type": "string",
+     "format": "int64"
+    },
+    "queryIndex": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "queryLimit": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "queryOffset": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "tags": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "trendingViews": {
+     "type": "string",
+     "format": "int64"
+    },
+    "views": {
+     "type": "string",
+     "format": "int64"
+    }
+   }
+  },
+  "StreamCollection": {
+   "id": "StreamCollection",
+   "type": "object",
+   "properties": {
+    "items": {
+     "type": "array",
+     "items": {
+      "$ref": "Stream"
+     }
+    }
+   }
+  }
+ },
+ "methods": {
+  "getMedia": {
+   "id": "streamlist.getMedia",
+   "path": "mediacollection/{streamId}/{ownerId}/{queryLimit}/{queryOffset}",
+   "httpMethod": "GET",
+   "parameters": {
+    "ownerId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    },
+    "queryLimit": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "queryOffset": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "streamId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "streamId",
+    "ownerId",
+    "queryLimit",
+    "queryOffset"
+   ],
+   "response": {
+    "$ref": "MediaCollection"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getStreams": {
+   "id": "streamlist.getStreams",
+   "path": "streamcollection/{queryLimit}/{queryOffset}",
+   "httpMethod": "GET",
+   "parameters": {
+    "latitude": {
+     "type": "number",
+     "format": "double",
+     "location": "query"
+    },
+    "longitude": {
+     "type": "number",
+     "format": "double",
+     "location": "query"
+    },
+    "mySubs": {
+     "type": "boolean",
+     "location": "query"
+    },
+    "query": {
+     "type": "string",
+     "location": "query"
+    },
+    "queryLimit": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "queryOffset": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "queryLimit",
+    "queryOffset"
+   ],
+   "response": {
+    "$ref": "StreamCollection"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  }
+ }
+}

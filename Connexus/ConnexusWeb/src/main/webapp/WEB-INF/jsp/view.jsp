@@ -42,7 +42,7 @@
 
 <jsp:body>
 <c:choose>
-<%-- VIEWING A SINGLE STREAM   style="background: url(${ viewingStream.coverURL });" --%>
+    <%-- VIEWING A SINGLE STREAM   style="background: url(${ viewingStream.coverURL });" --%>
 	<c:when test="${ viewingStream ne null }">
 		<div class="stream-cover-bg" >
 		<div class="page-header stream-page-header" >
@@ -166,7 +166,7 @@
 
 				</c:if>
 				
-			</ul>		
+			</ul>
 		</c:if>
 
 	</div>

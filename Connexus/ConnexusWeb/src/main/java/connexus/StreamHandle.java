@@ -61,7 +61,7 @@ public class StreamHandle {
 		}
 
 		CUser viewingStreamUser = CUser.getById(Long.parseLong(streamUserId),
-				site.get());
+				site.getKey());
 		if (viewingStreamUser == null) {
 			throw new RuntimeException(
 					"The stream you requested does not exist (cannot locate user).");

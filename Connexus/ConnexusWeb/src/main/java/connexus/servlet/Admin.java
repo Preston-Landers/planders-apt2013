@@ -58,7 +58,7 @@ public class Admin extends ConnexusServletBase {
 		Long editId = Long.parseLong(req.getParameter("edit"));
 		req.setAttribute("editItem", editId);
 		
-		CUser theUser = CUser.getById(editId, site.get());
+		CUser theUser = CUser.getById(editId, site.getKey());
 		if (theUser == null){
 			alertError(req, "User does not exist.");
 			return;
@@ -69,7 +69,7 @@ public class Admin extends ConnexusServletBase {
 	private void deleteUser(HttpServletRequest req, HttpServletResponse resp) {
 		Long objectId = Long.parseLong(req.getParameter("id"));
 		
-		CUser theUser = CUser.getById(objectId, site.get());
+		CUser theUser = CUser.getById(objectId, site.getKey());
 		if (theUser == null){
 			alertError(req, "User does not exist.");
 			return;

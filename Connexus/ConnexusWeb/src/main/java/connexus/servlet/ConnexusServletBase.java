@@ -73,41 +73,63 @@ public abstract class ConnexusServletBase extends HttpServlet {
         }        
         
         // Automatically create a CUser for any Google Users we recognize
-        if (guser != null) {
-        	// Try memcache before doing a query
-        	boolean doSetMemcache = false;
-        	String cuserIdCacheKey = guser.getUserId() + "_cuserId";
-        	Long cuserId = (Long) syncCache.get(cuserIdCacheKey); 
-        	if (cuserId == null) {
-    			cuser = ofy().load().type(CUser.class).ancestor(site)
-    					.filter("guser", guser).first().get();
-    			doSetMemcache = true;
-        	} else {
-				// System.err.println("user id cache hit : " + guser + " : " + cuserId);
-        		Key<CUser>  cuserKey = com.googlecode.objectify.Key.create(site.getKey(), CUser.class, cuserId);
-        		cuser = ofy().load().key(cuserKey).get();
-        	}
-			if (cuser == null) {
-				cuser = createUser(req, resp);
-			}
-			if (cuser != null) {
-				req.setAttribute("cuser", cuser);
-				if (doSetMemcache) {
-					// System.err.println("Setting user id into cache: " + guser + " : " + cuser.getId());
-					syncCache.put(cuserIdCacheKey, cuser.getId());
-				}
-			}
-    	
+        try {
+            cuser = getOrCreateUserRecord(guser, site);
+            if (cuser != null) {
+                req.setAttribute("cuser", cuser);
+            }
+        } catch (UserCreateException e) {
+            e.printStackTrace(System.err);
+            alertError(req, "You must provide an account name and a real name.");
         }
-	}
-	
-	private CUser createUser(HttpServletRequest req, HttpServletResponse resp) {
-		String accountName = guser.getEmail(); 
+    }
+
+    public static CUser getOrCreateUserRecord(User guser, Ref<Site> site) throws UserCreateException {
+        CUser cuser = null;
+        // Automatically create a CUser for any Google Users we recognize
+        if (guser != null) {
+            // Try memcache before doing a query
+            boolean doSetMemcache = false;
+            String cuserIdCacheKey = guser.getUserId() + "_cuserId";
+            Long cuserId = (Long) syncCache.get(cuserIdCacheKey);
+            if (cuserId == null) {
+                cuser = ofy().load().type(CUser.class).ancestor(site)
+                        .filter("guser", guser).first().get();
+                doSetMemcache = true;
+            } else {
+                // System.err.println("user id cache hit : " + guser + " : " + cuserId);
+                Key<CUser>  cuserKey = com.googlecode.objectify.Key.create(site.getKey(), CUser.class, cuserId);
+                cuser = ofy().load().key(cuserKey).get();
+            }
+            if (cuser == null) {
+                cuser = createUser(guser, site);
+            }
+            if (cuser != null) {
+                if (doSetMemcache) {
+                    // System.err.println("Setting user id into cache: " + guser + " : " + cuser.getId());
+                    syncCache.put(cuserIdCacheKey, cuser.getId());
+                }
+            }
+
+        }
+
+        return cuser;
+    }
+
+    public static class UserCreateException extends RuntimeException {
+        public UserCreateException(String message) {
+            super(message);
+        }
+    }
+
+    private static CUser createUser(User guser, Ref<Site> site) throws UserCreateException {
+        String accountName = guser.getEmail();
 		String realName = guser.getNickname();
 		
 		if (accountName.length() == 0 || realName.length() == 0) {
-			alertError(req, "You must provide an account name and a real name.");
-			return null;			
+            throw new UserCreateException("You must provide an account name and a real name.");
+//			alertError(req, "You must provide an account name and a real name.");
+//			return null;
 		}
 		
 		CUser thisUser = new CUser(null, site.getKey(), accountName, realName);
