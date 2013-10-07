@@ -9,5 +9,7 @@
     <string name="welcome_login_button">Sign in with Google</string>
     <string name="welcome_nologin_button">View Streams</string>
     <string name="welcome_not_signed_in">(Not Signed In)</string>
+    <string name="my_sub_streams">My Subscribed Streams</string>
+    <string name="browse_streams_activity_name">Browse Streams</string>
 
 </resources>

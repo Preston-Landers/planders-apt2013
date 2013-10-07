@@ -5,7 +5,7 @@
 <%@ attribute name="stream" required="true" %>
 <%@ attribute name="streamUser" required="true" %>
 
-<form action="${ uploadURL }" method="post" role="form" enctype="multipart/form-data">
+<form action="${ uploadUrl }" method="post" role="form" enctype="multipart/form-data">
 	<%-- All the cool kids use single letter keys --%>
 	<input type="hidden" name="v" value="${ viewingStream.objectURI }">
 	<div id="createStreamPanel" class="panel panel-default">

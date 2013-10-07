@@ -2,9 +2,12 @@ package connexus.endpoints;
 
 import java.util.Date;
 
+/**
+ * Endpoint model to represent a single image or other media object.
+ */
 public class Media {
     long id;
-    long ownerId;
+    long streamOwnerId;
     long streamId;
     String url;
     String thumbUrl;
@@ -28,12 +31,12 @@ public class Media {
         this.id = id;
     }
 
-    public long getOwnerId() {
-        return ownerId;
+    public long getStreamOwnerId() {
+        return streamOwnerId;
     }
 
-    public void setOwnerId(long ownerId) {
-        this.ownerId = ownerId;
+    public void setStreamOwnerId(long ownerId) {
+        this.streamOwnerId = ownerId;
     }
 
     public long getStreamId() {

@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/DMBpYC5njP3A-WnO6zo_aTGdWFw\"",
+ "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/C3BGrRqAcGQdYFT3TPP1OH7x4MM\"",
  "discoveryVersion": "v1",
  "id": "helloworld:v1",
  "name": "helloworld",
@@ -84,6 +84,17 @@
  "resources": {
   "greetings": {
    "methods": {
+    "authed": {
+     "id": "helloworld.greetings.authed",
+     "path": "greeting/authed",
+     "httpMethod": "POST",
+     "response": {
+      "$ref": "HelloBackend"
+     },
+     "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+     ]
+    },
     "getGreeting": {
      "id": "helloworld.greetings.getGreeting",
      "path": "hellobackend/{id}",
@@ -99,21 +110,6 @@
      "parameterOrder": [
       "id"
      ],
-     "response": {
-      "$ref": "HelloBackend"
-     },
-     "scopes": [
-      "https://www.googleapis.com/auth/userinfo.email"
-     ]
-    }
-   }
-  },
-  "streams": {
-   "methods": {
-    "authed": {
-     "id": "helloworld.streams.authed",
-     "path": "greeting/authed",
-     "httpMethod": "POST",
      "response": {
       "$ref": "HelloBackend"
      },

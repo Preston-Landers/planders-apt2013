@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 CLIENTTMP=/tmp/android-client
-LIBNAME=helloworld
+LIBNAME=streamlist
 VER=v1
 LIBZIP=${LIBNAME}-${VER}-java.zip
 SRCJAR=${CLIENTTMP}/${LIBNAME}/*jar

@@ -102,11 +102,14 @@ public class WelcomeActivity extends Activity {
 
     // When you click the View Streams button
     public void ViewStreamsButton(View view) {
-        TextView textView = (TextView) findViewById(R.id.welcome_status_textview);
-        DateTime now = new DateTime();
-        textView.setText("starting task at: " + now);
+//        TextView textView = (TextView) findViewById(R.id.welcome_status_textview);
+//        DateTime now = new DateTime();
+//        textView.setText("starting task at: " + now);
 
-        new ViewStreamsTask().execute();
+        Intent intent = new Intent(this, BrowseStreamsActivity.class);
+        startActivity(intent);
+
+        // new ViewStreamsTask().execute();
      }
 
 
@@ -136,6 +139,7 @@ public class WelcomeActivity extends Activity {
         editor.putString(Config.PREF_ACCOUNT_NAME, accountName);
         editor.commit();
         credential.setSelectedAccountName(accountName);
+        Account.getInstance().setCredential(credential);
         this.accountName = accountName;
         if (accountName != null) {
             this.signedIn = true;
@@ -218,7 +222,7 @@ public class WelcomeActivity extends Activity {
         protected String doInBackground(Void... params) {
             GoogleAccountCredential creds = null;
             if (signedIn) {
-                creds = credential;
+                creds = Account.getInstance().getCredential();
             }
             Helloworld.Builder builder = new Helloworld.Builder(
                     AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), creds);

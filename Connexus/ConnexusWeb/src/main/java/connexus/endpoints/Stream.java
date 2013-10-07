@@ -3,6 +3,9 @@ package connexus.endpoints;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Endpoint model to represent a single Stream, which is itself a collection of Media.
+ */
 public class Stream {
 
     long id;

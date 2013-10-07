@@ -1,11 +1,11 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/wa75jjatI4KvHF0AAUkvs779nqk\"",
+ "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/9thyj6928FzqB-vOO2PxaqRLivI\"",
  "discoveryVersion": "v1",
  "id": "streamlist:v1",
  "name": "streamlist",
  "version": "v1",
- "description": "This is an API",
+ "description": "Retrieve Connex.us photo streams.",
  "icons": {
   "x16": "http://www.google.com/images/icons/product/search-16.gif",
   "x32": "http://www.google.com/images/icons/product/search-32.gif"
@@ -92,10 +92,6 @@
     "mimeType": {
      "type": "string"
     },
-    "ownerId": {
-     "type": "string",
-     "format": "int64"
-    },
     "queryIndex": {
      "type": "integer",
      "format": "int32"
@@ -113,6 +109,10 @@
      "format": "int64"
     },
     "streamId": {
+     "type": "string",
+     "format": "int64"
+    },
+    "streamOwnerId": {
      "type": "string",
      "format": "int64"
     },
@@ -229,20 +229,31 @@
      }
     }
    }
+  },
+  "UploadUrl": {
+   "id": "UploadUrl",
+   "type": "object",
+   "properties": {
+    "streamId": {
+     "type": "string",
+     "format": "int64"
+    },
+    "streamOwnerId": {
+     "type": "string",
+     "format": "int64"
+    },
+    "uploadUrl": {
+     "type": "string"
+    }
+   }
   }
  },
  "methods": {
   "getMedia": {
    "id": "streamlist.getMedia",
-   "path": "mediacollection/{streamId}/{ownerId}/{queryLimit}/{queryOffset}",
+   "path": "mediacollection/{streamId}/{streamOwnerId}/{queryLimit}/{queryOffset}",
    "httpMethod": "GET",
    "parameters": {
-    "ownerId": {
-     "type": "string",
-     "required": true,
-     "format": "int64",
-     "location": "path"
-    },
     "queryLimit": {
      "type": "integer",
      "required": true,
@@ -260,11 +271,17 @@
      "required": true,
      "format": "int64",
      "location": "path"
+    },
+    "streamOwnerId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
     }
    },
    "parameterOrder": [
     "streamId",
-    "ownerId",
+    "streamOwnerId",
     "queryLimit",
     "queryOffset"
    ],
@@ -317,6 +334,35 @@
    ],
    "response": {
     "$ref": "StreamCollection"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getUploadUrl": {
+   "id": "streamlist.getUploadUrl",
+   "path": "uploadurl/{streamId}/{streamOwnerId}",
+   "httpMethod": "GET",
+   "parameters": {
+    "streamId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    },
+    "streamOwnerId": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "streamId",
+    "streamOwnerId"
+   ],
+   "response": {
+    "$ref": "UploadUrl"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
