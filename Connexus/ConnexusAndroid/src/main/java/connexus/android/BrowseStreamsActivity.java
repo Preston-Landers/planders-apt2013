@@ -24,7 +24,7 @@ import java.util.List;
 
 public class BrowseStreamsActivity extends Activity {
     private static final String TAG = "BrowseStreamsActivity";
-    private final int queryLimit = 16;
+    private final int queryLimit = 9;
     Streamlist service;
     String accountName;
     GoogleAccountCredential credential;
@@ -114,22 +114,22 @@ public class BrowseStreamsActivity extends Activity {
                 .showImageOnFail(R.drawable.ic_error)
                 .cacheInMemory(true)
                 // .cacheOnDisc(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
+                // .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
 
         gridView = (GridView) findViewById(R.id.gridview);
         ((GridView) gridView).setAdapter(new ImageAdapter());
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                startImagePagerActivity(position);
-//            }
-//        });
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Toast.makeText(BrowseStreamsActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startImagePagerActivity(position);
             }
         });
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+//                Toast.makeText(BrowseStreamsActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 

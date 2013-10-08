@@ -12,6 +12,6 @@
     <string name="my_sub_streams">My Subscribed Streams</string>
     <string name="browse_streams_activity_name">Browse Streams</string>
     <string name="descr_image">Image</string>
-    <string name="ac_name_image_pager">Image Pager</string>
+    <string name="ac_name_image_pager">Browse Covers</string>
 
 </resources>
