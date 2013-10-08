@@ -84,6 +84,9 @@ public class StreamList {
 
         int streamCount = 0;
         for (connexus.model.Stream stream : modelStreams) {
+            if (stream == null) {
+                continue;
+            }
             Stream endpointStream = convertStreamToAPI(stream);
             streams.add(endpointStream);
 
@@ -152,6 +155,9 @@ public class StreamList {
         List<Media> mediaList = new ArrayList<Media>();
         int mediaCount = 0;
         for (connexus.model.Media modelMedia : modelMediaList) {
+            if (modelMedia == null) {
+                continue;
+            }
             Media endpointMedia = convertMediaToAPI(modelMedia);
             endpointMedia.setQueryIndex(mediaCount++);
             endpointMedia.setQueryLimit(limit);
@@ -174,6 +180,9 @@ public class StreamList {
     public UploadUrl getUploadUrl(User user,
                                   @Named("streamId") Long streamId,
                                   @Named("streamOwnerId") Long streamOwnerId) {
+        if (user == null) {
+            throw new IllegalArgumentException("You must be authenticated to call this method.");
+        }
         UploadUrl uploadUrl = new UploadUrl();
         final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
         // TODO: do I need a different destination?
@@ -193,7 +202,11 @@ public class StreamList {
         stream.setTags(modelStream.getTags());
         stream.setCreationDate(modelStream.getCreationDate());
         stream.setNumberOfMedia(modelStream.getNumberOfMedia());
-        stream.setViews(modelStream.getViews());
+        Long views = modelStream.getViews();
+        if (views == null) {
+            views = new Long(0);
+        }
+        stream.setViews(views);
         stream.setTrendingViews(modelStream.getTrendingViews());
         stream.setLastNewMedia(modelStream.getLastNewMediaDate());
         return stream;

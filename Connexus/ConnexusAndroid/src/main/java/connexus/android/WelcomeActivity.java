@@ -9,23 +9,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.os.AsyncTask;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
-import org.joda.time.DateTime;
-
-import com.appspot.connexus_apt.helloworld.Helloworld;
 
 public class WelcomeActivity extends Activity {
     private static final String TAG = "WelcomeActivity";
-    Helloworld service;
     SharedPreferences settings;
     String accountName;
     GoogleAccountCredential credential;
@@ -45,7 +36,7 @@ public class WelcomeActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.ac_main);
 
         // Get user credentials for login
         settings = getSharedPreferences( Config.PREFS_NAME, 0);
@@ -91,25 +82,18 @@ public class WelcomeActivity extends Activity {
 
     // When you click the Sign in with Google button
     public void loginButton(View view) {
-        // TextView textView = (TextView) findViewById(R.id.welcome_status_textview);
         if (credential.getSelectedAccountName() != null) {
             Log.i(TAG, "You are logged into android as: " + credential.getSelectedAccountName());
-            // new ViewStreamsTask().execute();
-        } else {
         }
         signIn(view);
     }
 
     // When you click the View Streams button
     public void ViewStreamsButton(View view) {
-//        TextView textView = (TextView) findViewById(R.id.welcome_status_textview);
-//        DateTime now = new DateTime();
-//        textView.setText("starting task at: " + now);
 
         Intent intent = new Intent(this, BrowseStreamsActivity.class);
         startActivity(intent);
 
-        // new ViewStreamsTask().execute();
      }
 
 
@@ -215,53 +199,5 @@ public class WelcomeActivity extends Activity {
         });
     }
 
-    // Combine this with the other task
-    private class ViewStreamsTask extends AsyncTask<Void, Void, String> {
-        private boolean loginSuccess = false;
-        @Override
-        protected String doInBackground(Void... params) {
-            GoogleAccountCredential creds = null;
-            if (signedIn) {
-                creds = Account.getInstance().getCredential();
-            }
-            Helloworld.Builder builder = new Helloworld.Builder(
-                    AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), creds);
-            service = builder.build();
-            String rv = "<No result>";
-            try {
-                if (signedIn) {
-                    rv = service.greetings().authed().execute().getMessage();
-                } else {
-                    rv = service.greetings().getGreeting(0).execute().getMessage();
-                }
-
-                loginSuccess = true;
-            } catch (GoogleAuthIOException e) {
-                Log.e(TAG, "View Streams fail: ", e.getCause());
-            } catch (Exception e) {
-                Log.e(TAG, "View Streams failed.", e);
-            }
-            return rv;
-        }
-        @Override
-        protected void onPostExecute(String result) {
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.login_progressBar);
-            progressBar.setVisibility(View.INVISIBLE);
-            TextView textView = (TextView) findViewById(R.id.welcome_status_textview);
-            DateTime now = new DateTime();
-            if (loginSuccess) {
-                textView.setText("Server said: < " + result + " > at " + now);
-            } else {
-                textView.setText("ERROR: " + result + " time: " + now);
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.login_progressBar);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-    }
 }
 
