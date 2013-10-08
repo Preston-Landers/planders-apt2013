@@ -30,6 +30,7 @@ public class BrowseStreamsActivity extends Activity {
     GoogleAccountCredential credential;
     private boolean signedIn = false;
     String[] imageUrls;
+    String[] imageLabels;
     // AbsListView gridView;
     GridView gridView;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
@@ -98,14 +99,19 @@ public class BrowseStreamsActivity extends Activity {
 
     private void loadImages(List<Stream> streamList) {
         imageUrls = new String[queryLimit];
+        imageLabels = new String[queryLimit];
         int i = 0;
         for (Stream stream: streamList) {
             String coverURL = stream.getCoverURL();
-            if (coverURL != null && coverURL.length() > 0 && ! coverURL.startsWith("data:")) {
-                imageUrls[i] = coverURL;
-            } else {
-                imageUrls[i] = ""; // is this necessary?
+            if (coverURL == null || coverURL.equals("")  || coverURL.startsWith("data:")) {
+                coverURL = "";
             }
+            imageUrls[i] = coverURL;
+            String streamName = stream.getName();
+            if (streamName == null || streamName.equals("")) {
+                streamName = "(no name)";
+            }
+            imageLabels[i] = streamName;
             i++;
         }
         options = new DisplayImageOptions.Builder()
@@ -136,6 +142,7 @@ public class BrowseStreamsActivity extends Activity {
     private void startImagePagerActivity(int position) {
         Intent intent = new Intent(this, ImagePagerActivity.class);
         intent.putExtra(Config.IMAGES, imageUrls);
+        intent.putExtra(Config.IMAGE_LABELS, imageLabels);
         intent.putExtra(Config.IMAGE_POSITION, position);
         startActivity(intent);
     }
@@ -214,15 +221,18 @@ public class BrowseStreamsActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final ImageView imageView;
+            RelativeLayout imgContainerRL;
+            imgContainerRL = (RelativeLayout) getLayoutInflater().inflate(R.layout.item_grid_image, parent, false);
             if (convertView == null) {
-                imageView = (ImageView) getLayoutInflater().inflate(R.layout.item_grid_image, parent, false);
+                imageView = (ImageView) imgContainerRL.getChildAt(0);
             } else {
-                imageView = (ImageView) convertView;
+                imgContainerRL = (RelativeLayout) convertView;
+                imageView = (ImageView) imgContainerRL.getChildAt(0);
             }
-
+            TextView textView = (TextView) imgContainerRL.getChildAt(1);
+            textView.setText(imageLabels[position]);
             imageLoader.displayImage(imageUrls[position], imageView, options);
-
-            return imageView;
+            return imgContainerRL;
         }
     }
 }

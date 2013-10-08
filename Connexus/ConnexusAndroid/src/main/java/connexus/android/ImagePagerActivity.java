@@ -54,6 +54,7 @@ public class ImagePagerActivity extends Activity {
 
         Bundle bundle = getIntent().getExtras();
         String[] imageUrls = bundle.getStringArray(Config.IMAGES);
+        String[] imageLabels = bundle.getStringArray(Config.IMAGE_LABELS);
         int pagerPosition = bundle.getInt(Config.IMAGE_POSITION, 0);
 
         if (savedInstanceState != null) {
