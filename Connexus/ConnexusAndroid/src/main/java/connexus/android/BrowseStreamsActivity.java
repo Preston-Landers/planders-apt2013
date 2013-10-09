@@ -2,7 +2,6 @@ package connexus.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,13 +24,13 @@ import java.util.List;
 public class BrowseStreamsActivity extends Activity {
     private static final String TAG = "BrowseStreamsActivity";
     private final int queryLimit = 9;
+    private int queryOffset = 0;
     Streamlist service;
     String accountName;
     GoogleAccountCredential credential;
     private boolean signedIn = false;
     String[] imageUrls;
     String[] imageLabels;
-    // AbsListView gridView;
     GridView gridView;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     DisplayImageOptions options;
@@ -48,6 +47,9 @@ public class BrowseStreamsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_browse_streams);
 
+        Intent intent = getIntent();
+        queryOffset = intent.getIntExtra(Config.NAV_OFFSET, 0);
+
         // Make sure we're running on Honeycomb or higher to use ActionBar APIs
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             // Show the Up button in the action bar.
@@ -61,11 +63,25 @@ public class BrowseStreamsActivity extends Activity {
         } else {
             signedIn = false;
         }
-
+        checkNavButtonState();
         new BrowseStreamsTask().execute();
     }
 
-     // figure out if we need this
+    /**
+     * Should we be showing each nav left/right button?
+     */
+    private void checkNavButtonState() {
+        ImageButton browseLeftButton = (ImageButton) findViewById(R.id.browseLeftButton);
+
+        if (queryOffset > 0) {
+            browseLeftButton.setVisibility(View.VISIBLE);
+        } else {
+            browseLeftButton.setVisibility(View.INVISIBLE);
+       }
+
+    }
+
+    // figure out if we need this
     // http://developer.android.com/training/basics/firstapp/starting-activity.html
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
@@ -92,10 +108,38 @@ public class BrowseStreamsActivity extends Activity {
 
     // When you click the View Streams button
     public void ViewStreamsButton(View view) {
-
         Intent intent = new Intent(this, BrowseStreamsActivity.class);
         startActivity(intent);
      }
+
+    public void GoRightButton(View view) {
+        int newOffset = queryOffset + queryLimit;
+        queryOffset = newOffset;
+        new BrowseStreamsTask().execute();
+//        Intent intent = new Intent(this, BrowseStreamsActivity.class);
+//        intent.putExtra(Config.NAV_OFFSET, newOffset);
+//        startActivity(intent);
+
+    }
+    public void GoLeftButton(View view) {
+        int newOffset = queryOffset - queryLimit;
+        if (newOffset < 0) {
+            newOffset = 0;
+        }
+        queryOffset = newOffset;
+        new BrowseStreamsTask().execute();
+//        Intent intent = new Intent(this, BrowseStreamsActivity.class);
+//
+//        int newOffset = queryOffset - queryLimit;
+//        if (newOffset < 0) {
+//            newOffset = 0;
+//        }
+//        intent.putExtra(Config.NAV_OFFSET, newOffset);
+//
+//        startActivity(intent);
+
+    }
+
 
     private void loadImages(List<Stream> streamList) {
         imageUrls = new String[queryLimit];
@@ -122,6 +166,8 @@ public class BrowseStreamsActivity extends Activity {
                 // .cacheOnDisc(true)
                 // .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
+
+        checkNavButtonState();
 
         gridView = (GridView) findViewById(R.id.gridview);
         ((GridView) gridView).setAdapter(new ImageAdapter());
@@ -154,7 +200,7 @@ public class BrowseStreamsActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             int limit = queryLimit;
-            int offset = 2; // XXX TODO
+            int offset = queryOffset;
             GoogleAccountCredential creds = null;
             if (signedIn) {
                 creds = credential;

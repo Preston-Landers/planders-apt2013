@@ -6,15 +6,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
 
-    <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/browse_progressBar"
-            android:visibility="invisible"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="87dp"/>
-
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,6 +31,39 @@
               android:layout_marginBottom="50dp"
               android:stretchMode="columnWidth"
               android:textFilterEnabled="true"/>
-              android:stackFromBottom="true"/>
 
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/browseLeftButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="380dp"
+            android:background="@drawable/ic_navigation_previous_item"
+            android:layout_alignParentBottom="false"
+
+            android:onClick="GoLeftButton"/>
+
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/browseRightButton"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="380dp"
+            android:background="@drawable/ic_navigation_next_item"
+            android:onClick="GoRightButton"/>
+
+    <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/browse_progressBar"
+            android:visibility="invisible"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="87dp"/><![CDATA[
+
+    android:stackFromBottom="true"/>
+
+]]>
 </RelativeLayout>
