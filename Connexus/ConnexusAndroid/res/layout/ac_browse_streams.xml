@@ -23,7 +23,8 @@
             android:id="@+id/mysubs_button"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="380dp"/>
+            android:layout_marginTop="380dp"
+            style="@android:style/Widget.Holo.Light.Button"/>
 
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/gridview"
@@ -39,4 +40,6 @@
               android:layout_marginBottom="50dp"
               android:stretchMode="columnWidth"
               android:textFilterEnabled="true"/>
+              android:stackFromBottom="true"/>
+
 </RelativeLayout>

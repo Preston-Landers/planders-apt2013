@@ -80,8 +80,8 @@ public class BrowseStreamsActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        getMenuInflater().inflate(R.menu.ac_browse_streams_actions, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     public void loginButton(View view) {
