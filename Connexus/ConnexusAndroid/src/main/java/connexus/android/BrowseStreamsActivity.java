@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.appspot.connexus_apt.streamlist.Streamlist;
 import com.appspot.connexus_apt.streamlist.model.Stream;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -26,12 +24,11 @@ public class BrowseStreamsActivity extends Activity {
     private final int queryLimit = 9;
     private int queryOffset = 0;
     Streamlist service;
-    String accountName;
     GoogleAccountCredential credential;
     private boolean signedIn = false;
     List<Stream> streamList;
-    String[] imageUrls;
-    String[] imageLabels;
+//    String[] imageUrls;
+//    String[] imageLabels;
     GridView gridView;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     DisplayImageOptions options;
@@ -73,12 +70,22 @@ public class BrowseStreamsActivity extends Activity {
      */
     private void checkNavButtonState() {
         ImageButton browseLeftButton = (ImageButton) findViewById(R.id.browseLeftButton);
+        ImageButton browseRightButton = (ImageButton) findViewById(R.id.browseRightButton);
 
         if (queryOffset > 0) {
             browseLeftButton.setVisibility(View.VISIBLE);
         } else {
             browseLeftButton.setVisibility(View.INVISIBLE);
-       }
+        }
+
+        if (streamList != null) {
+            if (streamList.size() < queryLimit) {
+                browseRightButton.setVisibility(View.INVISIBLE);
+            } else {
+                browseRightButton.setVisibility(View.VISIBLE);
+            }
+
+        }
 
     }
 
@@ -132,23 +139,6 @@ public class BrowseStreamsActivity extends Activity {
 
     private void loadImages(List<Stream> streamList) {
         this.streamList = streamList;
-        imageUrls = new String[queryLimit];
-        imageLabels = new String[queryLimit];
-        int i = 0;
-        for (Stream stream: streamList) {
-            String coverURL = stream.getCoverURL();
-            if (coverURL == null || coverURL.equals("")  || coverURL.startsWith("data:")) {
-                coverURL = "";
-                coverURL = null;
-            }
-            imageUrls[i] = coverURL;
-            String streamName = stream.getName();
-            if (streamName == null || streamName.equals("")) {
-                streamName = "(no name)";
-            }
-            imageLabels[i] = streamName;
-            i++;
-        }
         options = new DisplayImageOptions.Builder()
                 .showStubImage(R.drawable.ic_stub)
                 .showImageForEmptyUri(R.drawable.ic_empty)
@@ -184,6 +174,7 @@ public class BrowseStreamsActivity extends Activity {
         }
 
         Intent intent = new Intent(this, ViewStreamActivity.class);
+        intent.putExtra(Config.STREAM_NAME, stream.getName());
         intent.putExtra(Config.STREAM_ID, stream.getId());
         intent.putExtra(Config.STREAM_OWNER_ID, stream.getOwnerId());
         startActivity(intent);
@@ -239,7 +230,8 @@ public class BrowseStreamsActivity extends Activity {
     public class ImageAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return imageUrls.length;
+            return streamList.size();
+            // return imageUrls.length;
         }
 
         @Override
@@ -264,8 +256,11 @@ public class BrowseStreamsActivity extends Activity {
                 imageView = (ImageView) imgContainerRL.getChildAt(0);
             }
             TextView textView = (TextView) imgContainerRL.getChildAt(1);
-            textView.setText(imageLabels[position]);
-            imageLoader.displayImage(imageUrls[position], imageView, options);
+
+            Stream stream = streamList.get(position);
+
+            textView.setText(stream.getName());
+            imageLoader.displayImage(stream.getCoverURL(), imageView, options);
             return imgContainerRL;
         }
     }

@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -55,7 +56,10 @@ public class ImagePagerActivity extends Activity {
         Bundle bundle = getIntent().getExtras();
         String[] imageUrls = bundle.getStringArray(Config.IMAGES);
         String[] imageLabels = bundle.getStringArray(Config.IMAGE_LABELS);
+        String streamName = bundle.getString(Config.STREAM_NAME);
         int pagerPosition = bundle.getInt(Config.IMAGE_POSITION, 0);
+
+        setTitle(streamName);
 
         if (savedInstanceState != null) {
             pagerPosition = savedInstanceState.getInt(STATE_POSITION);
@@ -72,7 +76,7 @@ public class ImagePagerActivity extends Activity {
                 .build();
 
         pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(new ImagePagerAdapter(imageUrls));
+        pager.setAdapter(new ImagePagerAdapter(imageUrls, imageLabels));
         pager.setCurrentItem(pagerPosition);
     }
 
@@ -83,11 +87,13 @@ public class ImagePagerActivity extends Activity {
 
     private class ImagePagerAdapter extends PagerAdapter {
 
-        private String[] images;
+        private String[] imageUrls;
+        private String[] imageLabels;
         private LayoutInflater inflater;
 
-        ImagePagerAdapter(String[] images) {
-            this.images = images;
+        ImagePagerAdapter(String[] imageUrls, String[] imageLabels) {
+            this.imageUrls = imageUrls;
+            this.imageLabels = imageLabels;
             inflater = getLayoutInflater();
         }
 
@@ -102,16 +108,17 @@ public class ImagePagerActivity extends Activity {
 
         @Override
         public int getCount() {
-            return images.length;
+            return imageUrls.length;
         }
 
         @Override
         public Object instantiateItem(ViewGroup view, int position) {
             View imageLayout = inflater.inflate(R.layout.item_pager_image, view, false);
-            ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
+            ImageView imageView = (ImageView) imageLayout.findViewById(R.id.pager_image);
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
-
-            imageLoader.displayImage(images[position], imageView, options, new SimpleImageLoadingListener() {
+            TextView textView = (TextView) imageLayout.findViewById(R.id.pagerimage_text);
+            textView.setText(imageLabels[position]);
+            imageLoader.displayImage(imageUrls[position], imageView, options, new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
                     spinner.setVisibility(View.VISIBLE);

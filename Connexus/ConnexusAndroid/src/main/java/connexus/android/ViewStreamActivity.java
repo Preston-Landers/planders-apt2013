@@ -29,14 +29,14 @@ public class ViewStreamActivity extends Activity {
     String accountName;
     GoogleAccountCredential credential;
     private boolean signedIn = false;
-    String[] imageUrls;
-    String[] imageLabels;
+    List<Media> mediaList;
     GridView gridView;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     DisplayImageOptions options;
 
     Long streamId;
     Long streamOwnerId;
+    String streamName;
 
     /**
      * Called when the activity is first created.
@@ -52,6 +52,7 @@ public class ViewStreamActivity extends Activity {
 
         Intent intent = getIntent();
         queryOffset = intent.getIntExtra(Config.NAV_OFFSET, 0);
+        streamName = intent.getStringExtra(Config.STREAM_NAME);
         streamId = intent.getLongExtra(Config.STREAM_ID, 0);
         streamOwnerId = intent.getLongExtra(Config.STREAM_OWNER_ID, 0);
 
@@ -62,6 +63,11 @@ public class ViewStreamActivity extends Activity {
         if (streamOwnerId == null || streamOwnerId == 0) {
             throw new IllegalArgumentException("You must specify a streamOwnerId!");
         }
+        if (streamName == null) {
+            streamName = "(no name)";
+        }
+
+        setTitle(streamName);
 
         // Make sure we're running on Honeycomb or higher to use ActionBar APIs
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -85,12 +91,21 @@ public class ViewStreamActivity extends Activity {
      */
     private void checkNavButtonState() {
         ImageButton browseLeftButton = (ImageButton) findViewById(R.id.viewStreamLeftButton);
+        ImageButton browseRightButton = (ImageButton) findViewById(R.id.viewStreamRightButton);
 
         if (queryOffset > 0) {
             browseLeftButton.setVisibility(View.VISIBLE);
         } else {
             browseLeftButton.setVisibility(View.INVISIBLE);
        }
+        if (mediaList != null) {
+            if (mediaList.size() < queryLimit) {
+                browseRightButton.setVisibility(View.INVISIBLE);
+            } else {
+                browseRightButton.setVisibility(View.VISIBLE);
+            }
+
+        }
 
     }
 
@@ -131,22 +146,7 @@ public class ViewStreamActivity extends Activity {
 
 
     private void loadImages(List<Media> mediaList) {
-        imageUrls = new String[queryLimit];
-        imageLabels = new String[queryLimit];
-        int i = 0;
-        for (Media media: mediaList) {
-            String mediaUrl = media.getUrl();
-            if (mediaUrl == null || mediaUrl.equals("")  || mediaUrl.startsWith("data:")) {
-                mediaUrl = "";
-            }
-            imageUrls[i] = mediaUrl;
-            String mediaComment = media.getComments();
-            if (mediaComment == null || mediaComment.equals("")) {
-                mediaComment = "(none)";
-            }
-            imageLabels[i] = mediaComment;
-            i++;
-        }
+        this.mediaList = mediaList;
         options = new DisplayImageOptions.Builder()
                 .showStubImage(R.drawable.ic_stub)
                 .showImageForEmptyUri(R.drawable.ic_empty)
@@ -176,7 +176,20 @@ public class ViewStreamActivity extends Activity {
 
     private void startImagePagerActivity(int position) {
         Intent intent = new Intent(this, ImagePagerActivity.class);
+        if (mediaList == null) {
+            Log.e(TAG, "No media loaded, can't start image pager");
+            return;
+        }
+        String[] imageUrls = new String[mediaList.size()];
+        String[] imageLabels = new String[mediaList.size()];
+        int i = 0;
+        for (Media media: mediaList) {
+            imageUrls[i] = media.getUrl();
+            imageLabels[i] = media.getComments();
+            i++;
+        }
         intent.putExtra(Config.IMAGES, imageUrls);
+        intent.putExtra(Config.STREAM_NAME, streamName);
         intent.putExtra(Config.IMAGE_LABELS, imageLabels);
         intent.putExtra(Config.IMAGE_POSITION, position);
         startActivity(intent);
@@ -230,7 +243,7 @@ public class ViewStreamActivity extends Activity {
     public class ImageAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return imageUrls.length;
+            return mediaList.size();
         }
 
         @Override
@@ -255,8 +268,10 @@ public class ViewStreamActivity extends Activity {
                 imageView = (ImageView) imgContainerRL.getChildAt(0);
             }
             TextView textView = (TextView) imgContainerRL.getChildAt(1);
-            textView.setText(imageLabels[position]);
-            imageLoader.displayImage(imageUrls[position], imageView, options);
+            Media media = mediaList.get(position);
+
+            textView.setText(media.getComments());
+            imageLoader.displayImage(media.getUrl(), imageView, options);
             return imgContainerRL;
         }
     }
