@@ -241,12 +241,12 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		
 		cal.add(Calendar.SECOND, Config.safeLongToInt(cleanFreqSec));
 		Date nextCleanTime = cal.getTime();
-		
+
 		if ( now.compareTo(nextCleanTime) < 0 ) {
 			// System.err.println("Not time for cleaning yet. Next report time is: " + nextCleanTime);
 			return;
 		}
-		// 
+
 		fixAllStreamMediaCounts();
 		StreamView.cleanupStreamViews();
 		setLastClean(new Date());
@@ -262,7 +262,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 	}
 	
 	public void fixAllStreamMediaCounts() {
-		for (Stream stream : Stream.getAllStreams(site)) {
+		for (Stream stream : Stream.getAllStreamsNoOrder(site)) {
 			stream.fixNumMedia();
 			stream.save();
 		}

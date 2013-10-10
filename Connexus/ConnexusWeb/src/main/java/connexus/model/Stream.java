@@ -35,6 +35,7 @@ public class Stream implements Comparable<Stream> {
 	@Index({IfNotNull.class}) List<String> tags;
 	@Index Date creationDate;
 	@Index Long numberOfMedia;
+    @Index Date lastUpdated;
 
 	@Index Long views;   // all time views
 	long trendingViews;  // views only within the trending window
@@ -48,6 +49,7 @@ public class Stream implements Comparable<Stream> {
 		this.owner = owner;
 		this.name = name;
 		this.creationDate = new Date();
+        this.lastUpdated = creationDate;
 	}
 
 	public Key<Stream> getKey() {
@@ -155,14 +157,27 @@ public class Stream implements Comparable<Stream> {
 		return ofy().load().key(owner).get().getRealName();
 	}
 
-	public Date getLastNewMediaDate() {
-		List<Media> ml = getMedia(0, 1);
-		if (ml == null || ml.isEmpty()) {
-			// kind of bogus but I hate nulls
-			return getCreationDate();
-		}
-		Media lastMedia = ml.get(0);
-		return lastMedia.getCreationDate();
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public void touchUpdated() {
+        setLastUpdated(new Date());
+    }
+
+    public Date getLastNewMediaDate() {
+        return getLastUpdated();
+//		List<Media> ml = getMedia(0, 1);
+//		if (ml == null || ml.isEmpty()) {
+//			// kind of bogus but I hate nulls
+//			return getCreationDate();
+//		}
+//		Media lastMedia = ml.get(0);
+//		return lastMedia.getCreationDate();
 	}
 
 
@@ -179,12 +194,14 @@ public class Stream implements Comparable<Stream> {
 		Long num = getNumberOfMedia();
 		num++;
 		setNumberOfMedia(num);
+        touchUpdated();
 	}
 
 	public void decNumberOfMedia() {
 		Long num = getNumberOfMedia();
 		num--;
 		setNumberOfMedia(num);
+        touchUpdated();
 	}
 
 	public void setNumberOfMedia(Long num) {
@@ -202,7 +219,23 @@ public class Stream implements Comparable<Stream> {
 	public void fixNumMedia() {
 		int rvi = ofy().load().type(Media.class).ancestor(this).count();
 		Long rv = new Long(rvi);
-		setNumberOfMedia(rv);
+        setNumberOfMedia(rv);
+
+        // Fix the last modified time if necessary
+        Date lastUpdate = getLastUpdated();
+        if (lastUpdate == null) {
+            Media lastMedia = ofy().load().type(Media.class).ancestor(this).order("-creationDate").limit(1).first().get();
+            if (lastMedia == null) {
+                lastUpdate = new Date();
+            } else {
+                lastUpdate = lastMedia.getCreationDate();
+                if (lastUpdate == null) {
+                    lastUpdate = new Date();
+                }
+            }
+            setLastUpdated(lastUpdate);
+        }
+
 	}
 
 	public boolean deleteStream() {
@@ -232,13 +265,20 @@ public class Stream implements Comparable<Stream> {
             site = Site.load(null).getKey();
         }
         // order by getLastNewMedia()
-        List<Stream> rv = ofy().load().type(Stream.class).ancestor(site)
+        List<Stream> rv = ofy().load().type(Stream.class).ancestor(site).order("-lastUpdated")
                 .limit(limit).offset(offset).list();
-        Collections.sort(rv);
-        Collections.reverse(rv);
+//        Collections.sort(rv);
+//        Collections.reverse(rv);
         return rv;
     }
 
+    public static List<Stream> getAllStreamsNoOrder(Key<Site> site) {
+        if (site == null) {
+            site = Site.load(null).getKey();
+        }
+        List<Stream> rv = ofy().load().type(Stream.class).ancestor(site).list();
+        return rv;
+    }
 
 
     /*

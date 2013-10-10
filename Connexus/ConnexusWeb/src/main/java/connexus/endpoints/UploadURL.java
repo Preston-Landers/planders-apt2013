@@ -1,9 +1,11 @@
 package connexus.endpoints;
 
+import java.io.Serializable;
+
 /**
  * Contains a one-time-use upload URL for uploading images.
  */
-public class UploadUrl {
+public class UploadUrl implements Serializable {
     String uploadUrl;
     Long streamId;
     Long streamOwnerId;

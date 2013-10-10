@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <datastore-indexes autoGenerate="false">
-  <datastore-index kind="StreamView" ancestor=  "false">
-<!--  long views = ofy().load().type(StreamView.class).filter("stream ==", getKey()).filter("date >=", timeWindow).count(); -->
-      <property name="stream" direction="asc" />
-      <property name="date" direction="desc" />
-  </datastore-index>
+    <datastore-index kind="StreamView" ancestor="false">
+        <!--  long views = ofy().load().type(StreamView.class).filter("stream ==", getKey()).filter("date >=", timeWindow).count(); -->
+        <property name="stream" direction="asc"/>
+        <property name="date" direction="desc"/>
+    </datastore-index>
+    <datastore-index kind="Stream" ancestor="true" source="manual">
+        <property name="lastUpdated" direction="desc"/>
+    </datastore-index>
 </datastore-indexes>
