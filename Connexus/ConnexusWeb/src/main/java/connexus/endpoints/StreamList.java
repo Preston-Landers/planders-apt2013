@@ -2,6 +2,9 @@ package connexus.endpoints;
 
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.googlecode.objectify.Ref;
 import connexus.Config;
 
@@ -14,8 +17,10 @@ import connexus.servlet.ConnexusServletBase;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import static connexus.OfyService.ofy;
 
@@ -32,6 +37,27 @@ import static connexus.OfyService.ofy;
         },
         audiences = {Config.ANDROID_AUDIENCE})
 public class StreamList {
+    protected final static MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+
+    static {
+        syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+    }
+
+    private static class StreamCacheKey implements Serializable {
+        Integer limit;
+        Integer offset;
+        Double latitude;
+        Double longitude;
+        String query;
+
+        StreamCacheKey(Integer limit, Integer offset, Double latitude, Double longitude, String query) {
+            this.limit = limit;
+            this.offset = offset;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.query = query;
+        }
+    }
 
     /**
      * Retrieve a list of photo streams according to criteria you specify. They are returned in
@@ -57,6 +83,13 @@ public class StreamList {
                                    @Named("longitude") @Nullable Double longitude,
                                    @Named("query") @Nullable String query,
                                    @Named("mySubs") @Nullable Boolean mySubs) {
+
+        StreamCacheKey cacheKey = new StreamCacheKey(limit, offset, latitude, longitude, query);
+        List<Stream> cacheHit = (List<Stream>) syncCache.get(cacheKey);
+        if (cacheHit != null) {
+            return cacheHit;
+        }
+
         List<Stream> streams = new ArrayList<Stream>();
 
         Ref<Site> site = ofy().load().type(Site.class).id(Config.siteId);
@@ -106,8 +139,22 @@ public class StreamList {
         }
 
         // TODO: Handle query, latlong, mysubs!
-
+        syncCache.put(cacheKey, streams);
         return streams;
+    }
+
+    private static class MediaCacheKey implements Serializable {
+        Long streamId;
+        Long streamOwnerId;
+        Integer limit;
+        Integer offset;
+
+        MediaCacheKey(Long streamId, Long streamOwnerId, Integer limit, Integer offset) {
+            this.streamId = streamId;
+            this.streamOwnerId = streamOwnerId;
+            this.limit = limit;
+            this.offset = offset;
+        }
     }
 
     /**
@@ -127,6 +174,13 @@ public class StreamList {
                                 @Named("streamOwnerId") Long streamOwnerId,
                                 @Named("queryLimit") Integer limit,
                                 @Named("queryOffset") Integer offset) {
+
+        MediaCacheKey cacheKey = new MediaCacheKey(streamId, streamOwnerId, limit, offset);
+        List<Media> returnVal = (List<Media>) syncCache.get(cacheKey);
+        if (returnVal != null) {
+            return returnVal;
+        }
+
         if (limit > 32) {
             limit = 32;
         } // XXX TODO: move to config?
@@ -144,7 +198,9 @@ public class StreamList {
         if (stream == null) {
             throw new IllegalArgumentException("Unable to load stream");
         }
-        return getMediaHelper(stream, limit, offset);
+        returnVal = getMediaHelper(stream, limit, offset);
+        syncCache.put(cacheKey, returnVal);
+        return returnVal;
     }
 
     protected List<Media> getMediaHelper(connexus.model.Stream stream, int limit, int offset) {

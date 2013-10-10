@@ -15,5 +15,7 @@
     <string name="ac_name_image_pager">Browse Covers</string>
     <string name="action_search">Search</string>
     <string name="action_location_search">Nearby</string>
+    <string name="upload_button">Upload an Image</string>
+    <string name="view_stream_activity_name">View Stream</string>
 
 </resources>

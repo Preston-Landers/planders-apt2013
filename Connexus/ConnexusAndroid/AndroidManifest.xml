@@ -38,6 +38,17 @@
         <activity
                 android:name=".ImagePagerActivity"
                 android:label="@string/ac_name_image_pager" />
+        <activity
+                android:name=".ViewStreamActivity"
+                android:theme="@style/ActionBar"
+                android:label="@string/view_stream_activity_name"
+                android:parentActivityName=".BrowseStreamsActivity"
+                >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".BrowseStreamsActivity"/>
+        </activity>
+
     </application>
 
 </manifest>

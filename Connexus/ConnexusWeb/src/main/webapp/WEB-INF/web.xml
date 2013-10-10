@@ -124,7 +124,8 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>connexus.endpoints.Greetings,connexus.endpoints.StreamList</param-value>
+            <!-- can comma separate here -->
+            <param-value>connexus.endpoints.StreamList</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

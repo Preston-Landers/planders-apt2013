@@ -1,11 +1,12 @@
 package connexus.endpoints;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Endpoint model to represent a single image or other media object.
  */
-public class Media {
+public class Media implements Serializable {
     long id;
     long streamOwnerId;
     long streamId;

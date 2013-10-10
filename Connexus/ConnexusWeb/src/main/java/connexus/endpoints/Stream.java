@@ -1,12 +1,13 @@
 package connexus.endpoints;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Endpoint model to represent a single Stream, which is itself a collection of Media.
  */
-public class Stream {
+public class Stream implements Serializable {
 
     long id;
     String name;

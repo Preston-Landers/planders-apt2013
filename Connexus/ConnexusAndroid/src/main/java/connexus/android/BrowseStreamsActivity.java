@@ -29,6 +29,7 @@ public class BrowseStreamsActivity extends Activity {
     String accountName;
     GoogleAccountCredential credential;
     private boolean signedIn = false;
+    List<Stream> streamList;
     String[] imageUrls;
     String[] imageLabels;
     GridView gridView;
@@ -68,7 +69,7 @@ public class BrowseStreamsActivity extends Activity {
     }
 
     /**
-     * Should we be showing each nav left/right button?
+     * Figure out if we should be showing each nav left/right button
      */
     private void checkNavButtonState() {
         ImageButton browseLeftButton = (ImageButton) findViewById(R.id.browseLeftButton);
@@ -116,11 +117,8 @@ public class BrowseStreamsActivity extends Activity {
         int newOffset = queryOffset + queryLimit;
         queryOffset = newOffset;
         new BrowseStreamsTask().execute();
-//        Intent intent = new Intent(this, BrowseStreamsActivity.class);
-//        intent.putExtra(Config.NAV_OFFSET, newOffset);
-//        startActivity(intent);
-
     }
+
     public void GoLeftButton(View view) {
         int newOffset = queryOffset - queryLimit;
         if (newOffset < 0) {
@@ -128,20 +126,12 @@ public class BrowseStreamsActivity extends Activity {
         }
         queryOffset = newOffset;
         new BrowseStreamsTask().execute();
-//        Intent intent = new Intent(this, BrowseStreamsActivity.class);
-//
-//        int newOffset = queryOffset - queryLimit;
-//        if (newOffset < 0) {
-//            newOffset = 0;
-//        }
-//        intent.putExtra(Config.NAV_OFFSET, newOffset);
-//
-//        startActivity(intent);
 
     }
 
 
     private void loadImages(List<Stream> streamList) {
+        this.streamList = streamList;
         imageUrls = new String[queryLimit];
         imageLabels = new String[queryLimit];
         int i = 0;
@@ -149,6 +139,7 @@ public class BrowseStreamsActivity extends Activity {
             String coverURL = stream.getCoverURL();
             if (coverURL == null || coverURL.equals("")  || coverURL.startsWith("data:")) {
                 coverURL = "";
+                coverURL = null;
             }
             imageUrls[i] = coverURL;
             String streamName = stream.getName();
@@ -174,7 +165,7 @@ public class BrowseStreamsActivity extends Activity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startImagePagerActivity(position);
+                startViewStreamActivity(position);
             }
         });
 //        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -185,15 +176,20 @@ public class BrowseStreamsActivity extends Activity {
 
     }
 
-    private void startImagePagerActivity(int position) {
-        Intent intent = new Intent(this, ImagePagerActivity.class);
-        intent.putExtra(Config.IMAGES, imageUrls);
-        intent.putExtra(Config.IMAGE_LABELS, imageLabels);
-        intent.putExtra(Config.IMAGE_POSITION, position);
+    private void startViewStreamActivity(int position) {
+        Stream stream = streamList.get(position);
+        if (stream == null) {
+            Log.e(TAG, "can't find stream to view at position: " + position);
+            return;
+        }
+
+        Intent intent = new Intent(this, ViewStreamActivity.class);
+        intent.putExtra(Config.STREAM_ID, stream.getId());
+        intent.putExtra(Config.STREAM_OWNER_ID, stream.getOwnerId());
         startActivity(intent);
+
     }
 
-    // Combine this with the other task
     private class BrowseStreamsTask extends AsyncTask<Void, Void, Void> {
         private boolean querySuccess = false;
         private List<Stream> streamList;
@@ -205,12 +201,9 @@ public class BrowseStreamsActivity extends Activity {
             if (signedIn) {
                 creds = credential;
             }
-            Streamlist.Builder builder = new Streamlist.Builder(
-                    AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), creds);
-            // builder.setRootUrl("http://192.168.56.1:8088/_ah/api/"); // for localhost development
-            service = builder.build();
             String rv = "<No result>";
             try {
+                service = EndpointService.getStreamlistService(creds);
                 streamList = service.getStreams(limit, offset)
                         .setQuery("test")
                         .execute()
@@ -228,15 +221,10 @@ public class BrowseStreamsActivity extends Activity {
         protected void onPostExecute(Void rv) {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.browse_progressBar);
             progressBar.setVisibility(View.INVISIBLE);
-//            TextView textView = (TextView) findViewById(R.id.welcome_status_textview);
-//            DateTime now = new DateTime();
             if (querySuccess) {
-//                textView.setText("Server said: < " + " > at " + now);
                 if (streamList != null) {
                     loadImages(streamList);
                 }
-            } else {
-//                textView.setText("ERROR: " + " time: " + now);
             }
 
         }
