@@ -3,6 +3,7 @@ package connexus.endpoints;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.googlecode.objectify.Ref;
@@ -139,7 +140,7 @@ public class StreamList {
         }
 
         // TODO: Handle query, latlong, mysubs!
-        syncCache.put(cacheKey, streams);
+        syncCache.put(cacheKey, streams, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
         return streams;
     }
 
@@ -199,7 +200,7 @@ public class StreamList {
             throw new IllegalArgumentException("Unable to load stream");
         }
         returnVal = getMediaHelper(stream, limit, offset);
-        syncCache.put(cacheKey, returnVal);
+        syncCache.put(cacheKey, returnVal, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
         return returnVal;
     }
 

@@ -24,6 +24,7 @@ public class Config {
 
     // Maximum search results to show
     public static final int maxSearchResults = 5;
+    public static final int API_CACHE_TIME_SEC = 360; // # of seconds cache is good for in API calls
 
     public static int getMaxSearchResults() {
     	return maxSearchResults;
