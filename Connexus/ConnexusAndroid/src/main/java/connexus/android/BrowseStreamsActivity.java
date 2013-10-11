@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -19,7 +20,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
-public class BrowseStreamsActivity extends Activity {
+public class BrowseStreamsActivity extends BaseActivity {
     private static final String TAG = "BrowseStreamsActivity";
 
     private boolean signedIn = false;
@@ -91,18 +92,6 @@ public class BrowseStreamsActivity extends Activity {
         }
 
     }
-
-    // figure out if we need this
-    // http://developer.android.com/training/basics/firstapp/starting-activity.html
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -11,6 +11,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
             android:name=".ConnexusApplication"
@@ -39,7 +44,9 @@
         <activity
                 android:name=".ImagePagerActivity"
                 android:theme="@style/ActionBar"
-                android:label="@string/ac_name_image_pager" />
+                android:label="@string/ac_name_image_pager"
+                android:parentActivityName=".ViewStreamsActivity"
+                />
         <activity
                 android:name=".ViewStreamActivity"
                 android:theme="@style/ActionBar"
@@ -49,6 +56,26 @@
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".BrowseStreamsActivity"/>
+        </activity>
+        <activity
+                android:name=".UploadActivity"
+                android:theme="@style/ActionBar"
+                android:label="@string/upload_activity_name"
+                android:parentActivityName=".ViewStreamsActivity"
+                >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".ViewStreamsActivity"/>
+        </activity>
+        <activity
+                android:name=".CameraActivity"
+                android:theme="@style/ActionBar"
+                android:label="@string/camera_activity_name">
+                <!--android:parentActivityName=".UploadActivity"-->
+                <!-->-->
+            <!--<meta-data-->
+                    <!--android:name="android.support.PARENT_ACTIVITY"-->
+                    <!--android:value=".UploadActivity"/>-->
         </activity>
 
     </application>

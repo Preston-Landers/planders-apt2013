@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -20,7 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.List;
 
 public class ViewStreamActivity extends Activity {
-    private static final String TAG = "BrowseStreamsActivity";
+    private static final String TAG = "ViewStreamsActivity";
     private final int queryLimit = 9;
     private int queryOffset = 0;
     Streamlist service;
@@ -113,18 +114,18 @@ public class ViewStreamActivity extends Activity {
 
 
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                // NavUtils.navigateUpFromSameTask(this);
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-    // figure out if we need this
-    // http://developer.android.com/training/basics/firstapp/starting-activity.html
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                NavUtils.navigateUpFromSameTask(this);
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -150,7 +151,11 @@ public class ViewStreamActivity extends Activity {
     }
 
     public void UploadButton(View view) {
-
+        Intent intent = new Intent(this, UploadActivity.class);
+        intent.putExtra(Config.STREAM_NAME, streamName);
+        intent.putExtra(Config.STREAM_ID, streamId);
+        intent.putExtra(Config.STREAM_OWNER_ID, streamOwnerId);
+        startActivity(intent);
     }
 
     private void loadImages(StreamResult streamResult) {
