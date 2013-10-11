@@ -40,6 +40,9 @@ public class Media implements Comparable<Media> {
 	Key<CUser> uploader; // in theory, could upload to other users streams?
 	@Index Long views;
 
+    long latitude;
+    long longitude;
+
 	private static final ImagesService imagesService = ImagesServiceFactory.getImagesService();
 	protected final static MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 	
@@ -280,4 +283,20 @@ public class Media implements Comparable<Media> {
 		}
 		return 0;
 	}
+
+    public long getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(long latitude) {
+        this.latitude = latitude;
+    }
+
+    public long getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(long longitude) {
+        this.longitude = longitude;
+    }
 }

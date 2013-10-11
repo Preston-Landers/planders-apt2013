@@ -14,6 +14,9 @@ public class StreamResult implements Serializable {
     int resultSize;
     boolean canUpload;
     String uploadUrl;
+    int queryLimit;
+    int queryOffset;
+
 
     public String getUploadUrl() {
         return uploadUrl;
@@ -69,5 +72,21 @@ public class StreamResult implements Serializable {
 
     public void setResultSize(int resultSize) {
         this.resultSize = resultSize;
+    }
+
+    public int getQueryLimit() {
+        return queryLimit;
+    }
+
+    public void setQueryLimit(int queryLimit) {
+        this.queryLimit = queryLimit;
+    }
+
+    public int getQueryOffset() {
+        return queryOffset;
+    }
+
+    public void setQueryOffset(int queryOffset) {
+        this.queryOffset = queryOffset;
     }
 }

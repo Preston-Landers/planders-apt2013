@@ -202,6 +202,19 @@ public class View extends ConnexusServletBase {
 		String bkeyStr = bkey.getKeyString();
 		String comments = req.getParameter("comments");
 
+        long latitude = 0;
+        long longitude = 0;
+        try {
+            latitude = Long.parseLong(req.getParameter("latitude"));
+        } catch (NumberFormatException e) {
+            latitude = 0;
+        }
+        try {
+            longitude = Long.parseLong(req.getParameter("longitude"));
+        } catch (NumberFormatException e) {
+            longitude = 0;
+        }
+
 		BlobInfo bInfo = blobInfoFactory.loadBlobInfo(bkey);
 
 		Media media = new Media(null, viewingStream.getKey(), bkey, bkeyStr,
@@ -210,6 +223,8 @@ public class View extends ConnexusServletBase {
 		media.setFileName(bInfo.getFilename());
 		media.setSize(bInfo.getSize());
 		media.setComments(comments);
+        media.setLongitude(longitude);
+        media.setLatitude(latitude);
 
 		ofy().save().entities(media).now();
 		viewingStream.incNumberOfMedia();

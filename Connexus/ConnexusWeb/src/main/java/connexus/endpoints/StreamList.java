@@ -238,6 +238,9 @@ public class StreamList {
             returnVal.setUploadUrl(null);
         }
 
+        returnVal.setQueryLimit(limit);
+        returnVal.setQueryOffset(offset);
+
         syncCache.put(cacheKey, returnVal, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
         return returnVal;
     }
@@ -296,6 +299,8 @@ public class StreamList {
         media.setCreationDate(modelMedia.getCreationDate());
         media.setUploader(modelMedia.getUploaderNow().getRealName());
         media.setViews(modelMedia.getViews());
+        media.setLatitude(modelMedia.getLatitude());
+        media.setLongitude(modelMedia.getLongitude());
         return media;
     }
 }
