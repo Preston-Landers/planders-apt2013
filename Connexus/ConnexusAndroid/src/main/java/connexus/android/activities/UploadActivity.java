@@ -2,6 +2,8 @@ package connexus.android.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -26,6 +28,7 @@ import java.util.Date;
 public class UploadActivity extends BaseActivity {
     private static final String TAG = "UploadActivity";
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    private static final int LOAD_IMAGE_ACTIVITY_REQUEST_CODE = 200;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
@@ -150,6 +153,7 @@ public class UploadActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 // Image captured and saved to cameraFileUri specified in the Intent
@@ -157,6 +161,9 @@ public class UploadActivity extends BaseActivity {
                 Toast.makeText(this, "Image saved to:\n" +
                         fileName, Toast.LENGTH_LONG).show();
                 setSelectedUploadUri(cameraFileUri);
+                ImageView imageView = (ImageView) findViewById(R.id.uploadPreviewImageView);
+                imageView.setImageBitmap(BitmapFactory.decodeFile(cameraFileUri.getPath()));
+
             } else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
                 Toast.makeText(UploadActivity.this, "Take Photo was canceled", Toast.LENGTH_SHORT).show();
@@ -164,6 +171,21 @@ public class UploadActivity extends BaseActivity {
                 // Image capture failed, advise user
                 Toast.makeText(UploadActivity.this, "Take Photo failed", Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == LOAD_IMAGE_ACTIVITY_REQUEST_CODE) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            setSelectedUploadUri(selectedImage);
+
+            ImageView imageView = (ImageView) findViewById(R.id.uploadPreviewImageView);
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
     }
 
@@ -188,6 +210,11 @@ public class UploadActivity extends BaseActivity {
     public void chooseFromLibrary(View view) {
         String message = "(Not Implemented Yet)";
         Toast.makeText(UploadActivity.this, message, Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(
+                Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(intent, LOAD_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
     public void uploadNow(View view) {

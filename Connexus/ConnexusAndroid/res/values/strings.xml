@@ -22,8 +22,9 @@
     <string name="use_camera">Use Camera</string>
     <string name="add_a_comment">Add a comment or message</string>
     <string name="upload_btn">Upload Now</string>
-    <string name="uploading_to_stream_name">Uploading to stream:</string>
+    <string name="uploading_to_stream_name">Uploading to:</string>
     <string name="stream_name_upload">(Stream Name)</string>
-    <string name="camera_activity_name">Use Camera</string><string name="take_picture">Take Picture</string>
+    <string name="camera_activity_name">Use Camera</string>
+    <string name="take_picture">Take Picture</string>
 
 </resources>
