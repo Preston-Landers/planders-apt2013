@@ -18,7 +18,8 @@
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
-        <activity android:name=".WelcomeActivity">
+        <activity android:name=".WelcomeActivity"
+                  android:theme="@style/ActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -37,6 +38,7 @@
         </activity>
         <activity
                 android:name=".ImagePagerActivity"
+                android:theme="@style/ActionBar"
                 android:label="@string/ac_name_image_pager" />
         <activity
                 android:name=".ViewStreamActivity"

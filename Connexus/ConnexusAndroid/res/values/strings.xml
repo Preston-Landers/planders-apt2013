@@ -10,7 +10,7 @@
     <string name="welcome_nologin_button">View Streams</string>
     <string name="welcome_not_signed_in">(Not Signed In)</string>
     <string name="my_sub_streams">My Subscriptions</string>
-    <string name="browse_streams_activity_name">Browse Streams</string>
+    <string name="browse_streams_activity_name">Connex.us</string>
     <string name="descr_image">Image</string>
     <string name="ac_name_image_pager">View Images</string>
     <string name="action_search">Search</string>

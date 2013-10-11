@@ -21,17 +21,20 @@ import java.util.List;
 
 public class BrowseStreamsActivity extends Activity {
     private static final String TAG = "BrowseStreamsActivity";
-    private final int queryLimit = 9;
-    private int queryOffset = 0;
+
+    private boolean signedIn = false;
+    GridView gridView;
+
+    // services 'n things
     Streamlist service;
     GoogleAccountCredential credential;
-    private boolean signedIn = false;
-    List<Stream> streamList;
-//    String[] imageUrls;
-//    String[] imageLabels;
-    GridView gridView;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     DisplayImageOptions options;
+
+    // query parameters for the server
+    private final int queryLimit = 9;
+    private int queryOffset = 0;
+    List<Stream> streamList; // query results
 
     /**
      * Called when the activity is first created.

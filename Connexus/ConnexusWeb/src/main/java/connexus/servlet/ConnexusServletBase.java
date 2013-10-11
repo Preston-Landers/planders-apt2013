@@ -74,7 +74,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
         
         // Automatically create a CUser for any Google Users we recognize
         try {
-            cuser = getOrCreateUserRecord(guser, site);
+            cuser = getOrCreateUserRecord(guser, site.getKey());
             if (cuser != null) {
                 req.setAttribute("cuser", cuser);
             }
@@ -84,7 +84,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
         }
     }
 
-    public static CUser getOrCreateUserRecord(User guser, Ref<Site> site) throws UserCreateException {
+    public static CUser getOrCreateUserRecord(User guser, Key<Site> site) throws UserCreateException {
         CUser cuser = null;
         // Automatically create a CUser for any Google Users we recognize
         if (guser != null) {
@@ -98,7 +98,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
                 doSetMemcache = true;
             } else {
                 // System.err.println("user id cache hit : " + guser + " : " + cuserId);
-                Key<CUser>  cuserKey = com.googlecode.objectify.Key.create(site.getKey(), CUser.class, cuserId);
+                Key<CUser>  cuserKey = com.googlecode.objectify.Key.create(site, CUser.class, cuserId);
                 cuser = ofy().load().key(cuserKey).get();
             }
             if (cuser == null) {
@@ -122,7 +122,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
         }
     }
 
-    private static CUser createUser(User guser, Ref<Site> site) throws UserCreateException {
+    private static CUser createUser(User guser, Key<Site> site) throws UserCreateException {
         String accountName = guser.getEmail();
 		String realName = guser.getNickname();
 		
@@ -132,7 +132,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
 //			return null;
 		}
 		
-		CUser thisUser = new CUser(null, site.getKey(), accountName, realName);
+		CUser thisUser = new CUser(null, site, accountName, realName);
 		thisUser.setGuser(guser);
 		ofy().save().entities(thisUser).now();
 

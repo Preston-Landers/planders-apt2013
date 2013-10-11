@@ -10,12 +10,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/upload_button"
-            android:onClick="ViewStreamsButton"
+            android:onClick="UploadButton"
             android:id="@+id/upload_button"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="380dp"
-            style="@android:style/Widget.Holo.Light.Button"/>
+            style="@android:style/Widget.Holo.Light.Button"
+            android:visibility="invisible"/>
 
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/vs_gridview"
@@ -42,7 +43,8 @@
             android:background="@drawable/ic_navigation_previous_item"
             android:layout_alignParentBottom="false"
 
-            android:onClick="GoLeftButton"/>
+            android:onClick="GoLeftButton"
+            android:visibility="invisible"/>
 
     <ImageButton
             android:layout_width="wrap_content"
@@ -52,7 +54,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="380dp"
             android:background="@drawable/ic_navigation_next_item"
-            android:onClick="GoRightButton"/>
+            android:onClick="GoRightButton"
+            android:visibility="invisible"/>
 
     <ProgressBar
             android:layout_width="wrap_content"

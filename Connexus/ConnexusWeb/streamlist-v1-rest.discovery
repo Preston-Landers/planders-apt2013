@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/9thyj6928FzqB-vOO2PxaqRLivI\"",
+ "etag": "\"_SAkL5LfohOjTvNX8memTU9s4HI/M6AWCXxurYczJiUbd68HimLQNWM\"",
  "discoveryVersion": "v1",
  "id": "streamlist:v1",
  "name": "streamlist",
@@ -131,18 +131,6 @@
     }
    }
   },
-  "MediaCollection": {
-   "id": "MediaCollection",
-   "type": "object",
-   "properties": {
-    "items": {
-     "type": "array",
-     "items": {
-      "$ref": "Media"
-     }
-    }
-   }
-  },
   "Stream": {
    "id": "Stream",
    "type": "object",
@@ -230,10 +218,27 @@
     }
    }
   },
-  "UploadUrl": {
-   "id": "UploadUrl",
+  "StreamResult": {
+   "id": "StreamResult",
    "type": "object",
    "properties": {
+    "canUpload": {
+     "type": "boolean"
+    },
+    "mediaList": {
+     "type": "array",
+     "items": {
+      "$ref": "Media"
+     }
+    },
+    "myId": {
+     "type": "string",
+     "format": "int64"
+    },
+    "resultSize": {
+     "type": "integer",
+     "format": "int32"
+    },
     "streamId": {
      "type": "string",
      "format": "int64"
@@ -251,7 +256,7 @@
  "methods": {
   "getMedia": {
    "id": "streamlist.getMedia",
-   "path": "mediacollection/{streamId}/{streamOwnerId}/{queryLimit}/{queryOffset}",
+   "path": "streamresult/{streamId}/{streamOwnerId}/{queryLimit}/{queryOffset}",
    "httpMethod": "GET",
    "parameters": {
     "queryLimit": {
@@ -286,7 +291,7 @@
     "queryOffset"
    ],
    "response": {
-    "$ref": "MediaCollection"
+    "$ref": "StreamResult"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
@@ -334,35 +339,6 @@
    ],
    "response": {
     "$ref": "StreamCollection"
-   },
-   "scopes": [
-    "https://www.googleapis.com/auth/userinfo.email"
-   ]
-  },
-  "getUploadUrl": {
-   "id": "streamlist.getUploadUrl",
-   "path": "uploadurl/{streamId}/{streamOwnerId}",
-   "httpMethod": "GET",
-   "parameters": {
-    "streamId": {
-     "type": "string",
-     "required": true,
-     "format": "int64",
-     "location": "path"
-    },
-    "streamOwnerId": {
-     "type": "string",
-     "required": true,
-     "format": "int64",
-     "location": "path"
-    }
-   },
-   "parameterOrder": [
-    "streamId",
-    "streamOwnerId"
-   ],
-   "response": {
-    "$ref": "UploadUrl"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

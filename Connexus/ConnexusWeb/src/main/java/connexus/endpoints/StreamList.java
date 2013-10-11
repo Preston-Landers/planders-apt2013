@@ -99,7 +99,7 @@ public class StreamList {
         }
         CUser cUser;
         if (user != null) {
-            cUser = ConnexusServletBase.getOrCreateUserRecord(user, site);
+            cUser = ConnexusServletBase.getOrCreateUserRecord(user, site.getKey());
         }
 
         if (limit == null) {
@@ -159,7 +159,7 @@ public class StreamList {
     }
 
     /**
-     * Retrieve a list of Media (images) from a photo Stream. You must provide both
+     * Retrieve a list of Media (images) from a single photo Stream. You must provide both
      * the streamId AND the ownerId.
      *
      * @param user Google User
@@ -170,14 +170,14 @@ public class StreamList {
      * @return a list of media objects matching the search criteria.
      */
     @ApiMethod(name = "getMedia", httpMethod = "get")
-    public List<Media> getMedia(User user,
+    public StreamResult getMedia(User user,
                                 @Named("streamId") Long streamId,
                                 @Named("streamOwnerId") Long streamOwnerId,
                                 @Named("queryLimit") Integer limit,
                                 @Named("queryOffset") Integer offset) {
 
         MediaCacheKey cacheKey = new MediaCacheKey(streamId, streamOwnerId, limit, offset);
-        List<Media> returnVal = (List<Media>) syncCache.get(cacheKey);
+        StreamResult returnVal = (StreamResult) syncCache.get(cacheKey);
         if (returnVal != null) {
             return returnVal;
         }
@@ -190,6 +190,13 @@ public class StreamList {
             // Should probably be logging something somewhere...
             throw new IllegalArgumentException("Unable to load site");
         }
+        CUser cUser;
+        if (user != null) {
+            cUser = ConnexusServletBase.getOrCreateUserRecord(user, site.getKey());
+        } else {
+            cUser = null;
+        }
+
         CUser owner = CUser.getById(streamOwnerId, site.getKey());
         if (owner == null) {
             throw new IllegalArgumentException("Unable to load user");
@@ -199,7 +206,38 @@ public class StreamList {
         if (stream == null) {
             throw new IllegalArgumentException("Unable to load stream");
         }
-        returnVal = getMediaHelper(stream, limit, offset);
+        returnVal = new StreamResult();
+        List<Media> mediaList = getMediaHelper(stream, limit, offset);
+        returnVal.setMediaList(mediaList);
+        if (mediaList != null) {
+            returnVal.setResultSize(mediaList.size());
+        }
+        else {
+            returnVal.setResultSize(0);
+        }
+        returnVal.setStreamId(streamId);
+        returnVal.setStreamOwnerId(streamOwnerId);
+        if (cUser != null) {
+            returnVal.setMyId(cUser.getId());
+        } else {
+            returnVal.setMyId(null);
+        }
+        boolean canUpload = false;
+        if (cUser != null) {
+            // Currently, you can only upload if you own the stream
+            if (cUser.getId().equals(owner.getId())) {
+                canUpload = true;
+            }
+        }
+        returnVal.setCanUpload(canUpload);
+        if (canUpload) {
+            final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+            // TODO: do I need a different destination?
+            returnVal.setUploadUrl(blobstoreService.createUploadUrl("/view"));
+        } else {
+            returnVal.setUploadUrl(null);
+        }
+
         syncCache.put(cacheKey, returnVal, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
         return returnVal;
     }
@@ -222,31 +260,6 @@ public class StreamList {
             mediaList.add(endpointMedia);
         }
         return mediaList;
-    }
-
-    /**
-     * Obtain a one-time-use upload URL for images.
-     * TODO: document how to upload
-     *
-     * @param user Google User account (automatic)
-     * @param streamId ID of stream to upload to
-     * @param streamOwnerId ID of owner of target stream
-     * @return an object which contains the form target for uploading
-     */
-    @ApiMethod(name = "getUploadUrl", httpMethod = "get")
-    public UploadUrl getUploadUrl(User user,
-                                  @Named("streamId") Long streamId,
-                                  @Named("streamOwnerId") Long streamOwnerId) {
-        if (user == null) {
-            throw new IllegalArgumentException("You must be authenticated to call this method.");
-        }
-        UploadUrl uploadUrl = new UploadUrl();
-        final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-        // TODO: do I need a different destination?
-        uploadUrl.setUploadUrl(blobstoreService.createUploadUrl("/view"));
-        uploadUrl.setStreamId(streamId);
-        uploadUrl.setStreamOwnerId(streamOwnerId);
-        return uploadUrl;
     }
 
     protected static Stream convertStreamToAPI(connexus.model.Stream modelStream) {

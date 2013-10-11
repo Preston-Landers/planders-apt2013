@@ -11,9 +11,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.appspot.connexus_apt.streamlist.Streamlist;
 import com.appspot.connexus_apt.streamlist.model.Media;
-import com.appspot.connexus_apt.streamlist.model.Stream;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.appspot.connexus_apt.streamlist.model.StreamResult;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -29,7 +27,7 @@ public class ViewStreamActivity extends Activity {
     String accountName;
     GoogleAccountCredential credential;
     private boolean signedIn = false;
-    List<Media> mediaList;
+    StreamResult streamResult;
     GridView gridView;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     DisplayImageOptions options;
@@ -98,14 +96,21 @@ public class ViewStreamActivity extends Activity {
         } else {
             browseLeftButton.setVisibility(View.INVISIBLE);
        }
-        if (mediaList != null) {
-            if (mediaList.size() < queryLimit) {
+        if (streamResult != null) {
+            if (streamResult.getResultSize() < queryLimit) {
                 browseRightButton.setVisibility(View.INVISIBLE);
             } else {
                 browseRightButton.setVisibility(View.VISIBLE);
             }
+            Button uploadButton = (Button) findViewById(R.id.upload_button);
+            if (streamResult.getCanUpload()) {
+                uploadButton.setVisibility(View.VISIBLE);
+            } else {
+                uploadButton.setVisibility(View.INVISIBLE);
+            }
 
         }
+
 
     }
 
@@ -144,9 +149,12 @@ public class ViewStreamActivity extends Activity {
         new ViewStreamTask().execute();
     }
 
+    public void UploadButton(View view) {
 
-    private void loadImages(List<Media> mediaList) {
-        this.mediaList = mediaList;
+    }
+
+    private void loadImages(StreamResult streamResult) {
+        this.streamResult = streamResult;
         options = new DisplayImageOptions.Builder()
                 .showStubImage(R.drawable.ic_stub)
                 .showImageForEmptyUri(R.drawable.ic_empty)
@@ -176,6 +184,11 @@ public class ViewStreamActivity extends Activity {
 
     private void startImagePagerActivity(int position) {
         Intent intent = new Intent(this, ImagePagerActivity.class);
+        if (streamResult == null) {
+            Log.e(TAG, "No media loaded, can't start image pager");
+            return;
+        }
+        List<Media> mediaList = streamResult.getMediaList();
         if (mediaList == null) {
             Log.e(TAG, "No media loaded, can't start image pager");
             return;
@@ -197,7 +210,8 @@ public class ViewStreamActivity extends Activity {
 
     private class ViewStreamTask extends AsyncTask<Void, Void, Void> {
         private boolean querySuccess = false;
-        private List<Media> mediaList;
+        private StreamResult streamResult;
+
         @Override
         protected Void doInBackground(Void... params) {
             int limit = queryLimit;
@@ -209,9 +223,8 @@ public class ViewStreamActivity extends Activity {
             String rv = "<No result>";
             try {
                 service = EndpointService.getStreamlistService(creds);
-                mediaList = service.getMedia(streamId, streamOwnerId, limit, offset)
-                        .execute()
-                        .getItems();
+                streamResult = service.getMedia(streamId, streamOwnerId, limit, offset)
+                        .execute();
 
                 querySuccess = true;
             } catch (GoogleAuthIOException e) {
@@ -226,8 +239,8 @@ public class ViewStreamActivity extends Activity {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.viewstream_progressBar);
             progressBar.setVisibility(View.INVISIBLE);
             if (querySuccess) {
-                if (mediaList != null) {
-                    loadImages(mediaList);
+                if (streamResult != null) {
+                    loadImages(streamResult);
                 }
             }
 
@@ -243,7 +256,7 @@ public class ViewStreamActivity extends Activity {
     public class ImageAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return mediaList.size();
+            return streamResult.getResultSize();
         }
 
         @Override
@@ -268,6 +281,7 @@ public class ViewStreamActivity extends Activity {
                 imageView = (ImageView) imgContainerRL.getChildAt(0);
             }
             TextView textView = (TextView) imgContainerRL.getChildAt(1);
+            List<Media> mediaList = streamResult.getMediaList();
             Media media = mediaList.get(position);
 
             textView.setText(media.getComments());
