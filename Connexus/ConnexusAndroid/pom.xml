@@ -44,6 +44,13 @@
             <artifactId>universal-image-loader</artifactId>
             <version>1.8.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.chrisbanes.photoview</groupId>
+            <artifactId>library</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
         <dependency>
             <groupId>android.support</groupId>
             <artifactId>compatibility-v4</artifactId>

@@ -1,12 +1,9 @@
 package connexus.android;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,6 +19,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 
 /**
@@ -36,6 +34,7 @@ public class ImagePagerActivity extends BaseActivity {
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
     ViewPager pager;
+    PhotoViewAttacher mAttacher;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +104,7 @@ public class ImagePagerActivity extends BaseActivity {
         public Object instantiateItem(ViewGroup view, int position) {
             View imageLayout = inflater.inflate(R.layout.item_pager_image, view, false);
             ImageView imageView = (ImageView) imageLayout.findViewById(R.id.pager_image);
+            mAttacher = new PhotoViewAttacher(imageView);
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
             TextView textView = (TextView) imageLayout.findViewById(R.id.pagerimage_text);
             textView.setText(imageLabels[position]);
