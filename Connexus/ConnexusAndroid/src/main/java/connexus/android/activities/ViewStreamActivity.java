@@ -28,18 +28,20 @@ public class ViewStreamActivity extends Activity {
     private static final String TAG = "ViewStreamsActivity";
     private final int queryLimit = 9;
     private int queryOffset = 0;
-    Streamlist service;
-    String accountName;
     GoogleAccountCredential credential;
     private boolean signedIn = false;
+
+    Streamlist service;
+    String accountName;
     StreamResult streamResult;
+    Long streamId;
+    Long streamOwnerId;
+    String streamName;
+
     GridView gridView;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     DisplayImageOptions options;
 
-    Long streamId;
-    Long streamOwnerId;
-    String streamName;
 
     /**
      * Called when the activity is first created.
@@ -159,6 +161,8 @@ public class ViewStreamActivity extends Activity {
         intent.putExtra(Config.STREAM_NAME, streamName);
         intent.putExtra(Config.STREAM_ID, streamId);
         intent.putExtra(Config.STREAM_OWNER_ID, streamOwnerId);
+
+        intent.putExtra(Config.STREAM_UPLOAD_URL, streamResult.getUploadUrl());
         startActivity(intent);
     }
 

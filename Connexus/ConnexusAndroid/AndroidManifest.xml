@@ -68,16 +68,7 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".ViewStreamsActivity"/>
         </activity>
-        <activity
-                android:name=".activities.CameraActivity"
-                android:theme="@style/ActionBar"
-                android:screenOrientation="landscape"
-                android:label="@string/camera_activity_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+
 
     </application>
 

@@ -5,6 +5,13 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/upload_file_name"
+            android:layout_marginTop="10dp"/>
+
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,4 +74,5 @@
                 android:layout_marginTop="100dp"
                 android:enabled="true"/>
     </RelativeLayout>
+
 </LinearLayout>

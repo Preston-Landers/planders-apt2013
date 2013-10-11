@@ -24,4 +24,5 @@ public class Config {
     public static final String IMAGES = "connexus.android.IMAGES";
     public static final String IMAGE_LABELS = "connexus.android.IMAGE_LABELS";
     public static final String IMAGE_POSITION = "connexus.android.IMAGE_POSITION";
+    public static final String STREAM_UPLOAD_URL = "connexus.android.STREAM_UPLOAD_URL";
 }
