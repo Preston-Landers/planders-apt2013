@@ -1,4 +1,4 @@
-package connexus.android;
+package connexus.android.activities;
 
 import android.app.Activity;
 import android.view.MenuItem;

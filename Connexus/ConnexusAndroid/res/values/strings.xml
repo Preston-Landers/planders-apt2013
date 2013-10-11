@@ -24,6 +24,6 @@
     <string name="upload_btn">Upload Now</string>
     <string name="uploading_to_stream_name">Uploading to stream:</string>
     <string name="stream_name_upload">(Stream Name)</string>
-    <string name="camera_activity_name">Use Camera</string>
+    <string name="camera_activity_name">Use Camera</string><string name="take_picture">Take Picture</string>
 
 </resources>

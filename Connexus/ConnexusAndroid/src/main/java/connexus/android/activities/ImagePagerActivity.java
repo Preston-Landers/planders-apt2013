@@ -1,4 +1,4 @@
-package connexus.android;
+package connexus.android.activities;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -19,6 +19,8 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import connexus.android.Config;
+import connexus.android.R;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 

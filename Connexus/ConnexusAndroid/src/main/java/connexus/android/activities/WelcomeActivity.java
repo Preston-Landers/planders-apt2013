@@ -1,4 +1,4 @@
-package connexus.android;
+package connexus.android.activities;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import connexus.android.Account;
+import connexus.android.Config;
+import connexus.android.R;
 
 public class WelcomeActivity extends Activity {
     private static final String TAG = "WelcomeActivity";

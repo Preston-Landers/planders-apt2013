@@ -1,4 +1,4 @@
-package connexus.android;
+package connexus.android.activities;
 
 import android.content.Intent;
 import android.os.Build;
@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.*;
 import com.appspot.connexus_apt.streamlist.Streamlist;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import connexus.android.Account;
+import connexus.android.Config;
+import connexus.android.R;
 
 public class UploadActivity extends BaseActivity {
     private static final String TAG = "UploadActivity";
