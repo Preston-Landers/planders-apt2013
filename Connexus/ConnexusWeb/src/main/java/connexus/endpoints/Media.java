@@ -19,8 +19,8 @@ public class Media implements Serializable {
     Date creationDate;
     String uploader;
     long views;
-    long longitude;
-    long latitude;
+    double longitude;
+    double latitude;
 
     int queryOffset;
     int queryLimit;
@@ -146,19 +146,19 @@ public class Media implements Serializable {
         this.queryIndex = queryIndex;
     }
 
-    public long getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 }

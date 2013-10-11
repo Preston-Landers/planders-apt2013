@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/Gmn44PV8i5Dj8t11rsA4IbEaGXs\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/R5sZLpaLapes-lvvkp6hGvXUiEc\"",
  "discoveryVersion": "v1",
  "id": "streamlist:v1",
  "name": "streamlist",
@@ -90,12 +90,12 @@
      "format": "int64"
     },
     "latitude": {
-     "type": "string",
-     "format": "int64"
+     "type": "number",
+     "format": "double"
     },
     "longitude": {
-     "type": "string",
-     "format": "int64"
+     "type": "number",
+     "format": "double"
     },
     "mimeType": {
      "type": "string"

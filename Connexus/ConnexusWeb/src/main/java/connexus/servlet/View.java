@@ -202,15 +202,15 @@ public class View extends ConnexusServletBase {
 		String bkeyStr = bkey.getKeyString();
 		String comments = req.getParameter("comments");
 
-        long latitude = 0;
-        long longitude = 0;
+        double latitude = 0;
+        double longitude = 0;
         try {
-            latitude = Long.parseLong(req.getParameter("latitude"));
+            latitude = Double.parseDouble(req.getParameter("latitude"));
         } catch (NumberFormatException e) {
             latitude = 0;
         }
         try {
-            longitude = Long.parseLong(req.getParameter("longitude"));
+            longitude = Double.parseDouble(req.getParameter("longitude"));
         } catch (NumberFormatException e) {
             longitude = 0;
         }
