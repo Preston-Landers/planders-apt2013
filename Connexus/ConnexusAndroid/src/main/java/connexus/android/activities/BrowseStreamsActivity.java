@@ -35,8 +35,11 @@ public class BrowseStreamsActivity extends BaseActivity {
     DisplayImageOptions options;
 
     // query parameters for the server
-    private final int queryLimit = 9;
+    private final static int defaultQueryLimit = 9;
+    private int queryLimit = defaultQueryLimit;
     private int queryOffset = 0;
+    private boolean showMySubs = false;
+    private String searchTerm = null;
     List<Stream> streamList; // query results
 
     /**
@@ -53,6 +56,16 @@ public class BrowseStreamsActivity extends BaseActivity {
 
         Intent intent = getIntent();
         queryOffset = intent.getIntExtra(Config.NAV_OFFSET, 0);
+        queryLimit = intent.getIntExtra(Config.NAV_LIMIT, defaultQueryLimit);
+        showMySubs = intent.getBooleanExtra(Config.SHOW_MY_SUBS, false);
+        searchTerm = intent.getStringExtra(Config.SEARCH_TERM);
+
+        // Blank out the status text
+        setStatusText("");
+
+        if (showMySubs) {
+            setTitle("My Subscriptions");
+        }
 
         // Make sure we're running on Honeycomb or higher to use ActionBar APIs
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -72,7 +85,7 @@ public class BrowseStreamsActivity extends BaseActivity {
     }
 
     /**
-     * Figure out if we should be showing each nav left/right button
+     * Figure out correct state of buttons
      */
     private void checkNavButtonState() {
         ImageButton browseLeftButton = (ImageButton) findViewById(R.id.browseLeftButton);
@@ -93,6 +106,15 @@ public class BrowseStreamsActivity extends BaseActivity {
 
         }
 
+        // Hide the "show my subs" button if we're there.
+        Button showMySubsButton = (Button) findViewById(R.id.mysubs_button);
+        showMySubsButton.setVisibility(showMySubs ? View.INVISIBLE : View.VISIBLE);
+
+    }
+
+    private void setStatusText(String message) {
+        TextView statusTextView = (TextView) findViewById(R.id.browse_status_textview);
+        statusTextView.setText(message);
     }
 
     @Override
@@ -109,10 +131,10 @@ public class BrowseStreamsActivity extends BaseActivity {
     }
 
     // When you click the View Streams button
-    public void ViewStreamsButton(View view) {
-        Intent intent = new Intent(this, BrowseStreamsActivity.class);
-        startActivity(intent);
-     }
+//    public void ViewStreamsButton(View view) {
+//        Intent intent = new Intent(this, BrowseStreamsActivity.class);
+//        startActivity(intent);
+//     }
 
     public void GoRightButton(View view) {
         int newOffset = queryOffset + queryLimit;
@@ -130,6 +152,14 @@ public class BrowseStreamsActivity extends BaseActivity {
 
     }
 
+    public void MySubsButton(View view) {
+        Intent intent = new Intent(this, BrowseStreamsActivity.class);
+        intent.putExtra(Config.SHOW_MY_SUBS, true);
+        intent.putExtra(Config.NAV_OFFSET, 0);
+        intent.putExtra(Config.NAV_LIMIT, queryLimit);
+
+        startActivity(intent);
+    }
 
     private void loadImages(List<Stream> streamList) {
         this.streamList = streamList;
@@ -143,6 +173,10 @@ public class BrowseStreamsActivity extends BaseActivity {
                 .build();
 
         checkNavButtonState();
+
+        if (searchTerm != null) {
+            setStatusText(streamList.size() + " search results for: " + searchTerm);
+        }
 
         gridView = (GridView) findViewById(R.id.gridview);
         ((GridView) gridView).setAdapter(new ImageAdapter());
@@ -189,8 +223,14 @@ public class BrowseStreamsActivity extends BaseActivity {
             String rv = "<No result>";
             try {
                 service = EndpointService.getStreamlistService(creds);
-                streamList = service.getStreams(limit, offset)
-                        .setQuery("test")
+                Streamlist.GetStreams getStreams = service.getStreams(limit, offset);
+
+                if (searchTerm != null) {
+                    getStreams.setQuery(searchTerm);
+                }
+                getStreams.setMySubs(showMySubs);
+
+                streamList = getStreams
                         .execute()
                         .getItems();
 

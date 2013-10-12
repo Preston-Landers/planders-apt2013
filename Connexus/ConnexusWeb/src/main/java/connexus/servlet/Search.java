@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.CharMatcher;
 
+import com.googlecode.objectify.Key;
 import connexus.Config;
+import connexus.model.Site;
 import connexus.model.Stream;
 
 public class Search extends ConnexusServletBase {
@@ -57,19 +59,18 @@ public class Search extends ConnexusServletBase {
 		req.setAttribute("showSearchResults", true);
 		req.setAttribute("q", queryTerm);
 		
-		// some dummy results
-		// No stream selected... let them browse all streams.
-		List<Stream> searchResults = performStreamSearch(queryTerm);
+        // random hardcoded limit for web since no paging
+		List<Stream> searchResults = performStreamSearch(queryTerm, site.getKey(), 40, 0);
 		req.setAttribute("searchResultsList", searchResults);
 
 	}
 
-	public List<Stream> performStreamSearch(String queryTerm) {
+	public static List<Stream> performStreamSearch(String queryTerm, Key<Site> siteKey, int limit, int offset) {
 		List<Stream> rv = new ArrayList<Stream>();
 		int hits = 0;
-		int max = Config.getMaxSearchResults();
-		for (Stream stream : Stream.getAllStreams(site.getKey())) {
-			if (hits > max) {
+		// int max = Config.getMaxSearchResults();
+		for (Stream stream : Stream.getAllStreams(siteKey)) {
+			if (hits > limit) {
 				break;
 			}
 			boolean match = false;
@@ -90,7 +91,7 @@ public class Search extends ConnexusServletBase {
 			}
 			// Now check the media comments??
 			
-			if (match) {
+			if (match && hits >= offset) {
 				rv.add(stream);
 				hits++;
 			}
@@ -99,7 +100,7 @@ public class Search extends ConnexusServletBase {
 		return rv;
 	}
 	
-	public boolean matchString(String queryTerm, String test) {
+	public static boolean matchString(String queryTerm, String test) {
 		for (String term : queryTerm.split("\\s")) {
 			Pattern pattern = Pattern.compile(term, Pattern.CASE_INSENSITIVE);
 			Matcher matcher = pattern.matcher(test);

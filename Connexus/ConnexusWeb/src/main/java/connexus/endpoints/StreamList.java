@@ -14,6 +14,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.appengine.api.users.User;
 import connexus.model.CUser;
 import connexus.model.Site;
+import connexus.model.Subscription;
 import connexus.servlet.ConnexusServletBase;
 
 import javax.annotation.Nullable;
@@ -50,13 +51,15 @@ public class StreamList {
         Double latitude;
         Double longitude;
         String query;
+        Boolean mySubs;
 
-        StreamCacheKey(Integer limit, Integer offset, Double latitude, Double longitude, String query) {
+        StreamCacheKey(Integer limit, Integer offset, Double latitude, Double longitude, String query, Boolean mySubs) {
             this.limit = limit;
             this.offset = offset;
             this.latitude = latitude;
             this.longitude = longitude;
             this.query = query;
+            this.mySubs = mySubs;
         }
     }
 
@@ -66,6 +69,8 @@ public class StreamList {
      * term query, and "my subscription" features are all mutually exclusive. Each Stream is
      * returned with a mediaList object giving the first 16 media objects of the stream to save
      * you the separate call to getMedia.
+     *
+     * TODO: Handle lat,long!
      *
      * @param user Google Account of the requesting user
      * @param limit Number of results to return. Max of 32.
@@ -84,22 +89,36 @@ public class StreamList {
                                    @Named("longitude") @Nullable Double longitude,
                                    @Named("query") @Nullable String query,
                                    @Named("mySubs") @Nullable Boolean mySubs) {
-        StreamCacheKey cacheKey;
+        // System.err.println("-> getStreams limit " + limit + " offset: " + offset );
+        if (mySubs == null) {
+            mySubs = new Boolean(false);
+        }
+        if (latitude == null) {
+            latitude = new Double(0.0);
+        }
+        if (longitude == null) {
+            longitude = new Double(0.0);
+        }
+
+        StreamCacheKey cacheKey = new StreamCacheKey(limit, offset, latitude, longitude, query, mySubs);
+
         if (Config.API_CACHE_TIME_SEC >= 0) {
-            cacheKey = new StreamCacheKey(limit, offset, latitude, longitude, query);
             List<Stream> cacheHit = (List<Stream>) syncCache.get(cacheKey);
             if (cacheHit != null) {
+                // System.err.println("-> getStreams cacheHit");
                 return cacheHit;
             }
         }
+
 
         List<Stream> streams = new ArrayList<Stream>();
 
         Ref<Site> site = ofy().load().type(Site.class).id(Config.siteId);
         if (site == null) {
+            System.err.println("-> getStreams can't load site");
             throw new IllegalArgumentException("Can't load site object.");
         }
-        CUser cUser;
+        CUser cUser = null;
         if (user != null) {
             cUser = ConnexusServletBase.getOrCreateUserRecord(user, site.getKey());
         }
@@ -116,7 +135,41 @@ public class StreamList {
         if (offset == null) {
             offset = 0;
         }
-        List<connexus.model.Stream> modelStreams = connexus.model.Stream.getAllStreams(site.getKey(), limit, offset);
+
+        List<connexus.model.Stream> modelStreams;
+        if (mySubs) {
+            // System.err.println("-> getStreams using mysubs");
+            // TODO: move some of this into subscription class
+            modelStreams = new ArrayList<connexus.model.Stream>();
+            int i = 0;
+            if (cUser != null) {
+                for (Subscription sub : Subscription.getSubscriptionsForUser(cUser.getKey())) {
+                    connexus.model.Stream stream = ofy().load().key(sub.getStream()).get();
+                    // System.err.println("-> getStreams sub " + Integer.toString(i));
+                    if (stream != null) {
+                        if (i >= offset && i <= limit) {
+                            modelStreams.add(stream);
+                        }
+                    }
+                    i++;
+                }
+                // System.err.println("-> getStreams using mysubs " + modelStreams.size() + " cUser " + cUser.getId() + " gUser: " + user);
+
+            } else {
+                System.err.println("-> getStreams error: asked for subs but not logged in!");
+            }
+
+        }
+        else if (query != null) {
+            modelStreams = connexus.servlet.Search.performStreamSearch(query, site.getKey(), limit, offset);
+            // System.err.println("-> getStreams using search " + modelStreams.size() + " results for query " + query);
+        }
+        else {
+            modelStreams = connexus.model.Stream.getAllStreams(site.getKey(), limit, offset);
+            // System.err.println("-> getStreams general " + modelStreams.size());
+        }
+
+
 
         int streamCount = 0;
         for (connexus.model.Stream stream : modelStreams) {
@@ -141,10 +194,10 @@ public class StreamList {
 
         }
 
-        // TODO: Handle query, latlong, mysubs!
         if (Config.API_CACHE_TIME_SEC >= 0) {
             syncCache.put(cacheKey, streams, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
         }
+        // System.err.println("-> getStreams return " + streams.size() );
         return streams;
     }
 

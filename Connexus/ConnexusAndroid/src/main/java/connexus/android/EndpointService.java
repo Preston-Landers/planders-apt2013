@@ -9,7 +9,8 @@ public class EndpointService {
     public static Streamlist getStreamlistService(GoogleAccountCredential creds) {
         Streamlist.Builder builder = new Streamlist.Builder(
                 AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), creds);
-        // builder.setRootUrl("http://192.168.56.1:8088/_ah/api/"); // for localhost development
+        // builder.setRootUrl("http://192.168.56.1:8088/_ah/api/"); // for localhost development (genymotion)
+        // builder.setRootUrl("http://10.0.2.2:8088/_ah/api/"); // for localhost development (AVD)
         Streamlist service = builder.build();
         return service;
     }

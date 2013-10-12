@@ -18,6 +18,8 @@ public class Config {
     // Stuff for intents, could move somewhere else
     public static final String NAV_OFFSET = "connexus.android.NAV_OFFSET";
     public static final String NAV_LIMIT = "connexus.android.NAV_LIMIT";
+    public static final String SHOW_MY_SUBS = "connexus.android.SHOW_MY_SUBS";
+    public static final String SEARCH_TERM = "connexus.android.SEARCH_TERM";
     public static final String STREAM_NAME = "connexus.android.STREAM_NAME";
     public static final String STREAM_ID = "connexus.android.STREAM_ID";
     public static final String STREAM_OWNER_ID = "connexus.android.STREAM_OWNER_ID";

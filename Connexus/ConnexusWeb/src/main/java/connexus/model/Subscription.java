@@ -48,7 +48,7 @@ public class Subscription implements Comparable<Subscription> {
 		creationDate = new Date();
 	}
 	
-	public static List<Subscription> getSubscriptionsForUser(CUser user) {
+	public static List<Subscription> getSubscriptionsForUser(Key<CUser> user) {
 		if (user == null) {
 			return new ArrayList<Subscription>();
 		}

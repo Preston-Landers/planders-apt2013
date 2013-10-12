@@ -88,7 +88,7 @@ public class Subscribe extends ConnexusServletBase {
 		}
 		
 		Subscription thisSub = null;
-		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser);
+		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser.getKey());
 		for (Subscription sub : mySubs) {
 			Stream subStream = ofy().load().key(sub.getStream()).get();
 			if (subStream == viewingStreamHandle.getStream()) {
@@ -125,7 +125,7 @@ public class Subscribe extends ConnexusServletBase {
 	
 	public void doSubscribe(HttpServletRequest req, HttpServletResponse resp,
 			StreamHandle viewingStreamHandle) throws IOException {
-		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser);
+		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser.getKey());
 		for (Subscription sub : mySubs) {
 			Stream subStream = ofy().load().key(sub.getStream()).get();
 			if (subStream == viewingStreamHandle.getStream()) {
