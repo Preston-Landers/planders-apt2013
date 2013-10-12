@@ -24,7 +24,7 @@ public class Config {
 
     // Maximum search results to show
     public static final int maxSearchResults = 5;
-    public static final int API_CACHE_TIME_SEC = 360; // # of seconds cache is good for in API calls
+    public static final int API_CACHE_TIME_SEC = 10; // # of seconds cache is good for in API calls
 
     public static int getMaxSearchResults() {
     	return maxSearchResults;
@@ -50,7 +50,6 @@ public class Config {
 			
 			return builder.toString();
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace(System.err);
 		}
 		return uri;

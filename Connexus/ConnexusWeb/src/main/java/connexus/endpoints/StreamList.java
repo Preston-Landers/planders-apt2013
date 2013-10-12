@@ -84,11 +84,13 @@ public class StreamList {
                                    @Named("longitude") @Nullable Double longitude,
                                    @Named("query") @Nullable String query,
                                    @Named("mySubs") @Nullable Boolean mySubs) {
-
-        StreamCacheKey cacheKey = new StreamCacheKey(limit, offset, latitude, longitude, query);
-        List<Stream> cacheHit = (List<Stream>) syncCache.get(cacheKey);
-        if (cacheHit != null) {
-            return cacheHit;
+        StreamCacheKey cacheKey;
+        if (Config.API_CACHE_TIME_SEC >= 0) {
+            cacheKey = new StreamCacheKey(limit, offset, latitude, longitude, query);
+            List<Stream> cacheHit = (List<Stream>) syncCache.get(cacheKey);
+            if (cacheHit != null) {
+                return cacheHit;
+            }
         }
 
         List<Stream> streams = new ArrayList<Stream>();
@@ -140,7 +142,9 @@ public class StreamList {
         }
 
         // TODO: Handle query, latlong, mysubs!
-        syncCache.put(cacheKey, streams, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
+        if (Config.API_CACHE_TIME_SEC >= 0) {
+            syncCache.put(cacheKey, streams, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
+        }
         return streams;
     }
 
@@ -176,10 +180,14 @@ public class StreamList {
                                 @Named("queryLimit") Integer limit,
                                 @Named("queryOffset") Integer offset) {
 
-        MediaCacheKey cacheKey = new MediaCacheKey(streamId, streamOwnerId, limit, offset);
-        StreamResult returnVal = (StreamResult) syncCache.get(cacheKey);
-        if (returnVal != null) {
-            return returnVal;
+        StreamResult returnVal;
+        MediaCacheKey cacheKey;
+        if (Config.API_CACHE_TIME_SEC >= 0) {
+            cacheKey = new MediaCacheKey(streamId, streamOwnerId, limit, offset);
+            returnVal = (StreamResult) syncCache.get(cacheKey);
+            if (returnVal != null) {
+                return returnVal;
+            }
         }
 
         if (limit > 32) {
@@ -229,10 +237,13 @@ public class StreamList {
                 canUpload = true;
             }
         }
+
+        // for now, letting anyone upload to any stream thru mobile for funsies
+        canUpload = true;
+
         returnVal.setCanUpload(canUpload);
         if (canUpload) {
             final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-            // TODO: do I need a different destination?
             returnVal.setUploadUrl(blobstoreService.createUploadUrl("/view"));
         } else {
             returnVal.setUploadUrl(null);
@@ -241,7 +252,9 @@ public class StreamList {
         returnVal.setQueryLimit(limit);
         returnVal.setQueryOffset(offset);
 
-        syncCache.put(cacheKey, returnVal, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
+        if (Config.API_CACHE_TIME_SEC >= 0) {
+            syncCache.put(cacheKey, returnVal, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
+        }
         return returnVal;
     }
 
@@ -299,8 +312,20 @@ public class StreamList {
         media.setCreationDate(modelMedia.getCreationDate());
         media.setUploader(modelMedia.getUploaderNow().getRealName());
         media.setViews(modelMedia.getViews());
-        media.setLatitude(modelMedia.getLatitude());
-        media.setLongitude(modelMedia.getLongitude());
+
+        Double lLat = modelMedia.getLatitude();
+        Double lLong = modelMedia.getLongitude();
+        double p_lat = 0.0;
+        double p_long = 0.0;
+        if (lLat != null) {
+            p_lat = lLat.doubleValue();
+        }
+        if (lLong != null) {
+            p_long = lLong.doubleValue();
+        }
+
+        media.setLatitude(p_lat);
+        media.setLongitude(p_long);
         return media;
     }
 }

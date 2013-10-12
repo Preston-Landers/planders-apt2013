@@ -21,6 +21,7 @@ public class Config {
     public static final String STREAM_NAME = "connexus.android.STREAM_NAME";
     public static final String STREAM_ID = "connexus.android.STREAM_ID";
     public static final String STREAM_OWNER_ID = "connexus.android.STREAM_OWNER_ID";
+    public static final String MY_ID = "connexus.android.MY_ID";
     public static final String IMAGES = "connexus.android.IMAGES";
     public static final String IMAGE_LABELS = "connexus.android.IMAGE_LABELS";
     public static final String IMAGE_POSITION = "connexus.android.IMAGE_POSITION";

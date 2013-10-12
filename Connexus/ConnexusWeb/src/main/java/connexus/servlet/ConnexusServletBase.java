@@ -74,9 +74,11 @@ public abstract class ConnexusServletBase extends HttpServlet {
         
         // Automatically create a CUser for any Google Users we recognize
         try {
-            cuser = getOrCreateUserRecord(guser, site.getKey());
-            if (cuser != null) {
-                req.setAttribute("cuser", cuser);
+            if (guser != null) {
+                cuser = getOrCreateUserRecord(guser, site.getKey());
+                if (cuser != null) {
+                    req.setAttribute("cuser", cuser);
+                }
             }
         } catch (UserCreateException e) {
             e.printStackTrace(System.err);

@@ -183,18 +183,33 @@ public class View extends ConnexusServletBase {
 	@SuppressWarnings("deprecation")
 	private void uploadMedia(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		
+
+        // Can bypass the normal requirement to be logged in in order to upload
+        // by providing the 'uu' parameter with your cuser ID.
+        String uploadUserId = req.getParameter("uu");
+
 		if (viewingStream == null) {
+            System.err.println("UPLOAD ERROR: viewingStream == null");
 			throw new ServletException("Internal error in upload.");			
 		}
-		if (guser == null) {
-			throw new ServletException("Internal error in upload: not logged in.");			
+		if (guser == null && uploadUserId == null) {
+            System.err.println("UPLOAD ERROR: not logged in");
+			throw new ServletException("Internal error in upload: not logged in.");
 		}
+        if (guser == null) {
+            Long uploadUID = Long.parseLong(uploadUserId);
+            cuser = CUser.getById(uploadUID, site.getKey());
+            if (cuser == null) {
+                System.err.println("UPLOAD ERROR: not logged in");
+                throw new ServletException("Internal error in upload: not logged in.");
+            }
+        }
 
 		Map<String, List<BlobKey>> uploadMap = blobstoreService.getUploads(req);
 
 		List<BlobKey> blobKeyList = uploadMap.get("media");
 		if (blobKeyList == null) {
+            System.err.println("UPLOAD ERROR: can't extract blobkey from blobstore");
 			alertError(req, "I'm sorry, there was a problem with your upload.");
 			return;
 		}
@@ -206,12 +221,12 @@ public class View extends ConnexusServletBase {
         double longitude = 0;
         try {
             latitude = Double.parseDouble(req.getParameter("latitude"));
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             latitude = 0;
         }
         try {
             longitude = Double.parseDouble(req.getParameter("longitude"));
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             longitude = 0;
         }
 
@@ -233,9 +248,10 @@ public class View extends ConnexusServletBase {
 		if (viewingStream.getCoverURL() == null || viewingStream.getCoverURL().length() == 0) {
 			ImagesService imagesService = ImagesServiceFactory.getImagesService();
 			try {
-			viewingStream.setCoverURL(imagesService.getServingUrl(bkey));
+    			viewingStream.setCoverURL(imagesService.getServingUrl(bkey));
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace(System.err);
+                System.err.println("UPLOAD ERROR: can't get media serving url");
+                e.printStackTrace(System.err);
 			}
 		}
 		viewingStream.save();

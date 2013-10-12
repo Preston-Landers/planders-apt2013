@@ -24,8 +24,9 @@ import connexus.android.R;
 
 import java.util.List;
 
-public class ViewStreamActivity extends Activity {
+public class ViewStreamActivity extends BaseActivity {
     private static final String TAG = "ViewStreamsActivity";
+    private static final int DO_UPLOAD_ACTIVITY_REQUEST_CODE = 100;
     private final int queryLimit = 9;
     private int queryOffset = 0;
     GoogleAccountCredential credential;
@@ -120,17 +121,6 @@ public class ViewStreamActivity extends Activity {
 
 
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                // NavUtils.navigateUpFromSameTask(this);
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 
 //    @Override
@@ -161,10 +151,26 @@ public class ViewStreamActivity extends Activity {
         intent.putExtra(Config.STREAM_NAME, streamName);
         intent.putExtra(Config.STREAM_ID, streamId);
         intent.putExtra(Config.STREAM_OWNER_ID, streamOwnerId);
+        intent.putExtra(Config.MY_ID, streamResult.getMyId());
 
         intent.putExtra(Config.STREAM_UPLOAD_URL, streamResult.getUploadUrl());
-        startActivity(intent);
+        startActivityForResult(intent, DO_UPLOAD_ACTIVITY_REQUEST_CODE);
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == DO_UPLOAD_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // re-run a new query so we can see the upload.
+                String message = "Upload complete!";
+                Toast.makeText(ViewStreamActivity.this, message, Toast.LENGTH_SHORT).show();
+                new ViewStreamTask().execute();
+            }
+        }
+    }
+
 
     private void loadImages(StreamResult streamResult) {
         this.streamResult = streamResult;

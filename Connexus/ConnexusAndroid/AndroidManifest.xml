@@ -36,37 +36,37 @@
                 android:name=".activities.BrowseStreamsActivity"
                 android:theme="@style/ActionBar"
                 android:label="@string/browse_streams_activity_name"
-                android:parentActivityName=".WelcomeActivity"
+                android:parentActivityName=".activities.WelcomeActivity"
                 >
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".WelcomeActivity"/>
+                    android:value=".activities.WelcomeActivity"/>
         </activity>
         <activity
                 android:name=".activities.ImagePagerActivity"
                 android:theme="@style/ActionBar"
                 android:label="@string/ac_name_image_pager"
-                android:parentActivityName=".ViewStreamsActivity"
+                android:parentActivityName=".activities.ViewStreamsActivity"
                 />
         <activity
                 android:name=".activities.ViewStreamActivity"
                 android:theme="@style/ActionBar"
                 android:label="@string/view_stream_activity_name"
-                android:parentActivityName=".BrowseStreamsActivity"
+                android:parentActivityName=".activities.BrowseStreamsActivity"
                 >
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".BrowseStreamsActivity"/>
+                    android:value=".activities.BrowseStreamsActivity"/>
         </activity>
         <activity
                 android:name=".activities.UploadActivity"
                 android:theme="@style/ActionBar"
                 android:label="@string/upload_activity_name"
-                android:parentActivityName=".ViewStreamsActivity"
+                android:parentActivityName=".activities.ViewStreamsActivity"
                 >
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".ViewStreamsActivity"/>
+                    android:value=".activities.ViewStreamsActivity"/>
         </activity>
 
 

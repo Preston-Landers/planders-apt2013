@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +21,14 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import connexus.android.Account;
 import connexus.android.Config;
 import connexus.android.R;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.entity.mime.MultipartEntity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -43,11 +52,13 @@ public class UploadActivity extends BaseActivity {
 
     Long streamId;
     Long streamOwnerId;
+    Long myId;
     String streamName;
     String uploadFormAction;
 
     // Our upload location
-    public Uri uploadFileUri;
+    private Uri uploadFileUri;
+    private String realPath;   // the path we pass to the File() for HTTP form upload
 
     // Where we saved camera results
     public Uri cameraFileUri;
@@ -70,6 +81,7 @@ public class UploadActivity extends BaseActivity {
         streamId = intent.getLongExtra(Config.STREAM_ID, 0);
         streamOwnerId = intent.getLongExtra(Config.STREAM_OWNER_ID, 0);
         uploadFormAction = intent.getStringExtra(Config.STREAM_UPLOAD_URL);
+        myId = intent.getLongExtra(Config.MY_ID, 0);
 
         // Dear God... there must be a better way to handle this!
         if (streamId == null || streamId == 0) {
@@ -81,12 +93,19 @@ public class UploadActivity extends BaseActivity {
         if (uploadFormAction == null) {
             throw new IllegalArgumentException("You must specify an upload URL!");
         }
+        if (myId == null) {
+            throw new IllegalArgumentException("You must specify your own user ID!");
+        }
         if (streamName == null) {
             streamName = "(no name)";
         }
 
+        if (uploadFormAction.toLowerCase().contains("/monolith:")) {
+            uploadFormAction = uploadFormAction.replaceAll("(?i)[/]monolith[:]", "/192.168.56.1:");
+        }
+
         // Clears out the selected file text label
-        setSelectedUploadUri(null);
+        setSelectedUploadUri(null, null);
 
         setTitle("Upload: " + streamName);
 
@@ -146,7 +165,7 @@ public class UploadActivity extends BaseActivity {
         if (isBetterLocation(location, currentBestLocation)) {
             currentBestLocation = location;
             // String locStr = currentBestLocation.toString();
-            // Toast.makeText(UploadActivity.this, locStr, Toast.LENGTH_LONG).show();
+            // Toast.makeText(UploadActivity.this, locStr, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -158,11 +177,11 @@ public class UploadActivity extends BaseActivity {
             if (resultCode == RESULT_OK) {
                 // Image captured and saved to cameraFileUri specified in the Intent
                 String fileName = cameraFileUri.getPath();
-                Toast.makeText(this, "Image saved to:\n" +
-                        fileName, Toast.LENGTH_LONG).show();
-                setSelectedUploadUri(cameraFileUri);
+//                Toast.makeText(this, "Image saved to:\n" +
+//                        fileName, Toast.LENGTH_SHORT).show();
+                setSelectedUploadUri(cameraFileUri, fileName);
                 ImageView imageView = (ImageView) findViewById(R.id.uploadPreviewImageView);
-                imageView.setImageBitmap(BitmapFactory.decodeFile(cameraFileUri.getPath()));
+                imageView.setImageBitmap(BitmapFactory.decodeFile(fileName));
 
             } else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
@@ -173,19 +192,12 @@ public class UploadActivity extends BaseActivity {
             }
         } else if (requestCode == LOAD_IMAGE_ACTIVITY_REQUEST_CODE) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-            setSelectedUploadUri(selectedImage);
+            String itsRealPath = getPath(selectedImage);
+            setSelectedUploadUri(selectedImage, itsRealPath);
 
             ImageView imageView = (ImageView) findViewById(R.id.uploadPreviewImageView);
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            imageView.setImageBitmap(BitmapFactory.decodeFile(itsRealPath));
         }
     }
 
@@ -193,8 +205,9 @@ public class UploadActivity extends BaseActivity {
      * Choose a file URI to upload.
      * @param uploadUri
      */
-    private void setSelectedUploadUri(Uri uploadUri) {
+    private void setSelectedUploadUri(Uri uploadUri, String realPath) {
         uploadFileUri = uploadUri;
+        this.realPath = realPath;
         TextView fileNameLabel = (TextView) findViewById(R.id.upload_file_name);
         Button uploadButton = (Button) findViewById(R.id.upload_now);
 
@@ -208,9 +221,6 @@ public class UploadActivity extends BaseActivity {
     }
 
     public void chooseFromLibrary(View view) {
-        String message = "(Not Implemented Yet)";
-        Toast.makeText(UploadActivity.this, message, Toast.LENGTH_SHORT).show();
-
         Intent intent = new Intent(
                 Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
@@ -225,6 +235,23 @@ public class UploadActivity extends BaseActivity {
         }
         String message = "Uploading: " + uploadFileUri.getPath();
         Toast.makeText(UploadActivity.this, message, Toast.LENGTH_SHORT).show();
+
+        new UploadFileTask().execute();
+    }
+
+    private void uploadIsComplete() {
+        setResult(RESULT_OK);
+        this.finish();
+    }
+
+    private void uploadFailed() {
+        String message = "Upload failed, sorry!";
+        try {
+            Toast.makeText(UploadActivity.this, message, Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Log.e(TAG, "Can't Toast for some reason", e);
+        }
+        this.finish();
     }
 
     /** Create a file Uri for saving an image or video */
@@ -351,6 +378,74 @@ public class UploadActivity extends BaseActivity {
             return provider2 == null;
         }
         return provider1.equals(provider2);
+    }
+
+
+    private class UploadFileTask extends AsyncTask<Void, Void, Void> {
+        private boolean uploadSucceeded = false;
+        @Override
+        protected Void doInBackground(Void... params) {
+            EditText uploadComment = (EditText) findViewById(R.id.upload_comment);
+            String comments = uploadComment.getText().toString();
+            double latitude = 0.0;
+            double longitude = 0.0;
+            if (currentBestLocation != null) {
+                latitude = currentBestLocation.getLatitude();
+                longitude = currentBestLocation.getLongitude();
+            }
+            String streamUploadId = streamOwnerId + ":" + streamId;
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(uploadFormAction);
+            MultipartEntity httpEntity = new MultipartEntity();
+            File uploadFile = new File(realPath);
+
+            try {
+                ContentBody contentBody = new FileBody(uploadFile);
+                httpEntity.addPart("media", contentBody);
+                httpEntity.addPart("v", new StringBody(streamUploadId));
+                httpEntity.addPart("uu", new StringBody(myId.toString()));
+                httpEntity.addPart("upload", new StringBody("1"));
+                httpEntity.addPart("comments", new StringBody(comments));
+                httpEntity.addPart("latitude", new StringBody(String.format("%f", latitude)));
+                httpEntity.addPart("longitude", new StringBody(String.format("%f", longitude)));
+                httpPost.setEntity(httpEntity);
+                HttpResponse httpResponse = httpClient.execute(httpPost);
+                uploadSucceeded = true;
+                return null;
+
+            } catch (Exception e) {
+                Log.e(TAG, "Unable to upload", e);
+            }
+
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void rv) {
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.upload_progressBar);
+            progressBar.setVisibility(View.INVISIBLE);
+            if (uploadSucceeded) {
+                uploadIsComplete();
+            } else {
+                uploadFailed();
+            }
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.upload_progressBar);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public String getPath(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        startManagingCursor(cursor);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 }
 
