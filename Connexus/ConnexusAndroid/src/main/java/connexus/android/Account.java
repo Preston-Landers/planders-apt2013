@@ -2,6 +2,9 @@ package connexus.android;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
+/**
+ * A singleton within the application to hold the Google Account credential
+ */
 public class Account {
     private Account() { }
 

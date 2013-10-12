@@ -155,13 +155,13 @@ public class WelcomeActivity extends Activity {
 
     private void setSignInEnablement(boolean state) {
         Button button = (Button) findViewById(R.id.login_button);
-        TextView textView = (TextView) findViewById(R.id.welcome_status_textview);
+        // TextView textView = (TextView) findViewById(R.id.welcome_status_textview);
 
         if (state) {
-            textView.setText(" Signed out. ");
+            // textView.setText(" Signed out. ");
             button.setText("Sign In");
         } else {
-            textView.setText(" Signed in. ");
+            // textView.setText(" Signed in. ");
             button.setText("Sign Out");
         }
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:padding="1dip">
@@ -12,7 +13,9 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/descr_image"
             android:layout_marginTop="15dp"/>
-    <TextView
+
+    <com.qwerjk.better_text.MagicTextView
+            xmlns:qwerjk="http://schemas.android.com/apk/res-auto"
             android:id="@+id/pagerimage_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,9 +25,19 @@
             android:layout_alignBottom="@+id/pager_image"
             android:layout_margin="1dp"
             android:gravity="center|bottom"
+            android:textSize="16sp"
             android:text=""
             android:textColor="#000000"
-            android:layout_marginTop="2dp"/>
+            android:layout_marginTop="2dp"
+
+            qwerjk:innerShadowDy="2"
+            qwerjk:innerShadowColor="#FF000000"
+            qwerjk:innerShadowRadius="1"
+            qwerjk:outerShadowDy="3"
+            qwerjk:outerShadowColor="#FF0088ff"
+            qwerjk:outerShadowRadius="10"
+            qwerjk:strokeJoinStyle="miter"
+            />
 
     <ProgressBar
             android:id="@+id/loading"

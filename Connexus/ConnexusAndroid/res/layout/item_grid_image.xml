@@ -13,7 +13,8 @@
                android:adjustViewBounds="true"
                android:contentDescription="@string/descr_image"
                android:scaleType="centerCrop" />
-    <TextView
+    <com.qwerjk.better_text.MagicTextView
+            xmlns:qwerjk="http://schemas.android.com/apk/res-auto"
             android:id="@+id/myImageViewText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,8 +24,15 @@
             android:layout_alignBottom="@+id/grid_imageview"
             android:layout_margin="1dp"
             android:gravity="center|bottom"
+            android:textSize="15sp"
             android:text="Hello"
-            android:textColor="#000000" />
+            android:textColor="#ffffffff"
+            android:textStyle="bold"
+
+            qwerjk:strokeJoinStyle="miter"
+            qwerjk:strokeWidth="1"
+            qwerjk:strokeColor="#000000"
+            />
 
 </RelativeLayout>
 
