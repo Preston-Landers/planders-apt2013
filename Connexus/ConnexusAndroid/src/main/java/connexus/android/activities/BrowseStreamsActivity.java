@@ -1,5 +1,7 @@
 package connexus.android.activities;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -54,17 +56,23 @@ public class BrowseStreamsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_browse_streams);
 
+        // Blank out the status text
+        setStatusText("");
+
         Intent intent = getIntent();
         queryOffset = intent.getIntExtra(Config.NAV_OFFSET, 0);
         queryLimit = intent.getIntExtra(Config.NAV_LIMIT, defaultQueryLimit);
         showMySubs = intent.getBooleanExtra(Config.SHOW_MY_SUBS, false);
         searchTerm = intent.getStringExtra(Config.SEARCH_TERM);
 
-        // Blank out the status text
-        setStatusText("");
-
         if (showMySubs) {
             setTitle("My Subscriptions");
+        }
+
+        // Handles the action bar search term
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            searchTerm = intent.getStringExtra(SearchManager.QUERY);
+            setTitle("Search: " + searchTerm);
         }
 
         // Make sure we're running on Honeycomb or higher to use ActionBar APIs
@@ -119,9 +127,17 @@ public class BrowseStreamsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        boolean rv = super.onCreateOptionsMenu(menu);
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.ac_browse_streams_actions, menu);
-        return super.onCreateOptionsMenu(menu);
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        return rv;
     }
 
     public void loginButton(View view) {

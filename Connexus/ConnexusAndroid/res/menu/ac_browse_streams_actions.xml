@@ -6,12 +6,13 @@
             android:id="@+id/action_location_search"
             android:icon="@drawable/ic_action_location_web_site"
             android:title="@string/action_location_search"
-            android:showAsAction="ifRoom"
+            android:showAsAction="collapseActionView|ifRoom"
             />
     <item
             android:id="@+id/action_search"
             android:icon="@drawable/ic_action_search"
             android:title="@string/action_search"
-            android:showAsAction="ifRoom"
+            android:showAsAction="collapseActionView|ifRoom"
+            android:actionViewClass="android.widget.SearchView"
             />
 </menu>

@@ -26,5 +26,6 @@
     <string name="stream_name_upload">(Stream Name)</string>
     <string name="camera_activity_name">Use Camera</string>
     <string name="take_picture">Take Picture</string>
+    <string name="search_hint">Type a search term...</string>
 
 </resources>
