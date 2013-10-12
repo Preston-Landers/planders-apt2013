@@ -36,25 +36,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/viewStreamLeftButton"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="380dp"
             android:background="@drawable/ic_navigation_previous_item"
-            android:layout_alignParentBottom="false"
 
             android:onClick="GoLeftButton"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/upload_button"/>
 
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/viewStreamRightButton"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="380dp"
             android:background="@drawable/ic_navigation_next_item"
             android:onClick="GoRightButton"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/upload_button"/>
 
     <ProgressBar
             android:layout_width="wrap_content"

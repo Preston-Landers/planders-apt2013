@@ -160,7 +160,6 @@ public class UploadActivity extends BaseActivity {
     }
 
 
-
     private void makeUseOfNewLocation(Location location) {
         if (isBetterLocation(location, currentBestLocation)) {
             currentBestLocation = location;
@@ -191,18 +190,26 @@ public class UploadActivity extends BaseActivity {
                 Toast.makeText(UploadActivity.this, "Take Photo failed", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == LOAD_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Uri selectedImage = data.getData();
+            if (resultCode == RESULT_OK) {
+                Uri selectedImage = data.getData();
 
-            String itsRealPath = getPath(selectedImage);
-            setSelectedUploadUri(selectedImage, itsRealPath);
+                String itsRealPath = getPath(selectedImage);
+                setSelectedUploadUri(selectedImage, itsRealPath);
 
-            ImageView imageView = (ImageView) findViewById(R.id.uploadPreviewImageView);
-            imageView.setImageBitmap(BitmapFactory.decodeFile(itsRealPath));
+                ImageView imageView = (ImageView) findViewById(R.id.uploadPreviewImageView);
+                imageView.setImageBitmap(BitmapFactory.decodeFile(itsRealPath));
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(UploadActivity.this, "Load from Gallery was canceled", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(UploadActivity.this, "Load from Gallery failed", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
     /**
      * Choose a file URI to upload.
+     *
      * @param uploadUri
      */
     private void setSelectedUploadUri(Uri uploadUri, String realPath) {
@@ -254,13 +261,17 @@ public class UploadActivity extends BaseActivity {
         this.finish();
     }
 
-    /** Create a file Uri for saving an image or video */
-    private static Uri getOutputMediaFileUri(int type){
+    /**
+     * Create a file Uri for saving an image or video
+     */
+    private static Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
     }
 
-    /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
+    /**
+     * Create a File for saving an image or video
+     */
+    private static File getOutputMediaFile(int type) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
@@ -270,8 +281,8 @@ public class UploadActivity extends BaseActivity {
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
                 Log.d("Connex.us", "failed to create directory");
                 return null;
             }
@@ -280,12 +291,12 @@ public class UploadActivity extends BaseActivity {
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
+        if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
-        } else if(type == MEDIA_TYPE_VIDEO) {
+                    "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_"+ timeStamp + ".mp4");
+                    "VID_" + timeStamp + ".mp4");
         } else {
             return null;
         }
@@ -301,11 +312,14 @@ public class UploadActivity extends BaseActivity {
                 makeUseOfNewLocation(location);
             }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
 
-            public void onProviderEnabled(String provider) {}
+            public void onProviderEnabled(String provider) {
+            }
 
-            public void onProviderDisabled(String provider) {}
+            public void onProviderDisabled(String provider) {
+            }
         };
 
         // Register the listener with the Location Manager to receive location updates
@@ -326,9 +340,11 @@ public class UploadActivity extends BaseActivity {
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
 
-    /** Determines whether one Location reading is better than the current Location fix
-     * @param location  The new Location that you want to evaluate
-     * @param currentBestLocation  The current Location fix, to which you want to compare the new one
+    /**
+     * Determines whether one Location reading is better than the current Location fix
+     *
+     * @param location            The new Location that you want to evaluate
+     * @param currentBestLocation The current Location fix, to which you want to compare the new one
      */
     protected boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
@@ -372,7 +388,9 @@ public class UploadActivity extends BaseActivity {
         return false;
     }
 
-    /** Checks whether two providers are the same */
+    /**
+     * Checks whether two providers are the same
+     */
     private boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;
@@ -383,6 +401,7 @@ public class UploadActivity extends BaseActivity {
 
     private class UploadFileTask extends AsyncTask<Void, Void, Void> {
         private boolean uploadSucceeded = false;
+
         @Override
         protected Void doInBackground(Void... params) {
             EditText uploadComment = (EditText) findViewById(R.id.upload_comment);
@@ -420,6 +439,7 @@ public class UploadActivity extends BaseActivity {
 
             return null;
         }
+
         @Override
         protected void onPostExecute(Void rv) {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.upload_progressBar);
@@ -440,7 +460,7 @@ public class UploadActivity extends BaseActivity {
     }
 
     public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         startManagingCursor(cursor);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);

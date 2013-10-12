@@ -12,10 +12,9 @@
             android:text="@string/my_sub_streams"
             android:onClick="ViewStreamsButton"
             android:id="@+id/mysubs_button"
+            style="@android:style/Widget.Holo.Light.Button"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="380dp"
-            style="@android:style/Widget.Holo.Light.Button"/>
+            android:layout_alignParentBottom="true"/>
 
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/gridview"
@@ -33,26 +32,25 @@
               android:textFilterEnabled="true"/>
 
     <ImageButton
-            android:layout_width="wrap_content"
+            android:layout_width="66dp"
             android:layout_height="wrap_content"
             android:id="@+id/browseLeftButton"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="380dp"
             android:background="@drawable/ic_navigation_previous_item"
-            android:layout_alignParentBottom="false"
 
-            android:onClick="GoLeftButton"/>
+            android:onClick="GoLeftButton"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/mysubs_button"/>
 
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/browseRightButton"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="380dp"
             android:background="@drawable/ic_navigation_next_item"
-            android:onClick="GoRightButton"/>
+            android:onClick="GoRightButton"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/mysubs_button"/>
 
     <ProgressBar
             android:layout_width="wrap_content"
