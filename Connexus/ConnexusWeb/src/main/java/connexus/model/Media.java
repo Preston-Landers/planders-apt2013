@@ -304,6 +304,18 @@ public class Media implements Comparable<Media> {
         this.longitude = longitude;
     }
 
+    public Long getStreamOwnerId() {
+        Key<Stream> streamKey = getStream();
+        Stream stream = ofy().load().key(streamKey).get();
+        if (stream != null) {
+            CUser streamOwner = ofy().load().key(stream.getOwner()).get();
+            if (streamOwner != null) {
+                return streamOwner.getId();
+            }
+        }
+        return null;
+    }
+
     /**
      * Perform a search of all media (images) sorted by proximity to a given location
      * Ignores media that doesn't have a location set.
@@ -332,7 +344,7 @@ public class Media implements Comparable<Media> {
                 continue;
             }
             if (mLat.equals(0.0) && mLong.equals(0.0)) {
-                System.err.println("Location search excluding 0/0 coords: " + media.getId());
+                // System.err.println("Location search excluding 0/0 coords: " + media.getId());
                 continue;
             }
             // System.err.println(" -> media: " + media.getId() + " has coords Lat: " + mLat + " long: " + mLong + " comment: " + media.getComments());

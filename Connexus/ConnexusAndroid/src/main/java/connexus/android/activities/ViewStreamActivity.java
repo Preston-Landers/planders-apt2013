@@ -1,21 +1,17 @@
 package connexus.android.activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.appspot.connexus_apt.streamlist.Streamlist;
 import com.appspot.connexus_apt.streamlist.model.Media;
 import com.appspot.connexus_apt.streamlist.model.NearbyResult;
-import com.appspot.connexus_apt.streamlist.model.Stream;
 import com.appspot.connexus_apt.streamlist.model.StreamResult;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
@@ -202,7 +198,7 @@ public class ViewStreamActivity extends BaseActivity {
 
     private static String getNearbySearchDescription(Double latitude, Double longitude) {
         // return latitude + " , " + longitude;
-        return String.format("%0.5f%n , \"%0.5f%n", latitude, longitude);
+        return String.format("%1$,.5f , %2$,.5f", latitude, longitude);
     }
 
     private void loadImages() {

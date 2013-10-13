@@ -217,6 +217,7 @@ public class StreamList {
                                  @Named("queryLimit") Integer limit,
                                  @Named("queryOffset") Integer offset) {
 
+        System.err.println("getMedia-> streamId: " + streamId + " ownerId: " + streamOwnerId);
         StreamResult returnVal;
         MediaCacheKey cacheKey;
         if (Config.API_CACHE_TIME_SEC >= 0) {
@@ -249,7 +250,7 @@ public class StreamList {
         }
         connexus.model.Stream stream = connexus.model.Stream.getById(streamId, owner);
         if (stream == null) {
-            throw new IllegalArgumentException("Unable to load stream");
+            throw new IllegalArgumentException("Unable to load stream ID: " + streamId + " ownerID: " + streamOwnerId);
         }
         returnVal = new StreamResult();
         List<Media> mediaList = getMediaHelper(stream, limit, offset);
@@ -376,7 +377,7 @@ public class StreamList {
         Media media = new Media();
         media.setId(modelMedia.getId());
         media.setStreamId(modelMedia.getStream().getId());
-        media.setStreamOwnerId(modelMedia.getUploader().getId());
+        media.setStreamOwnerId(modelMedia.getStreamOwnerId());
         media.setUrl(modelMedia.getMediaServingURL());
         media.setThumbUrl(modelMedia.getThumbURL());
         media.setFileName(modelMedia.getFileName());
