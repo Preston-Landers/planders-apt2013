@@ -15,9 +15,13 @@ public class Config {
     public static final String AUDIENCE = "server:client_id:771214203866-7btn313m3jrh49s1dhd837ssm1n1lrd0.apps.googleusercontent.com";
     public static final boolean DEVELOPER_MODE = true;
 
+    // When doing the Nearby search, how long will we wait for a location fix?
+    public static final int MAX_LOCATION_WAIT_SEC = 20;
+
     // Stuff for intents, could move somewhere else
     public static final String NAV_OFFSET = "connexus.android.NAV_OFFSET";
     public static final String NAV_LIMIT = "connexus.android.NAV_LIMIT";
+    public static final String LOCATION_SEARCH = "connexus.android.LOCATION_SEARCH";
     public static final String SHOW_MY_SUBS = "connexus.android.SHOW_MY_SUBS";
     public static final String SEARCH_TERM = "connexus.android.SEARCH_TERM";
     public static final String STREAM_NAME = "connexus.android.STREAM_NAME";
