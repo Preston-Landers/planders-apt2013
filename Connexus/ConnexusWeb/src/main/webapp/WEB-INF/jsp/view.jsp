@@ -103,8 +103,8 @@
 											</button>
 										</div>
 										
-        <%-- Allow delete if it's my image --%>
-        <c:if test="${media.uploader == cuser.key}">
+        <%-- Allow delete if it's my image or my stream --%>
+        <c:if test="${media.uploader == cuser.key || isMyStream }">
 			
 				
 				<%-- SET COVER IMAGE --%>

@@ -78,6 +78,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
                 cuser = getOrCreateUserRecord(guser, site.getKey());
                 if (cuser != null) {
                     req.setAttribute("cuser", cuser);
+                    req.setAttribute("currentUserId", cuser.getId());
                 }
             }
         } catch (UserCreateException e) {
