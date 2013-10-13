@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/sygT6VU20lARIvdbT9V4cq30EcM\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/mCFlbipSD3CQi-OJ21RmgCDHR8E\"",
  "discoveryVersion": "v1",
  "id": "streamlist:v1",
  "name": "streamlist",
@@ -165,6 +165,10 @@
      "type": "integer",
      "format": "int32"
     },
+    "resultSize": {
+     "type": "integer",
+     "format": "int32"
+    },
     "searchLatitude": {
      "type": "number",
      "format": "double"
@@ -291,13 +295,22 @@
      "type": "integer",
      "format": "int32"
     },
+    "stream": {
+     "$ref": "Stream"
+    },
     "streamId": {
      "type": "string",
      "format": "int64"
     },
+    "streamName": {
+     "type": "string"
+    },
     "streamOwnerId": {
      "type": "string",
      "format": "int64"
+    },
+    "streamOwnerName": {
+     "type": "string"
     },
     "uploadUrl": {
      "type": "string"

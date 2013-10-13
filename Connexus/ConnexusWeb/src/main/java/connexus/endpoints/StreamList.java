@@ -287,7 +287,9 @@ public class StreamList {
 
         returnVal.setQueryLimit(limit);
         returnVal.setQueryOffset(offset);
-
+        returnVal.setStreamName(stream.getName());
+        returnVal.setStreamOwnerName(stream.getOwnerName());
+        returnVal.setStream(convertStreamToAPI(stream));
         if (Config.API_CACHE_TIME_SEC >= 0) {
             syncCache.put(cacheKey, returnVal, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
         }
@@ -346,6 +348,7 @@ public class StreamList {
             }
         }
         nearbyResult.setMediaList(mediaList);
+        nearbyResult.setResultSize(mediaList.size());
         return nearbyResult;
     }
 

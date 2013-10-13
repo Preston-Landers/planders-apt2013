@@ -11,6 +11,7 @@ public class NearbyResult implements Serializable {
     double searchLongitude;
     Long myId;
     List<Media> mediaList;
+    int resultSize;
     int queryLimit;
     int queryOffset;
 
@@ -61,4 +62,13 @@ public class NearbyResult implements Serializable {
     public void setQueryOffset(int queryOffset) {
         this.queryOffset = queryOffset;
     }
+
+    public int getResultSize() {
+        return resultSize;
+    }
+
+    public void setResultSize(int resultSize) {
+        this.resultSize = resultSize;
+    }
 }
+

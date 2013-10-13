@@ -10,6 +10,9 @@ public class StreamResult implements Serializable {
     Long streamId;
     Long streamOwnerId;
     Long myId;
+    String streamName;
+    String streamOwnerName;
+    Stream stream;
     List<Media> mediaList;
     int resultSize;
     boolean canUpload;
@@ -88,5 +91,29 @@ public class StreamResult implements Serializable {
 
     public void setQueryOffset(int queryOffset) {
         this.queryOffset = queryOffset;
+    }
+
+    public String getStreamName() {
+        return streamName;
+    }
+
+    public void setStreamName(String streamName) {
+        this.streamName = streamName;
+    }
+
+    public String getStreamOwnerName() {
+        return streamOwnerName;
+    }
+
+    public void setStreamOwnerName(String streamOwnerName) {
+        this.streamOwnerName = streamOwnerName;
+    }
+
+    public Stream getStream() {
+        return stream;
+    }
+
+    public void setStream(Stream stream) {
+        this.stream = stream;
     }
 }

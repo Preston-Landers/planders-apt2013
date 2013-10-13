@@ -32,6 +32,15 @@
               android:stretchMode="columnWidth"
               android:textFilterEnabled="true"/>
 
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/view_stream_statustext"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="6dp"
+            android:layout_below="@+id/vs_gridview"/>
+
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

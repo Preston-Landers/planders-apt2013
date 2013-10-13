@@ -19,7 +19,7 @@
 package com.appspot.connexus_apt.streamlist.model;
 
 /**
- * Model definition for StreamResult.
+ * Model definition for NearbyResult.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the streamlist. For a detailed explanation see:
@@ -29,13 +29,7 @@ package com.appspot.connexus_apt.streamlist.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class StreamResult extends com.google.api.client.json.GenericJson {
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private java.lang.Boolean canUpload;
+public final class NearbyResult extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
@@ -77,52 +71,13 @@ public final class StreamResult extends com.google.api.client.json.GenericJson {
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private Stream stream;
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key @com.google.api.client.json.JsonString
-  private java.lang.Long streamId;
+  private java.lang.Double searchLatitude;
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private java.lang.String streamName;
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key @com.google.api.client.json.JsonString
-  private java.lang.Long streamOwnerId;
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private java.lang.String streamOwnerName;
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private java.lang.String uploadUrl;
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.Boolean getCanUpload() {
-    return canUpload;
-  }
-
-  /**
-   * @param canUpload canUpload or {@code null} for none
-   */
-  public StreamResult setCanUpload(java.lang.Boolean canUpload) {
-    this.canUpload = canUpload;
-    return this;
-  }
+  private java.lang.Double searchLongitude;
 
   /**
    * @return value or {@code null} for none
@@ -134,7 +89,7 @@ public final class StreamResult extends com.google.api.client.json.GenericJson {
   /**
    * @param mediaList mediaList or {@code null} for none
    */
-  public StreamResult setMediaList(java.util.List<Media> mediaList) {
+  public NearbyResult setMediaList(java.util.List<Media> mediaList) {
     this.mediaList = mediaList;
     return this;
   }
@@ -149,7 +104,7 @@ public final class StreamResult extends com.google.api.client.json.GenericJson {
   /**
    * @param myId myId or {@code null} for none
    */
-  public StreamResult setMyId(java.lang.Long myId) {
+  public NearbyResult setMyId(java.lang.Long myId) {
     this.myId = myId;
     return this;
   }
@@ -164,7 +119,7 @@ public final class StreamResult extends com.google.api.client.json.GenericJson {
   /**
    * @param queryLimit queryLimit or {@code null} for none
    */
-  public StreamResult setQueryLimit(java.lang.Integer queryLimit) {
+  public NearbyResult setQueryLimit(java.lang.Integer queryLimit) {
     this.queryLimit = queryLimit;
     return this;
   }
@@ -179,7 +134,7 @@ public final class StreamResult extends com.google.api.client.json.GenericJson {
   /**
    * @param queryOffset queryOffset or {@code null} for none
    */
-  public StreamResult setQueryOffset(java.lang.Integer queryOffset) {
+  public NearbyResult setQueryOffset(java.lang.Integer queryOffset) {
     this.queryOffset = queryOffset;
     return this;
   }
@@ -194,7 +149,7 @@ public final class StreamResult extends com.google.api.client.json.GenericJson {
   /**
    * @param resultSize resultSize or {@code null} for none
    */
-  public StreamResult setResultSize(java.lang.Integer resultSize) {
+  public NearbyResult setResultSize(java.lang.Integer resultSize) {
     this.resultSize = resultSize;
     return this;
   }
@@ -202,101 +157,41 @@ public final class StreamResult extends com.google.api.client.json.GenericJson {
   /**
    * @return value or {@code null} for none
    */
-  public Stream getStream() {
-    return stream;
+  public java.lang.Double getSearchLatitude() {
+    return searchLatitude;
   }
 
   /**
-   * @param stream stream or {@code null} for none
+   * @param searchLatitude searchLatitude or {@code null} for none
    */
-  public StreamResult setStream(Stream stream) {
-    this.stream = stream;
+  public NearbyResult setSearchLatitude(java.lang.Double searchLatitude) {
+    this.searchLatitude = searchLatitude;
     return this;
   }
 
   /**
    * @return value or {@code null} for none
    */
-  public java.lang.Long getStreamId() {
-    return streamId;
+  public java.lang.Double getSearchLongitude() {
+    return searchLongitude;
   }
 
   /**
-   * @param streamId streamId or {@code null} for none
+   * @param searchLongitude searchLongitude or {@code null} for none
    */
-  public StreamResult setStreamId(java.lang.Long streamId) {
-    this.streamId = streamId;
-    return this;
-  }
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.String getStreamName() {
-    return streamName;
-  }
-
-  /**
-   * @param streamName streamName or {@code null} for none
-   */
-  public StreamResult setStreamName(java.lang.String streamName) {
-    this.streamName = streamName;
-    return this;
-  }
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.Long getStreamOwnerId() {
-    return streamOwnerId;
-  }
-
-  /**
-   * @param streamOwnerId streamOwnerId or {@code null} for none
-   */
-  public StreamResult setStreamOwnerId(java.lang.Long streamOwnerId) {
-    this.streamOwnerId = streamOwnerId;
-    return this;
-  }
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.String getStreamOwnerName() {
-    return streamOwnerName;
-  }
-
-  /**
-   * @param streamOwnerName streamOwnerName or {@code null} for none
-   */
-  public StreamResult setStreamOwnerName(java.lang.String streamOwnerName) {
-    this.streamOwnerName = streamOwnerName;
-    return this;
-  }
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.String getUploadUrl() {
-    return uploadUrl;
-  }
-
-  /**
-   * @param uploadUrl uploadUrl or {@code null} for none
-   */
-  public StreamResult setUploadUrl(java.lang.String uploadUrl) {
-    this.uploadUrl = uploadUrl;
+  public NearbyResult setSearchLongitude(java.lang.Double searchLongitude) {
+    this.searchLongitude = searchLongitude;
     return this;
   }
 
   @Override
-  public StreamResult set(String fieldName, Object value) {
-    return (StreamResult) super.set(fieldName, value);
+  public NearbyResult set(String fieldName, Object value) {
+    return (NearbyResult) super.set(fieldName, value);
   }
 
   @Override
-  public StreamResult clone() {
-    return (StreamResult) super.clone();
+  public NearbyResult clone() {
+    return (NearbyResult) super.clone();
   }
 
 }

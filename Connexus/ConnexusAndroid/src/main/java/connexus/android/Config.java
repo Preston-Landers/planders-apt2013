@@ -16,7 +16,7 @@ public class Config {
     public static final boolean DEVELOPER_MODE = true;
 
     // When doing the Nearby search, how long will we wait for a location fix?
-    public static final int MAX_LOCATION_WAIT_SEC = 20;
+    public static final int MAX_LOCATION_WAIT_SEC = 10;
 
     // Stuff for intents, could move somewhere else
     public static final String NAV_OFFSET = "connexus.android.NAV_OFFSET";

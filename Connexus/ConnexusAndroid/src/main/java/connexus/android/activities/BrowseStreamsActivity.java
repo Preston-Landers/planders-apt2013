@@ -41,7 +41,6 @@ public class BrowseStreamsActivity extends BaseActivity {
     private int queryOffset = 0;
     private boolean showMySubs = false;
     private String searchTerm = null;
-    private boolean doingLocationSearch = false;
     List<Stream> streamList; // query results
 
     /**
@@ -64,7 +63,6 @@ public class BrowseStreamsActivity extends BaseActivity {
         queryLimit = intent.getIntExtra(Config.NAV_LIMIT, defaultQueryLimit);
         showMySubs = intent.getBooleanExtra(Config.SHOW_MY_SUBS, false);
         searchTerm = intent.getStringExtra(Config.SEARCH_TERM);
-        doingLocationSearch = intent.getBooleanExtra(Config.LOCATION_SEARCH, false);
 
         if (showMySubs) {
             setTitle("My Subscriptions");
@@ -90,13 +88,6 @@ public class BrowseStreamsActivity extends BaseActivity {
             signedIn = false;
         }
         checkNavButtonState();
-
-        if (doingLocationSearch) {
-            useLocation = true;
-            startLocationServices();
-            setTitle("Nearby Images");
-        }
-
 
         new BrowseStreamsTask().execute();
     }
@@ -196,7 +187,7 @@ public class BrowseStreamsActivity extends BaseActivity {
     }
 
     private void doLocationSearch() {
-        Intent intent = new Intent(this, BrowseStreamsActivity.class);
+        Intent intent = new Intent(this, ViewStreamActivity.class);
         intent.putExtra(Config.LOCATION_SEARCH, true);
         intent.putExtra(Config.NAV_OFFSET, 0);
         intent.putExtra(Config.NAV_LIMIT, queryLimit);
@@ -211,8 +202,8 @@ public class BrowseStreamsActivity extends BaseActivity {
                 .showStubImage(R.drawable.ic_stub)
                 .showImageForEmptyUri(R.drawable.ic_empty)
                 .showImageOnFail(R.drawable.ic_error)
-                .cacheInMemory(true)
-                // .cacheOnDisc(true)
+                // .cacheInMemory(true)
+                .cacheOnDisc(true)
                 // .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
 
@@ -230,12 +221,6 @@ public class BrowseStreamsActivity extends BaseActivity {
                 startViewStreamActivity(position);
             }
         });
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-//                Toast.makeText(BrowseStreamsActivity.this, "" + position, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
     }
 
     private void startViewStreamActivity(int position) {
@@ -259,7 +244,6 @@ public class BrowseStreamsActivity extends BaseActivity {
         @Override
         protected Void doInBackground(Void... params) {
             querySuccess = false;
-            String rv = "<No result>";
             int limit = queryLimit;
             int offset = queryOffset;
             GoogleAccountCredential creds = null;
@@ -275,21 +259,6 @@ public class BrowseStreamsActivity extends BaseActivity {
                     getStreams.setQuery(searchTerm);
                 }
                 getStreams.setMySubs(showMySubs);
-                if (doingLocationSearch) {
-                    // If doing a location search, wait until we have a location
-                    // for a short amount of time.
-                    Location location = waitForLocation();
-                    if (location == null) {
-                        // Maybe do a Toast here?
-                        Log.e(TAG, "Tried to do a location search but couldn't get location within time limit");
-                        Toast.makeText(BrowseStreamsActivity.this, "ERROR: Can't find location", Toast.LENGTH_SHORT).show();
-                        return null;
-                    } else {
-                        LatLong latLong = new LatLong(location);
-                        getStreams.setLatitude(latLong.getLatitude());
-                        getStreams.setLongitude(latLong.getLongitude());
-                    }
-                }
 
                 streamList = getStreams
                         .execute()
