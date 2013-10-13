@@ -2,6 +2,7 @@ package connexus.android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,7 +19,6 @@ import com.appspot.connexus_apt.streamlist.model.Stream;
 import com.appspot.connexus_apt.streamlist.model.StreamResult;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import connexus.android.*;
 
@@ -42,7 +42,6 @@ public class ViewStreamActivity extends BaseActivity {
 
     GridView gridView;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
-    DisplayImageOptions options;
 
     private boolean doingLocationSearch = false;
 
@@ -93,6 +92,7 @@ public class ViewStreamActivity extends BaseActivity {
         }
         checkNavButtonState();
 
+        setStatusText("Please wait, loading...");
         if (doingLocationSearch) {
             useLocation = true;
             startLocationServices();
@@ -181,7 +181,9 @@ public class ViewStreamActivity extends BaseActivity {
             Toast.makeText(ViewStreamActivity.this, "Can't load stream.", Toast.LENGTH_SHORT).show();
             return;
         }
-        setTitle(streamResult.getStreamName());
+        streamName = streamResult.getStreamName();
+        setTitle(streamName);
+        setStatusText("Stream: " + streamName + " from: " + streamResult.getStreamOwnerName());
         loadImages();
     }
 
@@ -197,20 +199,13 @@ public class ViewStreamActivity extends BaseActivity {
     private static String getNearbySearchDescription(NearbyResult nearbyResult) {
         return getNearbySearchDescription(nearbyResult.getSearchLatitude(), nearbyResult.getSearchLongitude());
     }
+
     private static String getNearbySearchDescription(Double latitude, Double longitude) {
-        return latitude + " , " + longitude;
+        // return latitude + " , " + longitude;
+        return String.format("%0.5f%n , \"%0.5f%n", latitude, longitude);
     }
 
     private void loadImages() {
-        options = new DisplayImageOptions.Builder()
-                .showStubImage(R.drawable.ic_stub)
-                .showImageForEmptyUri(R.drawable.ic_empty)
-                .showImageOnFail(R.drawable.ic_error)
-                // .cacheInMemory(true)   // seems to use too much
-                .cacheOnDisc(true)
-                // .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
-
         checkNavButtonState();
 
         gridView = (GridView) findViewById(R.id.vs_gridview);
@@ -240,6 +235,7 @@ public class ViewStreamActivity extends BaseActivity {
         startActivity(intent);
 
     }
+
     private void startImagePagerActivity(int position) {
         Intent intent = new Intent(this, ImagePagerActivity.class);
         if (streamResult == null) {
@@ -376,16 +372,16 @@ public class ViewStreamActivity extends BaseActivity {
                 Media media = mediaList.get(position);
 
                 textView.setText(media.getComments());
-                imageLoader.displayImage(media.getUrl(), imageView, options);
+                imageLoader.displayImage(media.getUrl(), imageView, getDisplayOptions());
             } else if (nearbyResult != null) {
                 List<Media> mediaList = nearbyResult.getMediaList();
                 Media media = mediaList.get(position);
 
-                String imageLabel = String.format("%s : %.3f%n km", media.getComments(), (media.getMetersToSearchPoint()/1000));
+                String imageLabel = String.format("%s : %.3f%n km", media.getComments(), (media.getMetersToSearchPoint() / 1000));
                 textView.setText(imageLabel);
 //                textView.setText(media.getComments() + " @ " +
 //                        getNearbySearchDescription(media.getLatitude(), media.getLongitude()));
-                imageLoader.displayImage(media.getUrl(), imageView, options);
+                imageLoader.displayImage(media.getUrl(), imageView, getDisplayOptions());
             }
             return imgContainerRL;
         }

@@ -3,6 +3,7 @@ package connexus.android.activities;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -17,7 +18,6 @@ import com.appspot.connexus_apt.streamlist.Streamlist;
 import com.appspot.connexus_apt.streamlist.model.Stream;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import connexus.android.*;
 
@@ -33,7 +33,6 @@ public class BrowseStreamsActivity extends BaseActivity {
     Streamlist service;
     GoogleAccountCredential credential;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
-    DisplayImageOptions options;
 
     // query parameters for the server
     private final static int defaultQueryLimit = 9;
@@ -198,14 +197,6 @@ public class BrowseStreamsActivity extends BaseActivity {
 
     private void loadImages(List<Stream> streamList) {
         this.streamList = streamList;
-        options = new DisplayImageOptions.Builder()
-                .showStubImage(R.drawable.ic_stub)
-                .showImageForEmptyUri(R.drawable.ic_empty)
-                .showImageOnFail(R.drawable.ic_error)
-                // .cacheInMemory(true)
-                .cacheOnDisc(true)
-                // .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
 
         checkNavButtonState();
 
@@ -324,7 +315,7 @@ public class BrowseStreamsActivity extends BaseActivity {
             Stream stream = streamList.get(position);
 
             textView.setText(stream.getName());
-            imageLoader.displayImage(stream.getCoverURL(), imageView, options);
+            imageLoader.displayImage(stream.getCoverURL(), imageView, getDisplayOptions());
             return imgContainerRL;
         }
     }

@@ -2,13 +2,16 @@ package connexus.android.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.MenuItem;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import connexus.android.Config;
+import connexus.android.R;
 
 /**
  * Base activity for all activities except the Welcome screen.
@@ -22,6 +25,7 @@ public class BaseActivity extends Activity {
     LocationListener locationListener;
     Location currentBestLocation;
     protected boolean useLocation = false;
+    DisplayImageOptions options;
 
     /**
      * Ensures correct "Back" navigation on action bar
@@ -33,7 +37,7 @@ public class BaseActivity extends Activity {
             case android.R.id.home:
                 // NavUtils.navigateUpFromSameTask(this);
                 this.finish();
-                return true;
+                // return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -48,6 +52,22 @@ public class BaseActivity extends Activity {
     protected void onResume() {
         super.onResume();
         startLocationServices();
+    }
+
+    /**
+     * Universal Image Loader display options used in at least 3 places
+     * @return
+     */
+    protected DisplayImageOptions getDisplayOptions() {
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .showStubImage(R.drawable.ic_stub)
+                .showImageForEmptyUri(R.drawable.ic_empty)
+                .showImageOnFail(R.drawable.ic_error)
+                .cacheInMemory(false)  //
+                .cacheOnDisc(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)   // appears to use less memory
+                .build();
+        return options;
     }
 
     private void makeUseOfNewLocation(Location location) {

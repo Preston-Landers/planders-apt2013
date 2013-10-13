@@ -13,12 +13,9 @@ import android.widget.Toast;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import connexus.android.Config;
 import connexus.android.R;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -32,7 +29,6 @@ public class ImagePagerActivity extends BaseActivity {
 
     private static final String STATE_POSITION = "STATE_POSITION";
 
-    DisplayImageOptions options;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
     ViewPager pager;
@@ -54,16 +50,6 @@ public class ImagePagerActivity extends BaseActivity {
         if (savedInstanceState != null) {
             pagerPosition = savedInstanceState.getInt(STATE_POSITION);
         }
-
-        options = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.ic_empty)
-                .showImageOnFail(R.drawable.ic_error)
-                .resetViewBeforeLoading(true)
-                .cacheOnDisc(true)
-                .imageScaleType(ImageScaleType.EXACTLY)
-                // .bitmapConfig(Bitmap.Config.RGB_565)
-                .displayer(new FadeInBitmapDisplayer(300))
-                .build();
 
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new ImagePagerAdapter(imageUrls, imageLabels));
@@ -110,7 +96,7 @@ public class ImagePagerActivity extends BaseActivity {
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
             TextView textView = (TextView) imageLayout.findViewById(R.id.pagerimage_text);
             textView.setText(imageLabels[position]);
-            imageLoader.displayImage(imageUrls[position], imageView, options, new SimpleImageLoadingListener() {
+            imageLoader.displayImage(imageUrls[position], imageView, getDisplayOptions(), new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
                     spinner.setVisibility(View.VISIBLE);
