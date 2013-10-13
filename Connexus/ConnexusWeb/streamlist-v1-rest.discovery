@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/R5sZLpaLapes-lvvkp6hGvXUiEc\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/sygT6VU20lARIvdbT9V4cq30EcM\"",
  "discoveryVersion": "v1",
  "id": "streamlist:v1",
  "name": "streamlist",
@@ -97,6 +97,10 @@
      "type": "number",
      "format": "double"
     },
+    "metersToSearchPoint": {
+     "type": "number",
+     "format": "double"
+    },
     "mimeType": {
      "type": "string"
     },
@@ -136,6 +140,38 @@
     "views": {
      "type": "string",
      "format": "int64"
+    }
+   }
+  },
+  "NearbyResult": {
+   "id": "NearbyResult",
+   "type": "object",
+   "properties": {
+    "mediaList": {
+     "type": "array",
+     "items": {
+      "$ref": "Media"
+     }
+    },
+    "myId": {
+     "type": "string",
+     "format": "int64"
+    },
+    "queryLimit": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "queryOffset": {
+     "type": "integer",
+     "format": "int32"
+    },
+    "searchLatitude": {
+     "type": "number",
+     "format": "double"
+    },
+    "searchLongitude": {
+     "type": "number",
+     "format": "double"
     }
    }
   },
@@ -313,21 +349,54 @@
     "https://www.googleapis.com/auth/userinfo.email"
    ]
   },
+  "getNearby": {
+   "id": "streamlist.getNearby",
+   "path": "nearbyresult/{queryLimit}/{queryOffset}/{latitude}/{longitude}",
+   "httpMethod": "GET",
+   "parameters": {
+    "latitude": {
+     "type": "number",
+     "required": true,
+     "format": "double",
+     "location": "path"
+    },
+    "longitude": {
+     "type": "number",
+     "required": true,
+     "format": "double",
+     "location": "path"
+    },
+    "queryLimit": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "queryOffset": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "queryLimit",
+    "queryOffset",
+    "latitude",
+    "longitude"
+   ],
+   "response": {
+    "$ref": "NearbyResult"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "getStreams": {
    "id": "streamlist.getStreams",
    "path": "streamcollection/{queryLimit}/{queryOffset}",
    "httpMethod": "GET",
    "parameters": {
-    "latitude": {
-     "type": "number",
-     "format": "double",
-     "location": "query"
-    },
-    "longitude": {
-     "type": "number",
-     "format": "double",
-     "location": "query"
-    },
     "mySubs": {
      "type": "boolean",
      "location": "query"

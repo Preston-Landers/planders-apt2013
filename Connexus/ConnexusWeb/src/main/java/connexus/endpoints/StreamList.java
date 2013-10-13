@@ -13,6 +13,7 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.appengine.api.users.User;
 import connexus.model.CUser;
+import connexus.model.LocMedia;
 import connexus.model.Site;
 import connexus.model.Subscription;
 import connexus.servlet.ConnexusServletBase;
@@ -48,16 +49,12 @@ public class StreamList {
     private static class StreamCacheKey implements Serializable {
         Integer limit;
         Integer offset;
-        Double latitude;
-        Double longitude;
         String query;
         Boolean mySubs;
 
-        StreamCacheKey(Integer limit, Integer offset, Double latitude, Double longitude, String query, Boolean mySubs) {
+        StreamCacheKey(Integer limit, Integer offset, String query, Boolean mySubs) {
             this.limit = limit;
             this.offset = offset;
-            this.latitude = latitude;
-            this.longitude = longitude;
             this.query = query;
             this.mySubs = mySubs;
         }
@@ -65,19 +62,15 @@ public class StreamList {
 
     /**
      * Retrieve a list of photo streams according to criteria you specify. They are returned in
-     * the most recently modified order unless otherwise specified. Note that the lat/long, search
-     * term query, and "my subscription" features are all mutually exclusive. Each Stream is
+     * the most recently modified order unless otherwise specified. Note that the search
+     * term query and "my subscription" features are mutually exclusive. Each Stream is
      * returned with a mediaList object giving the first 16 media objects of the stream to save
      * you the separate call to getMedia.
      *
-     * TODO: Handle lat,long!
-     *
-     * @param user Google Account of the requesting user
-     * @param limit Number of results to return. Max of 32.
+     * @param user   Google Account of the requesting user
+     * @param limit  Number of results to return. Max of 32.
      * @param offset Index into total result set (used for pagination)
-     * @param latitude (Optional) - latitude to search
-     * @param longitude  (Optional) - longitude to search
-     * @param query (Optional) - search term to query
+     * @param query  (Optional) - search term to query
      * @param mySubs (Optional) - if true, limit results to my subscriptions.
      * @return a list of Stream objects matching the criteria
      */
@@ -85,22 +78,13 @@ public class StreamList {
     public List<Stream> getStreams(User user,
                                    @Named("queryLimit") Integer limit,
                                    @Named("queryOffset") Integer offset,
-                                   @Named("latitude") @Nullable Double latitude,
-                                   @Named("longitude") @Nullable Double longitude,
                                    @Named("query") @Nullable String query,
                                    @Named("mySubs") @Nullable Boolean mySubs) {
         // System.err.println("-> getStreams limit " + limit + " offset: " + offset );
         if (mySubs == null) {
             mySubs = new Boolean(false);
         }
-        if (latitude == null) {
-            latitude = new Double(0.0);
-        }
-        if (longitude == null) {
-            longitude = new Double(0.0);
-        }
-
-        StreamCacheKey cacheKey = new StreamCacheKey(limit, offset, latitude, longitude, query, mySubs);
+        StreamCacheKey cacheKey = new StreamCacheKey(limit, offset, query, mySubs);
 
         if (Config.API_CACHE_TIME_SEC >= 0) {
             List<Stream> cacheHit = (List<Stream>) syncCache.get(cacheKey);
@@ -159,16 +143,13 @@ public class StreamList {
                 System.err.println("-> getStreams error: asked for subs but not logged in!");
             }
 
-        }
-        else if (query != null) {
+        } else if (query != null) {
             modelStreams = connexus.servlet.Search.performStreamSearch(query, site.getKey(), limit, offset);
             // System.err.println("-> getStreams using search " + modelStreams.size() + " results for query " + query);
-        }
-        else {
+        } else {
             modelStreams = connexus.model.Stream.getAllStreams(site.getKey(), limit, offset);
             // System.err.println("-> getStreams general " + modelStreams.size());
         }
-
 
 
         int streamCount = 0;
@@ -184,10 +165,13 @@ public class StreamList {
             endpointStream.setQueryLimit(limit);
 
             // Do an initial image search on each stream to save the subsequent requests
+            // actually, don't do this because we're not actually using it.
             int mediaOffset = 0;
-            int mediaLimit = 16;
+            // int mediaLimit = 16;
+            int mediaLimit = 0;
 
-            List<Media> mediaList = getMediaHelper(stream, mediaLimit, mediaOffset);
+            // List<Media> mediaList = getMediaHelper(stream, mediaLimit, mediaOffset);
+            List<Media> mediaList = null;
             endpointStream.setMediaOffset(mediaOffset);
             endpointStream.setMediaLimit(mediaLimit);
             endpointStream.setMediaList(mediaList);
@@ -219,19 +203,19 @@ public class StreamList {
      * Retrieve a list of Media (images) from a single photo Stream. You must provide both
      * the streamId AND the ownerId.
      *
-     * @param user Google User
-     * @param streamId stream Id
+     * @param user          Google User
+     * @param streamId      stream Id
      * @param streamOwnerId owner Id of the stream (not necessarily of all the images within)
-     * @param limit max of 32
-     * @param offset offset within results for pagination
+     * @param limit         max of 32
+     * @param offset        offset within results for pagination
      * @return a list of media objects matching the search criteria.
      */
     @ApiMethod(name = "getMedia", httpMethod = "get")
     public StreamResult getMedia(User user,
-                                @Named("streamId") Long streamId,
-                                @Named("streamOwnerId") Long streamOwnerId,
-                                @Named("queryLimit") Integer limit,
-                                @Named("queryOffset") Integer offset) {
+                                 @Named("streamId") Long streamId,
+                                 @Named("streamOwnerId") Long streamOwnerId,
+                                 @Named("queryLimit") Integer limit,
+                                 @Named("queryOffset") Integer offset) {
 
         StreamResult returnVal;
         MediaCacheKey cacheKey;
@@ -272,8 +256,7 @@ public class StreamList {
         returnVal.setMediaList(mediaList);
         if (mediaList != null) {
             returnVal.setResultSize(mediaList.size());
-        }
-        else {
+        } else {
             returnVal.setResultSize(0);
         }
         returnVal.setStreamId(streamId);
@@ -329,6 +312,41 @@ public class StreamList {
             mediaList.add(endpointMedia);
         }
         return mediaList;
+    }
+
+    /**
+     * Search for images whose location tag is nearby the given coordinates.
+     *
+     * @param user      Google Account of the requesting user
+     * @param limit     Number of results to return. Max of 32.
+     * @param offset    Index into total result set (used for pagination)
+     * @param latitude  search latitude
+     * @param longitude search longitude
+     * @return a list of Stream objects matching the criteria
+     */
+    @ApiMethod(name = "getNearby", httpMethod = "get")
+    public NearbyResult getNearby(User user,
+                                  @Named("queryLimit") Integer limit,
+                                  @Named("queryOffset") Integer offset,
+                                  @Named("latitude") Double latitude,
+                                  @Named("longitude") Double longitude) {
+        NearbyResult nearbyResult = new NearbyResult();
+        nearbyResult.setQueryLimit(limit);
+        nearbyResult.setQueryOffset(offset);
+        nearbyResult.setSearchLatitude(latitude);
+        nearbyResult.setSearchLongitude(longitude);
+        List<Media> mediaList = new ArrayList<Media>();
+        for (LocMedia locMedia:
+                connexus.model.Media.searchByLocation(limit, offset, latitude, longitude)) {
+            if (locMedia!= null) {
+                connexus.model.Media media = locMedia.getMedia();
+                Media epMedia = convertMediaToAPI(media);
+                epMedia.setMetersToSearchPoint(locMedia.getDistanceToOrigin());
+                mediaList.add(epMedia);
+            }
+        }
+        nearbyResult.setMediaList(mediaList);
+        return nearbyResult;
     }
 
     protected static Stream convertStreamToAPI(connexus.model.Stream modelStream) {

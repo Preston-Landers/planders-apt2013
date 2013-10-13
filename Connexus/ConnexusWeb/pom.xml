@@ -48,6 +48,11 @@
             <artifactId>httpclient</artifactId>
             <version>4.2.6</version>
         </dependency>
+        <dependency>
+            <groupId>com.javadocmd</groupId>
+            <artifactId>simplelatlng</artifactId>
+            <version>RELEASE</version>
+        </dependency>
 
         <!-- for Endpoints-->
         <dependency>

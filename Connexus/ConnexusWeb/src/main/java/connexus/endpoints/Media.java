@@ -21,6 +21,7 @@ public class Media implements Serializable {
     long views;
     double longitude;
     double latitude;
+    double metersToSearchPoint;
 
     int queryOffset;
     int queryLimit;
@@ -160,5 +161,13 @@ public class Media implements Serializable {
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public double getMetersToSearchPoint() {
+        return metersToSearchPoint;
+    }
+
+    public void setMetersToSearchPoint(double metersToSearchPoint) {
+        this.metersToSearchPoint = metersToSearchPoint;
     }
 }

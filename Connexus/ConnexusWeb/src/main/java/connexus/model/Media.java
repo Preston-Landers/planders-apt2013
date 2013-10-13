@@ -3,7 +3,10 @@ package connexus.model;
 import static connexus.OfyService.ofy;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 
 import com.google.appengine.api.blobstore.BlobKey;
@@ -23,6 +26,7 @@ import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfNotNull;
 
+import com.javadocmd.simplelatlng.LatLng;
 import connexus.Config;
 
 @Entity
@@ -227,7 +231,7 @@ public class Media implements Comparable<Media> {
 	}
 
 	public String getMediaServingURL() {
-		return getMediaURLHelper(getBlobKey(), 768);
+		return getMediaURLHelper(getBlobKey(), 0); // XXX TODO
 	}
 
 	public String getThumbURL() {
@@ -298,5 +302,59 @@ public class Media implements Comparable<Media> {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    /**
+     * Perform a search of all media (images) sorted by proximity to a given location
+     * Ignores media that doesn't have a location set.
+     * @param limit
+     * @param offset
+     * @param latitude
+     * @param longitude
+     * @return
+     */
+    public static List<LocMedia> searchByLocation(int limit, int offset, double latitude, double longitude) {
+        List<LocMedia> returnList = new ArrayList<LocMedia>();
+        Site site = Site.load(null);
+        if (limit == 0) {
+            limit = 9;
+        }
+
+        LatLng searchPoint = new LatLng(latitude, longitude);
+
+        List<LocMedia> locMedias = new ArrayList<LocMedia>();
+        List<Media> allMedia = ofy().load().type(Media.class).ancestor(site).list();
+        for (Media media : allMedia) {
+            // System.err.println("Location search on media: " + media.getId());
+            Double mLat = media.getLatitude();
+            Double mLong = media.getLongitude();
+            if (mLat == null || mLong == null) {
+                continue;
+            }
+            if (mLat.equals(0.0) && mLong.equals(0.0)) {
+                System.err.println("Location search excluding 0/0 coords: " + media.getId());
+                continue;
+            }
+            // System.err.println(" -> media: " + media.getId() + " has coords Lat: " + mLat + " long: " + mLong + " comment: " + media.getComments());
+            LatLng mediaPoint = new LatLng(mLat, mLong);
+            LocMedia locMedia = new LocMedia(mediaPoint, searchPoint, media);
+            locMedias.add(locMedia);
+        }
+        Collections.sort(locMedias);
+        int i = 0;
+        int added = 0;
+        for (LocMedia locMedia : locMedias) {
+            // System.err.println("Loc search i: " + i + " media: " + locMedia.getMedia().getId() + " comment: " + locMedia.getMedia().getComments());
+            if (i>=offset) {
+                returnList.add(locMedia);
+                added++;
+            }
+            i++;
+            if (added >= limit) {
+                break;
+            }
+        }
+        System.err.println("Returning nearby search results length: " + returnList.size());
+        return returnList;
     }
 }
