@@ -37,8 +37,6 @@ public class UploadActivity extends BaseActivity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
-    Streamlist service;
-    String accountName;
     GoogleAccountCredential credential;
     private boolean signedIn = false;
 

@@ -6,10 +6,7 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
@@ -89,11 +86,11 @@ public class ImagePagerActivity extends BaseActivity {
         }
 
         @Override
-        public Object instantiateItem(ViewGroup view, int position) {
-            View imageLayout = inflater.inflate(R.layout.item_pager_image, view, false);
+        public Object instantiateItem(final ViewGroup viewGroup, int position) {
+            View imageLayout = inflater.inflate(R.layout.item_pager_image, viewGroup, false);
             ImageView imageView = (ImageView) imageLayout.findViewById(R.id.pager_image);
             mAttacher = new PhotoViewAttacher(imageView);
-            final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
+            final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.pager_loading);
             TextView textView = (TextView) imageLayout.findViewById(R.id.pagerimage_text);
             textView.setText(imageLabels[position]);
             imageLoader.displayImage(imageUrls[position], imageView, getDisplayOptions(), new SimpleImageLoadingListener() {
@@ -133,7 +130,7 @@ public class ImagePagerActivity extends BaseActivity {
                 }
             });
 
-            ((ViewPager) view).addView(imageLayout, 0);
+            ((ViewPager) viewGroup).addView(imageLayout, 0);
             return imageLayout;
         }
 

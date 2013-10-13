@@ -3,16 +3,16 @@
 
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
-             android:padding="1dip">
+             android:padding="0dip">
 
     <ImageView
             android:id="@+id/pager_image"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:contentDescription="@string/descr_image"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:layout_marginTop="15dp"/>
 
     <com.qwerjk.better_text.MagicTextView
@@ -26,8 +26,8 @@
             android:layout_alignBottom="@+id/pager_image"
             android:layout_margin="1dp"
             android:gravity="center|bottom"
-            android:textSize="16sp"
-            android:text=""
+            android:textSize="18sp"
+            android:text=" "
             android:textColor="#000000"
             android:layout_marginTop="2dp"
 
@@ -41,7 +41,7 @@
             />
 
     <ProgressBar
-            android:id="@+id/loading"
+            android:id="@+id/pager_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
