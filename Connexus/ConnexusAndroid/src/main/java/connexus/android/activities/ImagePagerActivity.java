@@ -88,7 +88,7 @@ public class ImagePagerActivity extends BaseActivity {
         @Override
         public Object instantiateItem(final ViewGroup viewGroup, int position) {
             View imageLayout = inflater.inflate(R.layout.item_pager_image, viewGroup, false);
-            ImageView imageView = (ImageView) imageLayout.findViewById(R.id.pager_image);
+            final ImageView imageView = (ImageView) imageLayout.findViewById(R.id.pager_image);
             mAttacher = new PhotoViewAttacher(imageView);
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.pager_loading);
             TextView textView = (TextView) imageLayout.findViewById(R.id.pagerimage_text);
@@ -127,6 +127,18 @@ public class ImagePagerActivity extends BaseActivity {
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     spinner.setVisibility(View.GONE);
+
+                    // We want the following behavior:
+                    //  - show complete image initially (fill one axis)
+                    //  - allow zooming that takes up the entire viewport
+                    // In order to do this, I had to make the initial ImageView layout fit the content initial
+                    // size, but then after the zoom is attached and image loaded, we change the ImageView to
+                    // fill its parent container.
+
+                    ViewGroup.LayoutParams layoutParams = viewGroup.getLayoutParams();
+                    layoutParams.width = layoutParams.FILL_PARENT;
+                    layoutParams.height = layoutParams.FILL_PARENT;
+                    imageView.setLayoutParams(layoutParams);
                 }
             });
 

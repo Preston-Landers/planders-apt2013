@@ -8,8 +8,8 @@
     <ImageView
             android:id="@+id/pager_image"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
             android:adjustViewBounds="true"
             android:contentDescription="@string/descr_image"
             android:scaleType="centerInside"
