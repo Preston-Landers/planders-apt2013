@@ -2,7 +2,7 @@ package connexus.android.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -12,8 +12,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
-import com.appspot.connexus_apt.streamlist.Streamlist;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import connexus.android.Account;
 import connexus.android.Config;
 import connexus.android.R;
@@ -37,9 +38,6 @@ public class UploadActivity extends BaseActivity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
-    GoogleAccountCredential credential;
-    private boolean signedIn = false;
-
     Long streamId;
     Long streamOwnerId;
     Long myId;
@@ -48,11 +46,12 @@ public class UploadActivity extends BaseActivity {
 
     // Our upload location
     private Uri uploadFileUri;
-    private String realPath;   // the path we pass to the File() for HTTP form upload
 
     // Where we saved camera results
     public Uri cameraFileUri;
 
+    // For the Preview
+    protected ImageLoader imageLoader = ImageLoader.getInstance();
 
     /**
      * Called when the activity is first created.
@@ -95,7 +94,7 @@ public class UploadActivity extends BaseActivity {
         }
 
         // Clears out the selected file text label
-        setSelectedUploadUri(null, null);
+        setSelectedUploadUri(null);
 
         setTitle("Upload: " + streamName);
 
@@ -110,6 +109,7 @@ public class UploadActivity extends BaseActivity {
         }
 
         // Get user credentials for login
+        /// XX TODO: don't think we need here
         credential = Account.getInstance().getCredential();
         if (credential != null) {
             signedIn = true;
@@ -146,9 +146,7 @@ public class UploadActivity extends BaseActivity {
                 String fileName = cameraFileUri.getPath();
 //                Toast.makeText(this, "Image saved to:\n" +
 //                        fileName, Toast.LENGTH_SHORT).show();
-                setSelectedUploadUri(cameraFileUri, fileName);
-                ImageView imageView = (ImageView) findViewById(R.id.uploadPreviewImageView);
-                imageView.setImageBitmap(BitmapFactory.decodeFile(fileName));
+                setSelectedUploadUri(cameraFileUri);
 
             } else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
@@ -160,12 +158,8 @@ public class UploadActivity extends BaseActivity {
         } else if (requestCode == LOAD_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Uri selectedImage = data.getData();
+                setSelectedUploadUri(selectedImage);
 
-                String itsRealPath = getPath(selectedImage);
-                setSelectedUploadUri(selectedImage, itsRealPath);
-
-                ImageView imageView = (ImageView) findViewById(R.id.uploadPreviewImageView);
-                imageView.setImageBitmap(BitmapFactory.decodeFile(itsRealPath));
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(UploadActivity.this, "Load from Gallery was canceled", Toast.LENGTH_SHORT).show();
             } else {
@@ -175,14 +169,14 @@ public class UploadActivity extends BaseActivity {
         }
     }
 
+
     /**
      * Choose a file URI to upload.
      *
      * @param uploadUri
      */
-    private void setSelectedUploadUri(Uri uploadUri, String realPath) {
+    private void setSelectedUploadUri(Uri uploadUri) {
         uploadFileUri = uploadUri;
-        this.realPath = realPath;
         TextView fileNameLabel = (TextView) findViewById(R.id.upload_file_name);
         Button uploadButton = (Button) findViewById(R.id.upload_now);
 
@@ -193,8 +187,36 @@ public class UploadActivity extends BaseActivity {
             fileNameLabel.setText(uploadUri.getPath());
             uploadButton.setEnabled(true);
         }
+
+        setPreviewImage(uploadUri);
+
     }
 
+    /**
+     * After selecting an image for upload, load it in the preview area.
+     * Uses the UIL library to load a smaller version of the image (fitting in the preview area)
+     * since a camera image can be quite large.
+     * @param imageUri
+     */
+    private void setPreviewImage(Uri imageUri) {
+        final ImageView imageView = (ImageView) findViewById(R.id.uploadPreviewImageView);
+        if (imageView == null) {
+            return;
+        }
+        String imagePath = getPath(imageUri, true);
+        ImageSize targetSize = new ImageSize(imageView.getWidth(), imageView.getHeight());
+        imageLoader.loadImage(imagePath, targetSize, getDisplayOptions(), new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                imageView.setImageBitmap(loadedImage);
+            }
+        });
+    }
+
+    /**
+     * Start an intent to pick an image from the device image gallery.
+     * @param view
+     */
     public void chooseFromLibrary(View view) {
         Intent intent = new Intent(
                 Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -202,6 +224,10 @@ public class UploadActivity extends BaseActivity {
         startActivityForResult(intent, LOAD_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
+    /**
+     * This is run when you click the upload button.
+     * @param view
+     */
     public void uploadNow(View view) {
         if (uploadFileUri == null) {
             String message = "Nothing to upload...";
@@ -291,7 +317,7 @@ public class UploadActivity extends BaseActivity {
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(uploadFormAction);
             MultipartEntity httpEntity = new MultipartEntity();
-            File uploadFile = new File(realPath);
+            File uploadFile = new File(getPath(uploadFileUri, false));
 
             try {
                 ContentBody contentBody = new FileBody(uploadFile);
@@ -333,13 +359,31 @@ public class UploadActivity extends BaseActivity {
         }
     }
 
-    public String getPath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        startManagingCursor(cursor);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
+    /**
+     * Turn a content:// URI into a file:// URI
+     * @param _uri a content:// URI
+     * @param addFileProto if true, add the file:// protocol to the beginning
+     * @return a file:// URI
+     */
+    public String getPath(Uri _uri, boolean addFileProto) {
+        if (_uri == null) {
+            return null;
+        }
+        String filePath = "";
+        if (_uri != null && "content".equals(_uri.getScheme())) {
+            Cursor cursor = this.getContentResolver().query(_uri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+            cursor.moveToFirst();
+            filePath = cursor.getString(0);
+            cursor.close();
+        }
+        else {
+            filePath = _uri.getPath();
+        }
+        if (addFileProto) {
+            return "file://" + filePath;
+        } else {
+            return filePath;
+        }
     }
 }
 
