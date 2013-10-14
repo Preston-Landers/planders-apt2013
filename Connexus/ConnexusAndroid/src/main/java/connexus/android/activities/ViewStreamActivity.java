@@ -63,9 +63,11 @@ public class ViewStreamActivity extends BaseActivity {
         // Dear God... there must be a better way to handle this!
         if (!doingLocationSearch) {
             if (streamId == null || streamId == 0) {
+                Toast.makeText(ViewStreamActivity.this, "Internal error: invalid streamId", Toast.LENGTH_LONG).show();
                 throw new IllegalArgumentException("You must specify a streamId!");
             }
             if (streamOwnerId == null || streamOwnerId == 0) {
+                Toast.makeText(ViewStreamActivity.this, "Internal error: invalid streamOwnerId", Toast.LENGTH_LONG).show();
                 throw new IllegalArgumentException("You must specify a streamOwnerId!");
             }
         }
