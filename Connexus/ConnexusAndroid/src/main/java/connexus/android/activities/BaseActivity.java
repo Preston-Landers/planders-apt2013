@@ -17,7 +17,7 @@ import connexus.android.Config;
 import connexus.android.R;
 
 /**
- * Base activity for all activities except the Welcome screen.
+ * Base activity for all activities. Has code for location and account services.
  *
  * Handles location services - disabled by default, set useLocation in subclass onCreate.
  */
@@ -59,6 +59,9 @@ public class BaseActivity extends Activity {
 
     }
 
+    /**
+     * subclass can override to take action upon gaining account credentials
+     */
     protected void onSignIn() {
         return;
     }
@@ -68,14 +71,15 @@ public class BaseActivity extends Activity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        boolean rv = super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
                 // NavUtils.navigateUpFromSameTask(this);
                 this.finish();
-                // return true;
+                return rv;
         }
-        return super.onOptionsItemSelected(item);
+        return rv;
     }
 
     @Override

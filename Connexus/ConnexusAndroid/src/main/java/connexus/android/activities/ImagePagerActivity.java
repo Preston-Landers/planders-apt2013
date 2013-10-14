@@ -92,7 +92,7 @@ public class ImagePagerActivity extends BaseActivity {
             mAttacher = new PhotoViewAttacher(imageView);
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.pager_loading);
             TextView textView = (TextView) imageLayout.findViewById(R.id.pagerimage_text);
-            textView.setText(imageLabels[position]);
+            textView.setText(imageLabels[position] == null ? " " : imageLabels[position]);
             imageLoader.displayImage(imageUrls[position], imageView, getDisplayOptions(), new SimpleImageLoadingListener() {
                 @Override
                 public void onLoadingStarted(String imageUri, View view) {
