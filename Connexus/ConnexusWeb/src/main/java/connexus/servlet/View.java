@@ -235,7 +235,14 @@ public class View extends ConnexusServletBase {
 
 		Media media = new Media(null, viewingStream.getKey(), bkey, bkeyStr,
 				cuser.getKey());
-		media.setMimeType(bInfo.getContentType());
+
+        String mediaCT = req.getParameter("mediaCT");
+        if (mediaCT != null) {
+            media.setMimeType(mediaCT);
+        } else {
+            media.setMimeType(bInfo.getContentType());
+        }
+
 		media.setFileName(bInfo.getFilename());
 		media.setSize(bInfo.getSize());
 		media.setComments(comments);

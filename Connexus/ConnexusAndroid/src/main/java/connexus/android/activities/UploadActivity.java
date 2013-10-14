@@ -1,5 +1,6 @@
 package connexus.android.activities;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.*;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
@@ -21,11 +23,13 @@ import connexus.android.R;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.ClientPNames;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.params.HttpParams;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -177,6 +181,9 @@ public class UploadActivity extends BaseActivity {
      */
     private void setSelectedUploadUri(Uri uploadUri) {
         uploadFileUri = uploadUri;
+        if (uploadUri == null) {
+            Log.e(TAG, "Error: null upload URI!");
+        }
         TextView fileNameLabel = (TextView) findViewById(R.id.upload_file_name);
         Button uploadButton = (Button) findViewById(R.id.upload_now);
 
@@ -318,10 +325,12 @@ public class UploadActivity extends BaseActivity {
             HttpPost httpPost = new HttpPost(uploadFormAction);
             MultipartEntity httpEntity = new MultipartEntity();
             File uploadFile = new File(getPath(uploadFileUri, false));
+            String mediaCT = getMimeType(uploadFileUri);
 
             try {
                 ContentBody contentBody = new FileBody(uploadFile);
                 httpEntity.addPart("media", contentBody);
+                httpEntity.addPart("mediaCT", new StringBody(mediaCT));
                 httpEntity.addPart("v", new StringBody(streamUploadId));
                 httpEntity.addPart("uu", new StringBody(myId.toString()));
                 httpEntity.addPart("upload", new StringBody("1"));
@@ -384,6 +393,24 @@ public class UploadActivity extends BaseActivity {
         } else {
             return filePath;
         }
+    }
+
+    public String getMimeType(Uri fileUri){
+        ContentResolver cR = this.getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        String type = null;
+        // type = mime.getExtensionFromMimeType(cR.getType(fileUri));
+        if (fileUri.getScheme().equals("file")) {
+            // guess based on the extension
+            String fileExt = MimeTypeMap.getFileExtensionFromUrl(fileUri.getPath());
+            type = mime.getMimeTypeFromExtension(fileExt);
+        } else if (fileUri.getScheme().equals("content")) {
+           type = cR.getType(fileUri);
+        }  else {
+            throw new IllegalArgumentException("Unknown Uri scheme: " + fileUri.getScheme());
+        }
+
+        return type;
     }
 }
 
