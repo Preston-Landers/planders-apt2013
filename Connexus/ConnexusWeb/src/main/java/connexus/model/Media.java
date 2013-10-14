@@ -231,7 +231,7 @@ public class Media implements Comparable<Media> {
 	}
 
 	public String getMediaServingURL() {
-		return getMediaURLHelper(getBlobKey(), 0); // XXX TODO
+		return getMediaURLHelper(getBlobKey(), 1024); // XXX TODO - don't hardcode
 	}
 
 	public String getThumbURL() {
