@@ -18,12 +18,8 @@ import connexus.android.Account;
 import connexus.android.Config;
 import connexus.android.R;
 
-public class WelcomeActivity extends Activity {
+public class WelcomeActivity extends BaseActivity {
     private static final String TAG = "WelcomeActivity";
-    SharedPreferences settings;
-    String accountName;
-    GoogleAccountCredential credential;
-    private boolean signedIn = false;
 
     // Not sure if these are just magic or what...?
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
@@ -38,13 +34,13 @@ public class WelcomeActivity extends Activity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_main);
+        super.onCreate(savedInstanceState);
 
-        // Get user credentials for login
-        settings = getSharedPreferences( Config.PREFS_NAME, 0);
-        credential = GoogleAccountCredential.usingAudience(this, Config.AUDIENCE);
-        setAccountName(settings.getString(Config.PREF_ACCOUNT_NAME, null));
+//        // Get user credentials for login
+//        settings = getSharedPreferences( Config.PREFS_NAME, 0);
+//        credential = GoogleAccountCredential.usingAudience(this, Config.AUDIENCE);
+//        setAccountName(settings.getString(Config.PREF_ACCOUNT_NAME, null));
     }
 
     @Override
@@ -121,29 +117,12 @@ public class WelcomeActivity extends Activity {
         startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 
-    private void setAccountName(String accountName) {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(Config.PREF_ACCOUNT_NAME, accountName);
-        editor.commit();
-        credential.setSelectedAccountName(accountName);
-        Account.getInstance().setCredential(credential);
-        this.accountName = accountName;
-        if (accountName != null) {
-            this.signedIn = true;
-            setAccountLabel(accountName);
-            setSignInEnablement(false);
-        }
 
-    }
-
-    private void onSignIn() {
-        this.signedIn = true;
-        // this.waitingForMove = true;
+    @Override
+    protected void onSignIn() {
+        super.onSignIn();
         setSignInEnablement(false);
-        // setBoardEnablement(true);
         setAccountLabel(this.accountName);
-        // queryScores();
-        // new ViewStreamsTask().execute();
     }
 
     private void forgetAccount() {

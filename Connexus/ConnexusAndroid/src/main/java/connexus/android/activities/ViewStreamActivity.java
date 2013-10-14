@@ -373,7 +373,7 @@ public class ViewStreamActivity extends BaseActivity {
                 List<Media> mediaList = nearbyResult.getMediaList();
                 Media media = mediaList.get(position);
 
-                String imageLabel = String.format("%s : %.3f%n km", media.getComments(), (media.getMetersToSearchPoint() / 1000));
+                String imageLabel = String.format("%s : %2$,.3f km", media.getComments(), (media.getMetersToSearchPoint() / 1000));
                 textView.setText(imageLabel);
 //                textView.setText(media.getComments() + " @ " +
 //                        getNearbySearchDescription(media.getLatitude(), media.getLongitude()));

@@ -2,6 +2,7 @@ package connexus.android.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -9,7 +10,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.MenuItem;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import connexus.android.Account;
 import connexus.android.Config;
 import connexus.android.R;
 
@@ -26,6 +29,39 @@ public class BaseActivity extends Activity {
     Location currentBestLocation;
     protected boolean useLocation = false;
     DisplayImageOptions options;
+
+    protected SharedPreferences settings;
+    protected String accountName;
+    protected GoogleAccountCredential credential;
+    protected boolean signedIn = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Get user credentials for login
+        settings = getSharedPreferences( Config.PREFS_NAME, 0);
+        credential = GoogleAccountCredential.usingAudience(this, Config.AUDIENCE);
+        setAccountName(settings.getString(Config.PREF_ACCOUNT_NAME, null));
+    }
+
+    protected void setAccountName(String accountName) {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(Config.PREF_ACCOUNT_NAME, accountName);
+        editor.commit();
+        credential.setSelectedAccountName(accountName);
+        Account.getInstance().setCredential(credential);
+        this.accountName = accountName;
+        if (accountName != null) {
+            this.signedIn = true;
+            onSignIn();
+        }
+
+    }
+
+    protected void onSignIn() {
+        return;
+    }
 
     /**
      * Ensures correct "Back" navigation on action bar
