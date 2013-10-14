@@ -217,10 +217,13 @@ public class StreamList {
                                  @Named("queryLimit") Integer limit,
                                  @Named("queryOffset") Integer offset) {
 
-        System.err.println("getMedia-> streamId: " + streamId + " ownerId: " + streamOwnerId);
+        // System.err.println("getMedia-> streamId: " + streamId + " ownerId: " + streamOwnerId);
         StreamResult returnVal;
-        MediaCacheKey cacheKey;
-        if (Config.API_CACHE_TIME_SEC >= 0) {
+        MediaCacheKey cacheKey = null;
+        // Disabling cache on stream view due to incrementing view count..
+        // and who cares really?
+        boolean useCache = false;
+        if (useCache && Config.API_CACHE_TIME_SEC >= 0) {
             cacheKey = new MediaCacheKey(streamId, streamOwnerId, limit, offset);
             returnVal = (StreamResult) syncCache.get(cacheKey);
             if (returnVal != null) {
@@ -291,7 +294,7 @@ public class StreamList {
         returnVal.setStreamName(stream.getName());
         returnVal.setStreamOwnerName(stream.getOwnerName());
         returnVal.setStream(convertStreamToAPI(stream));
-        if (Config.API_CACHE_TIME_SEC >= 0) {
+        if (useCache && cacheKey != null && Config.API_CACHE_TIME_SEC >= 0) {
             syncCache.put(cacheKey, returnVal, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
         }
         return returnVal;
@@ -363,7 +366,7 @@ public class StreamList {
         stream.setTags(modelStream.getTags());
         stream.setCreationDate(modelStream.getCreationDate());
         stream.setNumberOfMedia(modelStream.getNumberOfMedia());
-        Long views = modelStream.getViews();
+        Long views = modelStream.getAndIncrementViews();
         if (views == null) {
             views = new Long(0);
         }
@@ -386,7 +389,7 @@ public class StreamList {
         media.setComments(modelMedia.getComments());
         media.setCreationDate(modelMedia.getCreationDate());
         media.setUploader(modelMedia.getUploaderNow().getRealName());
-        media.setViews(modelMedia.getViews());
+        media.setViews(modelMedia.getAndIncrementViews());
 
         Double lLat = modelMedia.getLatitude();
         Double lLong = modelMedia.getLongitude();
