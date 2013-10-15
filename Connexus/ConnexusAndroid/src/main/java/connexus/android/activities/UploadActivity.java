@@ -17,19 +17,16 @@ import android.widget.*;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import connexus.android.Account;
 import connexus.android.Config;
 import connexus.android.R;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.params.ClientPNames;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.params.HttpParams;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -110,15 +107,6 @@ public class UploadActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             // Show the Up button in the action bar.
             getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-        // Get user credentials for login
-        /// XX TODO: don't think we need here
-        credential = Account.getInstance().getCredential();
-        if (credential != null) {
-            signedIn = true;
-        } else {
-            signedIn = false;
         }
 
         useLocation = true;

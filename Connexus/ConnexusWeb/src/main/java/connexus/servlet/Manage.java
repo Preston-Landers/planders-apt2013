@@ -34,8 +34,10 @@ public class Manage extends ConnexusServletBase {
 		
 		// initialize my subscriptions (cuser could be null, you get an empty
 		// list)
-		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser.getKey());
-		req.setAttribute("mySubscriptions", mySubs);
+        if (cuser != null) {
+		    List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser.getKey());
+		    req.setAttribute("mySubscriptions", mySubs);
+        }
 
 		// Forward to JSP page to display them in a HTML table.
 		req.getRequestDispatcher(dispatcher).forward(req, resp); 

@@ -25,8 +25,6 @@ public class ViewStreamActivity extends BaseActivity {
     private static final int DO_UPLOAD_ACTIVITY_REQUEST_CODE = 100;
     private final int queryLimit = 9;
     private int queryOffset = 0;
-    GoogleAccountCredential credential;
-    private boolean signedIn = false;
 
     Streamlist service;
     String accountName;
@@ -81,13 +79,6 @@ public class ViewStreamActivity extends BaseActivity {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        // Get user credentials for login
-        credential = Account.getInstance().getCredential();
-        if (credential != null) {
-            signedIn = true;
-        } else {
-            signedIn = false;
-        }
         checkNavButtonState();
 
         setStatusText("Please wait, loading...");

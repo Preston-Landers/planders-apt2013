@@ -24,12 +24,10 @@ import java.util.List;
 public class BrowseStreamsActivity extends BaseActivity {
     private static final String TAG = "BrowseStreamsActivity";
 
-    private boolean signedIn = false;
     GridView gridView;
 
     // services 'n things
     Streamlist service;
-    GoogleAccountCredential credential;
     protected ImageLoader imageLoader = ImageLoader.getInstance();
 
     // query parameters for the server
@@ -77,13 +75,6 @@ public class BrowseStreamsActivity extends BaseActivity {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        // Get user credentials for login
-        credential = Account.getInstance().getCredential();
-        if (credential != null) {
-            signedIn = true;
-        } else {
-            signedIn = false;
-        }
         checkNavButtonState();
 
         new BrowseStreamsTask().execute();
@@ -149,12 +140,6 @@ public class BrowseStreamsActivity extends BaseActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void loginButton(View view) {
-        if (credential.getSelectedAccountName() != null) {
-            Log.i(TAG, "You are logged into android as: " + credential.getSelectedAccountName());
         }
     }
 

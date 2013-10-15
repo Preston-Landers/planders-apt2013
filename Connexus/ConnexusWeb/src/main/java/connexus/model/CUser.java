@@ -3,18 +3,20 @@ package connexus.model;
 import static connexus.OfyService.ofy;
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.*;
+import connexus.Config;
 
 @Entity
 @Cache
 public class CUser implements Comparable<CUser> {
 	@Id Long id;
 	@Parent Key<Site> site;
-	String accountName; // Displayed username
-	@Index String realName; // full name
+	@Index String accountName; // Displayed username
+	String realName; // full name
 	@Index User guser;      // google account
 	String content;
 	Date creationDate;
@@ -106,4 +108,17 @@ public class CUser implements Comparable<CUser> {
 		}
 		return 0;
 	}
+
+    public static void normalizeAllAccountNames(Key<Site> siteKey) {
+        if (siteKey == null) {
+            siteKey = Site.load(null).getKey();
+        }
+        List<CUser> allUsers = ofy().load().type(CUser.class).ancestor(siteKey).list();
+        for (CUser cUser : allUsers) {
+            cUser.setAccountName(Config.norm(cUser.getAccountName()));
+            ofy().save().entities(cUser);
+        }
+
+    }
+
 }

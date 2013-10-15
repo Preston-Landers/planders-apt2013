@@ -23,6 +23,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Additions by Preston Landers
  */
 public class ImagePagerActivity extends BaseActivity {
+    private static final String TAG = "ImagePagerActivity";
 
     private static final String STATE_POSITION = "STATE_POSITION";
 

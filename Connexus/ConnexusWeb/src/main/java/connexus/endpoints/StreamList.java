@@ -46,20 +46,6 @@ public class StreamList {
         syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
     }
 
-    private static class StreamCacheKey implements Serializable {
-        Integer limit;
-        Integer offset;
-        String query;
-        Boolean mySubs;
-
-        StreamCacheKey(Integer limit, Integer offset, String query, Boolean mySubs) {
-            this.limit = limit;
-            this.offset = offset;
-            this.query = query;
-            this.mySubs = mySubs;
-        }
-    }
-
     /**
      * Retrieve a list of photo streams according to criteria you specify. They are returned in
      * the most recently modified order unless otherwise specified. Note that the search
@@ -80,20 +66,14 @@ public class StreamList {
                                    @Named("queryOffset") Integer offset,
                                    @Named("query") @Nullable String query,
                                    @Named("mySubs") @Nullable Boolean mySubs) {
-        // System.err.println("-> getStreams limit " + limit + " offset: " + offset );
+        System.err.println((user == null ? "" : user) + " "
+                + (user == null ? "": user.getUserId())
+                + " -> getStreams limit " + limit + " offset: " + offset + " query: "
+                + (query == null ? "": query )+ " mySubs: "
+                + (mySubs == null ? "": mySubs ));
         if (mySubs == null) {
             mySubs = new Boolean(false);
         }
-        StreamCacheKey cacheKey = new StreamCacheKey(limit, offset, query, mySubs);
-
-        if (Config.API_CACHE_TIME_SEC >= 0) {
-            List<Stream> cacheHit = (List<Stream>) syncCache.get(cacheKey);
-            if (cacheHit != null) {
-                // System.err.println("-> getStreams cacheHit");
-                return cacheHit;
-            }
-        }
-
 
         List<Stream> streams = new ArrayList<Stream>();
 
@@ -102,6 +82,7 @@ public class StreamList {
             System.err.println("-> getStreams can't load site");
             throw new IllegalArgumentException("Can't load site object.");
         }
+        // CUser.normalizeAllAccountNames(site.getKey()); // XXX TODO
         CUser cUser = null;
         if (user != null) {
             cUser = ConnexusServletBase.getOrCreateUserRecord(user, site.getKey());
@@ -128,6 +109,7 @@ public class StreamList {
             int i = 0;
             if (cUser != null) {
                 for (Subscription sub : Subscription.getSubscriptionsForUser(cUser.getKey())) {
+                    // System.err.println("-> getStreams using mysubs cuser: " + cUser.getId());
                     connexus.model.Stream stream = ofy().load().key(sub.getStream()).get();
                     // System.err.println("-> getStreams sub " + Integer.toString(i));
                     if (stream != null) {
@@ -178,9 +160,6 @@ public class StreamList {
 
         }
 
-        if (Config.API_CACHE_TIME_SEC >= 0) {
-            syncCache.put(cacheKey, streams, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
-        }
         // System.err.println("-> getStreams return " + streams.size() );
         return streams;
     }

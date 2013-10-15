@@ -58,5 +58,15 @@ public class Config {
 	public static String escapeHTML(String inp) {
 		return inp.replace("<", "&lt;").replace(">","&gt;");
 	}
+
+    /**
+     * normalize strings for account lookup
+     * Apparently google account names/emails are case sensitive
+     * @param inp
+     * @return
+     */
+    public static String norm(String inp) {
+        return inp.toLowerCase();
+    }
     
 }

@@ -91,27 +91,14 @@ public abstract class ConnexusServletBase extends HttpServlet {
         CUser cuser = null;
         // Automatically create a CUser for any Google Users we recognize
         if (guser != null) {
-            // Try memcache before doing a query
-            boolean doSetMemcache = false;
-            String cuserIdCacheKey = guser.getUserId() + "_cuserId";
-            Long cuserId = (Long) syncCache.get(cuserIdCacheKey);
-            if (cuserId == null) {
-                cuser = ofy().load().type(CUser.class).ancestor(site)
-                        .filter("guser", guser).first().get();
-                doSetMemcache = true;
-            } else {
-                // System.err.println("user id cache hit : " + guser + " : " + cuserId);
-                Key<CUser>  cuserKey = com.googlecode.objectify.Key.create(site, CUser.class, cuserId);
-                cuser = ofy().load().key(cuserKey).get();
-            }
+            String normEmail = Config.norm(guser.getEmail());
+            // System.err.println("Searching for user " + normEmail);
+            cuser = ofy().load().type(CUser.class).ancestor(site)
+                    .filter("accountName", normEmail).first().get();
             if (cuser == null) {
+                System.err.println("Creating New User! " + guser + " guser ID: " + normEmail);
                 cuser = createUser(guser, site);
-            }
-            if (cuser != null) {
-                if (doSetMemcache) {
-                    // System.err.println("Setting user id into cache: " + guser + " : " + cuser.getId());
-                    syncCache.put(cuserIdCacheKey, cuser.getId());
-                }
+                System.err.println("New User cuser id: " + cuser.getId());
             }
 
         }
@@ -126,7 +113,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
     }
 
     private static CUser createUser(User guser, Key<Site> site) throws UserCreateException {
-        String accountName = guser.getEmail();
+        String accountName = Config.norm(guser.getEmail()); // needs to be lowercase
 		String realName = guser.getNickname();
 		
 		if (accountName.length() == 0 || realName.length() == 0) {
