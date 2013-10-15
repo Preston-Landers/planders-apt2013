@@ -141,7 +141,12 @@ public class View extends ConnexusServletBase {
 				viewingStreamUser = viewingStreamHandle.getCuser();
 				req.setAttribute("viewingStream", viewingStream);
 				req.setAttribute("viewingStreamUser", viewingStreamUser);
-                req.setAttribute("isMyStream", viewingStream.getOwner().equals(cuser.getKey()) ? true : false);
+                boolean isMyStream = false;
+                if ((cuser != null) &&
+                        (viewingStream.getOwner().equals(cuser.getKey()))) {
+                    isMyStream = true;
+                }
+                req.setAttribute("isMyStream", isMyStream);
 			} catch (RuntimeException e) {
 				alertError(req, e.toString());
 			}

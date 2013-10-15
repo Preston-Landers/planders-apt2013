@@ -13,7 +13,7 @@ public class Config {
     public static final String PREF_ACCOUNT_NAME = "accountName";
 
     public static final String AUDIENCE = "server:client_id:771214203866-7btn313m3jrh49s1dhd837ssm1n1lrd0.apps.googleusercontent.com";
-    public static final boolean DEVELOPER_MODE = true;
+    public static final boolean DEVELOPER_MODE = false;
 
     // When doing the Nearby search, how long will we wait for a location fix?
     public static final int MAX_LOCATION_WAIT_SEC = 10;
