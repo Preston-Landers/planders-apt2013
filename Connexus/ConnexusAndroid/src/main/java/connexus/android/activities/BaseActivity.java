@@ -56,6 +56,9 @@ public class BaseActivity extends Activity {
             this.signedIn = true;
             onSignIn();
         }
+        else {
+            this.signedIn = false;
+        }
 
     }
 

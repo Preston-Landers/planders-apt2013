@@ -126,7 +126,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void forgetAccount() {
-        this.signedIn = false;
+        setAccountName(null);
         SharedPreferences.Editor editor2 = settings.edit();
         editor2.remove(Config.PREF_AUTH_TOKEN);
         editor2.commit();

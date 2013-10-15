@@ -34,7 +34,7 @@ public class BrowseStreamsActivity extends BaseActivity {
     private final static int defaultQueryLimit = 9;
     private int queryLimit = defaultQueryLimit;
     private int queryOffset = 0;
-    private boolean showMySubs = false;
+    private boolean showingMySubs = false;
     private String searchTerm = null;
     List<Stream> streamList; // query results
 
@@ -56,10 +56,10 @@ public class BrowseStreamsActivity extends BaseActivity {
         Intent intent = getIntent();
         queryOffset = intent.getIntExtra(Config.NAV_OFFSET, 0);
         queryLimit = intent.getIntExtra(Config.NAV_LIMIT, defaultQueryLimit);
-        showMySubs = intent.getBooleanExtra(Config.SHOW_MY_SUBS, false);
+        showingMySubs = intent.getBooleanExtra(Config.SHOW_MY_SUBS, false);
         searchTerm = intent.getStringExtra(Config.SEARCH_TERM);
 
-        if (showMySubs) {
+        if (showingMySubs) {
             setTitle("My Subscriptions");
         }
 
@@ -102,9 +102,13 @@ public class BrowseStreamsActivity extends BaseActivity {
 
         }
 
-        // Hide the "show my subs" button if we're there.
+        // Hide the "show my subs" button if we're there (or not logged in)
         Button showMySubsButton = (Button) findViewById(R.id.mysubs_button);
-        showMySubsButton.setVisibility(showMySubs ? View.INVISIBLE : View.VISIBLE);
+        int newVisibility = View.VISIBLE;
+        if (showingMySubs || !signedIn) {
+            newVisibility = View.GONE;
+        }
+        showMySubsButton.setVisibility(newVisibility);
 
     }
 
@@ -232,7 +236,7 @@ public class BrowseStreamsActivity extends BaseActivity {
                 if (searchTerm != null) {
                     getStreams.setQuery(searchTerm);
                 }
-                getStreams.setMySubs(showMySubs);
+                getStreams.setMySubs(showingMySubs);
 
                 streamList = getStreams
                         .execute()

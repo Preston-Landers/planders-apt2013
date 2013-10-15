@@ -112,7 +112,7 @@ public class ViewStreamActivity extends BaseActivity {
                 browseRightButton.setVisibility(View.VISIBLE);
             }
             Button uploadButton = (Button) findViewById(R.id.upload_button);
-            if (streamResult.getCanUpload()) {
+            if (streamResult.getCanUpload() && signedIn) {
                 uploadButton.setVisibility(View.VISIBLE);
             } else {
                 uploadButton.setVisibility(View.INVISIBLE);
