@@ -201,7 +201,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		for (Key<Stream> streamKey : streamToTrendViews.keySet()) {			
 			Stream stream = ofy().load().key(streamKey).get();
 			stream.setTrendingViews(streamToTrendViews.get(streamKey));
-			stream.save();
+			stream.save(false);
 			allStreams.add(stream);
 		}
 
@@ -264,7 +264,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 	public void fixAllStreamMediaCounts() {
 		for (Stream stream : Stream.getAllStreamsNoOrder(site)) {
 			stream.fixNumMedia();
-			stream.save();
+			stream.save(false);
 		}
 		
 	}

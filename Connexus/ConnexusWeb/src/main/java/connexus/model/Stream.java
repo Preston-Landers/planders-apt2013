@@ -305,7 +305,7 @@ public class Stream implements Comparable<Stream> {
 		}
 		views++;
 		setViews(views);
-		save();
+		save(false); // async
 
 		StreamView streamView = new StreamView(null, getKey());
 		ofy().save().entities(streamView);  // async
@@ -313,9 +313,17 @@ public class Stream implements Comparable<Stream> {
 	}
 
 	public void save() {
-		// could be async but nah...
-		ofy().save().entities(this).now();
+		// synchronous by default
+        save(true);
 	}
+
+    public void save(boolean now) {
+        if (now) {
+            ofy().save().entities(this).now();
+        } else {
+            ofy().save().entities(this);
+        }
+    }
 
 	public long getTrendingViews() {
 		return trendingViews;

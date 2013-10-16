@@ -176,13 +176,21 @@ public class Media implements Comparable<Media> {
 		}
 		views++;
 		setViews(views);
-		save();
+		save(false); // async
 		return views;		
 	}
 	
 	public void save() {
-		ofy().save().entities(this).now();
+        save(true);
 	}
+
+    public void save(boolean now) {
+        if (now) {
+            ofy().save().entities(this).now();
+        } else {
+            ofy().save().entities(this);
+        }
+    }
 
 	public BlobKey getBlobKey() {
 		return blobKey;
