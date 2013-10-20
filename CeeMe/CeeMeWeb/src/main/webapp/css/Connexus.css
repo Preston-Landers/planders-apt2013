@@ -1,0 +1,109 @@
+.alert {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus {
+	background: none;
+	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0, 0.4), rgba(255,255,255,0.1) 0 1px 0;
+	box-shadow: inset 0 0 5px rgba(0,0,0, 0.4), rgba(255,255,255,0.1) 0 1px 0;
+	border-radius: 6px;
+	border: 0px solid rgba(0,0,0,0.25);
+}
+
+ul.dropdown-menu>li {
+	margin: 5px;
+}
+
+#createStreamPanel TEXTAREA { 
+	width: 100%;
+}
+
+.thumbnail {
+	margin-top: 15px;
+}
+
+div.thumbnail, img.img-thumbnail {
+	-webkit-box-shadow: 7px 7px 5px #ccc;
+	box-shadow: 7px 7px 5px #ccc;
+}
+
+.page-header {
+	margin-top: 0px;
+}
+
+.tags-well a:hover {
+	text-decoration: none;
+}
+
+#formReportFreq .radio {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.no-cover-image, .no-cover-image:hover  {
+	text-decoration: none;
+	color: gray;
+}
+.thumb-tb {
+	display: inline;
+}
+
+.thumb-tb-text {
+	font-size: 11pt;
+}
+ 
+ .social-buttons { opacity: 0; }
+ 
+ .about-col { margin-top: 5px; }
+
+.welcome-buttons-row A {
+	margin-top: 20px;
+}
+  
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#mainContent {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+#mainFooter {
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+#mainContent > .container {
+  padding: 30px 15px 0;
+}
+.container .credit {
+  margin: 20px 0;
+}
+
+#mainFooter > .container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+code {
+  font-size: 80%;
+}

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.appspot.cee_me</groupId>
+    <artifactId>ceeme-android</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>apk</packaging>
+    <name>CeeMeAndroid</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <platform.version>4.1.1.4
+        </platform.version>
+        <android.plugin.version>3.7.0</android.plugin.version>
+        <!--<android-platform>10</android-platform>-->
+        <!--<android.sdk.path>C:\Users\Preston\AppData\Local\Android\android-sdk\</android.sdk.path>-->
+    </properties>
+
+    <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>com.google.android</groupId>-->
+            <!--<artifactId>android</artifactId>-->
+            <!--<version>${platform.version}</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+
+        <!-- from: https://github.com/mosabua/maven-android-sdk-deployer -->
+        <dependency>
+            <groupId>android</groupId>
+            <artifactId>android</artifactId>
+            <version>4.0.3_r3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nostra13.universalimageloader</groupId>
+            <artifactId>universal-image-loader</artifactId>
+            <version>1.8.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.chrisbanes.photoview</groupId>
+            <artifactId>library</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
+        <!-- for UPLOADING by POST'ing a form -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v4</artifactId>
+            <version>18</version>
+        </dependency>
+
+        <!-- not 100% sure I need these 2 -->
+        <!--<dependency>-->
+            <!--<groupId>com.google.code.gson</groupId>-->
+            <!--<artifactId>gson</artifactId>-->
+            <!--<version>2.2.4</version>-->
+        <!--</dependency>-->
+
+        <!-- not 100% sure I need this -->
+        <!--<dependency>-->
+            <!--<groupId>com.google.guava</groupId>-->
+            <!--<artifactId>guava</artifactId>-->
+            <!--<version>15.0</version>-->
+        <!--</dependency>-->
+
+
+        <!-- Play Framework needed for making authenticated endpoint calls -->
+        <dependency>
+            <groupId>com.google.android.gms</groupId>
+            <artifactId>google-play-services</artifactId>
+            <version>12</version>
+            <type>apklib</type>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android.gms</groupId>
+            <artifactId>google-play-services</artifactId>
+            <version>12</version>
+            <type>jar</type>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.google.code.maven-play-plugin.org.playframework</groupId>-->
+            <!--<artifactId>play</artifactId>-->
+            <!--<version>1.2.7</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+
+        <!--  the following are for Cloud Endpoint support  -->
+         <dependency>
+             <groupId>com.google.api-client</groupId>
+             <artifactId>google-api-client-android</artifactId>
+             <version>1.17.0-rc</version>
+         </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <sourceDirectory>src</sourceDirectory>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                    <artifactId>android-maven-plugin</artifactId>
+                    <version>3.7.0</version>
+                    <extensions>true</extensions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <configuration>
+                    <sdk>
+                        <!-- platform or api level (api level 16 = platform 4.1)-->
+                        <platform>16</platform>
+                    </sdk>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

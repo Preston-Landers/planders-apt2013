@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Connex.us</string>
+    <string name="hello">Hello Connex.us Android app!</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello, Connex.us!</string>
+    <string name="welcome_header">Welcome to Connex.us for Android!</string>
+    <string name="welcome_login_button">Sign in with Google</string>
+    <string name="welcome_nologin_button">View Streams</string>
+    <string name="welcome_not_signed_in">(Not Signed In)</string>
+    <string name="my_sub_streams">My Subscriptions</string>
+    <string name="browse_streams_activity_name">Connex.us</string>
+    <string name="descr_image">Image</string>
+    <string name="ac_name_image_pager">View Images</string>
+    <string name="action_search">Search</string>
+    <string name="action_location_search">Nearby</string>
+    <string name="upload_button">Upload an Image</string>
+    <string name="view_stream_activity_name">View Stream</string>
+    <string name="upload_activity_name">Upload</string>
+    <string name="choose_from_your_library">Choose from your library</string>
+    <string name="use_camera">Use Camera</string>
+    <string name="add_a_comment">Add a comment or message</string>
+    <string name="upload_btn">Upload Now</string>
+    <string name="uploading_to_stream_name">Uploading to:</string>
+    <string name="stream_name_upload">(Stream Name)</string>
+    <string name="camera_activity_name">Use Camera</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="search_hint">Type a search term...</string>
+
+</resources>
