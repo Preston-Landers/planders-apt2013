@@ -1,0 +1,208 @@
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob Bathtub
+Submitting login form.
+Found expected bad password msg: Input combination of user id and password is incorrect.
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob definitely a bad password! 0
+Submitting login form.
+Passed check for bad password msg on good login.
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob definitely a bad password! 1
+Submitting login form.
+
+junit.framework.AssertionFailedError: Page doesn't contain bad password message: <html xmlns="http://www.w3.org/1999/xhtml"><head></head><body>Doing lookup with bob
+performing check
+<title>Frequent Login</title><h2>Wait for 10 seconds before trying to login again</h2>
+</body></html>
+	at TempConversion.testBadLoginTimer(TempConversion.java:112)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:84)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:160)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:77)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:195)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:63)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:120)
+
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+Setting input for case-sensitive form check
+Running Javascript to change form input name from farenheitTemperature to FarenheitTemperature
+Submitting new form with new input name FarenheitTemperature
+
+junit.framework.AssertionFailedError: Page says we need to enter a temp after changing case of input element to FarenheitTemperature
+	at TempConversion.testInputCaseSensitivity(TempConversion.java:326)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:84)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:160)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:77)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:195)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:63)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:120)
+
+Testing conversion of -393.38934 F 
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+
+junit.framework.AssertionFailedError: Precision fail. Expected < 1 >  actual < 2 >  Raw result: -393.38934 F -> -236.33 C
+	at TempConversion.testPrecisionHelper(TempConversion.java:254)
+	at TempConversion.testPrecisionA(TempConversion.java:184)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:84)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:160)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:77)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:195)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:63)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:120)
+
+Testing conversion of -0.00001 F 
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+
+junit.framework.AssertionFailedError: Precision fail. Expected < 1 >  actual < 2 >  Raw result: -0.00001 F -> -17.78 C
+	at TempConversion.testPrecisionHelper(TempConversion.java:254)
+	at TempConversion.testPrecisionB(TempConversion.java:191)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:84)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:160)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:77)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:195)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:63)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:120)
+
+Testing conversion of 0.0 F 
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+Passed conversion test. Expected: -17.78 actual: -17.78
+Testing conversion of 93.389321 F 
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+Passed conversion test. Expected: 34.11 actual: 34.11
+Testing conversion of 212.0 F 
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+Passed conversion test. Expected: 100 actual: 100
+Testing conversion of 212.1 F 
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+
+junit.framework.AssertionFailedError: Precision fail. Expected < 1 >  actual < 2 >  Raw result: 212.1 F -> 100.06 C
+	at TempConversion.testPrecisionHelper(TempConversion.java:254)
+	at TempConversion.testPrecisionF(TempConversion.java:219)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:84)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:160)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:77)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:195)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:63)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:120)
+
+Testing conversion of 245.38342 F 
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+
+junit.framework.AssertionFailedError: Precision fail. Expected < 1 >  actual < 2 >  Raw result: 245.38342 F -> 118.55 C
+	at TempConversion.testPrecisionHelper(TempConversion.java:254)
+	at TempConversion.testPrecisionG(TempConversion.java:226)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:84)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:160)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:77)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:195)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:63)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:120)
+
+Testing conversion of 0.01 F 
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+Passed conversion test. Expected: -17.77 actual: -17.77
+Testing conversion of 211.99 F 
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+Passed conversion test. Expected: 99.99 actual: 99.99
+Testing alternate login:  BOB  pw: <  bathtub >
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password:  BOB    bathtub 
+Submitting login form.
+Passed alternate login check for:  BOB  pw: <  bathtub >
+Testing alternate login:  Bob pw: <  bathtub >
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password:  Bob   bathtub 
+Submitting login form.
+Passed alternate login check for:  Bob pw: <  bathtub >
+Testing alternate login: BoB   pw: <  bathtub >
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: BoB     bathtub 
+Submitting login form.
+Passed alternate login check for: BoB   pw: <  bathtub >
+Testing alternate login:  CHARLEY  pw: <  china >
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password:  CHARLEY    china 
+Submitting login form.
+Passed alternate login check for:  CHARLEY  pw: <  china >
+Testing alternate login:  Charley pw: <  china >
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password:  Charley   china 
+Submitting login form.
+Passed alternate login check for:  Charley pw: <  china >
+Testing alternate login: CharLEY   pw: <  china >
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: CharLEY     china 
+Submitting login form.
+Passed alternate login check for: CharLEY   pw: <  china >
+Testing alternate login:  ANDY  pw: <  apple >
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password:  ANDY    apple 
+Submitting login form.
+Passed alternate login check for:  ANDY  pw: <  apple >
+Testing alternate login:  Andy pw: <  apple >
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password:  Andy   apple 
+Submitting login form.
+Passed alternate login check for:  Andy pw: <  apple >
+Testing alternate login: AnDy   pw: <  apple >
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: AnDy     apple 
+Submitting login form.
+Passed alternate login check for: AnDy   pw: <  apple >
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+Passed bad number test for input: -534.043.23
+Loading login page at: http://adnan.appspot.com/testing-lab-login.html
+Filling in username and password: bob bathtub
+Submitting login form.
+Passed bad number test for input: Tony
