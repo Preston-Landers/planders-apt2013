@@ -173,7 +173,11 @@ public class Leaderboard implements Comparable<Leaderboard> {
 	 */
 	public static void generateLeaderBoard() {
 		Site site = Site.load(null);
-		Leaderboard LB = load(null, site.getKey());
+
+        // Only necessary to do this migration once per data-store
+        // CUser.normalizeAllAccountNames(site.getKey());
+
+        Leaderboard LB = load(null, site.getKey());
 		if (LB == null) {
 			System.err.println("Error: leaderboard is missing!");
 			return;

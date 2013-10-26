@@ -20,10 +20,25 @@
 		</script>			
 		
 	</c:if>
+
+    <c:if test="${ canDoUpload }">
+        <!-- Generic jQuery File Upload page styles -->
+        <link rel="stylesheet" href="css/jquery.file.upload/style.css">
+        <!-- blueimp Gallery styles -->
+        <link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+
+        <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+        <link rel="stylesheet" href="css/jquery.file.upload/jquery.fileupload.css">
+        <link rel="stylesheet" href="css/jquery.file.upload/jquery.fileupload-ui.css">
+        <!-- CSS adjustments for browsers with JavaScript disabled -->
+        <noscript><link rel="stylesheet" href="css/jquery.file.upload/jquery.fileupload-noscript.css"></noscript>
+        <noscript><link rel="stylesheet" href="css/jquery.file.upload/jquery.fileupload-ui-noscript.css"></noscript>
+    </c:if>
+
 </jsp:attribute>
 
 <jsp:attribute name="tail">
-	<script src="/js/jquery.colorbox.js"></script>
+	<script src="js/jquery.colorbox.js"></script>
 	<script>
 		$(document).ready(function() {
 			// Activate image viewing galleries
@@ -37,7 +52,10 @@
 			});
 		});		
 	</script>
-	
+
+    <c:if test="${ canDoUpload }">
+        <t:uploadMediaScripts></t:uploadMediaScripts>
+    </c:if>
 </jsp:attribute>
 
 <jsp:body>
@@ -197,7 +215,7 @@
 
 	<%-- If this is your stream, show the upload widget. Otherwise show the subscribe widget. --%>
 	<c:choose>
-		<c:when test="${ viewingStreamUser == cuser }">
+		<c:when test="${ canDoUpload }">
 			<t:uploadMedia stream="${ viewingStream.id }" streamUser="${ viewingStreamUser.id }"></t:uploadMedia>
 		</c:when>
 		<c:otherwise>

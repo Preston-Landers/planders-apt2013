@@ -54,6 +54,14 @@
             <version>RELEASE</version>
         </dependency>
 
+        <!-- GSON is for the file upload widget responses -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+
+
         <!-- for Endpoints-->
         <dependency>
             <groupId>com.google.appengine</groupId>
