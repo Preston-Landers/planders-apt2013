@@ -98,14 +98,22 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>updatelb</servlet-name>
+        <servlet-name>updateleaderboard</servlet-name>
         <servlet-class>connexus.servlet.UpdateLeaderboard</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>updatelb</servlet-name>
-        <url-pattern>/cron/updatelb</url-pattern>
+        <servlet-name>updateleaderboard</servlet-name>
+        <url-pattern>/cron/updateleaderboard</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>updateautocomplete</servlet-name>
+        <servlet-class>connexus.servlet.UpdateAutocomplete</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>updateautocomplete</servlet-name>
+        <url-pattern>/cron/updateautocomplete</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>error</servlet-name>

@@ -54,7 +54,7 @@ public class View extends ConnexusServletBase {
         try {
             limit = Integer.parseInt(req.getParameter("limit"));
         } catch (NumberFormatException e) {
-            limit = 3;
+            limit = Config.defaultViewLimit;
         }
 
         req.setAttribute("offset", offset);

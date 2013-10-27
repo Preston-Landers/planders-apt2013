@@ -16,7 +16,8 @@ public class OfyService {
         factory().register(Media.class);
         factory().register(Stream.class);
         factory().register(Subscription.class);
-        
+        factory().register(AutocompleteIndex.class);
+
         // Ensure that our logical site entity exists.
         // Ancestor entity for searching all root-less objects.
 

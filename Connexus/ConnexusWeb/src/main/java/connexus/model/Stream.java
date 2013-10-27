@@ -40,6 +40,9 @@ public class Stream implements Comparable<Stream> {
 	@Index Long views;   // all time views
 	long trendingViews;  // views only within the trending window
 
+    Long displayLimit;
+    Long displayOffset;
+
 	@SuppressWarnings("unused")
 	private Stream() {
 	}
@@ -50,6 +53,8 @@ public class Stream implements Comparable<Stream> {
 		this.name = name;
 		this.creationDate = new Date();
         this.lastUpdated = creationDate;
+        this.displayLimit = null;
+        this.displayOffset = null;
 	}
 
 	public Key<Stream> getKey() {
@@ -71,6 +76,18 @@ public class Stream implements Comparable<Stream> {
 	public String getViewURI() {
 		// Use URIBuilder?
 		List<String[]> params = new ArrayList<String[]>();
+
+        // When gathering Streams for display (e.g. search results)
+        // You can setDisplayLimit() and setDisplayOffset()
+        // to control where view link goes so it jumps to the appropriate image.
+        Long displayLimit = getDisplayLimit();
+        if (displayLimit != null) {
+            params.add(new String[] {"limit", displayLimit.toString()});
+        }
+        Long displayOffset = getDisplayOffset();
+        if (displayOffset != null) {
+            params.add(new String[] {"offset", displayOffset.toString()});
+        }
 		params.add(new String[] {"v", getObjectURI()});
 		return Config.getURIWithParams("/view", params);
 	}
@@ -369,4 +386,19 @@ public class Stream implements Comparable<Stream> {
 		}
 	}
 
+    public Long getDisplayLimit() {
+        return displayLimit;
+    }
+
+    public void setDisplayLimit(Long displayLimit) {
+        this.displayLimit = displayLimit;
+    }
+
+    public Long getDisplayOffset() {
+        return displayOffset;
+    }
+
+    public void setDisplayOffset(Long displayOffset) {
+        this.displayOffset = displayOffset;
+    }
 }

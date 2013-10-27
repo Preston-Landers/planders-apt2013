@@ -22,6 +22,9 @@ public class Config {
     public static final String EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
     public static final String ANDROID_AUDIENCE = WEB_CLIENT_ID;
 
+    // How many photos to show per "View" page
+    public static final int defaultViewLimit = 3;
+
     // Maximum search results to show
     public static final int maxSearchResults = 5;
     public static final int API_CACHE_TIME_SEC = 10; // # of seconds cache is good for in API calls

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-  <cron>
-    <url>/cron/updatelb</url>
-    <description>Update the leaderboard statistics and email reports.</description>
-    <schedule>every 5 minutes</schedule>
-  </cron>
+    <cron>
+        <url>/cron/updateleaderboard</url>
+        <description>Update the leaderboard statistics and email reports.</description>
+        <schedule>every 5 minutes</schedule>
+    </cron>
+    <cron>
+        <url>/cron/updateautocomplete</url>
+        <description>Rebuild the autocompletion index at the top of ever hour.</description>
+        <schedule>every 1 hour synchronized</schedule>
+    </cron>
 </cronentries>
