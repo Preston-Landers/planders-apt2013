@@ -6,12 +6,22 @@
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-upload fade">
+    <tr id="fileupload-preview-row-{%=fileToId(file.name)%}" class="template-upload fade">
         <td>
             <span class="preview"></span>
         </td>
         <td>
-            <p class="name">{%=file.name%}</p>
+            <p class="name">
+                <div class="form-group">
+                    <input type="text" class="form-control fileupload-comment" id="uploadMediaComments{%=i%}"
+                           name="comments{%=file.name%}" placeholder="Comments or description"
+                           value="{%=file.name%}">
+
+                    <label for="uploadMediaComments{%=i%}">
+                        Comments
+                    </label>
+                </div>
+            </p>
             {% if (file.error) { %}
             <div><span class="label label-danger">Error</span> {%=file.error%}</div>
             {% } %}
@@ -24,7 +34,7 @@
         </td>
         <td>
             {% if (!o.files.error && !i && !o.options.autoUpload) { %}
-            <button class="btn btn-primary start">
+            <button class="btn btn-primary start" style="display: none;">
                 <i class="glyphicon glyphicon-upload"></i>
                 <span>Start</span>
             </button>
@@ -91,8 +101,6 @@
 <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
 <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
-<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-<%--<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>--%>
 <!-- blueimp Gallery script -->
 <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
@@ -111,8 +119,6 @@
 <script src="/js/jquery.file.upload/jquery.fileupload-validate.js"></script>
 <!-- The File Upload user interface plugin -->
 <script src="/js/jquery.file.upload/jquery.fileupload-ui.js"></script>
-<!-- The main application script -->
-<%--<script src="/js/jquery.file.upload/main.js"></script>--%>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
 <!--[if (gte IE 8)&(lt IE 10)]>
 <script src="/js/jquery.file.upload/cors/jquery.xdr-transport.js"></script>
@@ -120,23 +126,79 @@
 
 
 <script>
+    function fileToId(fname) {
+        return fname.replace(".", "-");
+    }
     $(function () {
+        function allUploadsComplete() {
+            // window.alert("Batch upload done");
+            $("#uploadCompleteAlert").css("display", "block");
+            // Wait a few seconds so they can see that it's finished
+            window.setTimeout(function () {
+                window.location = "${ streamViewUrl }";
+                // window.alert("Redirecting...");
+            }, 2500);
+        }
+
+        var pendingUploads = 0;
+
         $('#fileupload').fileupload({
-            dataType: 'html',
-            singleFileUploads: false, // handle the batch upload as one HTTP request
-            done: function (e, data) {
-                // window.alert("Batch upload done");
-                // #F5FCF7
-                $("#uploadCompleteAlert").css("display", "block");
-                $(".fileupload-previewtable .files tr td").css("background-color", "#F5FCF7");
-                $(".fileupload-previewtable .files tr").each(function(index) {
-                   $(this).find("td:last").html("Upload Complete!");
+            submit: function (e, data) {
+
+                var $this = $(this);
+                // debugger;
+                $.getJSON('/rest/file/url?' + new Date().getTime(), function (result) {
+                    data.url = result.url;
+                    //var formData = $("#fileupload").serialize();
+                    //data.formData = formData;
+                    $this.fileupload('send', data);
                 });
-                // Wait a few seconds so they can see that it's finished
+                pendingUploads++;
+                return false;
+            },
+            done: function (e, data) {
+                // #F5FCF7
+                $.each(data.result.files, function (index, file) {
+                    var $previewRow = $("#fileupload-preview-row-" + fileToId(file.name));
+                    $previewRow.find("td").css("background-color", "#F5FCF7");
+                    $previewRow.find(".fileupload-comment").attr("disabled", true);
+                    $previewRow.find("td:last").html("Upload Complete!");
+                });
+                pendingUploads--;
                 window.setTimeout(function() {
-                    window.location = "${ streamViewUrl }";
-                }, 2500);
+                    if (pendingUploads == 0) {
+                        pendingUploads--;
+                        allUploadsComplete()
+                    }
+                }, 1000);
             }
+
         });
+
+        <%--
+                $('#fileupload').fileupload({
+                    dataType: 'html',
+                    singleFileUploads: false, // handle the batch upload as one HTTP request
+        //            add: function( e, data ) {
+        //                $(".fileupload-previewtable .files tr").each(function(index) {
+        //                    $(this).find("button.start").hide();
+        //                });
+        //            },
+                    done: function (e, data) {
+                        // window.alert("Batch upload done");
+                        // #F5FCF7
+                        $("#uploadCompleteAlert").css("display", "block");
+                        $(".fileupload-previewtable .files tr td").css("background-color", "#F5FCF7");
+                        $(".fileupload-previewtable .files tr").each(function(index) {
+                           $(this).find(".fileupload-comment").attr("disabled", true);
+                           $(this).find("td:last").html("Upload Complete!");
+                        });
+                        // Wait a few seconds so they can see that it's finished
+                        window.setTimeout(function() {
+                            window.location = "${ streamViewUrl }";
+                        }, 2500);
+                    }
+                });
+        --%>
     });
 </script>

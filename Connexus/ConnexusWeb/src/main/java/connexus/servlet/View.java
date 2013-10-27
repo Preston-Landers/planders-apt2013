@@ -232,21 +232,41 @@ public class View extends ConnexusServletBase {
             alertError(req, "I'm sorry, there was a problem with your upload.");
             return;
         }
-
+        int i = -1;
         List<FileMeta> fileList = new ArrayList<FileMeta>();
-        for (BlobKey bkey : blobKeyList) {
+        int blobKeyListSize = blobKeyList.size();
 
+        String[] latitudeParams = req.getParameterValues("latitude");
+        if (latitudeParams == null) {
+            latitudeParams = new String[blobKeyListSize];
+        }
+        String[] longitudeParams = req.getParameterValues("longitude");
+        if (longitudeParams == null) {
+            longitudeParams = new String[blobKeyListSize];
+        }
+        String[] mediaCTParams = req.getParameterValues("mediaCT");
+        if (mediaCTParams == null) {
+            mediaCTParams = new String[blobKeyListSize];
+        }
+//        String[] commentParams = req.getParameterValues("comments");
+//        if (commentParams == null) {
+//            commentParams = new String[blobKeyListSize+1];
+//        }
+        for (BlobKey bkey : blobKeyList) {
+            i++;
             String bkeyStr = bkey.getKeyString();
 
             double latitude = 0;
             double longitude = 0;
             try {
-                latitude = Double.parseDouble(req.getParameter("latitude"));
+                String latitudeStr = latitudeParams[i];
+                latitude = Double.parseDouble(latitudeStr);
             } catch (Exception e) {
                 latitude = 0;
             }
             try {
-                longitude = Double.parseDouble(req.getParameter("longitude"));
+                String longitudeStr = longitudeParams[i];
+                longitude = Double.parseDouble(longitudeStr);
             } catch (Exception e) {
                 longitude = 0;
             }
@@ -256,7 +276,7 @@ public class View extends ConnexusServletBase {
             Media media = new Media(null, viewingStream.getKey(), bkey, bkeyStr,
                     cuser.getKey());
 
-            String mediaCT = req.getParameter("mediaCT");
+            String mediaCT = mediaCTParams[i];
             if (mediaCT != null) {
                 media.setMimeType(mediaCT);
             } else {
@@ -264,7 +284,7 @@ public class View extends ConnexusServletBase {
             }
 
             String fileName = bInfo.getFilename();
-            String comments = req.getParameter("comments");
+            String comments = req.getParameter("comments"+fileName);
             if (comments == null || comments.length() == 0) {
                 comments = fileName;
             }
@@ -280,7 +300,7 @@ public class View extends ConnexusServletBase {
 
             fileList.add(
                     new FileMeta(fileName, bInfo.getSize(),
-                            media.getMediaServingURL(), media.getThumbURL()));
+                            media.getMediaServingURL(), media.getThumbURL(), media.getComments()));
 
             System.err.println("MEDIA was into space! " + media);
 

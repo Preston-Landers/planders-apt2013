@@ -175,7 +175,7 @@ public class Leaderboard implements Comparable<Leaderboard> {
 		Site site = Site.load(null);
 
         // Only necessary to do this migration once per data-store
-        // CUser.normalizeAllAccountNames(site.getKey());
+        CUser.normalizeAllAccountNames(site.getKey());
 
         Leaderboard LB = load(null, site.getKey());
 		if (LB == null) {

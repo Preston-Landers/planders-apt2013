@@ -59,8 +59,17 @@
 	       		<a href="http://tablesorter.com/docs/" target="_blank">Tablesorter plugin for jQuery</a>        		
         	</div>
         	<div class="col-md-6 about-col">
-        		 <a href="http://eclipse.org" target="_blank">Eclipse</a> 
+        		 <a href="http://www.jetbrains.com/idea/" target="_blank">IntelliJ IDEA</a>
         	</div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 about-col">
+                <a href="http://blueimp.github.io/jQuery-File-Upload/" target="_blank">
+                    jQuery File Upload</a>
+            </div>
+            <div class="col-md-6 about-col">
+                <a href="http://jqueryui.com/autocomplete/#remote-with-cache" target="_blank">jQuery UI</a>
+            </div>
         </div>
 
         <p style="margin-top: 20px">Special thanks to:</p>
