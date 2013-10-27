@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.common.base.CharMatcher;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import connexus.Config;
+import connexus.ConnexusContext;
 import connexus.model.Site;
 import connexus.model.Stream;
 
@@ -29,10 +31,10 @@ public class Search extends ConnexusServletBase {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		InitializeContext(req, resp); // Base site context initialization
+		ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 		
 		if (req.getParameter("q") != null) {
-			doHandleSearch(req, resp);
+			doHandleSearch(cContext, req, resp);
 		}
 		
 		// Forward to JSP page to display them in a HTML table.
@@ -41,12 +43,13 @@ public class Search extends ConnexusServletBase {
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		InitializeContext(req, resp); // Base site context initialization
+        ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 		alertInfo(req, "TODO: Not implemented yet.");
 		resp.sendRedirect(uri);
 	}
 
-	public void doHandleSearch(HttpServletRequest req, HttpServletResponse resp) {
+	public void doHandleSearch(ConnexusContext cContext, HttpServletRequest req, HttpServletResponse resp) {
+        Ref<Site> site = cContext.getSite();
 		String queryTerm = req.getParameter("q");
 		queryTerm = CharMatcher.WHITESPACE.trimFrom(queryTerm);
 		// System.err.println("User " + cuser + " searched for " + queryTerm);

@@ -1,5 +1,7 @@
 package connexus.servlet;
 
+import connexus.ConnexusContext;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -18,7 +20,7 @@ public class Welcome extends ConnexusServletBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
-		InitializeContext(req, resp); // Base site context initialization
+		ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 
 		// The Welcome screen needs a special login URL that takes you somewhere else.
 		String welcomeLoginURL = userService.createLoginURL(welcomeLoginDestination);

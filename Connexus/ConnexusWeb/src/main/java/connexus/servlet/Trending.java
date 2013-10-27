@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import connexus.ConnexusContext;
 import connexus.model.Leaderboard;
 import connexus.model.Stream;
 
@@ -22,12 +23,12 @@ public class Trending extends ConnexusServletBase {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		InitializeContext(req, resp); // Base site context initialization
+		ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 
 		req.setAttribute("leaderBoardSize", Leaderboard.lbSize);
 		
 		// Get the leaderboard
-		Leaderboard lb = Leaderboard.load(null, site.getKey());
+		Leaderboard lb = Leaderboard.load(null, cContext.getSite().getKey());
 		
 		// Now in cron job.
 		// Leaderboard.generateLeaderBoard();
@@ -54,7 +55,7 @@ public class Trending extends ConnexusServletBase {
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		InitializeContext(req, resp); // Base site context initialization
+        ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 		
 		if (req.getParameter("updateRate") != null) {
 			String newFreqStr = req.getParameter("reportFreq");
@@ -72,7 +73,7 @@ public class Trending extends ConnexusServletBase {
 				resp.sendRedirect(uri);
 				return;
 			}
-			Leaderboard LB = Leaderboard.load(null, null);
+			Leaderboard LB = Leaderboard.load(null, cContext.getSite().getKey());
 			LB.setReportFrequencySec(newFreq);
 			LB.save();
 			alertSuccess(req, "Updated report frequency.");			

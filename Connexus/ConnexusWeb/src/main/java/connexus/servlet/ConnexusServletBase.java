@@ -22,15 +22,13 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 
 import connexus.Config;
+import connexus.ConnexusContext;
 import connexus.model.CUser;
 import connexus.model.Site;
 import connexus.status.*;
 
 public abstract class ConnexusServletBase extends HttpServlet {
 	
-	protected Ref<Site> site; // The "Site" entity (usually just one exists)
-	protected User guser;     // The Google User object - MAY BE NULL! if not logged in
-	protected CUser cuser;    // The Connexus User object - MAY BE NULL! if not logged in
 	protected final static UserService userService = UserServiceFactory.getUserService();
 	protected final static MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 	
@@ -43,12 +41,23 @@ public abstract class ConnexusServletBase extends HttpServlet {
 	 * @param req
 	 * @param resp
 	 */
-	protected void InitializeContext(HttpServletRequest req,
+	protected ConnexusContext InitializeContext(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException, ServletException {
-		cuser = null;
-		guser = null;
-		
-        guser = userService.getCurrentUser();
+        // The "Site" entity (usually just one exists)
+        Ref<Site> site = ofy().load().type(Site.class).id(Config.siteId);
+        // Parent entity for the entire site
+        if (site == null) {
+            // Should probably be logging something somewhere...
+            String errorMsg = "Internal error: site entity was not initialized.";
+            System.err.println(errorMsg);
+            alertError(req, errorMsg);
+            return null;
+        }
+
+        // The Google User object - MAY BE NULL! if not logged in
+        User guser = userService.getCurrentUser();
+        CUser cuser = null;    // The Connexus User object - MAY BE NULL! if not logged in
+
         req.setAttribute("guser", guser);
         if (guser == null) {
         	req.setAttribute("loginURL", userService.createLoginURL(req.getRequestURI()));
@@ -62,16 +71,7 @@ public abstract class ConnexusServletBase extends HttpServlet {
         	req.setAttribute("logoutURL", logoutURL);	
         }        
         
-        // Parent entity for the entire site
-        site = ofy().load().type(Site.class).id(Config.siteId);
-        if (site == null) {
-        	// Should probably be logging something somewhere...
-        	String errorMsg = "Internal error: site entity was not initialized.";
-        	System.err.println(errorMsg);
-        	alertError(req, errorMsg);
-        	return;
-        }        
-        
+
         // Automatically create a CUser for any Google Users we recognize
         try {
             if (guser != null) {
@@ -85,6 +85,8 @@ public abstract class ConnexusServletBase extends HttpServlet {
             e.printStackTrace(System.err);
             alertError(req, "You must provide an account name and a real name.");
         }
+
+        return new ConnexusContext(site, guser, cuser);
     }
 
     public static CUser getOrCreateUserRecord(User guser, Key<Site> site) throws UserCreateException {

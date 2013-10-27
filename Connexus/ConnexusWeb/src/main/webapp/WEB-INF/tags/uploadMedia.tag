@@ -5,7 +5,7 @@
 <%@ attribute name="stream" required="true" %>
 <%@ attribute name="streamUser" required="true" %>
 
-<form action="${ uploadURL }" method="post" role="form" id="fileupload" enctype="multipart/form-data">
+<form method="post" role="form" id="fileupload" enctype="multipart/form-data">
 	<%-- All the cool kids use single letter keys --%>
 	<input type="hidden" name="v" value="${ viewingStream.objectURI }">
     <input type="hidden" name="upload" value="true">
@@ -19,6 +19,11 @@
                     <div id="uploadCompleteAlert" class="alert alert-success" style="display: none;">
                         <span class="glyphicon glyphicon-thumbs-up" style="margin-right: 6px;"></span>
                         Upload complete. Please wait a moment.
+                    </div>
+                    <div id="uploadInProgressAlert" class="alert alert-info" style="display: none;">
+                        <span class="glyphicon glyphicon-link" style="margin-right: 6px;"></span>
+                        Please wait while I contact the upload server.
+                        <img style="margin-left: 6px;" src="images/jquery.file.upload/loading.gif" width="20px" height="20px">
                     </div>
                 </div>
                 <div class="row">
@@ -71,35 +76,11 @@
                         <div class="col-lg-6">
                             <span class="help-block">
                                 <em>Tip:</em> You can drag & drop files from your desktop or other programs to here.
+                                <BR>You can also select multiple files at once in the file chooser.
                             </span>
                         </div>
                     </div>
                 </div>
-<%--
-				<div class="row">
-					<div class="col-md-8">
-						<div class="form-group">
-							<input type="text" class="form-control" id="uploadMediaComments"
-								name="comments" placeholder="Comments or description" > 
-								
-							<label for="uploadMediaComments">
-								Comments
-							</label>
-
-						</div>
-					</div>
-				</div>
---%>
-<%--
-				<div class="row">
-					<div class="col-md-6">
-						<button onClick="$(this).html('Please wait...');return true;" id="uploadButton" class="btn btn-primary" name="upload" type="submit">
-							<span class="glyphicon glyphicon-remove-circle"></span>&nbsp;
-							Upload File
-						</button>
-					</div>
-				</div>
---%>
 			</div>
 		</div>
 	</div>

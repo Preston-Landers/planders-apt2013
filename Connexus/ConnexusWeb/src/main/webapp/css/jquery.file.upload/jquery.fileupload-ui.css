@@ -16,14 +16,14 @@
 }
 .progress-animated .progress-bar,
 .progress-animated .bar {
-  background: url("../img/progressbar.gif") !important;
+  background: url("../../images/jquery.file.upload/progressbar.gif") !important;
   filter: none;
 }
 .fileupload-loading {
   float: right;
   width: 32px;
   height: 32px;
-  background: url("../img/loading.gif") center no-repeat;
+  background: url("../../images/jquery.file.upload/loading.gif") center no-repeat;
   background-size: contain;
   display: none;
 }

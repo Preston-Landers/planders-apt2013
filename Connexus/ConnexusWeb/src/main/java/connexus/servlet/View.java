@@ -15,12 +15,11 @@ import static connexus.OfyService.ofy;
 import com.google.appengine.api.blobstore.*;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.users.User;
 
 import com.google.gson.Gson;
-import connexus.Config;
-import connexus.FileMeta;
-import connexus.FileUploadEntity;
-import connexus.StreamHandle;
+import com.googlecode.objectify.Ref;
+import connexus.*;
 import connexus.model.*;
 
 public class View extends ConnexusServletBase {
@@ -35,13 +34,14 @@ public class View extends ConnexusServletBase {
             .getBlobstoreService();
     private final BlobInfoFactory blobInfoFactory = new BlobInfoFactory();
 
-    private Stream viewingStream;
-    private CUser viewingStreamUser;
-    private StreamHandle viewingStreamHandle;
+//    private Stream viewingStream;
+//    private CUser viewingStreamUser;
+//    private StreamHandle viewingStreamHandle;
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
-        InitializeContext(req, resp); // Base site context initialization
+        ViewContext viewContext = InitializeViewContext(req, resp); // Base site context initialization
+        Stream viewingStream = viewContext.getViewingStream();
 
         // How many images to show
         int offset;
@@ -102,18 +102,15 @@ public class View extends ConnexusServletBase {
             viewingStream.getAndIncrementViews();
 
             // For now, only allow uploading if this is YOUR stream.
-            canDoUpload = (viewingStreamUser == cuser);
+            canDoUpload = (viewContext.getViewingStreamUser() == viewContext.getConnexusContext().getCuser());
         } else {
             // No stream selected... let them browse all streams.
-            List<Stream> allStreams = Stream.getAllStreams(site.getKey());
+            List<Stream> allStreams = Stream.getAllStreams(
+                    viewContext.getConnexusContext().getSite().getKey());
             req.setAttribute("allStreamsList", allStreams);
         }
 
         req.setAttribute("canDoUpload", canDoUpload);
-
-        // Get the Blobstore upload URL.
-        String uploadURL = blobstoreService.createUploadUrl("/view");
-        req.setAttribute("uploadURL", uploadURL);
 
         // Forward to JSP page to display them in a HTML table.
         req.getRequestDispatcher(dispatcher).forward(req, resp);
@@ -121,15 +118,22 @@ public class View extends ConnexusServletBase {
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
-        InitializeContext(req, resp); // Base site context initialization
-
+        ViewContext viewContext = InitializeViewContext(req, resp); // Base site context initialization
+        Stream viewingStream = viewContext.getViewingStream();
+        if (viewingStream == null) {
+            String errorMsg = "Error: Did not provide a valid stream id (v) parameter.";
+            System.err.println(errorMsg);
+            alertError(req, errorMsg);
+            resp.sendRedirect(uri);
+            return;
+        }
         if (req.getParameter("upload") != null) {
-            uploadMedia(req, resp);
+            uploadMedia(viewContext, req, resp);
             return;
         } else if (req.getParameter("delete") != null) {
-            deleteMedia(req, resp);
+            deleteMedia(viewContext, req, resp);
         } else if (req.getParameter("setCover") != null) {
-            setCover(req, resp);
+            setCover(viewContext, req, resp);
         } else {
             alertInfo(req, "TODO: Not implemented yet.");
         }
@@ -137,15 +141,17 @@ public class View extends ConnexusServletBase {
         resp.sendRedirect(viewingStream.getViewURI());
     }
 
-    @Override
-    protected void InitializeContext(HttpServletRequest req,
-                                     HttpServletResponse resp) throws IOException, ServletException {
-        super.InitializeContext(req, resp);
+    protected ViewContext InitializeViewContext(HttpServletRequest req,
+                                                HttpServletResponse resp) throws IOException, ServletException {
+
+        ConnexusContext connexusContext = super.InitializeContext(req, resp);
+        CUser cuser = connexusContext.getCuser();
+        Ref<Site> site = connexusContext.getSite();
 
 
-        viewingStreamHandle = null;
-        viewingStream = null;
-        viewingStreamUser = null;
+        StreamHandle viewingStreamHandle = null;
+        Stream viewingStream = null;
+        CUser viewingStreamUser = null;
         if (req.getParameter("v") != null) {
             try {
                 viewingStreamHandle = StreamHandle.getStreamHandleFromRequest(
@@ -161,6 +167,7 @@ public class View extends ConnexusServletBase {
                 }
                 req.setAttribute("isMyStream", isMyStream);
             } catch (RuntimeException e) {
+                e.printStackTrace(System.err);
                 alertError(req, e.toString());
             }
         }
@@ -171,10 +178,11 @@ public class View extends ConnexusServletBase {
                     cuser, viewingStreamHandle);
         }
         req.setAttribute("mySubForStream", mySubForStream);
-
+        return new ViewContext(connexusContext, viewingStream, viewingStreamUser, viewingStreamHandle);
     }
 
-    private void setCover(HttpServletRequest req, HttpServletResponse resp) {
+    private void setCover(ViewContext viewContext, HttpServletRequest req, HttpServletResponse resp) {
+        Stream viewingStream = viewContext.getViewingStream();
         Media media = Media.getById(Long.parseLong(req.getParameter("m")),
                 viewingStream);
         if (media == null) {
@@ -188,7 +196,8 @@ public class View extends ConnexusServletBase {
         alertInfo(req, "Set new cover image.");
     }
 
-    private void deleteMedia(HttpServletRequest req, HttpServletResponse resp) {
+    private void deleteMedia(ViewContext viewContext, HttpServletRequest req, HttpServletResponse resp) {
+        Stream viewingStream = viewContext.getViewingStream();
         Media media = Media.getById(Long.parseLong(req.getParameter("delete")),
                 viewingStream);
         if (media == null) {
@@ -200,8 +209,13 @@ public class View extends ConnexusServletBase {
     }
 
     @SuppressWarnings("deprecation")
-    private void uploadMedia(HttpServletRequest req, HttpServletResponse resp)
+    private void uploadMedia(ViewContext viewContext, HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
+
+        Stream viewingStream = viewContext.getViewingStream();
+        User guser = viewContext.getConnexusContext().getGuser();
+        CUser cuser = viewContext.getConnexusContext().getCuser();
+        Ref<Site> site = viewContext.getConnexusContext().getSite();
 
         // Can bypass the normal requirement to be logged in in order to upload
         // by providing the 'uu' parameter with your cuser ID.
@@ -284,7 +298,7 @@ public class View extends ConnexusServletBase {
             }
 
             String fileName = bInfo.getFilename();
-            String comments = req.getParameter("comments"+fileName);
+            String comments = req.getParameter("comments" + fileName);
             if (comments == null || comments.length() == 0) {
                 comments = fileName;
             }

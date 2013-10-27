@@ -1,5 +1,7 @@
 package connexus.servlet;
 
+import connexus.ConnexusContext;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -15,7 +17,7 @@ public class Social extends ConnexusServletBase {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		InitializeContext(req, resp); // Base site context initialization
+		ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 		
 		// Forward to JSP page to display them in a HTML table.
 		req.getRequestDispatcher(dispatcher).forward(req, resp); 

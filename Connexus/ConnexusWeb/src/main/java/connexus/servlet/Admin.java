@@ -9,7 +9,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.googlecode.objectify.Ref;
+import connexus.ConnexusContext;
 import connexus.model.CUser;
+import connexus.model.Site;
 
 public class Admin extends ConnexusServletBase {
 
@@ -20,13 +23,13 @@ public class Admin extends ConnexusServletBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
-		InitializeContext(req, resp); // Base site context initialization
+		ConnexusContext connexusContext = InitializeContext(req, resp); // Base site context initialization
 		
 		if (req.getParameter("edit") != null) {
-			doShowEditScreen(req, resp);
+			doShowEditScreen(connexusContext, req, resp);
 		} else {
 			List<CUser> allUsersList = ofy().load().type(CUser.class)
-					.ancestor(site).list();
+					.ancestor(connexusContext.getSite()).list();
 			for (CUser userRec : allUsersList) {
 				System.err.println("USER REC: " + userRec.toString());
 			}
@@ -40,13 +43,13 @@ public class Admin extends ConnexusServletBase {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
-		InitializeContext(req, resp); // Base site context initialization
+		ConnexusContext connexusContext = InitializeContext(req, resp); // Base site context initialization
 
 		if (req.getParameter("create") != null) {
-			createUser(req, resp);
+			createUser(connexusContext, req, resp);
 		}
 		else if (req.getParameter("delete") != null) {
-			deleteUser(req, resp);
+			deleteUser(connexusContext, req, resp);
 		} else {
 			alertWarning(req, "Command not implemented yet.");
 		}
@@ -54,11 +57,11 @@ public class Admin extends ConnexusServletBase {
 		resp.sendRedirect(uri);
 	}
 
-	private void doShowEditScreen(HttpServletRequest req, HttpServletResponse resp) {
+	private void doShowEditScreen(ConnexusContext connexusContext, HttpServletRequest req, HttpServletResponse resp) {
 		Long editId = Long.parseLong(req.getParameter("edit"));
 		req.setAttribute("editItem", editId);
 		
-		CUser theUser = CUser.getById(editId, site.getKey());
+		CUser theUser = CUser.getById(editId, connexusContext.getSite().getKey());
 		if (theUser == null){
 			alertError(req, "User does not exist.");
 			return;
@@ -66,7 +69,8 @@ public class Admin extends ConnexusServletBase {
 
 	}
 	
-	private void deleteUser(HttpServletRequest req, HttpServletResponse resp) {
+	private void deleteUser(ConnexusContext connexusContext, HttpServletRequest req, HttpServletResponse resp) {
+        Ref<Site> site = connexusContext.getSite();
 		Long objectId = Long.parseLong(req.getParameter("id"));
 		
 		CUser theUser = CUser.getById(objectId, site.getKey());
@@ -81,14 +85,14 @@ public class Admin extends ConnexusServletBase {
 		alertSuccess(req, "User deleted.");
 	}
 	
-	private CUser getUserByAccountName(String accountName) {		
-		CUser existingUser = ofy().load().type(CUser.class).ancestor(site).
+	private CUser getUserByAccountName(ConnexusContext connexusContext, String accountName) {
+		CUser existingUser = ofy().load().type(CUser.class).ancestor(connexusContext.getSite()).
 				filter("accountName", accountName).first().get();
 		return existingUser;
 	}
 
 
-	private void createUser(HttpServletRequest req, HttpServletResponse resp) {
+	private void createUser(ConnexusContext connexusContext, HttpServletRequest req, HttpServletResponse resp) {
 		String accountName = req.getParameter("accountName");
 		String realName = req.getParameter("realName");
 		
@@ -106,12 +110,13 @@ public class Admin extends ConnexusServletBase {
 			return;			
 		}
 
-		CUser existingUser = getUserByAccountName(accountName);
+		CUser existingUser = getUserByAccountName(connexusContext, accountName);
 		if (existingUser != null) {
 			alertError(req, "I'm sorry, but an account of that name already exists.");
 			return;
 		}
-		
+
+        Ref<Site> site = connexusContext.getSite();
 		CUser thisUser = new CUser(null, site.getKey(), accountName, realName);
 		ofy().save().entities(thisUser).now();
 

@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import connexus.ConnexusContext;
 import connexus.model.*;
 
 public class Manage extends ConnexusServletBase {
@@ -22,7 +23,8 @@ public class Manage extends ConnexusServletBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
-		InitializeContext(req, resp); // Base site context initialization
+		ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
+        CUser cuser = cContext.getCuser();
 
 		List<Stream> myStreams;
 		if (cuser != null) {
@@ -45,8 +47,8 @@ public class Manage extends ConnexusServletBase {
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		
-		InitializeContext(req, resp); // Base site context initialization
+
+        ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 
 		if (req.getParameter("doDelete") != null) {
 			if (req.getParameter("delete") == null) {
@@ -54,7 +56,7 @@ public class Manage extends ConnexusServletBase {
 				resp.sendRedirect(uri);
 				return;
 			}
-			deleteStream(req, resp);
+			deleteStream(cContext, req, resp);
 		} else {
 			alertWarning(req, "Internal error: command not implemented yet.");
 		}
@@ -62,7 +64,8 @@ public class Manage extends ConnexusServletBase {
 		resp.sendRedirect(uri);
 	}
 	
-	private void deleteStream(HttpServletRequest req, HttpServletResponse resp) {
+	private void deleteStream(ConnexusContext cContext, HttpServletRequest req, HttpServletResponse resp) {
+        CUser cuser = cContext.getCuser();
 		for (String objectIdStr : req.getParameterValues("delete")) {
 			if (objectIdStr == null || objectIdStr.length() < 1) {
 				continue;

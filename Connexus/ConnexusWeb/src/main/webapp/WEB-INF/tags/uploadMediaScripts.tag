@@ -132,11 +132,12 @@
     $(function () {
         function allUploadsComplete() {
             // window.alert("Batch upload done");
+            $("#uploadInProgressAlert").css("display", "none");
             $("#uploadCompleteAlert").css("display", "block");
             // Wait a few seconds so they can see that it's finished
             window.setTimeout(function () {
-                window.location = "${ streamViewUrl }";
                 // window.alert("Redirecting...");
+                window.location = "${ streamViewUrl }";
             }, 2500);
         }
 
@@ -144,13 +145,11 @@
 
         $('#fileupload').fileupload({
             submit: function (e, data) {
-
+                $("#uploadInProgressAlert").css("display", "block");
                 var $this = $(this);
                 // debugger;
                 $.getJSON('/rest/file/url?' + new Date().getTime(), function (result) {
                     data.url = result.url;
-                    //var formData = $("#fileupload").serialize();
-                    //data.formData = formData;
                     $this.fileupload('send', data);
                 });
                 pendingUploads++;
@@ -168,37 +167,12 @@
                 window.setTimeout(function() {
                     if (pendingUploads == 0) {
                         pendingUploads--;
-                        allUploadsComplete()
+                        allUploadsComplete();
                     }
                 }, 1000);
             }
 
         });
 
-        <%--
-                $('#fileupload').fileupload({
-                    dataType: 'html',
-                    singleFileUploads: false, // handle the batch upload as one HTTP request
-        //            add: function( e, data ) {
-        //                $(".fileupload-previewtable .files tr").each(function(index) {
-        //                    $(this).find("button.start").hide();
-        //                });
-        //            },
-                    done: function (e, data) {
-                        // window.alert("Batch upload done");
-                        // #F5FCF7
-                        $("#uploadCompleteAlert").css("display", "block");
-                        $(".fileupload-previewtable .files tr td").css("background-color", "#F5FCF7");
-                        $(".fileupload-previewtable .files tr").each(function(index) {
-                           $(this).find(".fileupload-comment").attr("disabled", true);
-                           $(this).find("td:last").html("Upload Complete!");
-                        });
-                        // Wait a few seconds so they can see that it's finished
-                        window.setTimeout(function() {
-                            window.location = "${ streamViewUrl }";
-                        }, 2500);
-                    }
-                });
-        --%>
     });
 </script>

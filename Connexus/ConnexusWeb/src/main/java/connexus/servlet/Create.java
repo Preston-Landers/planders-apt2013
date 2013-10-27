@@ -1,8 +1,13 @@
 package connexus.servlet;
 
 import static connexus.OfyService.ofy;
+
+import com.googlecode.objectify.Ref;
 import connexus.Config;
+import connexus.ConnexusContext;
 import connexus.EmailHelper;
+import connexus.model.CUser;
+import connexus.model.Site;
 import connexus.model.Stream;
 
 import java.io.IOException;
@@ -29,10 +34,10 @@ public class Create extends ConnexusServletBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
-		InitializeContext(req, resp); // Base site context initialization
+		ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 		
 		// Force user to login screen before showing create
-		if (guser == null) {
+		if (cContext.getGuser() == null) {
 			resp.sendRedirect((String) req.getAttribute("loginURL"));
 		}
 		
@@ -42,7 +47,9 @@ public class Create extends ConnexusServletBase {
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		InitializeContext(req, resp); // Base site context initialization
+        ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
+        Ref<Site> site = cContext.getSite();
+        CUser cuser = cContext.getCuser();
 		CharMatcher wspace = CharMatcher.is(' ');
 
 		String streamName = req.getParameter("name");

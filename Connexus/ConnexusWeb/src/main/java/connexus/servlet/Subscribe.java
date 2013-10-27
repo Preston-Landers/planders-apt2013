@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import connexus.ConnexusContext;
 import connexus.StreamHandle;
 import connexus.model.Stream;
 import connexus.model.Subscription;
@@ -22,7 +23,7 @@ public class Subscribe extends ConnexusServletBase {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		InitializeContext(req, resp); // Base site context initialization
+		ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 
 		// Forward to JSP page to display them in a HTML table.
 		req.getRequestDispatcher(dispatcher).forward(req, resp);
@@ -30,12 +31,12 @@ public class Subscribe extends ConnexusServletBase {
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
-		InitializeContext(req, resp); // Base site context initialization
+        ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 
 		StreamHandle viewingStreamHandle;
 		try {
 			viewingStreamHandle = StreamHandle.getStreamHandleFromRequest(req,
-					site);
+					cContext.getSite());
 		} catch (RuntimeException e) {
 			viewingStreamHandle = new StreamHandle();
 		}
@@ -57,7 +58,7 @@ public class Subscribe extends ConnexusServletBase {
 
 		}
 
-		if (cuser == null) {
+		if (cContext.getCuser() == null) {
 			String redir = userService.createLoginURL(viewingStreamHandle.getStream().getViewURI());
 			alertError(req, "<A HREF=\"" + redir + "\">Please log in to subscribe to streams.</A>");
 			resp.sendRedirect(doneUri);
@@ -67,9 +68,9 @@ public class Subscribe extends ConnexusServletBase {
 		
 		// Handle the request
 		if (req.getParameter("subscribe") != null) {
-			doSubscribe(req, resp, viewingStreamHandle);
+			doSubscribe(cContext, req, resp, viewingStreamHandle);
 		} else if (req.getParameter("unsubscribe") != null) {
-			doUnsubscribe(req, resp, viewingStreamHandle);
+			doUnsubscribe(cContext, req, resp, viewingStreamHandle);
 		} else {
 			alertError(req, "Internal error: unknown command.");
 			resp.sendRedirect(doneUri);
@@ -78,7 +79,7 @@ public class Subscribe extends ConnexusServletBase {
 
 	}
 
-	public void doUnsubscribe(HttpServletRequest req, HttpServletResponse resp,
+	public void doUnsubscribe(ConnexusContext cContext, HttpServletRequest req, HttpServletResponse resp,
 			StreamHandle viewingStreamHandle) throws IOException {
 
 		// See if we want to be redirected anywhere after this.
@@ -88,7 +89,7 @@ public class Subscribe extends ConnexusServletBase {
 		}
 		
 		Subscription thisSub = null;
-		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser.getKey());
+		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cContext.getCuser().getKey());
 		for (Subscription sub : mySubs) {
 			Stream subStream = ofy().load().key(sub.getStream()).get();
 			if (subStream == viewingStreamHandle.getStream()) {
@@ -116,16 +117,16 @@ public class Subscribe extends ConnexusServletBase {
 		
 		// Delete the sub.
 		ofy().delete().entities(thisSub).now();
-		Subscription.clearCacheForSubscription(cuser, viewingStreamHandle);
+		Subscription.clearCacheForSubscription(cContext.getCuser(), viewingStreamHandle);
 		
 		alertWarning(req, "You have unsubscribed from the stream " + subStream.getName() + ".");
 		resp.sendRedirect(redirectURI);
 		return;		
 	}
 	
-	public void doSubscribe(HttpServletRequest req, HttpServletResponse resp,
+	public void doSubscribe(ConnexusContext cContext, HttpServletRequest req, HttpServletResponse resp,
 			StreamHandle viewingStreamHandle) throws IOException {
-		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cuser.getKey());
+		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cContext.getCuser().getKey());
 		for (Subscription sub : mySubs) {
 			Stream subStream = ofy().load().key(sub.getStream()).get();
 			if (subStream == viewingStreamHandle.getStream()) {
@@ -135,10 +136,10 @@ public class Subscribe extends ConnexusServletBase {
 			}
 		}
 
-		Subscription newSub = new Subscription(null, cuser.getKey(),
+		Subscription newSub = new Subscription(null, cContext.getCuser().getKey(),
 				viewingStreamHandle.getStream().getKey());
 		ofy().save().entities(newSub).now();
-		Subscription.clearCacheForSubscription(cuser, viewingStreamHandle);
+		Subscription.clearCacheForSubscription(cContext.getCuser(), viewingStreamHandle);
 
 		alertSuccess(req, "You are now subscribed to this stream.");
 		resp.sendRedirect(viewingStreamHandle.getStream().getViewURI());
