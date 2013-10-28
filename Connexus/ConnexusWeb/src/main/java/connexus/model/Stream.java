@@ -23,6 +23,7 @@ import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfNotNull;
 
 import connexus.Config;
+import connexus.servlet.GeoView;
 
 @Entity
 @Cache
@@ -69,6 +70,20 @@ public class Stream implements Comparable<Stream> {
 		return ofy().load().type(Stream.class).parent(cuser).id(objectId).get();
 	}
 
+    public String getAbsoluteGeoViewURI() {
+        return Config.productURL + getGeoViewURI();
+    }
+
+    /**
+     * Returns the URI to view this stream in Geo mode.
+     * @return
+     */
+    public String getGeoViewURI() {
+        List<String[]> params = new ArrayList<String[]>();
+        params.add(new String[] {"v", getObjectURI()});
+        return Config.getURIWithParams(GeoView.uri, params);
+    }
+
 	public String getAbsoluteViewURI() {
 		return Config.productURL + getViewURI();
 	}
@@ -89,7 +104,7 @@ public class Stream implements Comparable<Stream> {
             params.add(new String[] {"offset", displayOffset.toString()});
         }
 		params.add(new String[] {"v", getObjectURI()});
-		return Config.getURIWithParams("/view", params);
+		return Config.getURIWithParams(connexus.servlet.View.uri, params);
 	}
 
 	public String getObjectURI() {

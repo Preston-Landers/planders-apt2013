@@ -1,9 +1,6 @@
 package connexus;
 
-import com.google.appengine.api.users.User;
-import com.googlecode.objectify.Ref;
 import connexus.model.CUser;
-import connexus.model.Site;
 import connexus.model.Stream;
 
 /**

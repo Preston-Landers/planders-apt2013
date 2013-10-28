@@ -76,7 +76,7 @@
                         <div class="col-lg-6">
                             <span class="help-block">
                                 <em>Tip:</em> You can drag & drop files from your desktop or other programs to here.
-                                <BR>You can also select multiple files at once in the file chooser.
+                                <BR>You can also select multiple files in the Add Files chooser.
                             </span>
                         </div>
                     </div>

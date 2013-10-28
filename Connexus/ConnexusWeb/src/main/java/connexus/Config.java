@@ -16,6 +16,8 @@ public class Config {
     
     public static final String emailSubject = "[APT-Preston Landers] Trending streams for " + productDomain;
 
+    public static final String facebookAppId = "194168720763795";
+
     // For the endpoints
     public static final String ANDROID_CLIENT_ID = "771214203866-9vmc9ha8rvco92ul4dfc74r00t0nj6ls.apps.googleusercontent.com";
     public static final String WEB_CLIENT_ID = "771214203866-7btn313m3jrh49s1dhd837ssm1n1lrd0.apps.googleusercontent.com";
@@ -71,5 +73,8 @@ public class Config {
     public static String norm(String inp) {
         return inp.toLowerCase();
     }
-    
+
+    public static String getFacebookAppId() {
+        return facebookAppId;
+    }
 }

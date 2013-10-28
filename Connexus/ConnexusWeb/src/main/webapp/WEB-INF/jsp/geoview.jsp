@@ -11,7 +11,7 @@
 		<meta property="og:title"           content="${ fn:escapeXml(viewingStream.name) }" /> 
 		<meta property="og:image"           content="${ viewingStream.coverURL }" />
 		<meta property="og:description"     
-				content="${ fn:escapeXml(viewingStream.name) } is a ${productName } photo stream created by ${ fn:escapeXml(viewingStream.ownerName) }" />
+				content="${ fn:escapeXml(viewingStream.name) } is a ${productName } photo stream created by ${ fn:escapeXml(viewingStream.ownerName) } [Geographic View]" />
 		<meta property="og:type"            content="article"/> 
 		<meta property="fb:app_id"          content="${ facebookAppId }"/>
 		
@@ -86,7 +86,7 @@
 			<table width="100%">
 				<TR>
 					<TD>
-						<small><em>currently viewing stream of</em></small> 
+						<small><em>Geographic view of stream</em></small>
 							<strong>${ fn:escapeXml(viewingStreamUser.realName) }</strong> 
 					</TD>
 					<TD style="text-align: right">					
@@ -175,15 +175,7 @@
 					</li>
 				</c:if>
 
-                <li class="geoview">
-                    <a
-                        rel="tooltip"
-                        title="View this stream in geographic map mode."
-                        href="${ viewingStream.geoViewURI }">
-                        Geo View</a>
-                </li>
-
-                <c:if test="${ showOlderButton }">
+				<c:if test="${ showOlderButton }">
 
 					<%-- only show older when they exist --%>
 					<li class="next">
@@ -221,7 +213,7 @@
 	</div>
 	</div> <%-- stream cover (curently unused) --%>
 
-	<%-- If you are able to upload, show the upload widget. Otherwise show the subscribe widget. --%>
+	<%-- If this is your stream, show the upload widget. Otherwise show the subscribe widget. --%>
 	<c:choose>
 		<c:when test="${ canDoUpload }">
 			<t:uploadMedia stream="${ viewingStream.id }" streamUser="${ viewingStreamUser.id }"></t:uploadMedia>

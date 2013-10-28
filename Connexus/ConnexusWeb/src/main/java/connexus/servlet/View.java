@@ -34,10 +34,6 @@ public class View extends ConnexusServletBase {
             .getBlobstoreService();
     private final BlobInfoFactory blobInfoFactory = new BlobInfoFactory();
 
-//    private Stream viewingStream;
-//    private CUser viewingStreamUser;
-//    private StreamHandle viewingStreamHandle;
-
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
         ViewContext viewContext = InitializeViewContext(req, resp); // Base site context initialization
@@ -141,13 +137,14 @@ public class View extends ConnexusServletBase {
         resp.sendRedirect(viewingStream.getViewURI());
     }
 
-    protected ViewContext InitializeViewContext(HttpServletRequest req,
+    public static ViewContext InitializeViewContext(HttpServletRequest req,
                                                 HttpServletResponse resp) throws IOException, ServletException {
 
-        ConnexusContext connexusContext = super.InitializeContext(req, resp);
+        ConnexusContext connexusContext = ConnexusServletBase.InitializeContext(req, resp);
         CUser cuser = connexusContext.getCuser();
         Ref<Site> site = connexusContext.getSite();
 
+        req.setAttribute("facebookAppId", Config.getFacebookAppId());
 
         StreamHandle viewingStreamHandle = null;
         Stream viewingStream = null;
