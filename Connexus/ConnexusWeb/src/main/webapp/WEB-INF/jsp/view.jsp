@@ -215,16 +215,16 @@
 	</div>
 	</div> <%-- stream cover (curently unused) --%>
 
-	<%-- If you are able to upload, show the upload widget. Otherwise show the subscribe widget. --%>
-	<c:choose>
-		<c:when test="${ canDoUpload }">
-			<t:uploadMedia stream="${ viewingStream.id }" streamUser="${ viewingStreamUser.id }"></t:uploadMedia>
-		</c:when>
-		<c:otherwise>
-			<t:subscribe stream="${ viewingStream.id }" streamUser="${ viewingStreamUser.id }"></t:subscribe>
-		</c:otherwise>
-	</c:choose>
-	</c:when>
+        <c:if test="${ canDoUpload }">
+            <t:uploadMedia stream="${ viewingStream.id }" streamUser="${ viewingStreamUser.id }"></t:uploadMedia>
+        </c:if>
+        <c:if test="${ canSubscribe }">
+            <t:subscribe
+                    stream="${ viewingStream.id }"
+                    streamUser="${ viewingStreamUser.id }"
+                    redir="${ viewingStream.viewURI }"></t:subscribe>
+        </c:if>
+    </c:when>
 	
 	<%-- BROWSE AVAILABLE STREAMS --%>
 	<c:otherwise>

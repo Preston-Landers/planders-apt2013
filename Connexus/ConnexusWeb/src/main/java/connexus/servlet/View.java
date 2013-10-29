@@ -56,8 +56,6 @@ public class View extends ConnexusServletBase {
         req.setAttribute("offset", offset);
         req.setAttribute("limit", limit);
 
-        boolean canDoUpload = false;
-
         if (viewingStream != null) {
             // We are viewing a stream, so set some variables for the JSP
             List<Media> mediaList = viewingStream.getMedia(offset, limit);
@@ -97,16 +95,12 @@ public class View extends ConnexusServletBase {
             }
             viewingStream.getAndIncrementViews();
 
-            // For now, only allow uploading if this is YOUR stream.
-            canDoUpload = (viewContext.getViewingStreamUser() == viewContext.getConnexusContext().getCuser());
         } else {
             // No stream selected... let them browse all streams.
             List<Stream> allStreams = Stream.getAllStreams(
                     viewContext.getConnexusContext().getSite().getKey());
             req.setAttribute("allStreamsList", allStreams);
         }
-
-        req.setAttribute("canDoUpload", canDoUpload);
 
         // Forward to JSP page to display them in a HTML table.
         req.getRequestDispatcher(dispatcher).forward(req, resp);
@@ -137,6 +131,15 @@ public class View extends ConnexusServletBase {
         resp.sendRedirect(viewingStream.getViewURI());
     }
 
+    /**
+     * Sets up the ViewContext object and request attributes needed to view pictures within a Stream.
+     *
+     * @param req
+     * @param resp
+     * @return
+     * @throws IOException
+     * @throws ServletException
+     */
     public static ViewContext InitializeViewContext(HttpServletRequest req,
                                                 HttpServletResponse resp) throws IOException, ServletException {
 
@@ -163,18 +166,29 @@ public class View extends ConnexusServletBase {
                     isMyStream = true;
                 }
                 req.setAttribute("isMyStream", isMyStream);
+
+                // Determine if the current user is subscribed to this stream.
+                Subscription mySubForStream = null;
+                if (cuser != null && viewingStreamHandle != null) {
+                    mySubForStream = Subscription.getUserSubscriptionFromStreamHandle(
+                            cuser, viewingStreamHandle);
+                }
+                req.setAttribute("mySubForStream", mySubForStream);
+                // Determine if the current user could potentially subscribe to this stream.
+                // He can unless he is the owner.
+                boolean canSubscribe = ( !isMyStream );
+                req.setAttribute("canSubscribe", canSubscribe);
+
+                // For now, only allow uploading if this is YOUR stream.
+                boolean canDoUpload = (viewingStreamUser == connexusContext.getCuser());
+                req.setAttribute("canDoUpload", canDoUpload);
+
+
             } catch (RuntimeException e) {
                 e.printStackTrace(System.err);
                 alertError(req, e.toString());
             }
         }
-        // Determine if the current user is subscribed to this stream.
-        Subscription mySubForStream = null;
-        if (cuser != null && viewingStreamHandle != null) {
-            mySubForStream = Subscription.getUserSubscriptionFromStreamHandle(
-                    cuser, viewingStreamHandle);
-        }
-        req.setAttribute("mySubForStream", mySubForStream);
         return new ViewContext(connexusContext, viewingStream, viewingStreamUser, viewingStreamHandle);
     }
 

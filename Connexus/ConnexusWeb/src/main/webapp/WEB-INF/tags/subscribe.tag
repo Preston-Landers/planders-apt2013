@@ -3,6 +3,7 @@
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
 <%@ attribute name="stream" required="true" %>
 <%@ attribute name="streamUser" required="true" %>
+<%@ attribute name="redir" required="false" %>
 
 <c:choose>
 	<c:when test="${ mySubForStream != null }">
@@ -15,7 +16,11 @@
 
 <%-- TODO: don't show if already subscribed... --%>
 <form action="/subscribe" method="post" role="form">
-	<%-- All the cool kids use single letter keys --%>
+    <c:if test="${ redir != null }">
+        <input type="hidden" name="redir" value="${ redir }">
+    </c:if>
+
+<%-- All the cool kids use single letter keys --%>
 	<input type="hidden" name="v" value="${ viewingStream.objectURI }">
 	<div id="createStreamPanel" class="panel panel-default">
 		<div class="panel-heading">

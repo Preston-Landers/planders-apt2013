@@ -19,7 +19,6 @@ public class Subscribe extends ConnexusServletBase {
 	private static final long serialVersionUID = -4578267704775630816L;
 	public static final String uri = "/subscribe";
 	public static final String dispatcher = "/WEB-INF/jsp/view.jsp";
-	public static final String doneUri = View.uri;
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
@@ -33,6 +32,11 @@ public class Subscribe extends ConnexusServletBase {
 			throws IOException, ServletException {
         ConnexusContext cContext = InitializeContext(req, resp); // Base site context initialization
 
+        String redirUri = View.uri;  // where do we go after this?
+        if (req.getParameter("redir") != null) {
+            redirUri = req.getParameter("redir");
+        }
+
 		StreamHandle viewingStreamHandle;
 		try {
 			viewingStreamHandle = StreamHandle.getStreamHandleFromRequest(req,
@@ -43,12 +47,8 @@ public class Subscribe extends ConnexusServletBase {
 
 		// Validate that we have a stream to deal with at this point
 		if (viewingStreamHandle.getStream() == null) {
-			String redirUri = doneUri;
 			if (req.getParameter("unsubscribe") != null) {
 				// See if we want to be redirected anywhere after this.
-				if (req.getParameter("redir") != null) {
-					redirUri = req.getParameter("redir");
-				}
 				alertError(req, "You must select a stream to unsubscribe from.");
 			} else {
 				alertError(req, "Stream not found.");
@@ -61,7 +61,7 @@ public class Subscribe extends ConnexusServletBase {
 		if (cContext.getCuser() == null) {
 			String redir = userService.createLoginURL(viewingStreamHandle.getStream().getViewURI());
 			alertError(req, "<A HREF=\"" + redir + "\">Please log in to subscribe to streams.</A>");
-			resp.sendRedirect(doneUri);
+			resp.sendRedirect(redirUri);
 			return;
 		}
 		
@@ -73,21 +73,15 @@ public class Subscribe extends ConnexusServletBase {
 			doUnsubscribe(cContext, req, resp, viewingStreamHandle);
 		} else {
 			alertError(req, "Internal error: unknown command.");
-			resp.sendRedirect(doneUri);
-			return;
 		}
+        resp.sendRedirect(redirUri);
 
 	}
 
 	public void doUnsubscribe(ConnexusContext cContext, HttpServletRequest req, HttpServletResponse resp,
 			StreamHandle viewingStreamHandle) throws IOException {
 
-		// See if we want to be redirected anywhere after this.
-		String redirectURI = doneUri;
-		if (req.getParameter("redir") != null) {
-			redirectURI = req.getParameter("redir");
-		}
-		
+
 		Subscription thisSub = null;
 		List<Subscription> mySubs = Subscription.getSubscriptionsForUser(cContext.getCuser().getKey());
 		for (Subscription sub : mySubs) {
@@ -99,29 +93,22 @@ public class Subscribe extends ConnexusServletBase {
 		}
 		if (thisSub == null) {
 			alertWarning(req, "You are not subscribed to that stream.");
-			resp.sendRedirect(redirectURI);
-			return;					
+			return;
 		}
 		// Get the view link before we delete.
 		
 		Stream subStream = ofy().load().key(thisSub.getStream()).get();
 		if (subStream == null) {
 			alertWarning(req, "Internal error: cannot load stream from subscription.");
-			resp.sendRedirect(redirectURI);
-			return;								
+			return;
 		}
-		
-		if (req.getParameter("redir") == null) {
-			redirectURI = subStream.getViewURI();
-		}
-		
+
 		// Delete the sub.
 		ofy().delete().entities(thisSub).now();
 		Subscription.clearCacheForSubscription(cContext.getCuser(), viewingStreamHandle);
 		
 		alertWarning(req, "You have unsubscribed from the stream " + subStream.getName() + ".");
-		resp.sendRedirect(redirectURI);
-		return;		
+		return;
 	}
 	
 	public void doSubscribe(ConnexusContext cContext, HttpServletRequest req, HttpServletResponse resp,
@@ -131,7 +118,6 @@ public class Subscribe extends ConnexusServletBase {
 			Stream subStream = ofy().load().key(sub.getStream()).get();
 			if (subStream == viewingStreamHandle.getStream()) {
 				alertError(req, "You are already subscribed to that stream.");
-				resp.sendRedirect(doneUri);
 				return;
 			}
 		}
@@ -142,7 +128,6 @@ public class Subscribe extends ConnexusServletBase {
 		Subscription.clearCacheForSubscription(cContext.getCuser(), viewingStreamHandle);
 
 		alertSuccess(req, "You are now subscribed to this stream.");
-		resp.sendRedirect(viewingStreamHandle.getStream().getViewURI());
 
 	}
 }

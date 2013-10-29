@@ -169,9 +169,9 @@
                             <p>
                                 <label for="geoDateRateDisplay">Date range:</label>
                                 <span
-                                    style="border: 0; color: #f6931f; font-weight: bold;"
-                                    id="geoDateRateDisplay"
-                                    >
+                                        style="border: 0; color: #f6931f; font-weight: bold;"
+                                        id="geoDateRateDisplay"
+                                        >
                                 </span>
                             </p>
 
@@ -233,16 +233,18 @@
             <%-- stream cover (curently unused) --%>
 
             <%-- If this is your stream, show the upload widget. Otherwise show the subscribe widget. --%>
-            <c:choose>
-                <c:when test="${ canDoUpload }">
-                    <t:uploadMedia stream="${ viewingStream.id }"
-                                   streamUser="${ viewingStreamUser.id }"></t:uploadMedia>
-                </c:when>
-                <c:otherwise>
-                    <t:subscribe stream="${ viewingStream.id }"
-                                 streamUser="${ viewingStreamUser.id }"></t:subscribe>
-                </c:otherwise>
-            </c:choose>
+            <c:if test="${ canDoUpload }">
+                <t:uploadMedia stream="${ viewingStream.id }"
+                               streamUser="${ viewingStreamUser.id }"></t:uploadMedia>
+            </c:if>
+            <c:if test="${ canSubscribe }">
+                <t:subscribe
+                        stream="${ viewingStream.id }"
+                        streamUser="${ viewingStreamUser.id }"
+                        redir="${ viewingStream.geoViewURI }"
+                        >
+                </t:subscribe>
+            </c:if>
         </c:when>
 
         <%-- BROWSE AVAILABLE STREAMS --%>

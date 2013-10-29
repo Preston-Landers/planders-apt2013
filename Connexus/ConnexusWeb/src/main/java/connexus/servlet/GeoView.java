@@ -18,7 +18,9 @@ public class GeoView extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
-        ViewContext viewContext =  View.InitializeViewContext(req, resp);
+
+        // Sets up the request attributes needed by the JSP
+        ViewContext viewContext = View.InitializeViewContext(req, resp);
 
         // Forward to JSP page to display them in a HTML table.
         req.getRequestDispatcher(dispatcher).forward(req, resp);

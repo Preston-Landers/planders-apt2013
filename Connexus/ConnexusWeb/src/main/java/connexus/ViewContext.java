@@ -5,7 +5,7 @@ import connexus.model.Stream;
 
 /**
  * An object to represent the current servlet request context
- * within the View & Upload screens.
+ * within the View/Upload & GeoView screens.
  */
 public class ViewContext {
     private Stream viewingStream;
