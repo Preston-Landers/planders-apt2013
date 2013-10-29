@@ -139,7 +139,7 @@ public class StreamList {
             if (stream == null) {
                 continue;
             }
-            Stream endpointStream = convertStreamToAPI(stream);
+            Stream endpointStream = Stream.convertStreamToAPI(stream);
             streams.add(endpointStream);
 
             endpointStream.setQueryIndex(streamCount++);
@@ -272,7 +272,7 @@ public class StreamList {
         returnVal.setQueryOffset(offset);
         returnVal.setStreamName(stream.getName());
         returnVal.setStreamOwnerName(stream.getOwnerName());
-        returnVal.setStream(convertStreamToAPI(stream));
+        returnVal.setStream(Stream.convertStreamToAPI(stream));
         if (useCache && cacheKey != null && Config.API_CACHE_TIME_SEC >= 0) {
             syncCache.put(cacheKey, returnVal, Expiration.byDeltaSeconds(Config.API_CACHE_TIME_SEC));
         }
@@ -290,7 +290,7 @@ public class StreamList {
             if (modelMedia == null) {
                 continue;
             }
-            Media endpointMedia = convertMediaToAPI(modelMedia);
+            Media endpointMedia = Media.convertMediaToAPI(modelMedia);
             endpointMedia.setQueryIndex(mediaCount++);
             endpointMedia.setQueryLimit(limit);
             endpointMedia.setQueryOffset(offset);
@@ -325,7 +325,7 @@ public class StreamList {
                 connexus.model.Media.searchByLocation(limit, offset, latitude, longitude)) {
             if (locMedia!= null) {
                 connexus.model.Media media = locMedia.getMedia();
-                Media epMedia = convertMediaToAPI(media);
+                Media epMedia = Media.convertMediaToAPI(media);
                 epMedia.setMetersToSearchPoint(locMedia.getDistanceToOrigin());
                 mediaList.add(epMedia);
             }
@@ -335,54 +335,4 @@ public class StreamList {
         return nearbyResult;
     }
 
-    protected static Stream convertStreamToAPI(connexus.model.Stream modelStream) {
-        Stream stream = new Stream();
-        stream.setId(modelStream.getId());
-        stream.setOwnerId(modelStream.getOwner().getId());
-        stream.setName(modelStream.getName());
-        stream.setOwnerEmail(modelStream.getOwnerName());
-        stream.setCoverURL(modelStream.getCoverURL());
-        stream.setTags(modelStream.getTags());
-        stream.setCreationDate(modelStream.getCreationDate());
-        stream.setNumberOfMedia(modelStream.getNumberOfMedia());
-        Long views = modelStream.getAndIncrementViews();
-        if (views == null) {
-            views = new Long(0);
-        }
-        stream.setViews(views);
-        stream.setTrendingViews(modelStream.getTrendingViews());
-        stream.setLastNewMedia(modelStream.getLastNewMediaDate());
-        return stream;
-    }
-
-    protected static Media convertMediaToAPI(connexus.model.Media modelMedia) {
-        Media media = new Media();
-        media.setId(modelMedia.getId());
-        media.setStreamId(modelMedia.getStream().getId());
-        media.setStreamOwnerId(modelMedia.getStreamOwnerId());
-        media.setUrl(modelMedia.getMediaServingURL());
-        media.setThumbUrl(modelMedia.getThumbURL());
-        media.setFileName(modelMedia.getFileName());
-        media.setMimeType(modelMedia.getMimeType());
-        media.setSize(modelMedia.getSize());
-        media.setComments(modelMedia.getComments());
-        media.setCreationDate(modelMedia.getCreationDate());
-        media.setUploader(modelMedia.getUploaderNow().getRealName());
-        media.setViews(modelMedia.getAndIncrementViews());
-
-        Double lLat = modelMedia.getLatitude();
-        Double lLong = modelMedia.getLongitude();
-        double p_lat = 0.0;
-        double p_long = 0.0;
-        if (lLat != null) {
-            p_lat = lLat.doubleValue();
-        }
-        if (lLong != null) {
-            p_long = lLong.doubleValue();
-        }
-
-        media.setLatitude(p_lat);
-        media.setLongitude(p_long);
-        return media;
-    }
 }

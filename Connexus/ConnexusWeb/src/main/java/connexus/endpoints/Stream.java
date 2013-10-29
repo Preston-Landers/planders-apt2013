@@ -35,6 +35,26 @@ public class Stream implements Serializable {
         this.name = name;
     }
 
+    public static Stream convertStreamToAPI(connexus.model.Stream modelStream) {
+        Stream stream = new Stream();
+        stream.setId(modelStream.getId());
+        stream.setOwnerId(modelStream.getOwner().getId());
+        stream.setName(modelStream.getName());
+        stream.setOwnerEmail(modelStream.getOwnerName());
+        stream.setCoverURL(modelStream.getCoverURL());
+        stream.setTags(modelStream.getTags());
+        stream.setCreationDate(modelStream.getCreationDate());
+        stream.setNumberOfMedia(modelStream.getNumberOfMedia());
+        Long views = modelStream.getAndIncrementViews();
+        if (views == null) {
+            views = new Long(0);
+        }
+        stream.setViews(views);
+        stream.setTrendingViews(modelStream.getTrendingViews());
+        stream.setLastNewMedia(modelStream.getLastNewMediaDate());
+        return stream;
+    }
+
     public long getId() {
         return id;
     }

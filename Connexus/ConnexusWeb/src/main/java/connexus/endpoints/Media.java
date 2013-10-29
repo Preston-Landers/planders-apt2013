@@ -27,6 +27,37 @@ public class Media implements Serializable {
     int queryLimit;
     int queryIndex;
 
+    public static Media convertMediaToAPI(connexus.model.Media modelMedia) {
+        Media media = new Media();
+        media.setId(modelMedia.getId());
+        media.setStreamId(modelMedia.getStream().getId());
+        media.setStreamOwnerId(modelMedia.getStreamOwnerId());
+        media.setUrl(modelMedia.getMediaServingURL());
+        media.setThumbUrl(modelMedia.getThumbURL());
+        media.setFileName(modelMedia.getFileName());
+        media.setMimeType(modelMedia.getMimeType());
+        media.setSize(modelMedia.getSize());
+        media.setComments(modelMedia.getComments());
+        media.setCreationDate(modelMedia.getCreationDate());
+        media.setUploader(modelMedia.getUploaderNow().getRealName());
+        media.setViews(modelMedia.getAndIncrementViews());
+
+        Double lLat = modelMedia.getLatitude();
+        Double lLong = modelMedia.getLongitude();
+        double p_lat = 0.0;
+        double p_long = 0.0;
+        if (lLat != null) {
+            p_lat = lLat.doubleValue();
+        }
+        if (lLong != null) {
+            p_long = lLong.doubleValue();
+        }
+
+        media.setLatitude(p_lat);
+        media.setLongitude(p_long);
+        return media;
+    }
+
     public long getId() {
         return id;
     }

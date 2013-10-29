@@ -1,6 +1,9 @@
 package connexus;
 
 import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.client.utils.URIBuilder;
@@ -76,5 +79,24 @@ public class Config {
 
     public static String getFacebookAppId() {
         return facebookAppId;
+    }
+
+    /**
+     * Attempt to format a JSON date param (string) to a java.util.Date
+     * Returns null if fail
+     * @param dateStr
+     * @return
+     */
+    public static Date paramToDate(String dateStr) {
+        // dateStr = "2013-08-13T14:15:00.000Z";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+
+        try {
+            Date parsedDate = formatter.parse(dateStr);
+            return parsedDate;
+        } catch (ParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return null;
+        }
     }
 }

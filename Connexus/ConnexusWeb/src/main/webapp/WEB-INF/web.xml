@@ -125,6 +125,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>updatefakegeodata</servlet-name>
+        <servlet-class>connexus.servlet.UpdateFakeGeodata</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>updatefakegeodata</servlet-name>
+        <url-pattern>/cron/updatefakegeodata</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>error</servlet-name>
         <servlet-class>connexus.servlet.Error</servlet-class>
     </servlet>

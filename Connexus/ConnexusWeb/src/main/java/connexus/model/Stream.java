@@ -23,6 +23,7 @@ import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfNotNull;
 
 import connexus.Config;
+import connexus.LatLong;
 import connexus.servlet.GeoView;
 
 @Entity
@@ -271,10 +272,9 @@ public class Stream implements Comparable<Stream> {
 	}
 
 	public boolean deleteStream() {
-		// TODO: logging and TRANSACTION...
 		System.err.println("Deleting stream and all its media: " + this);
 
-		// TODO Delete all Media in this stream
+		// Delete all Media in this stream
 		for (Media media : getMedia(0, 0)) {
 			media.deleteMedia();
 		}
@@ -286,7 +286,7 @@ public class Stream implements Comparable<Stream> {
 
 	/**
 	 * Returns ALL streams available in the system, sorted by most recently updated first.
-	 * TODO: memcache?
+	 * Should we memcache?
 	 */
 	public static List<Stream> getAllStreams(Key<Site> site) {
         return getAllStreams(site, 0, 0);
@@ -313,7 +313,7 @@ public class Stream implements Comparable<Stream> {
     }
 
 
-    /*
+    /**
 	 * Get a list of media for this stream sorted by creation date
 	 */
 	public List<Media> getMedia(int offset, int limit) {
@@ -321,8 +321,25 @@ public class Stream implements Comparable<Stream> {
 				.offset(offset).limit(limit).list();
 	}
 
+    /**
+     * Get a list of all media for this stream within a certain date range.
+     * @param begin
+     * @param end
+     * @return
+     */
+    public List<Media> getMediaByDateRange(Date begin, Date end) {
+        List<Media> mediaList = new ArrayList<Media>();
+        for (Media media : getMedia(0, 0)) {
+            Date mediaCreationDate = media.getCreationDate();
+            if ((mediaCreationDate.equals(begin) || mediaCreationDate.after(begin)) &&
+                    (mediaCreationDate.equals(end) || mediaCreationDate.before(end))) {
+                mediaList.add(media);
+            }
+        }
+        return mediaList;
+    }
 
-	public Long getViews() {
+    public Long getViews() {
 		return views;
 	}
 

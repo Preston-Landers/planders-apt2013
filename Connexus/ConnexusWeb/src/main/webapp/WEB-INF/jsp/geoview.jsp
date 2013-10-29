@@ -35,16 +35,95 @@
         <t:uploadMediaScripts redir="${ viewingStream.geoViewURI }" ></t:uploadMediaScripts>
     </c:if>
 
+    <%-- a template to use when creating map pin info windows. --%>
+    <div id="geo-thumbnail-template" style="display: none;" class="thumbnail">
+        <img data-src="" alt="...">
+        <div class="caption">
+            <p class="thumbnail-desc">...</p>
+        </div>
+    </div>
+
     <%-- Geo-goodies --%>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript" src="js/jquery.ui.map/markerclusterer.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.map/min/jquery.ui.map.min.js"></script>
     <script>
+        var geoQueryBeginDate = null;
+        var geoQueryEndDate = null;
+        var geoAjaxTimer = null;
+
+        function setQueryDateRange(begin, end) {
+            geoQueryBeginDate = begin;
+            geoQueryEndDate = end;
+        }
+
+        function invokeGeoAjaxTimer() {
+            clearGeoAjaxTimer();
+            geoAjaxTimer = window.setTimeout(geoTimerHandler, 2000);
+        }
+        function clearGeoAjaxTimer() {
+            if (geoAjaxTimer) {
+                window.clearTimeout(geoAjaxTimer);
+            }
+            geoAjaxTimer = null;
+        }
+        function geoTimerHandler() {
+            clearGeoAjaxTimer();
+            loadGeoData();
+        }
+
+        function getInfoWindowForMedia(media) {
+            var $info = $("#geo-thumbnail-template").clone().css('display', 'block');
+            // Need to monkey with the URL to get a smaller thumbnail
+            $info.find("img").attr("alt", media.comments).attr("src", media.thumbUrl.replace('=s300', '=s100'));
+            $info.find(".caption p").html(media.comments);
+            return $info.html();
+        }
+        function loadGeoData() {
+            $.getJSON('geo',
+                    {
+                        v: '${ viewingStream.objectURI }',  // what stream is it?
+                        jsonget: '1',                       // invokes the JSON handler
+                        begin: geoQueryBeginDate.toISOString(),
+                        end: geoQueryEndDate.toISOString()
+                    },
+                    function(data, textStatus, jqXHR) {
+                        $map_canvas = $('#map_canvas');
+
+                        $map_canvas.gmap('clear', 'markers');
+
+                        // Add the new points.
+                        $.each(data.stream.mediaList, function(index, media) {
+                            // technically 0,0 is a valid coordinate but not in my system
+                            if (media.latitude && media.longitude) {
+                                var pos = media.latitude + "," + media.longitude;
+                                $map_canvas.gmap('addMarker', {'position': pos, 'bounds': true}).click(function() {
+                                    $map_canvas.gmap('openInfoWindow', {'content': getInfoWindowForMedia(media)}, this);
+                                });
+                            }
+                        });
+
+                        // Re-center the map around displayed coordinates.
+                        // Not sure if this is really necessary.
+                        // http://stackoverflow.com/questions/2818984/google-map-api-v3-center-zoom-on-displayed-markers
+                        // map: an instance of GMap3
+                        // latlng: an array of instances of GLatLng
+                        var latlngbounds = new google.maps.LatLngBounds();
+                        latlng.each(function(n){
+                            latlngbounds.extend(n);
+                        });
+                        map.setCenter(latlngbounds.getCenter());
+                        map.fitBounds(latlngbounds);
+                    }
+            );
+        }
+
         // We need to bind the map with the "init" event otherwise bounds will be null
         $('#map_canvas').gmap({'zoom': 2, 'disableDefaultUI': true}).bind('init', function (evt, map) {
             var bounds = map.getBounds();
             var southWest = bounds.getSouthWest();
             var northEast = bounds.getNorthEast();
+/*
             var lngSpan = northEast.lng() - southWest.lng();
             var latSpan = northEast.lat() - southWest.lat();
             for (var i = 0; i < 1000; i++) {
@@ -56,9 +135,13 @@
                             $('#map_canvas').gmap('openInfoWindow', { content: 'Hello world!' }, this);
                         });
             }
+*/
             $('#map_canvas').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));
             // To call methods in MarkerClusterer simply call
             // $('#map_canvas').gmap('get', 'MarkerClusterer').callingSomeMethod();
+
+            // Initial data load.
+            loadGeoData();
         });
     </script>
 
@@ -79,6 +162,7 @@
                 var highDate = new Date(yearAgo);
                 highDate.setDate(yearAgo.getDate() + high);
                 var label = formatDate(lowDate) + " to: " + formatDate(highDate);
+                setQueryDateRange(lowDate, highDate);
                 $("#geoDateRateDisplay").html(label);
             }
 
@@ -88,7 +172,12 @@
                 max: 365,  // one year back
                 values: [ 0, 365 ],
                 slide: function (event, ui) {
-                    setRangeLabels(ui.values[ 0 ], ui.values[ 1 ])
+                    setRangeLabels(ui.values[ 0 ], ui.values[ 1 ]);
+
+                    // start a timer that will update the map via AJAX
+                    // another slider move event within a short time window
+                    // will cancel the previous request and start another.
+                    invokeGeoAjaxTimer();
                 }
             });
             setRangeLabels(
