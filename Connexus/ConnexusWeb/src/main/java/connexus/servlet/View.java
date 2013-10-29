@@ -77,8 +77,6 @@ public class View extends ConnexusServletBase {
                 showOlderButton = true;
             }
 
-            req.setAttribute("numberOfMedia", numberOfMedia);
-
             req.setAttribute("olderOffset", olderOffset);
             req.setAttribute("olderLimit", olderLimit);
             req.setAttribute("newerOffset", newerOffset);
@@ -183,6 +181,8 @@ public class View extends ConnexusServletBase {
                 boolean canDoUpload = (viewingStreamUser == connexusContext.getCuser());
                 req.setAttribute("canDoUpload", canDoUpload);
 
+                int numberOfMedia = Config.safeLongToInt(viewingStream.getNumberOfMedia());
+                req.setAttribute("numberOfMedia", numberOfMedia);
 
             } catch (RuntimeException e) {
                 e.printStackTrace(System.err);

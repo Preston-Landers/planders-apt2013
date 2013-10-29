@@ -1,7 +1,9 @@
 package connexus.servlet;
 
 import connexus.model.AutocompleteIndex;
+import connexus.model.CUser;
 import connexus.model.Leaderboard;
+import connexus.model.Site;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +25,10 @@ public class UpdateAutocomplete extends HttpServlet {
 		resp.setContentType("text/plain");
 		PrintWriter pw = resp.getWriter();
         doGenerateAutocompleteIndex();
+
+        // Only necessary to do this migration once per data-store
+        // But let's do it every hour just to be sure...
+        CUser.normalizeAllAccountNames(Site.load(null).getKey());
 
 		pw.println("Index regenerated.");
 		pw.flush();
