@@ -17,7 +17,7 @@
 		<ul class="nav navbar-nav">
 			<t:menuTab label="Manage" triggerURIEnd="/manage.jsp" target="/manage"></t:menuTab>
 			<t:menuTab label="Create" triggerURIEnd="/create.jsp" target="/create"></t:menuTab>
-			<t:menuTab label="View" triggerURIEnd="/view.jsp" target="/view"></t:menuTab>
+			<t:menuTab label="View" triggerURIEnd="view.jsp" target="/view"></t:menuTab>  <%-- allows it to work with geoview.jsp --%>
 			<t:menuTab label="Search" triggerURIEnd="/search.jsp" target="/search"></t:menuTab>
 			<t:menuTab label="Trending" triggerURIEnd="/trending.jsp" target="/trending"></t:menuTab>
 			<t:menuTab label="Social" triggerURIEnd="/social.jsp" target="/social"></t:menuTab>
@@ -91,9 +91,7 @@
 					</li>
 				</ul>
 			</li>
-		
-		
-		
+
 			<%-- <t:menuTab label="Admin" triggerURIEnd="/admin.jsp" target="/admin"></t:menuTab>  --%>
 			<t:menuLoginTab></t:menuLoginTab>
 		</ul>

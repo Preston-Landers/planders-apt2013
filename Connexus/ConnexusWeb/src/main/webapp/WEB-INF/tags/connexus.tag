@@ -15,7 +15,7 @@
 							"<h5><small>Department of Computer and<BR>Electrical Engineering</small></H5></center>");
 
 	
-	String cssTheme = "/bootstrap/css/bootstrap.spacelab.min.css";
+	String cssTheme = "/bootstrap/css/bootstrap.flatly.min.css";
 	Cookie[] cookies = request.getCookies();
 	if (cookies != null) {
 		for (int i=0; i<cookies.length; i++) {
@@ -35,7 +35,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>${productName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link id="bootswatch-theme" href="${ bootswatchTheme != null ? bootswatchTheme :  '/bootstrap/css/bootstrap.spacelab.min.css' }" rel="stylesheet" media="screen">
+<link id="bootswatch-theme" href="${ bootswatchTheme != null ? bootswatchTheme :  '/bootstrap/css/bootstrap.flatly.min.css' }" rel="stylesheet" media="screen">
 
 <%-- Inlining the small, un-minified CSS files --%>
 <style>

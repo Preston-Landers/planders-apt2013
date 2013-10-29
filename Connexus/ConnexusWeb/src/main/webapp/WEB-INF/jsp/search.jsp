@@ -30,8 +30,16 @@
                             response( data );
                         });
                     },
+//                    open:function( event, ui ) {
+//                        $('.ui-autocomplete.ui-menu').parent().addClass('jquery-ui');
+//                    },
+//                    close:function( event, ui ) {
+//                        $('.ui-autocomplete.ui-menu').parent().removeClass('jquery-ui');
+//                    },
                     minLength: 1
                 });
+
+                $(".ui-autocomplete.ui-menu").wrap('<div class="jquery-ui" />');
             });
         </script>
     </jsp:attribute>
@@ -51,7 +59,7 @@
 	</div>
 	<div class="panel-body">
 		<form id="searchform" role="form" action="/search" method="get" style="display: inline">
-			<div class="row"><div class="col-md-12">		
+			<div class="row"><div class="col-md-12 jquery-ui">
 					<label for="q">Search:</label>		
 					<input style="margin-left: 5px" class="form-control" id="q" type="text" name="q"
 							value="${fn:escapeXml(q)}" ${ showSearchResults ? '': 'autofocus' } placeholder="Type search terms here" />

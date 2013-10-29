@@ -9,7 +9,7 @@
 	<%-- All the cool kids use single letter keys --%>
 	<input type="hidden" name="v" value="${ viewingStream.objectURI }">
     <input type="hidden" name="upload" value="true">
-	<div id="createStreamPanel" class="panel panel-default">
+	<div id="createStreamPanel" class="panel panel-default  jquery-ui">
 		<div class="panel-heading">
 			<H3 class="panel-title">Upload pictures to <b>${ fn:escapeXml(viewingStream.name) }</b></H3>
 		</div>

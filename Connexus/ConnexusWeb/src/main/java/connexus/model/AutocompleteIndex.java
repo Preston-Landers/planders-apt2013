@@ -65,9 +65,6 @@ public class AutocompleteIndex {
      */
     public static void generateAutocompleteIndex() {
         AutocompleteIndex autocompleteIndex = load(null, null);
-        if (autocompleteIndex == null) {
-            autocompleteIndex = new AutocompleteIndex(null, null);
-        }
         SortedSet<String> acStrings = new TreeSet<String>();
 
         for (Stream stream : Stream.getAllStreams(null)) {
@@ -81,7 +78,7 @@ public class AutocompleteIndex {
             }
             List<Media> mediaList = stream.getMedia(0, 0);
             if (mediaList != null) {
-                for (Media media: mediaList) {
+                for (Media media : mediaList) {
                     acStrings.add(media.getComments());
                 }
             }
@@ -99,7 +96,13 @@ public class AutocompleteIndex {
         if (site == null) {
             site = Site.load(null).getKey();
         }
-        return ofy().load().type(AutocompleteIndex.class).parent(site).id(id).get();
+        AutocompleteIndex autocompleteIndex = ofy().load().type(AutocompleteIndex.class).parent(site).id(id).get();
+        if (autocompleteIndex == null) {
+            autocompleteIndex = new AutocompleteIndex(null, null);
+            autocompleteIndex.save();
+        }
+
+        return autocompleteIndex;
     }
 
     public void save() {

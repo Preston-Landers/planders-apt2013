@@ -3,6 +3,10 @@
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
 
 <%-- MiniProject3: file upload --%>
+<%--NOTE: ALSO REQUIRES IMPORTING JQUERY UI!
+You must do this somewhere else:
+
+<script src="jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>--%>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -92,8 +96,6 @@
     </tr>
     {% } %}
 </script>
-
-<script src="js/jquery.file.upload/vendor/jquery.ui.widget.js"></script>
 
 <!-- The Templates plugin is included to render the upload/download listings -->
 <script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
