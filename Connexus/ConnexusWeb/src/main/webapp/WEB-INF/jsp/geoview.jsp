@@ -32,7 +32,7 @@
 <jsp:attribute name="tail">
     <script src="jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
     <c:if test="${ canDoUpload }">
-        <t:uploadMediaScripts></t:uploadMediaScripts>
+        <t:uploadMediaScripts redir="${ viewingStream.geoViewURI }" ></t:uploadMediaScripts>
     </c:if>
 
     <%-- Geo-goodies --%>
@@ -213,7 +213,7 @@
                                 <c:when test="${fn:length(viewingStream.tags) > 0 }">
                                     <c:forEach var="tag" items="${ viewingStream.tags }">
                                         <c:if test="${ fn:length(tag) > 0 }">
-                                            <a href="${func:getSearchURI(tag)}"><span style="margin: 0px 5px;"
+                                            <a href="${func:getSearchURI(tag)}"><span style="margin: 0 5px;"
                                                                                       class="stream-tag">
 									<span class="badge" style="padding: 8px">
 										<c:out value="${tag}"></c:out>
@@ -235,15 +235,14 @@
             <%-- If this is your stream, show the upload widget. Otherwise show the subscribe widget. --%>
             <c:if test="${ canDoUpload }">
                 <t:uploadMedia stream="${ viewingStream.id }"
-                               streamUser="${ viewingStreamUser.id }"></t:uploadMedia>
+                               streamUser="${ viewingStreamUser.id }"
+                               redir="${ viewingStream.geoViewURI }" ></t:uploadMedia>
             </c:if>
             <c:if test="${ canSubscribe }">
                 <t:subscribe
                         stream="${ viewingStream.id }"
                         streamUser="${ viewingStreamUser.id }"
-                        redir="${ viewingStream.geoViewURI }"
-                        >
-                </t:subscribe>
+                        redir="${ viewingStream.geoViewURI }" ></t:subscribe>
             </c:if>
         </c:when>
 

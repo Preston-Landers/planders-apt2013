@@ -4,11 +4,16 @@
 <%-- NOTE: not actually using this attribute ... probably remove --%>
 <%@ attribute name="stream" required="true" %>
 <%@ attribute name="streamUser" required="true" %>
+<%@ attribute name="redir" required="false" %>
 
 <form method="post" role="form" id="fileupload" enctype="multipart/form-data">
 	<%-- All the cool kids use single letter keys --%>
 	<input type="hidden" name="v" value="${ viewingStream.objectURI }">
     <input type="hidden" name="upload" value="true">
+    <c:if test="${ redir != null }">
+        <input type="hidden" name="redir" value="${ redir }">
+    </c:if>
+
 	<div id="createStreamPanel" class="panel panel-default  jquery-ui">
 		<div class="panel-heading">
 			<H3 class="panel-title">Upload pictures to <b>${ fn:escapeXml(viewingStream.name) }</b></H3>
@@ -87,7 +92,7 @@
 </form>
 
 <!-- The blueimp Gallery widget -->
-<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls jquery-ui" data-filter=":even">
     <div class="slides"></div>
     <h3 class="title"></h3>
     <a class="prev">‹</a>

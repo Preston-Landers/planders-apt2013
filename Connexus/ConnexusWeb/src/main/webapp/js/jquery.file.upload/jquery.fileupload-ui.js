@@ -550,13 +550,16 @@
             this._on(fileUploadButtonBar.find('.start'), {
                 click: function (e) {
                     e.preventDefault();
-                    filesList.find('.start').click();
+                    // Don't know why trigger('click') works but not click() -- Preston
+                    filesList.find('.start').trigger('click');
+                    // filesList.find('.start').click();
                 }
             });
             this._on(fileUploadButtonBar.find('.cancel'), {
                 click: function (e) {
                     e.preventDefault();
-                    filesList.find('.cancel').click();
+                    filesList.find('.cancel').trigger('click');
+                    // filesList.find('.cancel').click();
                 }
             });
             this._on(fileUploadButtonBar.find('.delete'), {
@@ -564,7 +567,7 @@
                     e.preventDefault();
                     filesList.find('.toggle:checked')
                         .closest('.template-download')
-                        .find('.delete').click();
+                        .find('.delete').trigger('click');  // .click(); // .trigger('click');
                     fileUploadButtonBar.find('.toggle')
                         .prop('checked', false);
                 }

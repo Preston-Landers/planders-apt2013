@@ -48,7 +48,7 @@
 
     <c:if test="${ canDoUpload }">
         <script src="jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
-        <t:uploadMediaScripts></t:uploadMediaScripts>
+        <t:uploadMediaScripts redir="${ streamViewUrl }" ></t:uploadMediaScripts>
     </c:if>
 </jsp:attribute>
 

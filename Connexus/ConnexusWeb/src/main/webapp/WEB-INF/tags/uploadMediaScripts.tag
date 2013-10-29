@@ -2,6 +2,8 @@
         pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
 
+<%@ attribute name="redir" required="true" description="where to redirect to after the upload" %>
+
 <%-- MiniProject3: file upload --%>
 <%--NOTE: ALSO REQUIRES IMPORTING JQUERY UI!
 You must do this somewhere else:
@@ -139,7 +141,7 @@ You must do this somewhere else:
             // Wait a few seconds so they can see that it's finished
             window.setTimeout(function () {
                 // window.alert("Redirecting...");
-                window.location = "${ streamViewUrl }";
+                window.location = "${ redir }";
             }, 2500);
         }
 
