@@ -32,12 +32,13 @@
 <jsp:attribute name="tail">
     <script src="jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
     <c:if test="${ canDoUpload }">
-        <t:uploadMediaScripts redir="${ viewingStream.geoViewURI }" ></t:uploadMediaScripts>
+        <t:uploadMediaScripts redir="${ viewingStream.geoViewURI }"></t:uploadMediaScripts>
     </c:if>
 
     <%-- a template to use when creating map pin info windows. --%>
     <div id="geo-thumbnail-template" style="display: none;" class="thumbnail">
         <img data-src="" alt="...">
+
         <div class="caption">
             <p class="thumbnail-desc">...</p>
         </div>
@@ -48,6 +49,8 @@
     <script type="text/javascript" src="js/jquery.ui.map/markerclusterer.min.js"></script>
     <script type="text/javascript" src="js/jquery.ui.map/min/jquery.ui.map.min.js"></script>
     <script>
+        var markerClusterOptions = {maxZoom: 18};
+
         var geoQueryBeginDate = null;
         var geoQueryEndDate = null;
         var geoAjaxTimer = null;
@@ -59,7 +62,7 @@
 
         function invokeGeoAjaxTimer() {
             clearGeoAjaxTimer();
-            geoAjaxTimer = window.setTimeout(geoTimerHandler, 2000);
+            geoAjaxTimer = window.setTimeout(geoTimerHandler, 1500);
         }
         function clearGeoAjaxTimer() {
             if (geoAjaxTimer) {
@@ -76,10 +79,28 @@
             var $info = $("#geo-thumbnail-template").clone().css('display', 'block');
             // Need to monkey with the URL to get a smaller thumbnail
             $info.find("img").attr("alt", media.comments).attr("src", media.thumbUrl.replace('=s300', '=s100'));
-            $info.find(".caption p").html(media.comments);
+            $info.find(".caption p").text(media.comments);
             return $info.html();
         }
         function loadGeoData() {
+            function centerMap() {
+                // Re-center the map around displayed coordinates.
+                // Not sure if this is really necessary.
+                // http://stackoverflow.com/questions/2818984/google-map-api-v3-center-zoom-on-displayed-markers
+                // map: an instance of GMap3
+                // latlng: an array of instances of GLatLng
+                var latlngbounds = new google.maps.LatLngBounds();
+                latlng.each(function (n) {
+                    latlngbounds.extend(n);
+                });
+                map.setCenter(latlngbounds.getCenter());
+                map.fitBounds(latlngbounds);
+            }
+
+            function fixMapZoom() {
+                $("#map_canvas").gmap('option', 'zoom', 2);
+            }
+
             $.getJSON('geo',
                     {
                         v: '${ viewingStream.objectURI }',  // what stream is it?
@@ -87,33 +108,60 @@
                         begin: geoQueryBeginDate.toISOString(),
                         end: geoQueryEndDate.toISOString()
                     },
-                    function(data, textStatus, jqXHR) {
+                    function (data, textStatus, jqXHR) {
                         $map_canvas = $('#map_canvas');
 
                         $map_canvas.gmap('clear', 'markers');
+                        var lowDate = null;
+                        var highDate = null;
 
                         // Add the new points.
-                        $.each(data.stream.mediaList, function(index, media) {
+                        $.each(data.stream.mediaList, function (index, media) {
                             // technically 0,0 is a valid coordinate but not in my system
                             if (media.latitude && media.longitude) {
+                                var mediaDate = $.datepicker.parseDate("M dd, yy", media.creationDate);
+                                if (lowDate === null || lowDate > mediaDate) {
+                                    lowDate = mediaDate;
+                                }
+                                if (highDate === null || highDate < mediaDate) {
+                                    highDate = mediaDate;
+                                }
                                 var pos = media.latitude + "," + media.longitude;
-                                $map_canvas.gmap('addMarker', {'position': pos, 'bounds': true}).click(function() {
-                                    $map_canvas.gmap('openInfoWindow', {'content': getInfoWindowForMedia(media)}, this);
-                                });
+                                $map_canvas.gmap('addMarker', {'position': pos, 'bounds': true}).
+                                        mouseover(function () {
+                                            $map_canvas.gmap('openInfoWindow', {'content': getInfoWindowForMedia(media)}, this);
+                                        });
+/*
+                                        .mouseout(function () {
+                                            window.setTimeout(function() {
+                                                $map_canvas.gmap('closeInfoWindow');
+                                            }, 500);
+                                        });
+*/
+
                             }
                         });
 
-                        // Re-center the map around displayed coordinates.
-                        // Not sure if this is really necessary.
-                        // http://stackoverflow.com/questions/2818984/google-map-api-v3-center-zoom-on-displayed-markers
-                        // map: an instance of GMap3
-                        // latlng: an array of instances of GLatLng
-                        var latlngbounds = new google.maps.LatLngBounds();
-                        latlng.each(function(n){
-                            latlngbounds.extend(n);
-                        });
-                        map.setCenter(latlngbounds.getCenter());
-                        map.fitBounds(latlngbounds);
+                        var foundRangeStr = "";
+                        if (lowDate !== null && highDate !== null) {
+                            foundRangeStr = lowDate.toDateString() + " to: " + highDate.toDateString();
+                        }
+                        $(".map-result-desc").show();
+                        $(".map-result-desc .map-result-desc-one")
+                                .html("Found " + data.stream.mediaList.length + " images from " + foundRangeStr);
+
+                        // Use marker clustering.
+                        $map_canvas.gmap('set', 'MarkerClusterer',
+                                new MarkerClusterer(
+                                        $map_canvas.gmap('get', 'map'),
+                                        $map_canvas.gmap('get', 'markers'),
+                                        markerClusterOptions)
+                        );
+
+                        // centerMap();
+                        fixMapZoom();
+                        $map_canvas.gmap('refresh');
+
                     }
             );
         }
@@ -123,20 +171,21 @@
             var bounds = map.getBounds();
             var southWest = bounds.getSouthWest();
             var northEast = bounds.getNorthEast();
-/*
-            var lngSpan = northEast.lng() - southWest.lng();
-            var latSpan = northEast.lat() - southWest.lat();
-            for (var i = 0; i < 1000; i++) {
-                var lat = southWest.lat() + latSpan * Math.random();
-                var lng = southWest.lng() + lngSpan * Math.random();
-                $('#map_canvas').gmap('addMarker', {
-                    'position': new google.maps.LatLng(lat, lng)
-                }).click(function () {
-                            $('#map_canvas').gmap('openInfoWindow', { content: 'Hello world!' }, this);
-                        });
-            }
-*/
-            $('#map_canvas').gmap('set', 'MarkerClusterer', new MarkerClusterer(map, $(this).gmap('get', 'markers')));
+            /*
+             var lngSpan = northEast.lng() - southWest.lng();
+             var latSpan = northEast.lat() - southWest.lat();
+             for (var i = 0; i < 1000; i++) {
+             var lat = southWest.lat() + latSpan * Math.random();
+             var lng = southWest.lng() + lngSpan * Math.random();
+             $('#map_canvas').gmap('addMarker', {
+             'position': new google.maps.LatLng(lat, lng)
+             }).click(function () {
+             $('#map_canvas').gmap('openInfoWindow', { content: 'Hello world!' }, this);
+             });
+             }
+             */
+            $('#map_canvas').gmap('set', 'MarkerClusterer',
+                    new MarkerClusterer(map, $(this).gmap('get', 'markers'), markerClusterOptions));
             // To call methods in MarkerClusterer simply call
             // $('#map_canvas').gmap('get', 'MarkerClusterer').callingSomeMethod();
 
@@ -219,6 +268,7 @@
                             <TD>
                                 <small><em>Geographic view of stream</em></small>
                                 <strong>${ fn:escapeXml(viewingStreamUser.realName) }</strong>
+                                <small>(Only shows mobile uploads.)</small>
                             </TD>
                             <TD style="text-align: right">
                                 <small><em>${ numberOfMedia } images total</em></small> &mdash;
@@ -251,6 +301,7 @@
                             <div class="panel-body">
                                 <div id="map_canvas"></div>
                             </div>
+
                         </div>
                             <%-- panel-default map-panel --%>
 
@@ -268,6 +319,13 @@
 
                         </div>
                             <%-- panel-date-range-slider --%>
+
+                        <div class="alert alert-success map-result-desc">
+                            <span class="glyphicon glyphicon-globe" style="margin-right: 6px;"></span>
+                            <span class="map-result-desc-one"></span>
+                            <span class="map-result-desc-two"></span>
+                            <span class="map-result-desc-three"></span>
+                        </div>
 
                     </div>
                         <%-- jumbotron --%>
@@ -325,32 +383,36 @@
             <c:if test="${ canDoUpload }">
                 <t:uploadMedia stream="${ viewingStream.id }"
                                streamUser="${ viewingStreamUser.id }"
-                               redir="${ viewingStream.geoViewURI }" ></t:uploadMedia>
+                               redir="${ viewingStream.geoViewURI }"></t:uploadMedia>
             </c:if>
             <c:if test="${ canSubscribe }">
                 <t:subscribe
                         stream="${ viewingStream.id }"
                         streamUser="${ viewingStreamUser.id }"
-                        redir="${ viewingStream.geoViewURI }" ></t:subscribe>
+                        redir="${ viewingStream.geoViewURI }"></t:subscribe>
             </c:if>
         </c:when>
 
-        <%-- BROWSE AVAILABLE STREAMS --%>
         <c:otherwise>
             <div class="page-header">
-                <h3>Available Streams</h3>
-                <small><em>Subscribe to your favorite streams!</em></small>
+                <h3>Secret Page</h3>
+                <small><em>You have found the secret page!</em></small>
             </div>
             <div id="browseStreamPanel" class="panel panel-default">
                 <div class="panel-heading">
                     <H3 class="panel-title">
-                        Browse available streams &ndash;
-                        <small><em>Most recently updated first</em></small>
+                        I'm sorry Dave, I'm afraid I can't let you do that.
                     </H3>
 
                 </div>
                 <div class="panel-body">
-                    <t:streamList streamList="${ allStreamsList }"></t:streamList>
+                    <P>
+                        You have found the secret page.
+                    </P>
+
+                    <P>
+                        This space intentionally left blank.
+                    </P>
                 </div>
 
             </div>

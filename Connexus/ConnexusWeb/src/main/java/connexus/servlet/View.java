@@ -273,10 +273,6 @@ public class View extends ConnexusServletBase {
         if (mediaCTParams == null) {
             mediaCTParams = new String[blobKeyListSize];
         }
-//        String[] commentParams = req.getParameterValues("comments");
-//        if (commentParams == null) {
-//            commentParams = new String[blobKeyListSize+1];
-//        }
         for (BlobKey bkey : blobKeyList) {
             i++;
             String bkeyStr = bkey.getKeyString();
@@ -310,6 +306,14 @@ public class View extends ConnexusServletBase {
 
             String fileName = bInfo.getFilename();
             String comments = req.getParameter("comments" + fileName);
+
+            if (comments == null) {
+                String[] commentParams = req.getParameterValues("comments");
+                if (commentParams != null) {
+                    comments = commentParams[i];
+                }
+            }
+
             if (comments == null || comments.length() == 0) {
                 comments = fileName;
             }

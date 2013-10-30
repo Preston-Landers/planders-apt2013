@@ -37,13 +37,13 @@ public class LatLong {
     }
 
     private static double generateFakeLatitude() {
-        // double between -180,180
-        return randomInRange(-180.0, 180.0);
+        // double between reasonable latitudes
+        return randomInRange(-70, 70.0);
     }
 
     private static double generateFakeLongitude() {
-        // double between -90,90
-        return randomInRange(-90.0, 90.0);
+        // double between longitude range
+        return randomInRange(-180.0, 180.0);
     }
 
     private static double randomInRange(double rangeMin, double rangeMax) {

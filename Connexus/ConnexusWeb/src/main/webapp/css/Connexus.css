@@ -66,6 +66,11 @@ div.thumbnail, img.img-thumbnail {
     font-size: 0.8em;
 }
 
+.map-result-desc {
+    display: none;
+    font-size: 18px;
+}
+
 .page-header {
 	margin-top: 0px;
 }

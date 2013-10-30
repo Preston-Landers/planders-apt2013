@@ -296,6 +296,24 @@ public class Media implements Comparable<Media> {
 		return 0;
 	}
 
+    /**
+     * Returns true if this image has geo-coordinates
+     * and they're not the 0,0 special value
+     * @return
+     */
+    public boolean hasValidCoordinates() {
+        Double zero = new Double(0.0);
+        Double latitude = getLatitude();
+        if (latitude == null || latitude.equals(zero)) {
+            return false;
+        }
+        Double longitude = getLongitude();
+        if (longitude == null || longitude.equals(zero)) {
+            return false;
+        }
+        return true;
+    }
+
     public Double getLatitude() {
         return latitude;
     }

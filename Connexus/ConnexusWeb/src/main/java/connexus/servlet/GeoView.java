@@ -67,7 +67,10 @@ public class GeoView extends HttpServlet {
         Stream stream = viewContext.getViewingStream();
         List<Media> apiMediaList = new ArrayList<Media>();
         for (connexus.model.Media media : stream.getMediaByDateRange(beginDate, endDate)) {
-            apiMediaList.add(Media.convertMediaToAPI(media));
+            if (media.hasValidCoordinates()) {
+                apiMediaList.add(Media.convertMediaToAPI(media));
+            }
+
         }
         GeoStream geoStream = GeoStream.convertStreamToGeoAPI(stream);
         connexus.endpoints.Stream apiStream = geoStream.getStream();
