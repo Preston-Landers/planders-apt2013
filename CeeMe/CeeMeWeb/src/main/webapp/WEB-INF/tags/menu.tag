@@ -1,4 +1,4 @@
-<%@ tag description="Connexus Menu bar" language="java"
+<%@ tag description="CeeMe Menu bar" language="java"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
 <nav id="mainMenu" class="navbar navbar-default" role="navigation">

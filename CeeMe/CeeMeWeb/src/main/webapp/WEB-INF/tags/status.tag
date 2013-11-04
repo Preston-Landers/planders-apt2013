@@ -1,4 +1,4 @@
-<%@ tag description="Connexus status message" language="java"
+<%@ tag description="CeeMe status message" language="java"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
 

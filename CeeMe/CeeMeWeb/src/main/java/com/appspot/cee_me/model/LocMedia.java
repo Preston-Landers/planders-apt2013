@@ -1,4 +1,4 @@
-package connexus.model;
+package com.appspot.cee_me.model;
 
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;

@@ -1,4 +1,4 @@
-<%@ tag description="Connexus Menu Tab item LI" language="java"
+<%@ tag description="CeeMe Menu Tab item LI" language="java"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
 <%@ attribute name="triggerURIEnd" required="true" %>

@@ -1,4 +1,4 @@
-<%@ tag description="Connexus Page template" language="java" pageEncoding="UTF-8"%>
+<%@ tag description="CeeMe Page template" language="java" pageEncoding="UTF-8"%>
 <%@ tag trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
@@ -40,7 +40,7 @@
 <%-- Inlining the small, un-minified CSS files --%>
 <style>
  
-<%@ include file="/css/Connexus.css"%>
+<%@ include file="/css/CeeMe.css"%>
 <%@ include file="/css/colorbox.css"%>
 
 </style>

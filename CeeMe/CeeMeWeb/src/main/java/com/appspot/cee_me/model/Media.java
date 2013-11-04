@@ -1,12 +1,8 @@
-package connexus.model;
+package com.appspot.cee_me.model;
 
-import static connexus.OfyService.ofy;
+import static com.appspot.cee_me.OfyService.ofy;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 
 import com.google.appengine.api.blobstore.BlobKey;
@@ -26,21 +22,21 @@ import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfNotNull;
 
-import com.javadocmd.simplelatlng.LatLng;
-import connexus.Config;
+import com.appspot.cee_me.Config;
+import org.joda.time.DateTime;
 
 @Entity
 @Cache
 public class Media implements Comparable<Media> {
 	@Id Long id;
-	@Parent Key<Stream> stream;
-	@Index({IfNotNull.class}) String fileName; 
+	@Index({IfNotNull.class}) String fileName;
 	@Index BlobKey blobKey;
 	@Index String blobKeyString;
 	String mimeType;
 	Long size;
 	@Index({IfNotNull.class}) String comments;
-	@Index Date creationDate; 
+	@Index
+    DateTime creationDate;
 	Key<CUser> uploader; // in theory, could upload to other users streams?
 	@Index Long views;
 
@@ -71,22 +67,21 @@ public class Media implements Comparable<Media> {
 	private Media() {
 	}
 
-	public Media(Long id, Key<Stream> stream, BlobKey blobKey, String blobKeyString, Key<CUser> cuser) {
+	public Media(Long id, BlobKey blobKey, String blobKeyString, Key<CUser> cuser) {
 		this.id = id;
-		this.stream = stream;
 		this.blobKey = blobKey;
 		this.blobKeyString = blobKeyString;
 		this.uploader = cuser;
-		this.creationDate = new Date();
+		this.creationDate = new DateTime();
 		this.views = new Long(0);
 	}
 	
 	public Key<Media> getKey() {
-		return Key.create(stream, Media.class, id);
+		return Key.create(Media.class, id);
 	}
 	
-	public static Media getById(Long objectId, Stream stream) {	
-		return ofy().load().type(Media.class).parent(stream).id(objectId).get();
+	public static Media getById(Long objectId) {
+		return ofy().load().type(Media.class).id(objectId).get();
 	}
 
 
@@ -111,11 +106,11 @@ public class Media implements Comparable<Media> {
 	}
 
 
-	public Date getCreationDate() {
+	public DateTime getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(DateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 
@@ -132,14 +127,6 @@ public class Media implements Comparable<Media> {
 		rv.append(Config.escapeHTML(getUploaderNow().getRealName()));
 		rv.append("</h6>" );
 		return rv.toString();
-	}
-
-	public Key<Stream> getStream() {
-		return stream;
-	}
-
-	public void setStream(Key<Stream> stream) {
-		this.stream = stream;
 	}
 
 	public String getMimeType() {
@@ -259,15 +246,6 @@ public class Media implements Comparable<Media> {
 		// TODO: logging
 		System.err.println("Deleting media: " + this);
 		
-		// return ofy().load().type(Media.class).parent(stream).id(objectId).get();
-		Stream myStream = ofy().load().key(getStream()).get();
-		if (myStream.getCoverURL().equals(getThumbURL())) {
-			// String newCoverURL = myStream.getMedia(0, 1);
-			String newCoverURL = null;
-			myStream.setCoverURL(newCoverURL);
-		}
-		myStream.decNumberOfMedia();
-		myStream.save();
 		// ignoring error result here...
 		deleteBlob();
 		ofy().delete().entities(this).now();
@@ -288,12 +266,7 @@ public class Media implements Comparable<Media> {
 	
 	@Override
 	public int compareTo(Media other) {
-		if (creationDate.after(other.creationDate)) {
-			return 1;
-		} else if (creationDate.before(other.creationDate)) {
-			return -1;
-		}
-		return 0;
+        return getCreationDate().compareTo(other.getCreationDate());
 	}
 
     public Double getLatitude() {
@@ -312,69 +285,4 @@ public class Media implements Comparable<Media> {
         this.longitude = longitude;
     }
 
-    public Long getStreamOwnerId() {
-        Key<Stream> streamKey = getStream();
-        Stream stream = ofy().load().key(streamKey).get();
-        if (stream != null) {
-            CUser streamOwner = ofy().load().key(stream.getOwner()).get();
-            if (streamOwner != null) {
-                return streamOwner.getId();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Perform a search of all media (images) sorted by proximity to a given location
-     * Ignores media that doesn't have a location set.
-     * @param limit
-     * @param offset
-     * @param latitude
-     * @param longitude
-     * @return
-     */
-    public static List<LocMedia> searchByLocation(int limit, int offset, double latitude, double longitude) {
-        List<LocMedia> returnList = new ArrayList<LocMedia>();
-        Site site = Site.load(null);
-        if (limit == 0) {
-            limit = 9;
-        }
-
-        LatLng searchPoint = new LatLng(latitude, longitude);
-
-        List<LocMedia> locMedias = new ArrayList<LocMedia>();
-        List<Media> allMedia = ofy().load().type(Media.class).ancestor(site).list();
-        for (Media media : allMedia) {
-            // System.err.println("Location search on media: " + media.getId());
-            Double mLat = media.getLatitude();
-            Double mLong = media.getLongitude();
-            if (mLat == null || mLong == null) {
-                continue;
-            }
-            if (mLat.equals(0.0) && mLong.equals(0.0)) {
-                // System.err.println("Location search excluding 0/0 coords: " + media.getId());
-                continue;
-            }
-            // System.err.println(" -> media: " + media.getId() + " has coords Lat: " + mLat + " long: " + mLong + " comment: " + media.getComments());
-            LatLng mediaPoint = new LatLng(mLat, mLong);
-            LocMedia locMedia = new LocMedia(mediaPoint, searchPoint, media);
-            locMedias.add(locMedia);
-        }
-        Collections.sort(locMedias);
-        int i = 0;
-        int added = 0;
-        for (LocMedia locMedia : locMedias) {
-            // System.err.println("Loc search i: " + i + " media: " + locMedia.getMedia().getId() + " comment: " + locMedia.getMedia().getComments());
-            if (i>=offset) {
-                returnList.add(locMedia);
-                added++;
-            }
-            i++;
-            if (added >= limit) {
-                break;
-            }
-        }
-        System.err.println("Returning nearby search results length: " + returnList.size());
-        return returnList;
-    }
 }

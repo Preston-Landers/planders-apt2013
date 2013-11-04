@@ -1,4 +1,4 @@
-<%@ tag description="Connexus Create Stream" language="java"
+<%@ tag description="CeeMe Create Stream" language="java"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
 

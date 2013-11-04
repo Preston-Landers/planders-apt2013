@@ -36,7 +36,7 @@
         <dependency>
             <groupId>com.googlecode.objectify</groupId>
             <artifactId>objectify</artifactId>
-            <version>4.0b1</version>
+            <version>4.0rc2</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -52,6 +52,11 @@
             <groupId>com.javadocmd</groupId>
             <artifactId>simplelatlng</artifactId>
             <version>RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.3</version>
         </dependency>
 
         <!-- for Endpoints-->

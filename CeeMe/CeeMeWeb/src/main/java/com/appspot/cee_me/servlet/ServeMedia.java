@@ -1,4 +1,4 @@
-package connexus.servlet;
+package com.appspot.cee_me.servlet;
 
 import java.io.IOException;
 

@@ -1,44 +1,41 @@
-package connexus.model;
+package com.appspot.cee_me.model;
 
-import static connexus.OfyService.ofy;
+import static com.appspot.cee_me.OfyService.ofy;
 
-import java.util.Date;
-import java.util.List;
 
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.*;
-import connexus.Config;
+import org.joda.time.DateTime;
+
 
 @Entity
 @Cache
 public class CUser implements Comparable<CUser> {
 	@Id Long id;
-	@Parent Key<Site> site;
 	@Index String accountName; // Displayed username
 	String realName; // full name
-	@Index User guser;      // google account
-	String content;
-	Date creationDate;
+	@Index User guser;      // google account  // Need getByGUser for this to be useful?
+	String content;    // ??
+	DateTime creationDate;
 
 	@SuppressWarnings("unused")
 	private CUser() {
 	}
 
-	public CUser(Long id, Key<Site> site, String accountName, String realName) {
+	public CUser(Long id, String accountName, String realName) {
 		this.id = id;
-		this.site = site;
 		this.accountName = accountName;
 		this.realName = realName;
-		this.creationDate = new Date();
+		this.creationDate = new DateTime();
 	}
 	
 	public Key<CUser> getKey() {
-		return Key.create(site, CUser.class, id);
+		return Key.create(CUser.class, id);
 	}
 	
-	public static CUser getById(Long userId, Key<Site> site) {
-		return ofy().load().type(CUser.class).parent(site).id(userId).get();
+	public static CUser getById(Long userId) {
+		return ofy().load().type(CUser.class).id(userId).now();
 	}
 
 	
@@ -78,11 +75,11 @@ public class CUser implements Comparable<CUser> {
 		this.guser = guser;
 	}
 
-	public Date getCreationDate() {
+	public DateTime getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(DateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 
@@ -99,26 +96,10 @@ public class CUser implements Comparable<CUser> {
 		return content;
 	}
 
+    // Does compare by creation date even make sense?
 	@Override
 	public int compareTo(CUser other) {
-		if (creationDate.after(other.creationDate)) {
-			return 1;
-		} else if (creationDate.before(other.creationDate)) {
-			return -1;
-		}
-		return 0;
+        return getCreationDate().compareTo(other.getCreationDate());
 	}
-
-    public static void normalizeAllAccountNames(Key<Site> siteKey) {
-        if (siteKey == null) {
-            siteKey = Site.load(null).getKey();
-        }
-        List<CUser> allUsers = ofy().load().type(CUser.class).ancestor(siteKey).list();
-        for (CUser cUser : allUsers) {
-            cUser.setAccountName(Config.norm(cUser.getAccountName()));
-            ofy().save().entities(cUser);
-        }
-
-    }
 
 }

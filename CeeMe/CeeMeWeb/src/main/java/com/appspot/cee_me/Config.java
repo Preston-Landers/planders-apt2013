@@ -1,4 +1,4 @@
-package connexus;
+package com.appspot.cee_me;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -6,19 +6,17 @@ import java.util.List;
 import org.apache.http.client.utils.URIBuilder;
 
 public class Config {
-	public static final String productName = "Connex.us";
-	public static final String productDomain = "connexus-apt.appspot.com";
+	public static final String productName = "Cee.me";
+	public static final String productDomain = "cee-me.appspot.com";
 	public static final String productURL = "http://" + productDomain;
 
 	public static final String productAdminEmail = "planders@gmail.com";
 	
     public static final long siteId = 1;
     
-    public static final String emailSubject = "[APT-Preston Landers] Trending streams for " + productDomain;
-
     // For the endpoints
-    public static final String ANDROID_CLIENT_ID = "771214203866-9vmc9ha8rvco92ul4dfc74r00t0nj6ls.apps.googleusercontent.com";
-    public static final String WEB_CLIENT_ID = "771214203866-7btn313m3jrh49s1dhd837ssm1n1lrd0.apps.googleusercontent.com";
+    public static final String ANDROID_CLIENT_ID = "860742061992.apps.googleusercontent.com";
+    public static final String WEB_CLIENT_ID = "860742061992-hluiaap2cfsl9dp1io7bc3au26vks2m6.apps.googleusercontent.com";
     public static final String EMAIL_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
     public static final String ANDROID_AUDIENCE = WEB_CLIENT_ID;
 

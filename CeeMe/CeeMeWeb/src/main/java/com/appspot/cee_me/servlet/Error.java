@@ -1,4 +1,4 @@
-package connexus.servlet;
+package com.appspot.cee_me.servlet;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Throwables;
 
-public class Error extends ConnexusServletBase {
+public class Error extends CeeMeServletBase {
 
 	private static final long serialVersionUID = 5728163889277892752L;
 	public static final String dispatcher = "/WEB-INF/jsp/error.jsp";

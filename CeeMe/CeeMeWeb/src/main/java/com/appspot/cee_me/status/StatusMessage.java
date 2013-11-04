@@ -1,4 +1,4 @@
-package connexus.status;
+package com.appspot.cee_me.status;
 
 import java.io.Serializable;
 

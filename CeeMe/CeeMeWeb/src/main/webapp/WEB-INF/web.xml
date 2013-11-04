@@ -15,93 +15,12 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>manage</servlet-name>
-        <servlet-class>com.appspot.cee_me.servlet.Manage</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>manage</servlet-name>
-        <url-pattern>/manage</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>create</servlet-name>
-        <servlet-class>com.appspot.cee_me.servlet.Create</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>create</servlet-name>
-        <url-pattern>/create</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>view</servlet-name>
-        <servlet-class>com.appspot.cee_me.servlet.View</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>view</servlet-name>
-        <url-pattern>/view</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>search</servlet-name>
-        <servlet-class>com.appspot.cee_me.servlet.Search</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>search</servlet-name>
-        <url-pattern>/search</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>trending</servlet-name>
-        <servlet-class>com.appspot.cee_me.servlet.Trending</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>trending</servlet-name>
-        <url-pattern>/trending</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>social</servlet-name>
-        <servlet-class>com.appspot.cee_me.servlet.Social</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>social</servlet-name>
-        <url-pattern>/social</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>admin</servlet-name>
-        <servlet-class>com.appspot.cee_me.servlet.Admin</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>admin</servlet-name>
-        <url-pattern>/admin</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>ServeMedia</servlet-name>
         <servlet-class>com.appspot.cee_me.servlet.ServeMedia</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ServeMedia</servlet-name>
         <url-pattern>/serve</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>subscribe</servlet-name>
-        <servlet-class>com.appspot.cee_me.servlet.Subscribe</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>subscribe</servlet-name>
-        <url-pattern>/subscribe</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>updatelb</servlet-name>
-        <servlet-class>com.appspot.cee_me.servlet.UpdateLeaderboard</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>updatelb</servlet-name>
-        <url-pattern>/cron/updatelb</url-pattern>
     </servlet-mapping>
 
 

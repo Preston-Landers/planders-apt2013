@@ -1,4 +1,4 @@
-<%@ tag description="Connexus User CRUD" language="java"
+<%@ tag description="CeeMe User CRUD" language="java"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
 

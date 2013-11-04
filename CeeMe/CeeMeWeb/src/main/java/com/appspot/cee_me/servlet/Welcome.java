@@ -1,4 +1,6 @@
-package connexus.servlet;
+package com.appspot.cee_me.servlet;
+
+import com.appspot.cee_me.CeeMeContext;
 
 import java.io.IOException;
 
@@ -7,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-public class Welcome extends ConnexusServletBase {
+public class Welcome extends CeeMeServletBase {
 	private static final long serialVersionUID = 5623205007285996372L;
 	
 	public static final String uri = "/welcome";
@@ -18,7 +20,7 @@ public class Welcome extends ConnexusServletBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
-		InitializeContext(req, resp); // Base site context initialization
+		CeeMeContext ceeMeContext = InitializeContext(req, resp); // Base site context initialization
 
 		// The Welcome screen needs a special login URL that takes you somewhere else.
 		String welcomeLoginURL = userService.createLoginURL(welcomeLoginDestination);
