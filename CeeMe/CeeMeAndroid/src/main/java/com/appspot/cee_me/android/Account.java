@@ -1,4 +1,4 @@
-package connexus.android;
+package com.appspot.cee_me.android;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 

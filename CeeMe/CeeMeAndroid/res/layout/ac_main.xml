@@ -7,36 +7,51 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical">
 
-    <com.qwerjk.better_text.MagicTextView
-            xmlns:qwerjk="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome_header"
-            android:id="@+id/textView"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:textAppearance="@style/welcome_header_style"
-            android:textSize="20sp"
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-            qwerjk:innerShadowDy="2"
-            qwerjk:innerShadowColor="#FF000000"
-            qwerjk:innerShadowRadius="1"
-            qwerjk:outerShadowDy="3"
-            qwerjk:outerShadowColor="#FF0088ff"
-            qwerjk:outerShadowRadius="10"
-            qwerjk:strokeJoinStyle="miter"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            />
+        <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/login_progressBar"
+                android:visibility="invisible"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="left|center_vertical"/>
+
+        <com.qwerjk.better_text.MagicTextView
+                xmlns:qwerjk="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome_header"
+                android:id="@+id/textView"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:textAppearance="@style/welcome_header_style"
+                android:textSize="20sp"
+
+                qwerjk:innerShadowDy="2"
+                qwerjk:innerShadowColor="#FF000000"
+                qwerjk:innerShadowRadius="1"
+                qwerjk:outerShadowDy="3"
+                qwerjk:outerShadowColor="#FF0088ff"
+                qwerjk:outerShadowRadius="10"
+                qwerjk:strokeJoinStyle="miter"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                />
+    </LinearLayout>
 
     <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_height="154dp"
             android:id="@+id/logoImageView"
             android:layout_gravity="center"
             android:scaleType="fitXY"
-            android:src="@drawable/connexus_logo"
-            android:layout_marginTop="50dp"/>
+            android:src="@drawable/ceeme_logo_1"
+            android:layout_marginTop="20dp"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -47,7 +62,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="20dp"/>
 
     <Button
             android:layout_width="wrap_content"
@@ -60,23 +75,15 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"/>
 
-    <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/login_progressBar"
-            android:visibility="invisible"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            />
-
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/welcome_nologin_button"
+            android:text="@string/settings"
             android:onClick="ViewStreamsButton"
             android:id="@+id/nologin_button"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"/>
 
 </LinearLayout>

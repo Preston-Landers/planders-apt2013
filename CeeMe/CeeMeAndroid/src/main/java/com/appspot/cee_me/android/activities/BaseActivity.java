@@ -1,9 +1,8 @@
-package connexus.android.activities;
+package com.appspot.cee_me.android.activities;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -11,10 +10,9 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.MenuItem;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import connexus.android.Account;
-import connexus.android.Config;
-import connexus.android.R;
+import com.appspot.cee_me.android.Account;
+import com.appspot.cee_me.android.Config;
+import com.appspot.cee_me.android.R;
 
 /**
  * Base activity for all activities. Has code for location and account services.
@@ -28,7 +26,6 @@ public class BaseActivity extends Activity {
     LocationListener locationListener;
     Location currentBestLocation;
     protected boolean useLocation = false;
-    DisplayImageOptions options;
 
     protected SharedPreferences settings;
     protected String accountName;
@@ -97,21 +94,6 @@ public class BaseActivity extends Activity {
         startLocationServices();
     }
 
-    /**
-     * Universal Image Loader display options used in at least 3 places
-     * @return
-     */
-    protected DisplayImageOptions getDisplayOptions() {
-        DisplayImageOptions options = new DisplayImageOptions.Builder()
-                .showStubImage(R.drawable.ic_stub)
-                .showImageForEmptyUri(R.drawable.ic_empty)
-                .showImageOnFail(R.drawable.ic_error)
-                .cacheInMemory(false)  //
-                .cacheOnDisc(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)   // appears to use less memory
-                .build();
-        return options;
-    }
 
     private void makeUseOfNewLocation(Location location) {
         if (isBetterLocation(location, currentBestLocation)) {

@@ -1,4 +1,4 @@
-package connexus.android.activities;
+package com.appspot.cee_me.android.activities;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -14,9 +14,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import connexus.android.Account;
-import connexus.android.Config;
-import connexus.android.R;
+import com.appspot.cee_me.android.Account;
+import com.appspot.cee_me.android.Config;
+import com.appspot.cee_me.android.R;
 
 public class WelcomeActivity extends BaseActivity {
     private static final String TAG = "WelcomeActivity";
@@ -75,7 +75,7 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(connexus.android.R.menu.main, menu);
+        getMenuInflater().inflate(com.appspot.cee_me.android.R.menu.main, menu);
         return true;
     }
 
@@ -86,14 +86,6 @@ public class WelcomeActivity extends BaseActivity {
         }
         signIn(view);
     }
-
-    // When you click the View Streams button
-    public void ViewStreamsButton(View view) {
-
-        Intent intent = new Intent(this, BrowseStreamsActivity.class);
-        startActivity(intent);
-
-     }
 
 
     /**

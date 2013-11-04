@@ -39,17 +39,6 @@
             <version>2.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.nostra13.universalimageloader</groupId>
-            <artifactId>universal-image-loader</artifactId>
-            <version>1.8.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.chrisbanes.photoview</groupId>
-            <artifactId>library</artifactId>
-            <version>1.2.2</version>
-        </dependency>
 
         <!-- for UPLOADING by POST'ing a form -->
         <dependency>

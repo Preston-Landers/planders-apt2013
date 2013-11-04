@@ -24,7 +24,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.TextView;
-import connexus.android.R;
+import com.appspot.cee_me.android.R;
 
 public class MagicTextView extends TextView {
 	private ArrayList<Shadow> outerShadows;
