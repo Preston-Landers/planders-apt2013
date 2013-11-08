@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 
-<t:connexus><jsp:body>
+<t:ceeme><jsp:body>
 <div class="page-header">
 	<h3>Search Streams</h3>
 	<small><em>Search within stream tags</em></small>
@@ -50,4 +50,4 @@
 </div>
 </c:otherwise></c:choose>
 	
-</jsp:body></t:connexus>
+</jsp:body></t:ceeme>

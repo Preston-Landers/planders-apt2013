@@ -13,10 +13,10 @@ import org.joda.time.DateTime;
 @Cache
 public class CUser implements Comparable<CUser> {
 	@Id Long id;
-	@Index String accountName; // Displayed username
+	String accountName; // Displayed username
 	String realName; // full name
 	@Index User guser;      // google account  // Need getByGUser for this to be useful?
-	String content;    // ??
+	String adminNotes;    // private / internal notes for this account.
 	DateTime creationDate;
 
 	@SuppressWarnings("unused")
@@ -40,7 +40,7 @@ public class CUser implements Comparable<CUser> {
 
 	
 	public String toString() {
-		return "CUser " + accountName + " " + realName;
+		return "CUser " + id + " " + accountName + " - " + guser;
 	}
 	
 	public Long getId() {
@@ -83,8 +83,8 @@ public class CUser implements Comparable<CUser> {
 		this.creationDate = creationDate;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setAdminNotes(String adminNotes) {
+		this.adminNotes = adminNotes;
 	}
 
 
@@ -92,8 +92,8 @@ public class CUser implements Comparable<CUser> {
 		return guser;
 	}
 
-	public String getContent() {
-		return content;
+	public String getAdminNotes() {
+		return adminNotes;
 	}
 
     // Does compare by creation date even make sense?

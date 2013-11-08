@@ -4,6 +4,7 @@ import static com.appspot.cee_me.OfyService.ofy;
 
 import java.io.IOException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +20,6 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Ref;
 
 import com.appspot.cee_me.Config;
 import com.appspot.cee_me.model.*;
@@ -31,6 +30,7 @@ public abstract class CeeMeServletBase extends HttpServlet {
 
     protected final static UserService userService = UserServiceFactory.getUserService();
     protected final static MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+    private final static Logger log = Logger.getLogger(CeeMeServletBase.class.getName());
 
     static {
         syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
@@ -72,6 +72,7 @@ public abstract class CeeMeServletBase extends HttpServlet {
                 }
             }
         } catch (UserCreateException e) {
+            log.severe("UserCreateException");
             e.printStackTrace(System.err);
             alertError(req, "You must provide an account name and a real name.");
         }
@@ -84,13 +85,13 @@ public abstract class CeeMeServletBase extends HttpServlet {
         // Automatically create a CUser for any Google Users we recognize
         if (guser != null) {
             String normEmail = Config.norm(guser.getEmail());
-            // System.err.println("Searching for user " + normEmail);
+            log.fine("Searching for user " + normEmail);
             cuser = ofy().load().type(CUser.class)
-                    .filter("accountName", normEmail).first().get();
+                    .filter("guser", guser).first().now();
             if (cuser == null) {
-                System.err.println("Creating New User! " + guser + " guser ID: " + normEmail);
+                log.fine("Creating New User! " + guser + " guser ID: " + normEmail);
                 cuser = createUser(guser);
-                System.err.println("New User cuser id: " + cuser.getId());
+                log.fine("New User cuser id: " + cuser.getId());
             }
 
         }
@@ -109,17 +110,17 @@ public abstract class CeeMeServletBase extends HttpServlet {
         String realName = guser.getNickname();
 
         if (accountName.length() == 0 || realName.length() == 0) {
-            throw new UserCreateException("You must provide an account name and a real name.");
-//			alertError(req, "You must provide an account name and a real name.");
-//			return null;
+            String msg = "You must provide an account name and a real name.";
+            log.warning(msg + " --> guser: " + guser);
+            throw new UserCreateException(msg);
         }
 
         CUser thisUser = new CUser(null, accountName, realName);
         thisUser.setGuser(guser);
         ofy().save().entities(thisUser).now();
 
-//		alertSuccess(req, "Created an account for " + realName + " : "
-//				+ accountName);
+        log.info("Created a new user account! " + accountName);
+
         return thisUser;
     }
 

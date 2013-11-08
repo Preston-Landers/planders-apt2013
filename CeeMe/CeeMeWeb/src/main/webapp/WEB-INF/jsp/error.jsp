@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 
-<t:connexus><jsp:body>
+<t:ceeme><jsp:body>
 <div class="container">
 	<div class="page-header" style="margin-top: 5px">
 
@@ -45,4 +45,4 @@
 </div>
 	</div>
 </div>
-</jsp:body></t:connexus>
+</jsp:body></t:ceeme>

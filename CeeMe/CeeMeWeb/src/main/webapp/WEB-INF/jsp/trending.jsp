@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 
-<t:connexus> <jsp:body>
+<t:ceeme> <jsp:body>
 	
 <div class="page-header">
 	<h3>Top ${ leaderBoardSize } trending streams</h3>
@@ -110,4 +110,4 @@
 	</div>	
 
 </div>	
-</jsp:body></t:connexus>
+</jsp:body></t:ceeme>

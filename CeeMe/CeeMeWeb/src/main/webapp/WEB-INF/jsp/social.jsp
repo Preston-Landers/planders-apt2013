@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 
-<t:connexus>
+<t:ceeme>
 
  <jsp:attribute name="head">
 	<script>
@@ -66,4 +66,4 @@ window.cx.SocialPageFBReady = function SocialPageFBReady () {
 	</div>	
 
 </jsp:body>
-</t:connexus>
+</t:ceeme>

@@ -44,7 +44,7 @@
         <init-param>
             <param-name>services</param-name>
             <!-- can comma separate here -->
-            <param-value>com.appspot.cee_me.endpoints.StreamList</param-value>
+            <param-value>com.appspot.cee_me.endpoints.Register</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

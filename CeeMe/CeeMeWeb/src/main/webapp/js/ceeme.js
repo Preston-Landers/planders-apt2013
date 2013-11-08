@@ -1,9 +1,9 @@
 // sets up a JS namespace called cx
 window.cx = (function (cx, $, window, undefined) {
 
-	if($.cookie("css")) {
+	if($.cookie("ceeme-theme")) {
 		var curTheme = $("#bootswatch-theme").attr("href");
-		var cookieTheme = $.cookie("css"); 
+		var cookieTheme = $.cookie("ceeme-theme");
 		if (curTheme != cookieTheme) {
 			$("#bootswatch-theme").attr("href", cookieTheme);
 		}
@@ -15,7 +15,7 @@ window.cx = (function (cx, $, window, undefined) {
 		// THEME selector
 		$("#mainMenu .theme-dropdown-menu li a").click(function() { 
 			$("#bootswatch-theme").attr("href",$(this).attr('rel'));
-			$.cookie("css",$(this).attr('rel'), {expires: 365, path: '/'});
+			$.cookie("ceeme-theme",$(this).attr('rel'), {expires: 365, path: '/'});
 			return false;
 		});
 		

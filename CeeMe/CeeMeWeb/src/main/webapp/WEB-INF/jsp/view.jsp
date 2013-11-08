@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="func" uri="/WEB-INF/tlds/functions.tld" %>
-<t:connexus>
+<t:ceeme>
 
 <jsp:attribute name="head">	
 	<%-- put some attributes in the HEAD tag for Facebook likes  --%>
@@ -230,4 +230,4 @@
 	
 </c:choose>
 </jsp:body>
-</t:connexus>
+</t:ceeme>

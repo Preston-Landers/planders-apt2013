@@ -4,11 +4,13 @@ import static com.appspot.cee_me.OfyService.ofy;
 
 import java.io.Serializable;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreFailureException;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.datastore.ShortBlob;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.memcache.ErrorHandlers;
@@ -28,17 +30,27 @@ import org.joda.time.DateTime;
 @Entity
 @Cache
 public class Media implements Comparable<Media> {
-	@Id Long id;
-	@Index({IfNotNull.class}) String fileName;
-	@Index BlobKey blobKey;
-	@Index String blobKeyString;
-	String mimeType;
-	Long size;
-	@Index({IfNotNull.class}) String comments;
-	@Index
+
+    @Id Long id;
+
+    ShortBlob sha256;
+
+    String fileName;
+
+    @Index BlobKey blobKey;
+
+    String mimeType;
+
+    Long size;
+
+    String comments;
+
+    @Index
     DateTime creationDate;
-	Key<CUser> uploader; // in theory, could upload to other users streams?
-	@Index Long views;
+
+    Key<CUser> uploader; // in theory, could upload to other users streams?
+
+    Long views;
 
     Double latitude;
     Double longitude;
@@ -67,10 +79,9 @@ public class Media implements Comparable<Media> {
 	private Media() {
 	}
 
-	public Media(Long id, BlobKey blobKey, String blobKeyString, Key<CUser> cuser) {
+	public Media(Long id, BlobKey blobKey, Key<CUser> cuser) {
 		this.id = id;
 		this.blobKey = blobKey;
-		this.blobKeyString = blobKeyString;
 		this.uploader = cuser;
 		this.creationDate = new DateTime();
 		this.views = new Long(0);
@@ -243,9 +254,9 @@ public class Media implements Comparable<Media> {
 	}
 
 	public boolean deleteMedia() {
-		// TODO: logging
-		System.err.println("Deleting media: " + this);
-		
+        Logger log = Logger.getLogger(getClass().getName());
+        log.warning("Deleting media: " + this);
+
 		// ignoring error result here...
 		deleteBlob();
 		ofy().delete().entities(this).now();
@@ -285,4 +296,11 @@ public class Media implements Comparable<Media> {
         this.longitude = longitude;
     }
 
+    public ShortBlob getSha256() {
+        return sha256;
+    }
+
+    public void setSha256(ShortBlob sha256) {
+        this.sha256 = sha256;
+    }
 }

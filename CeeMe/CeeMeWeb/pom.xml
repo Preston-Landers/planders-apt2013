@@ -53,10 +53,17 @@
             <artifactId>simplelatlng</artifactId>
             <version>RELEASE</version>
         </dependency>
+
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.3</version>
+        </dependency>
+        <!-- allows JodaTime to be used as entity properties -->
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jodatime</artifactId>
+            <version>3.2.1</version>
         </dependency>
 
         <!-- for Endpoints-->

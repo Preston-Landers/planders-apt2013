@@ -1,11 +1,11 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 
-<t:connexus>
+<t:ceeme>
 	<jsp:body>
 		<div class="jumbotron">
 			<h1><strong>Welcome to ${productName}!</strong></h1>
 			<p class="text-center"  style="margin-top: 30px">
-			The world's best* photo sharing site!
+			Send photos, videos, documents and more to your Android device or other users.
 			</p>
 			
 			<c:choose>
@@ -55,7 +55,7 @@
 		</div>
 		
 		<h6>
-			<em><strong>*</strong>Limitations may apply. Do not upload personal or private photos.</em>
+			<em><strong>*</strong>This site is currently in beta testing.</em>
 		</h6>
 	</jsp:body>
-</t:connexus>
+</t:ceeme>

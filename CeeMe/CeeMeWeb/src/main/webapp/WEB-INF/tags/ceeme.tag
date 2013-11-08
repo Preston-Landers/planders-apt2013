@@ -5,28 +5,28 @@
 <%@ attribute name="head" required="false" fragment="true"%>
 <%@ attribute name="bodyHead" required="false" fragment="true"%>
 <%@ attribute name="tail" required="false" fragment="true"%>
-<%@ tag import="connexus.Config"%>
+<%@ tag import="com.appspot.cee_me.Config"%>
 <%@ tag import="java.net.URLDecoder"%>
 <%
-	request.setAttribute("productName", Config.productName);
-	request.setAttribute("productURL", Config.productURL);
-	request.setAttribute("aboutText", "<center><h4>Preston Landers</h4><H5>Advanced Programming Tools 2013</H5>" + 
-							"<H6>The University of Texas at Austin</H6>" +
-							"<h5><small>Department of Computer and<BR>Electrical Engineering</small></H5></center>");
+    request.setAttribute("productName", Config.productName);
+    request.setAttribute("productURL", Config.productURL);
+    request.setAttribute("aboutText", "<center><h4>Preston Landers</h4><H5>Advanced Programming Tools 2013</H5>" +
+            "<H6>The University of Texas at Austin</H6>" +
+            "<h5><small>Department of Computer and<BR>Electrical Engineering</small></H5></center>");
 
-	
-	String cssTheme = "/bootstrap/css/bootstrap.spacelab.min.css";
-	Cookie[] cookies = request.getCookies();
-	if (cookies != null) {
-		for (int i=0; i<cookies.length; i++) {
-			if (cookies[i].getName().equals("css")) {
-				cssTheme = URLDecoder.decode(cookies[i].getValue(), "UTF-8");
-			}
-		}
-		if (cssTheme != null && cssTheme.length()>0 ) {
-			request.setAttribute("bootswatchTheme", cssTheme);
-		}
-	}
+
+    String cssTheme = "/bootstrap/css/bootstrap.flatly.min.css";
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (int i=0; i<cookies.length; i++) {
+            if (cookies[i].getName().equals("ceeme-theme")) {
+                cssTheme = URLDecoder.decode(cookies[i].getValue(), "UTF-8");
+            }
+        }
+        if (cssTheme != null && cssTheme.length()>0 ) {
+            request.setAttribute("bootswatchTheme", cssTheme);
+        }
+    }
 %>
 
 <!DOCTYPE html>
@@ -35,7 +35,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>${productName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link id="bootswatch-theme" href="${ bootswatchTheme != null ? bootswatchTheme :  '/bootstrap/css/bootstrap.spacelab.min.css' }" rel="stylesheet" media="screen">
+<link id="bootswatch-theme" href="${ bootswatchTheme != null ? bootswatchTheme :  '/bootstrap/css/bootstrap.flatly.min.css' }" rel="stylesheet" media="screen">
 
 <%-- Inlining the small, un-minified CSS files --%>
 <style>
@@ -93,9 +93,9 @@
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 
 
-<!-- <script src="/js/connexus.js"> -->
+<!-- <script src="/js/ceeme.js"> -->
 <script>
-<%@ include file="/js/connexus.js"%>
+<%@ include file="/js/ceeme.js"%>
 </script>
 
 <script>

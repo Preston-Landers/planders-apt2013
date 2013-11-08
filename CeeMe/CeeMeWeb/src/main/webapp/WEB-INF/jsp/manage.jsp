@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/include.jsp"%>
 
-<t:connexus>
+<t:ceeme>
 
 	<jsp:attribute name="head">
 		<link type="text/css" rel="stylesheet" href="/css/jquery.tablesorter/themes/blue/style.css">			
@@ -22,4 +22,4 @@
 		<t:myStreams></t:myStreams>
 		<t:mySubscriptions></t:mySubscriptions>
 	</jsp:body>
-</t:connexus>
+</t:ceeme>
