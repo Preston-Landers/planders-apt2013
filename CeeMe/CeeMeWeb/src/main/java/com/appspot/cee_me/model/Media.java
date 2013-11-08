@@ -21,8 +21,6 @@ import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Parent;
-import com.googlecode.objectify.condition.IfNotNull;
 
 import com.appspot.cee_me.Config;
 import org.joda.time.DateTime;
@@ -96,11 +94,18 @@ public class Media implements Comparable<Media> {
 	}
 
 
-	public String toString() {
-		return "Media " + id + " U: " + uploader.getId() + " : " + mimeType + " : " + fileName;
-	}
-	
-	public Long getId() {
+    @Override
+    public String toString() {
+        return "Media{" +
+                "id=" + id +
+                ", fileName='" + fileName + '\'' +
+                ", mimeType='" + mimeType + '\'' +
+                ", size=" + size +
+                ", comments='" + comments + '\'' +
+                '}';
+    }
+
+    public Long getId() {
 		return id;
 	}
 

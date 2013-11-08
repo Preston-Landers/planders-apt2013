@@ -4,6 +4,9 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import org.apache.http.client.utils.URIBuilder;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class Config {
 	public static final String productName = "Cee.me";
@@ -23,6 +26,14 @@ public class Config {
     // Maximum search results to show
     public static final int maxSearchResults = 5;
     public static final int API_CACHE_TIME_SEC = 10; // # of seconds cache is good for in API calls
+
+    // How to format Joda DateTimes for the user
+    public static final String DATE_TIME_FORMAT_PATTERN = "EE, MMM d, YYYY @ HH:mm zz";
+
+    // What do we say when we got a POST with an unknown or malformed command
+    public static final String MSG_UNKNOWN_COMMAND = "Internal error: command unknown or not implemented yet.";
+    public static final String MSG_NOT_DEVICE_OWNER = Config.MSG_NOT_DEVICE_OWNER;
+
 
     public static int getMaxSearchResults() {
     	return maxSearchResults;
@@ -66,5 +77,14 @@ public class Config {
     public static String norm(String inp) {
         return inp.toLowerCase();
     }
-    
+
+    /**
+     * Format a Joda DateTime to our preferred string representation
+     * @param dateTime Joda DateTime instance
+     * @return a formatted string
+     */
+    public static String formatDateTime(DateTime dateTime) {
+        DateTimeFormatter fmt = DateTimeFormat.forPattern(DATE_TIME_FORMAT_PATTERN);
+        return fmt.print(dateTime);
+    }
 }

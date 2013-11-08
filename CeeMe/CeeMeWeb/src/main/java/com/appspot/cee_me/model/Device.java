@@ -1,5 +1,6 @@
 package com.appspot.cee_me.model;
 
+import com.google.appengine.api.datastore.KeyFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Result;
 import com.googlecode.objectify.annotation.Cache;
@@ -24,13 +25,15 @@ public class Device {
     @Id
     Long id;
 
-    @Index String publicId; // goes into public URL
+    @Index
+    String publicId; // goes into public URL
 
     String name; // Displayed user-assignable name
     String comment; // user-assignable extra comment field
     String hardwareDescription; // something to identify the actual hardware (user-visible)
 
-    @Index Key<CUser> owner;
+    @Index
+    Key<CUser> owner;
 
     String gcmRegistrationId; // Google Cloud Messaging registration ID for this device.
 
@@ -38,7 +41,8 @@ public class Device {
     DateTime lastIncomingMessageDate; // when was this device named a target of a message?
     DateTime lastOutgoingMessageDate; // when did this device last originate a message?
 
-    private Device() {}
+    private Device() {
+    }
 
     public Device(String name, String hardwareDescription, Key<CUser> owner, String gcmRegistrationId) {
         this.name = name;
@@ -130,28 +134,50 @@ public class Device {
 
     /**
      * Saves the entity to the data store.
+     *
      * @param async set to true if the save should be finished before returning.
      */
     public void save(boolean async) {
         Result result = ofy().save().entity(this);
         if (!async) {
-           result.now();
+            result.now();
         }
     }
 
     /**
      * The interface to register a new device.
-     * @param owner Device owner
-     * @param name Owner-assigned named (e.g. "My TV")
+     *
+     * @param owner               Device owner
+     * @param name                Owner-assigned named (e.g. "My TV")
      * @param hardwareDescription Device should describe its model (e.g. "Samsung Galaxy S4")
-     * @param gcmRegistrationId Device should have already obtained the Google Cloud Messaging registration ID
-     * @param comment Any additional comment string
+     * @param gcmRegistrationId   Device should have already obtained the Google Cloud Messaging registration ID
+     * @param comment             Any additional comment string
      * @return
      */
     public static Device registerDevice(Key<CUser> owner, String name, String hardwareDescription,
                                         String gcmRegistrationId, String comment) {
 
-        Logger log = Logger.getLogger(Device.class.getName());
+        Logger log = Logger.getLogger(Device.class.getName() + " registerDevice");
+
+        // Do some basic validation for duplicates
+        List<Device> existingDevices = getAllUserDevices(owner);
+        if (existingDevices != null && existingDevices.size() > 0) {
+            for (Device otherDevice : existingDevices) {
+                if (otherDevice.getName().equals(name)) {
+                    String msg = "You already have a device with this name: " + name;
+                    log.warning(owner + " " + msg);
+                    throw new IllegalArgumentException(msg);
+                }
+                if (otherDevice.getGcmRegistrationId().equals(gcmRegistrationId)) {
+                    String msg = "You already have a device with the same Google Cloud Messenger ID." +
+                        " This may be an internal error";
+                    log.severe(owner + " " + msg);
+                    throw new IllegalArgumentException(msg);
+                }
+            }
+        }
+
+        // TODO: more validation here... what other things should we check for?
 
         Device device = new Device(name, hardwareDescription, owner, gcmRegistrationId);
         device.setComment(comment);
@@ -159,11 +185,67 @@ public class Device {
         log.info(String.format("Registering new device: %s  HW: <%s> GCM: <%s> %s",
                 name, hardwareDescription, gcmRegistrationId, comment));
 
-        device.save(true);
+        device.save(false);
         return device;
     }
 
     public static List<Device> getAllUserDevices(Key<CUser> owner) {
         return ofy().load().type(Device.class).filter("owner =", owner).list();
+    }
+
+    /**
+     * Load a device by its key string
+     * @param objectIdStr should be result of getKey().getString()
+     * @return the Device
+     */
+    public static Device loadByKey(String objectIdStr) {
+        Key<Device> key = Key.create(objectIdStr);
+        return ofy().load().key(key).now();
+    }
+
+    /**
+     * Permanently deletes a device registration. Note that references to the deleted entity may be retained in memory.
+     *
+     * @param async if true, blocks until deletion is complete
+     * @return true for success, false for failure
+     */
+    public boolean deleteDevice(boolean async) {
+        // TODO: would like a more permanent record than this log message.
+        Logger log = Logger.getLogger(Device.class.getName());
+        log.severe("Deleting device registration: " + toString());
+
+        Result result = ofy().delete().entities(this);
+        if (!async) {
+            result.now();
+        }
+        return true;
+    }
+
+    public Key<Device> getKey() {
+        return Key.create(Device.class, getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "id=" + id +
+                ", publicId='" + publicId + '\'' +
+                ", name='" + name + '\'' +
+                ", comment='" + comment + '\'' +
+                ", hardwareDescription='" + hardwareDescription + '\'' +
+                ", owner=" + owner +
+                '}';
+    }
+
+    /**
+     * Return true if the given user key is owner of this device.
+     * @param userKey a user key to check
+     * @return true if userKey is the owner of this device
+     */
+    public boolean cUserIsOwner(Key<CUser> userKey) {
+        if (getOwner().equals(userKey)) {
+            return true;
+        }
+        return false;
     }
 }

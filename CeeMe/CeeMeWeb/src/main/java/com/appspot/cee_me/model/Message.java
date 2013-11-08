@@ -20,7 +20,12 @@ public class Message {
     Key<CUser> toUser;
     Key<Device> toDevice;
 
+    // File attachment
     Key<Media> media;
+
+    // String message payload
+    // NOT indexed!! Can be up to 1 MB strings
+    String text;
 
     DateTime creationDate;
     DateTime lastRetrievalDate;
@@ -89,5 +94,27 @@ public class Message {
 
     public void setFromDevice(Key<Device> fromDevice) {
         this.fromDevice = fromDevice;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "text=<" + text +
+                ">, id=" + id +
+                ", fromDevice=" + fromDevice +
+                ", fromUser=" + fromUser +
+                ", toUser=" + toUser +
+                ", toDevice=" + toDevice +
+                ", media=" + media +
+                ", creationDate=" + creationDate +
+                '}';
     }
 }

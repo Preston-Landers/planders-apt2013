@@ -15,6 +15,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>manage</servlet-name>
+        <servlet-class>com.appspot.cee_me.servlet.Manage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>manage</servlet-name>
+        <url-pattern>/manage</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>ServeMedia</servlet-name>
         <servlet-class>com.appspot.cee_me.servlet.ServeMedia</servlet-class>
     </servlet>

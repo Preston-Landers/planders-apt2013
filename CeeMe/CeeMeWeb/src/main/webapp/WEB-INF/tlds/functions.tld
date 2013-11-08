@@ -26,5 +26,11 @@
         <function-class>com.google.common.collect.Lists</function-class>
         <function-signature>java.util.List partition(java.util.List, int)</function-signature>
     </function>
+
+    <function>
+        <name>formatDateTime</name>
+        <function-class>com.appspot.cee_me.Config</function-class>
+        <function-signature>java.lang.String formatDateTime(org.joda.time.DateTime)</function-signature>
+    </function>
     
 </taglib>

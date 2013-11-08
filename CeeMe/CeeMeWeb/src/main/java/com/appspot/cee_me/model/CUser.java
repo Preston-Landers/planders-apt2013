@@ -39,10 +39,6 @@ public class CUser implements Comparable<CUser> {
 	}
 
 	
-	public String toString() {
-		return "CUser " + id + " " + accountName + " - " + guser;
-	}
-	
 	public Long getId() {
 		return id;
 	}
@@ -102,4 +98,15 @@ public class CUser implements Comparable<CUser> {
         return getCreationDate().compareTo(other.getCreationDate());
 	}
 
+    @Override
+    public String toString() {
+        return "CUser{" +
+                "id=" + id +
+                ", accountName='" + accountName + '\'' +
+                ", realName='" + realName + '\'' +
+                ", guser=" + guser +
+                ", adminNotes='" + adminNotes + '\'' +
+                ", creationDate=" + creationDate +
+                '}';
+    }
 }

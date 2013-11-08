@@ -11,15 +11,13 @@
 		<script src="/js/jquery.tablesorter/jquery.metadata.js"/></script>
 		<script>
 			$(document).ready(function() {
-				$("#mySubsTable").tablesorter({ headers: { 4: { sorter: false},  }, });
-				$("#myStreamsTable").tablesorter({ headers: { 3: { sorter: false},  }, });
+				$("#myDevicesTable").tablesorter({ headers: { 5: { sorter: false}  } });
 			});
 		</script>
 	</jsp:attribute>
 
 	<jsp:body>
-		<h3>Stream Management</h3>
-		<t:myStreams></t:myStreams>
-		<t:mySubscriptions></t:mySubscriptions>
+		<h3>Manage My Devices</h3>
+		<t:myDevices></t:myDevices>
 	</jsp:body>
 </t:ceeme>

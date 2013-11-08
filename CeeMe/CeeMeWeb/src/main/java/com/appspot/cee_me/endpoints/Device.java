@@ -2,13 +2,15 @@ package com.appspot.cee_me.endpoints;
 
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
+
 // import java.util.Date;
 
 /**
  * Represents a Device for endpoint JSON responses
  */
-public class Device {
-    Long id;
+public class Device implements Serializable {
+    String key;  // ID field - look it up by this key in several messages.
 
     String publicId; // goes into public URL
 
@@ -30,7 +32,7 @@ public class Device {
     public Device() {}
 
     public Device(com.appspot.cee_me.model.Device device) {
-        id = device.getId();
+        key = device.getKey().getString();
         publicId = device.getPublicId();
         name = device.getName();
         comment = device.getComment();
@@ -45,12 +47,12 @@ public class Device {
 //        lastOutgoingMessageDate = device.getLastOutgoingMessageDate().toDate();
     }
 
-    public Long getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getPublicId() {
