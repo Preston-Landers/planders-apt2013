@@ -10,6 +10,9 @@ import com.google.appengine.api.users.User;
 public class CeeMeContext {
     protected User guser;     // The Google User object - MAY BE NULL! if not logged in
     protected CUser cuser;    // The CeeMe User object - MAY BE NULL! if not logged in
+    protected String cssThemeFile;
+    protected String loginURL;
+    protected String logoutURL;
 
     public CeeMeContext(User guser, CUser cuser) {
         this.guser = guser;
@@ -30,5 +33,37 @@ public class CeeMeContext {
 
     public void setCuser(CUser cuser) {
         this.cuser = cuser;
+    }
+
+    public String getCssThemeFile() {
+        return cssThemeFile;
+    }
+
+    public void setCssThemeFile(String cssThemeFile) {
+        this.cssThemeFile = cssThemeFile;
+    }
+
+    public String getProductName() {
+        return Config.productName;
+    }
+
+    public String getProductURL() {
+        return Config.productURL;
+    }
+
+    public String getLoginURL() {
+        return loginURL;
+    }
+
+    public void setLoginURL(String loginURL) {
+        this.loginURL = loginURL;
+    }
+
+    public String getLogoutURL() {
+        return logoutURL;
+    }
+
+    public void setLogoutURL(String logoutURL) {
+        this.logoutURL = logoutURL;
     }
 }

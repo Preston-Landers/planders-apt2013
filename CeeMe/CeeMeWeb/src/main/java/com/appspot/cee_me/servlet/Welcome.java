@@ -20,7 +20,7 @@ public class Welcome extends CeeMeServletBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
-		CeeMeContext ceeMeContext = InitializeContext(req, resp); // Base site context initialization
+		CeeMeContext ceeMeContext = InitializeContext(req); // Base site context initialization
 
 		// The Welcome screen needs a special login URL that takes you somewhere else.
 		String welcomeLoginURL = userService.createLoginURL(welcomeLoginDestination);

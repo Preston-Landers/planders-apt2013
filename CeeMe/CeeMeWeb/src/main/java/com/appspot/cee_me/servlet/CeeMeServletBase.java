@@ -3,14 +3,13 @@ package com.appspot.cee_me.servlet;
 import static com.appspot.cee_me.OfyService.ofy;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.net.URLDecoder;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 import com.appspot.cee_me.CeeMeContext;
 import com.google.appengine.api.memcache.ErrorHandlers;
@@ -38,19 +37,17 @@ public abstract class CeeMeServletBase extends HttpServlet {
 
     /**
      * Set up things that are common to all pages including the currently logged in user, if any.
-     * @param req
-     * @param resp
+     * @param req servlet request
      */
-    public static CeeMeContext InitializeContext(HttpServletRequest req,
-                                                    HttpServletResponse resp) throws IOException, ServletException {
+    public static CeeMeContext InitializeContext(HttpServletRequest req) throws IOException, ServletException {
 
         // The Google User object - MAY BE NULL! if not logged in
         User guser = userService.getCurrentUser();
         CUser cuser = null;    // The CeeMe User object - MAY BE NULL! if not logged in
+        CeeMeContext context = new CeeMeContext(guser, cuser);
 
-        req.setAttribute("guser", guser);
         if (guser == null) {
-            req.setAttribute("loginURL", userService.createLoginURL(req.getRequestURI()));
+            context.setLoginURL(userService.createLoginURL(req.getRequestURI()));
         } else {
             String logoutURLCacheKey = guser.getUserId() + "_logoutURL";
             String logoutURL = (String) syncCache.get(logoutURLCacheKey);
@@ -58,7 +55,7 @@ public abstract class CeeMeServletBase extends HttpServlet {
                 logoutURL = userService.createLogoutURL(req.getRequestURI());
                 syncCache.put(logoutURLCacheKey, logoutURL, Expiration.byDeltaSeconds(60 * 20));
             }
-            req.setAttribute("logoutURL", logoutURL);
+            context.setLogoutURL(logoutURL);
         }
 
 
@@ -66,10 +63,6 @@ public abstract class CeeMeServletBase extends HttpServlet {
         try {
             if (guser != null) {
                 cuser = getOrCreateUserRecord(guser);
-                if (cuser != null) {
-                    req.setAttribute("cuser", cuser);
-                    req.setAttribute("currentUserId", cuser.getId());
-                }
             }
         } catch (UserCreateException e) {
             log.severe("UserCreateException");
@@ -77,7 +70,34 @@ public abstract class CeeMeServletBase extends HttpServlet {
             alertError(req, "You must provide an account name and a real name.");
         }
 
-        return new CeeMeContext(guser, cuser);
+        context.setCuser(cuser);
+        context.setCssThemeFile(getCSSTheme(req));
+        req.setAttribute("Context", context);
+        return context;
+    }
+
+    private static String getCSSTheme(HttpServletRequest req) {
+
+        String defaultCssTheme = "/bootstrap/css/bootstrap.flatly.min.css";
+        String cssTheme = defaultCssTheme;
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (int i=0; i<cookies.length; i++) {
+                if (cookies[i].getName().equals("ceeme-theme")) {
+                    try {
+                        cssTheme = URLDecoder.decode(cookies[i].getValue(), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        log.warning("Cookie encoding error for ceeme-theme");
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        if (cssTheme == null || cssTheme.length() == 0 ) {
+            cssTheme = defaultCssTheme;
+        }
+        return cssTheme;
+
     }
 
     public static CUser getOrCreateUserRecord(User guser) throws UserCreateException {

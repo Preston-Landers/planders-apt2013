@@ -1,6 +1,7 @@
 <%@ tag description="My Devices" language="java"
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/mytaglibs.jspf"%>
+<jsp:useBean id="myDeviceList" scope="request" type="java.util.List<com.appspot.cee_me.model.Device>"/>
 
 <form action="manage" method="post" role="form">
 	<div id="createStreamPanel" class="panel panel-default">
@@ -33,7 +34,9 @@
                                                 <td>${fn:escapeXml(device.hardwareDescription )}</td>
                                                 <td>${fn:escapeXml(device.comment )}</td>
                                                 <td>${func:formatDateTime(device.creationDate)}</td>
-												<TD><input type="checkbox" name="delete" value="${ device.key.string }"></TD>
+												<TD><label>Delete
+                                                    <input type="checkbox" name="delete" value="${ device.key.string }">
+                                                </label></TD>
 											</TR>
 										</c:forEach>
 									</tbody>

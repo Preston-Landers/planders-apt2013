@@ -24,6 +24,24 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>send</servlet-name>
+        <servlet-class>com.appspot.cee_me.servlet.Send</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>send</servlet-name>
+        <url-pattern>/send</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>search</servlet-name>
+        <servlet-class>com.appspot.cee_me.servlet.Search</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>search</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>ServeMedia</servlet-name>
         <servlet-class>com.appspot.cee_me.servlet.ServeMedia</servlet-class>
     </servlet>
@@ -66,10 +84,12 @@
     <filter>
         <filter-name>appstats</filter-name>
         <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+<!--
         <init-param>
             <param-name>logMessage</param-name>
             <param-value>Appstats available: /appstats/details?time={ID}</param-value>
         </init-param>
+-->
     </filter>
 
     <filter-mapping>

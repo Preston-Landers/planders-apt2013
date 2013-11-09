@@ -5,37 +5,15 @@
 <%@ attribute name="head" required="false" fragment="true"%>
 <%@ attribute name="bodyHead" required="false" fragment="true"%>
 <%@ attribute name="tail" required="false" fragment="true"%>
-<%@ tag import="com.appspot.cee_me.Config"%>
-<%@ tag import="java.net.URLDecoder"%>
-<%
-    request.setAttribute("productName", Config.productName);
-    request.setAttribute("productURL", Config.productURL);
-    request.setAttribute("aboutText", "<center><h4>Preston Landers</h4><H5>Advanced Programming Tools 2013</H5>" +
-            "<H6>The University of Texas at Austin</H6>" +
-            "<h5><small>Department of Computer and<BR>Electrical Engineering</small></H5></center>");
-
-
-    String cssTheme = "/bootstrap/css/bootstrap.flatly.min.css";
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-        for (int i=0; i<cookies.length; i++) {
-            if (cookies[i].getName().equals("ceeme-theme")) {
-                cssTheme = URLDecoder.decode(cookies[i].getValue(), "UTF-8");
-            }
-        }
-        if (cssTheme != null && cssTheme.length()>0 ) {
-            request.setAttribute("bootswatchTheme", cssTheme);
-        }
-    }
-%>
+<jsp:useBean id="Context" scope="request" type="com.appspot.cee_me.CeeMeContext"/>
 
 <!DOCTYPE html>
-<html xmlns:fb="http://www.facebook.com/2008/fbml">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>${productName}</title>
+<title>${Context.productName}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link id="bootswatch-theme" href="${ bootswatchTheme != null ? bootswatchTheme :  '/bootstrap/css/bootstrap.flatly.min.css' }" rel="stylesheet" media="screen">
+<link id="bootswatch-theme" href="${ Context.cssThemeFile != null ? Context.cssThemeFile :  '/bootstrap/css/bootstrap.flatly.min.css' }" rel="stylesheet" media="screen">
 
 <%-- Inlining the small, un-minified CSS files --%>
 <style>
@@ -46,7 +24,7 @@
 </style>
  
 
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="apple-touch-icon" href="${pageContext.request.contextPath}/apple-touch-icon.png">
 
 <%-- allow users of this tag to include stuff in the head --%>
 <jsp:invoke fragment="head" />
@@ -60,10 +38,10 @@
 		<div class="container">
 			<%-- 			<div id="pageLogo">${productName}</div> --%>
 
-			<t:menu></t:menu>
+			<t:menu />
 
 			<div class="container">
-				<t:status></t:status>
+				<t:status />
 				<jsp:doBody />
 			</div>
 		</div>
@@ -75,7 +53,7 @@
 
 			<div style="float: right; margin-top: 15px;">
 
-				<t:about></t:about>
+				<t:about />
 				
 			</div>
 		</div>
@@ -84,13 +62,13 @@
 <!--  Congratulations. You have just discovered the secret message. -->
 <!--  Please send your answer to Old Pink, care of the Funny Farm, Chalfontay -->
 
-<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-1.10.2.min.js"></script>
 <!-- <script src="/js/jquery.cookie.js"></script> -->
 <script>
 <%@ include file="/js/jquery.cookie.js"%>
 </script>
 
-<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
 
 
 <!-- <script src="/js/ceeme.js"> -->
@@ -99,12 +77,14 @@
 </script>
 
 <script>
- (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
- (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
- m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
- })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
- ga('create', 'UA-43808480-1', 'connexus-apt.appspot.com');
- ga('send', 'pageview');
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-45548686-1', 'cee-me.appspot.com');
+    ga('send', 'pageview');
+
 </script>
 
 <%-- allow users of this tag to include stuff at the bottom --%>

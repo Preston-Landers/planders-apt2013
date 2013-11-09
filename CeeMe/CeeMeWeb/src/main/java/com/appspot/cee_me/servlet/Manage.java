@@ -24,12 +24,12 @@ public class Manage extends CeeMeServletBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
-		CeeMeContext ceeMeContext = InitializeContext(req, resp); // Base site context initialization
+		CeeMeContext ceeMeContext = InitializeContext(req); // Base site context initialization
 
         CUser cuser = ceeMeContext.getCuser();
         // Force user to login screen before showing manage
         if (cuser == null) {
-            resp.sendRedirect((String) req.getAttribute("loginURL"));
+            resp.sendRedirect(ceeMeContext.getLoginURL());
             return;
         }
 
@@ -44,14 +44,14 @@ public class Manage extends CeeMeServletBase {
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
 
-        CeeMeContext cContext = InitializeContext(req, resp); // Base site context initialization
+        CeeMeContext cContext = InitializeContext(req); // Base site context initialization
         CUser cuser = cContext.getCuser();
         // Force user to login screen before showing manage
         if (cuser == null) {
             String msg = "You must be signed in to delete a device registration.";
             alertError(req, msg);
             log.warning(msg);
-            resp.sendRedirect((String) req.getAttribute("loginURL"));
+            resp.sendRedirect(uri);
             return;
         }
 

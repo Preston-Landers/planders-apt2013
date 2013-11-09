@@ -22,7 +22,7 @@
     <div id="collapseOne" class="panel-collapse collapse in">
       <div class="panel-body">
 <%--       	<PRE>${ fn:escapeXml(errorMessage) }</PRE> --%>
-      	<PRE>${ errorMessage }</PRE>
+      	<PRE>${ requestScope.errorMessage }</PRE>
       </div>
     </div>
   </div>
@@ -37,7 +37,7 @@
     </div>
     <div id="collapseTwo" class="panel-collapse collapse">
       <div class="panel-body">
-      	<PRE>${ stackTrace }</PRE>
+      	<PRE>${ requestScope.stackTrace }</PRE>
       </div>
     </div>
   </div>
