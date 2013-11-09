@@ -2,16 +2,16 @@
 
 <t:connexus>
     <jsp:attribute name="head">
-        <link rel="stylesheet" href="jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/jquery-ui/css/smoothness/jquery-ui-1.10.3.custom.min.css" />
         <style>
             .ui-autocomplete-loading {
-                background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
+                background: white url('${pageContext.request.contextPath}/images/ui-anim_basic_16x16.gif') right center no-repeat;
             }
         </style>
     </jsp:attribute>
 
     <jsp:attribute name="tail">
-        <script src="jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
+        <script src="${pageContext.request.contextPath}/jquery-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
         <script>
             $(function() {
 
@@ -58,7 +58,7 @@
 	
 	</div>
 	<div class="panel-body">
-		<form id="searchform" role="form" action="/search" method="get" style="display: inline">
+		<form id="searchform" role="form" action="${pageContext.request.contextPath}/search" method="get" style="display: inline">
 			<div class="row"><div class="col-md-12 jquery-ui">
 					<label for="q">Search:</label>		
 					<input style="margin-left: 5px" class="form-control" id="q" type="text" name="q"

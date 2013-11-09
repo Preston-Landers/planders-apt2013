@@ -17,17 +17,17 @@
 					</p>
 					<div class="row welcome-buttons-row">
 						<div class="col-xs-8 col-md-3">
-							<a class="btn btn-large btn-success" href="/view">
+							<a class="btn btn-large btn-success" href="${pageContext.request.contextPath}/view">
 								Browse Photo Streams
 							</a>						
 						</div>
 						<div class="col-xs-8 col-md-3">
-							<a class="btn btn-large btn-primary" href="/create" >
+							<a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/create" >
 								Create a Photo Stream
 							</a>
 						</div>
 						<div class="col-xs-8 col-md-3">
-							<a class="btn btn-large btn-info" href="/manage" >
+							<a class="btn btn-large btn-info" href="${pageContext.request.contextPath}/manage" >
 								Manage your streams
 							</a>
 						</div>
