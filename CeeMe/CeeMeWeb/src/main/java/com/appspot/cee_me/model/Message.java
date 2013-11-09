@@ -1,10 +1,13 @@
 package com.appspot.cee_me.model;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Result;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import org.joda.time.DateTime;
+
+import static com.appspot.cee_me.OfyService.ofy;
 
 /**
  * Represents a message sent through CeeMe.
@@ -29,8 +32,12 @@ public class Message {
 
     DateTime creationDate;
     DateTime lastRetrievalDate;
+    Boolean accepted;
 
-    private Message() {}
+    private Message() {
+        creationDate = new DateTime();
+        accepted = new Boolean(false);
+    }
 
     public Long getId() {
         return id;
@@ -116,5 +123,52 @@ public class Message {
                 ", media=" + media +
                 ", creationDate=" + creationDate +
                 '}';
+    }
+
+    /**
+     * Saves the entity to the data store.
+     *
+     * @param now set to true if the save should be finished before returning.
+     */
+    public void save(boolean now) {
+        Result result = ofy().save().entity(this);
+        if (now) {
+            result.now();
+        }
+    }
+
+    /**
+     * Creates a Message entitity (saves it to datastore)
+     * but does NOT initiate delivery
+     * @param fromDevice
+     * @param fromUser
+     * @param toUser
+     * @param toDevice
+     * @param media
+     * @param text
+     * @return
+     */
+    public static Message createMessage(
+            Key<Device> fromDevice,
+            Key<CUser> fromUser,
+            Key<CUser> toUser,
+            Key<Device> toDevice,
+            Key<Media> media,
+
+            // String message payload
+            // NOT indexed!! Can be up to 1 MB strings
+            String text
+    ) {
+        Message message = new Message();
+        message.setFromDevice(fromDevice);
+        message.setToDevice(toDevice);
+        message.setFromUser(fromUser);
+        message.setToUser(toUser);
+        message.setMedia(media);
+        message.setText(text);
+
+        message.save(true);
+
+        return message;
     }
 }

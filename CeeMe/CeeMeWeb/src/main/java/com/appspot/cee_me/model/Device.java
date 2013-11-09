@@ -135,11 +135,11 @@ public class Device {
     /**
      * Saves the entity to the data store.
      *
-     * @param async set to true if the save should be finished before returning.
+     * @param now set to true if the save should be finished before returning.
      */
-    public void save(boolean async) {
+    public void save(boolean now) {
         Result result = ofy().save().entity(this);
-        if (!async) {
+        if (now) {
             result.now();
         }
     }
@@ -185,7 +185,7 @@ public class Device {
         log.info(String.format("Registering new device: %s  HW: <%s> GCM: <%s> %s",
                 name, hardwareDescription, gcmRegistrationId, comment));
 
-        device.save(false);
+        device.save(true); // now
         return device;
     }
 

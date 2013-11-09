@@ -120,7 +120,7 @@ public class Register {
         }
 
         if (didUpdate) {
-            device.save(false);  // blocking
+            device.save(true);  // now
         }
 
         // Return the API version of the modified Device
