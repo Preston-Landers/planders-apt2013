@@ -15,28 +15,28 @@ import static com.appspot.cee_me.OfyService.ofy;
 @Entity
 @Cache
 public class Message {
-    @Id
+    private @Id
     Long id;
 
-    Key<Device> fromDevice;
-    Key<CUser> fromUser;
-    Key<CUser> toUser;
-    Key<Device> toDevice;
+    private Key<Device> fromDevice;
+    private Key<CUser> fromUser;
+    private Key<CUser> toUser;
+    private Key<Device> toDevice;
 
     // File attachment
-    Key<Media> media;
+    private Key<Media> media;
 
     // String message payload
     // NOT indexed!! Can be up to 1 MB strings
-    String text;
+    private String text;
 
-    DateTime creationDate;
-    DateTime lastRetrievalDate;
-    Boolean accepted;
+    private DateTime creationDate;
+    private DateTime lastRetrievalDate;
+    private Boolean accepted;
 
     private Message() {
         creationDate = new DateTime();
-        accepted = new Boolean(false);
+        accepted = Boolean.FALSE;
     }
 
     public Long getId() {
@@ -138,15 +138,15 @@ public class Message {
     }
 
     /**
-     * Creates a Message entitity (saves it to datastore)
+     * Creates a Message entity (saves it to datastore)
      * but does NOT initiate delivery
-     * @param fromDevice
-     * @param fromUser
-     * @param toUser
-     * @param toDevice
-     * @param media
-     * @param text
-     * @return
+     * @param fromDevice source device (if any)
+     * @param fromUser source user
+     * @param toUser destination user
+     * @param toDevice destination device
+     * @param media media attachment
+     * @param text text payload / message
+     * @return the saved Message object
      */
     public static Message createMessage(
             Key<Device> fromDevice,

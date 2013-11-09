@@ -11,7 +11,7 @@ import com.google.common.base.Throwables;
 public class Error extends CeeMeServletBase {
 
 	private static final long serialVersionUID = 5728163889277892752L;
-	public static final String dispatcher = "/WEB-INF/jsp/error.jsp";
+	private static final String dispatcher = "/WEB-INF/jsp/error.jsp";
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {

@@ -10,10 +10,10 @@ import com.javadocmd.simplelatlng.util.LengthUnit;
  *
  */
 public class LocMedia implements Comparable<LocMedia> {
-    LatLng location;
-    LatLng origin;
-    Media media;
-    double distanceToOrigin;
+    private LatLng location;
+    private LatLng origin;
+    private Media media;
+    private double distanceToOrigin;
 
     public LocMedia(LatLng location, LatLng origin, Media media) {
         this.location = location;
@@ -24,8 +24,8 @@ public class LocMedia implements Comparable<LocMedia> {
 
     /**
      * Sorts in REVERSE order (smallest distance to origin first)
-     * @param other
-     * @return
+     * @param other The other point to compare to.
+     * @return comparison integer: -1 if this is less than other, 0 if same, 1 if this is greater than other
      */
     @Override
     public int compareTo(LocMedia other) {

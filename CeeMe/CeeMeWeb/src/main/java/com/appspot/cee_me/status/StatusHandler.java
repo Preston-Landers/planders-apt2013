@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
  * 
  */
 public class StatusHandler {
-	public final static String propName = "StatusList"; // name of property within session
+	private final static String propName = "StatusList"; // name of property within session
 	public static void addStatus(HttpSession session, StatusMessage msg) {
 		@SuppressWarnings("unchecked")
 		List<StatusMessage> messageList = (List<StatusMessage>) session
@@ -24,13 +24,12 @@ public class StatusHandler {
 	}
 
 	public static List<StatusMessage> getAppStatus(HttpSession session) {
-		@SuppressWarnings("unchecked")
-		List<StatusMessage> messageList = (List<StatusMessage>) session
-				.getAttribute(propName);
-		return messageList;
+        //noinspection unchecked
+        return (List<StatusMessage>) session
+                .getAttribute(propName);
 	}
 
-	public static void clearStatus(HttpSession session) {
+	private static void clearStatus(HttpSession session) {
 		session.removeAttribute(propName);
 	}
 

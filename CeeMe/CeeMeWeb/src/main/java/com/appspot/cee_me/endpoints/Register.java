@@ -7,7 +7,6 @@ import com.appspot.cee_me.servlet.CeeMeServletBase;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.appengine.api.users.User;
-import com.googlecode.objectify.Key;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +64,7 @@ public class Register {
         CUser owner = getUser(user);
         com.appspot.cee_me.model.Device modelDevice = com.appspot.cee_me.model.Device.registerDevice(
                 owner.getKey(), name, hardwareDescription, gcmRegistrationId, comment);
-        Device device = new Device(modelDevice);
-        return device;
+        return new Device(modelDevice);
 
     }
 
@@ -78,7 +76,7 @@ public class Register {
      * @param hardwareDescription New hardware description
      * @param gcmRegistrationId New GCM messaging registration ID
      * @param comment New device comment
-     * @return
+     * @return the updated Device
      */
     @ApiMethod(name = "updateDevice", httpMethod = "post")
     public Device updateDevice(User user,
@@ -91,7 +89,7 @@ public class Register {
 
         CUser owner = getUser(user);
         com.appspot.cee_me.model.Device device = loadByKey(keyStr);
-        if (!device.cUserIsOwner(owner.getKey())) {
+        if (device.cUserIsNotOwner(owner.getKey())) {
             log.severe("Tried to update someone else's registration: " + owner + " " + device);
             throw new IllegalArgumentException(Config.MSG_NOT_DEVICE_OWNER);
         }
@@ -132,13 +130,13 @@ public class Register {
      * Retrieve a device description by its key.
      * @param user your Google User
      * @param keyStr the device key string obtain via a call to listMyDevices or registerDevice
-     * @return
+     * @return the Device description
      */
     @ApiMethod(name = "getDevice", httpMethod = "get")
     public Device getDevice(User user, @Named("key") String keyStr) {
         CUser cuser = getUser(user);
         com.appspot.cee_me.model.Device device = loadByKey(keyStr);
-        if (!device.cUserIsOwner(cuser.getKey())) {
+        if (device.cUserIsNotOwner(cuser.getKey())) {
             log.severe("Tried to view someone else's registration: " + cuser + " " + device);
             throw new IllegalArgumentException(Config.MSG_NOT_DEVICE_OWNER);
         }
@@ -147,7 +145,7 @@ public class Register {
     }
 
     /**
-     * Retreives a list of all registered devices that belong to you.
+     * Retrieves a list of all registered devices that belong to you.
      * @param user your Google User
      * @return a list of your registered devices
      */
@@ -172,12 +170,12 @@ public class Register {
                                    @Named("key") String keyStr) {
         CUser cuser = getUser(user);
         com.appspot.cee_me.model.Device device = loadByKey(keyStr);
-        if (!device.cUserIsOwner(cuser.getKey())) {
+        if (device.cUserIsNotOwner(cuser.getKey())) {
             log.severe("Tried to delete someone else's registration: " + cuser + " " + device);
             throw new IllegalArgumentException(Config.MSG_NOT_DEVICE_OWNER);
         }
         log.warning("API device deletion: " + device);
-        device.deleteDevice(false);
+        device.deleteDevice(true);
     }
 
 

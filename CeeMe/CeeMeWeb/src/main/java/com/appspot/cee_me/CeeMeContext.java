@@ -8,11 +8,11 @@ import com.google.appengine.api.users.User;
  * things like the CeeMe User (CUser), Google User (guser), etc.
  */
 public class CeeMeContext {
-    protected User guser;     // The Google User object - MAY BE NULL! if not logged in
-    protected CUser cuser;    // The CeeMe User object - MAY BE NULL! if not logged in
-    protected String cssThemeFile;
-    protected String loginURL;
-    protected String logoutURL;
+    private User guser;     // The Google User object - MAY BE NULL! if not logged in
+    private CUser cuser;    // The CeeMe User object - MAY BE NULL! if not logged in
+    private String cssThemeFile;
+    private String loginURL;
+    private String logoutURL;
 
     public CeeMeContext(User guser, CUser cuser) {
         this.guser = guser;

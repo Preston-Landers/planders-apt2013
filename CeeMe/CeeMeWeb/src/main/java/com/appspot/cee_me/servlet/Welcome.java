@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class Welcome extends CeeMeServletBase {
 	private static final long serialVersionUID = 5623205007285996372L;
 	
-	public static final String uri = "/welcome";
+	// public static final String uri = "/welcome";
 	public static final String dispatcher = "/WEB-INF/jsp/welcome.jsp";
 	public static final String welcomeLoginDestination = "/manage";
 	
@@ -20,7 +20,8 @@ public class Welcome extends CeeMeServletBase {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 		
-		CeeMeContext ceeMeContext = InitializeContext(req); // Base site context initialization
+		@SuppressWarnings("unused")
+        CeeMeContext ceeMeContext = InitializeContext(req); // Base site context initialization
 
 		// The Welcome screen needs a special login URL that takes you somewhere else.
 		String welcomeLoginURL = userService.createLoginURL(welcomeLoginDestination);

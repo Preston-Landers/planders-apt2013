@@ -32,7 +32,7 @@ public class Config {
 
     // What do we say when we got a POST with an unknown or malformed command
     public static final String MSG_UNKNOWN_COMMAND = "Internal error: command unknown or not implemented yet.";
-    public static final String MSG_NOT_DEVICE_OWNER = Config.MSG_NOT_DEVICE_OWNER;
+    public static final String MSG_NOT_DEVICE_OWNER = "You are not the device owner.";
 
 
     public static int getMaxSearchResults() {
@@ -71,8 +71,8 @@ public class Config {
     /**
      * normalize strings for account lookup
      * Apparently google account names/emails are case sensitive
-     * @param inp
-     * @return
+     * @param inp input string (account name)
+     * @return normalized account name
      */
     public static String norm(String inp) {
         return inp.toLowerCase();

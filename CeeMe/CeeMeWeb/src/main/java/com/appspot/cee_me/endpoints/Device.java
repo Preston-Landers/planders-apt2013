@@ -10,21 +10,21 @@ import java.io.Serializable;
  * Represents a Device for endpoint JSON responses
  */
 public class Device implements Serializable {
-    String key;  // ID field - look it up by this key in several messages.
+    private String key;  // ID field - look it up by this key in several messages.
 
-    String publicId; // goes into public URL
+    private String publicId; // goes into public URL
 
-    String name; // Displayed user-assignable name
-    String comment; // user-assignable extra comment field
-    String hardwareDescription; // something to identify the actual hardware (user-visible)
+    private String name; // Displayed user-assignable name
+    private String comment; // user-assignable extra comment field
+    private String hardwareDescription; // something to identify the actual hardware (user-visible)
 
-    String ownerKey;
+    private String ownerKey;
 
-    String gcmRegistrationId; // Google Cloud Messaging registration ID for this device.
+    private String gcmRegistrationId; // Google Cloud Messaging registration ID for this device.
 
-    DateTime creationDate;        // when was the device registered?
-    DateTime lastIncomingMessageDate; // when was this device named a target of a message?
-    DateTime lastOutgoingMessageDate; // when did this device last originate a message?
+    private DateTime creationDate;        // when was the device registered?
+    private DateTime lastIncomingMessageDate; // when was this device named a target of a message?
+    private DateTime lastOutgoingMessageDate; // when did this device last originate a message?
 //    Date creationDate;        // when was the device registered?
 //    Date lastIncomingMessageDate; // when was this device named a target of a message?
 //    Date lastOutgoingMessageDate; // when did this device last originate a message?

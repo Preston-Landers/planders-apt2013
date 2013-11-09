@@ -29,29 +29,29 @@ import org.joda.time.DateTime;
 @Cache
 public class Media implements Comparable<Media> {
 
-    @Id Long id;
+    private @Id Long id;
 
-    ShortBlob sha256;
+    private ShortBlob sha256;
 
-    String fileName;
+    private String fileName;
 
-    @Index BlobKey blobKey;
+    private @Index BlobKey blobKey;
 
-    String mimeType;
+    private String mimeType;
 
-    Long size;
+    private Long size;
 
-    String comments;
+    private String comments;
 
-    @Index
+    private @Index
     DateTime creationDate;
 
-    Key<CUser> uploader; // in theory, could upload to other users streams?
+    private Key<CUser> uploader; // in theory, could upload to other users streams?
 
-    Long views;
+    private Long views;
 
-    Double latitude;
-    Double longitude;
+    private Double latitude;
+    private Double longitude;
 
 	private static final ImagesService imagesService = ImagesServiceFactory.getImagesService();
 	protected final static MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
@@ -82,7 +82,7 @@ public class Media implements Comparable<Media> {
 		this.blobKey = blobKey;
 		this.uploader = cuser;
 		this.creationDate = new DateTime();
-		this.views = new Long(0);
+		this.views = (long) 0;
 	}
 	
 	public Key<Media> getKey() {
@@ -90,7 +90,7 @@ public class Media implements Comparable<Media> {
 	}
 	
 	public static Media getById(Long objectId) {
-		return ofy().load().type(Media.class).id(objectId).get();
+		return ofy().load().type(Media.class).id(objectId).now();
 	}
 
 
@@ -138,7 +138,8 @@ public class Media implements Comparable<Media> {
 		rv.append("</h4>");
 		
 		rv.append("<h6>");
-		rv.append("<em>Uploaded on:</em><BR>" + creationDate);
+		rv.append("<em>Uploaded on:</em><BR>");
+        rv.append(creationDate);
 		rv.append("<BR><BR><em>Uploaded by:</em><BR>");
 		rv.append(Config.escapeHTML(getUploaderNow().getRealName()));
 		rv.append("</h6>" );
@@ -157,7 +158,7 @@ public class Media implements Comparable<Media> {
 		return uploader;
 	}
 	public CUser getUploaderNow() {
-		return ofy().load().key(getUploader()).get();
+		return ofy().load().key(getUploader()).now();
 	}
 
 	public void setUploader(Key<CUser> uploader) {
@@ -175,7 +176,7 @@ public class Media implements Comparable<Media> {
 	public Long getAndIncrementViews() {
 		Long views = getViews();
 		if (views == null) {
-			views = new Long(0);
+			views = (long) 0;
 		}
 		views++;
 		setViews(views);
@@ -213,8 +214,8 @@ public class Media implements Comparable<Media> {
 	
 	
 	/**
-	 * Return a list of image serving URLs for the given media 
-	 * @WARNING: does not check whether the media is actually an image! 
+	 * Return a list of image serving URLs for the given media
+     * WARNING: does not check whether the media is actually an image!
 	 */
 	@SuppressWarnings("deprecation")
 	public String getMediaURLHelper(BlobKey blobKey, int size) {
@@ -268,16 +269,9 @@ public class Media implements Comparable<Media> {
 		return true;
 	}
 
-	private boolean deleteBlob() {
+	private void deleteBlob() throws BlobstoreFailureException {
 		BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-		try {
-			blobstoreService.delete(getBlobKey());
-		} catch (BlobstoreFailureException e) {
-			e.printStackTrace(System.err);
-			return false;
-		}
-		
-		return true;
+        blobstoreService.delete(getBlobKey());
 	}
 	
 	@Override

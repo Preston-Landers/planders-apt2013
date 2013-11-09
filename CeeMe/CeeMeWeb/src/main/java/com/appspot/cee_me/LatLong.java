@@ -3,11 +3,11 @@ package com.appspot.cee_me;
 import java.util.Random;
 
 /**
- * Contain Latitude and Longitude coords
+ * Contain Latitude and Longitude coordinates
  */
 public class LatLong {
-    double latitude;
-    double longitude;
+    private double latitude;
+    private double longitude;
 
     public double getLongitude() {
         return longitude;
@@ -48,7 +48,6 @@ public class LatLong {
 
     private static double randomInRange(double rangeMin, double rangeMax) {
         Random r = new Random();
-        double randomValue = rangeMin + (rangeMax - rangeMin) * r.nextDouble();
-        return randomValue;
+        return rangeMin + (rangeMax - rangeMin) * r.nextDouble();
     }
 }

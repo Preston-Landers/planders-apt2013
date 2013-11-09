@@ -1,6 +1,5 @@
 package com.appspot.cee_me.model;
 
-import com.google.appengine.api.datastore.KeyFactory;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Result;
 import com.googlecode.objectify.annotation.Cache;
@@ -9,7 +8,6 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -22,34 +20,38 @@ import static com.appspot.cee_me.OfyService.ofy;
 @Entity
 @Cache
 public class Device {
-    @Id
+    private @Id
     Long id;
 
-    @Index
+    private @Index
     String publicId; // goes into public URL
 
-    String name; // Displayed user-assignable name
-    String comment; // user-assignable extra comment field
-    String hardwareDescription; // something to identify the actual hardware (user-visible)
+    private String name; // Displayed user-assignable name
+    private String comment; // user-assignable extra comment field
+    private String hardwareDescription; // something to identify the actual hardware (user-visible)
 
-    @Index
+    private @Index
     Key<CUser> owner;
 
-    String gcmRegistrationId; // Google Cloud Messaging registration ID for this device.
+    private String gcmRegistrationId; // Google Cloud Messaging registration ID for this device.
 
-    DateTime creationDate;        // when was the device registered?
-    DateTime lastIncomingMessageDate; // when was this device named a target of a message?
-    DateTime lastOutgoingMessageDate; // when did this device last originate a message?
+    private DateTime creationDate;        // when was the device registered?
+    private DateTime lastIncomingMessageDate; // when was this device named a target of a message?
+    private DateTime lastOutgoingMessageDate; // when did this device last originate a message?
 
+    @SuppressWarnings("unused")
     private Device() {
     }
 
     public Device(String name, String hardwareDescription, Key<CUser> owner, String gcmRegistrationId) {
-        this.name = name;
-        this.hardwareDescription = hardwareDescription;
-        this.owner = owner;
-        this.gcmRegistrationId = gcmRegistrationId;
-        this.creationDate = new DateTime();
+        setName(name);
+        setPublicId(null); /// XXX TODO
+        setHardwareDescription(hardwareDescription);
+        setOwner(owner);
+        setGcmRegistrationId(gcmRegistrationId);
+        setCreationDate(new DateTime());
+        setLastIncomingMessageDate(null);
+        setLastOutgoingMessageDate(null);
     }
 
     public Long getId() {
@@ -152,7 +154,7 @@ public class Device {
      * @param hardwareDescription Device should describe its model (e.g. "Samsung Galaxy S4")
      * @param gcmRegistrationId   Device should have already obtained the Google Cloud Messaging registration ID
      * @param comment             Any additional comment string
-     * @return
+     * @return Device description
      */
     public static Device registerDevice(Key<CUser> owner, String name, String hardwareDescription,
                                         String gcmRegistrationId, String comment) {
@@ -170,7 +172,7 @@ public class Device {
                 }
                 if (otherDevice.getGcmRegistrationId().equals(gcmRegistrationId)) {
                     String msg = "You already have a device with the same Google Cloud Messenger ID." +
-                        " This may be an internal error";
+                            " This may be an internal error";
                     log.severe(owner + " " + msg);
                     throw new IllegalArgumentException(msg);
                 }
@@ -195,6 +197,7 @@ public class Device {
 
     /**
      * Load a device by its key string
+     *
      * @param objectIdStr should be result of getKey().getString()
      * @return the Device
      */
@@ -204,18 +207,19 @@ public class Device {
     }
 
     /**
-     * Permanently deletes a device registration. Note that references to the deleted entity may be retained in memory.
+     * Permanently deletes a device registration. Note that references to the deleted
+     * entity may be retained in memory. Does not do any validity checks!
      *
-     * @param async if true, blocks until deletion is complete
+     * @param now if true, blocks until deletion is complete
      * @return true for success, false for failure
      */
-    public boolean deleteDevice(boolean async) {
+    public boolean deleteDevice(boolean now) {
         // TODO: would like a more permanent record than this log message.
         Logger log = Logger.getLogger(Device.class.getName());
         log.severe("Deleting device registration: " + toString());
 
         Result result = ofy().delete().entities(this);
-        if (!async) {
+        if (now) {
             result.now();
         }
         return true;
@@ -239,13 +243,15 @@ public class Device {
 
     /**
      * Return true if the given user key is owner of this device.
+     *
      * @param userKey a user key to check
      * @return true if userKey is the owner of this device
      */
     public boolean cUserIsOwner(Key<CUser> userKey) {
-        if (getOwner().equals(userKey)) {
-            return true;
-        }
-        return false;
+        return getOwner().equals(userKey);
+    }
+
+    public boolean cUserIsNotOwner(Key<CUser> userKey) {
+        return ! cUserIsOwner(userKey);
     }
 }

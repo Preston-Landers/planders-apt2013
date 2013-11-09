@@ -34,9 +34,12 @@
                                                 <td>${fn:escapeXml(device.hardwareDescription )}</td>
                                                 <td>${fn:escapeXml(device.comment )}</td>
                                                 <td>${func:formatDateTime(device.creationDate)}</td>
-												<TD><label>Delete
-                                                    <input type="checkbox" name="delete" value="${ device.key.string }">
-                                                </label></TD>
+												<TD>
+                                                    <label>
+                                                        <input type="checkbox" name="delete"
+                                                               value="${ device.key.string }">
+                                                    </label>
+                                                </TD>
 											</TR>
 										</c:forEach>
 									</tbody>

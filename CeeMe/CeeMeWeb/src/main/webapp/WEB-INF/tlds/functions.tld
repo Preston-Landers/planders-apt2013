@@ -7,6 +7,7 @@
 
     <display-name>Custom Functions</display-name>    
     <tlib-version>1.0</tlib-version>
+    <short-name>customFunctions</short-name>
     <uri>http://example.com/functions</uri>
 
     <function>

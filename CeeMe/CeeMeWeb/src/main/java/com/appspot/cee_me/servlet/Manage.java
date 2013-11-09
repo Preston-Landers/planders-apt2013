@@ -16,8 +16,8 @@ import java.util.logging.Logger;
 public class Manage extends CeeMeServletBase {
 	private static final long serialVersionUID = 1609921843328426049L;
 	
-	public static final String uri = "/manage";
-	public static final String dispatcher = "/WEB-INF/jsp/manage.jsp";
+	private static final String uri = "/manage";
+	private static final String dispatcher = "/WEB-INF/jsp/manage.jsp";
     private final static Logger log = Logger.getLogger(Manage.class.getName());
 
 	
@@ -82,8 +82,15 @@ public class Manage extends CeeMeServletBase {
                 log.warning("Error deleting device: could not load device by key: " + objectIdStr);
                 continue;
             }
+            if (!device.getOwner().equals(cuser.getKey())) {
+                String delMsg = "Error: This device does not belong to you.";
+                log.severe("Tried to delete someone else's registration: " + cuser + " " + device);
+                alertError(req, delMsg);
+                // throw new IllegalArgumentException(Config.MSG_NOT_DEVICE_OWNER);
+                continue;
+            }
             String deviceName = device.getName();
-            if (device.deleteDevice(false)) {
+            if (device.deleteDevice(true)) {
                 String delMsg = "Device registration was deleted for " + deviceName;
                 log.info(delMsg + " " + device.toString());
                 alertSuccess(req, delMsg);

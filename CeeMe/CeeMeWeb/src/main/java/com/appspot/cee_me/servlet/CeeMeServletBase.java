@@ -2,13 +2,11 @@ package com.appspot.cee_me.servlet;
 
 import static com.appspot.cee_me.OfyService.ofy;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.net.URLDecoder;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 import com.appspot.cee_me.CeeMeContext;
@@ -27,8 +25,8 @@ import com.appspot.cee_me.status.*;
 
 public abstract class CeeMeServletBase extends HttpServlet {
 
-    protected final static UserService userService = UserServiceFactory.getUserService();
-    protected final static MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+    final static UserService userService = UserServiceFactory.getUserService();
+    final static MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
     private final static Logger log = Logger.getLogger(CeeMeServletBase.class.getName());
 
     static {
@@ -39,7 +37,7 @@ public abstract class CeeMeServletBase extends HttpServlet {
      * Set up things that are common to all pages including the currently logged in user, if any.
      * @param req servlet request
      */
-    public static CeeMeContext InitializeContext(HttpServletRequest req) throws IOException, ServletException {
+    static CeeMeContext InitializeContext(HttpServletRequest req)  {
 
         // The Google User object - MAY BE NULL! if not logged in
         User guser = userService.getCurrentUser();
@@ -82,10 +80,10 @@ public abstract class CeeMeServletBase extends HttpServlet {
         String cssTheme = defaultCssTheme;
         Cookie[] cookies = req.getCookies();
         if (cookies != null) {
-            for (int i=0; i<cookies.length; i++) {
-                if (cookies[i].getName().equals("ceeme-theme")) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("ceeme-theme")) {
                     try {
-                        cssTheme = URLDecoder.decode(cookies[i].getValue(), "UTF-8");
+                        cssTheme = URLDecoder.decode(cookie.getValue(), "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         log.warning("Cookie encoding error for ceeme-theme");
                         e.printStackTrace();
@@ -146,21 +144,22 @@ public abstract class CeeMeServletBase extends HttpServlet {
 
     private static final long serialVersionUID = 7414103509881465189L;
 
-    public static void alertError(HttpServletRequest req, String msg) {
+    static void alertError(HttpServletRequest req, String msg) {
         alertMessage(req, StatusMessageType.ERROR, msg);
     }
-    public static void alertSuccess(HttpServletRequest req, String msg) {
+    static void alertSuccess(HttpServletRequest req, String msg) {
         alertMessage(req, StatusMessageType.SUCCESS, msg);
     }
-    public static void alertInfo(HttpServletRequest req, String msg) {
+    @SuppressWarnings("unused")
+    static void alertInfo(HttpServletRequest req, String msg) {
         alertMessage(req, StatusMessageType.INFO, msg);
     }
-    public static void alertWarning(HttpServletRequest req, String msg) {
+    static void alertWarning(HttpServletRequest req, String msg) {
         alertMessage(req, StatusMessageType.WARNING, msg);
     }
 
-    public static void alertMessage(HttpServletRequest req, StatusMessageType msgType,
-                                    String msg) {
+    private static void alertMessage(HttpServletRequest req, StatusMessageType msgType,
+                                     String msg) {
         HttpSession session = req.getSession(true);
         StatusHandler.addStatus(session, new StatusMessage(msgType, msg));
     }

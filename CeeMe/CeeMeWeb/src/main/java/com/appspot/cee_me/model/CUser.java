@@ -12,12 +12,12 @@ import org.joda.time.DateTime;
 @Entity
 @Cache
 public class CUser implements Comparable<CUser> {
-	@Id Long id;
-	String accountName; // Displayed username
-	String realName; // full name
-	@Index User guser;      // google account  // Need getByGUser for this to be useful?
-	String adminNotes;    // private / internal notes for this account.
-	DateTime creationDate;
+	private @Id Long id;
+    private String accountName; // Displayed username
+    private String realName; // full name
+    private @Index User guser;      // google account  // Need getByGUser for this to be useful?
+    private String adminNotes;    // private / internal notes for this account.
+    private DateTime creationDate;
 
 	@SuppressWarnings("unused")
 	private CUser() {

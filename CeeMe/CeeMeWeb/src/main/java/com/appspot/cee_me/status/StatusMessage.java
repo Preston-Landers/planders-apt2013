@@ -10,8 +10,8 @@ import java.io.Serializable;
  */
 public class StatusMessage implements Serializable {
 	private static final long serialVersionUID = -73465466713153918L;
-	StatusMessageType type;
-	String message;
+	private StatusMessageType type;
+	private String message;
 	String iconClass;
 
 	public StatusMessage(StatusMessageType type, String message) {
