@@ -56,7 +56,7 @@
 		</div>
 		
 		<h6>
-			<em><strong>*</strong>This site is currently in beta testing.</em>
+			<em><strong>*</strong>This site is currently in development.</em>
 		</h6>
 	</jsp:body>
 </t:ceeme>

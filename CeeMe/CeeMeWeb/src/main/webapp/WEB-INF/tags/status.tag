@@ -7,8 +7,9 @@
 <%-- <c:if test="${fn:length(func:getAppStatus(pageContext.session)) > 0}"> --%>
 
 	<div id="statusArea" class="clearfix">
+		<jsp:useBean id="Context" scope="request" type="com.appspot.cee_me.CeeMeContext"/>
 		<c:forEach var="statusMessage"
-			items="${func:getAndClearAppStatus(pageContext.session)}">
+			items="${Context.appStatusListWithClear}">
 			<div
 				class="alert alert-dismissable fade in ${statusMessage.CSSClass}">
 				<span class="${statusMessage.iconClass}" style="padding-right: 5px"></span>

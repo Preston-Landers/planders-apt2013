@@ -11,18 +11,6 @@
     <uri>http://example.com/functions</uri>
 
     <function>
-        <name>getAndClearAppStatus</name>
-        <function-class>com.appspot.cee_me.status.StatusHandler</function-class>
-        <function-signature>java.util.List getAndClearAppStatus(javax.servlet.http.HttpSession)</function-signature>
-    </function>
-
-    <function>
-        <name>getAppStatus</name>
-        <function-class>com.appspot.cee_me.status.StatusHandler</function-class>
-        <function-signature>java.util.List getAppStatus(javax.servlet.http.HttpSession)</function-signature>
-    </function>
-    
-    <function>
         <name>partition</name>
         <function-class>com.google.common.collect.Lists</function-class>
         <function-signature>java.util.List partition(java.util.List, int)</function-signature>

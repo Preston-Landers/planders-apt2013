@@ -68,6 +68,8 @@ public abstract class CeeMeServletBase extends HttpServlet {
             alertError(req, "You must provide an account name and a real name.");
         }
 
+        context.setReq(req);
+        context.setGuser(guser);
         context.setCuser(cuser);
         context.setCssThemeFile(getCSSTheme(req));
         req.setAttribute("Context", context);
