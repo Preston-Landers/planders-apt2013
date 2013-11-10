@@ -9,21 +9,30 @@ import java.io.IOException;
 
 
 public class Send extends CeeMeServletBase {
-	private static final long serialVersionUID = 5623205007285996379L;
-	
-	// public static final String uri = "/send";
-	private static final String dispatcher = "/WEB-INF/jsp/send.jsp";
+    private static final long serialVersionUID = 5623205007285996379L;
 
-	
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException, ServletException {
+    private static final String uri = "/send";
+    private static final String dispatcher = "/WEB-INF/jsp/send.jsp";
 
-		@SuppressWarnings("unused")
+
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
+
+        @SuppressWarnings("unused")
         CeeMeContext ceeMeContext = InitializeContext(req); // Base site context initialization
 
-		// Forward to JSP page to display them in a HTML table.
-		req.getRequestDispatcher(dispatcher).forward(req, resp); 
-	}
+        // Forward to JSP page to display them in a HTML table.
+        req.getRequestDispatcher(dispatcher).forward(req, resp);
+    }
 
+    public void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
+        CeeMeContext ceeMeContext = InitializeContext(req); // Base site context initialization
+
+        alertInfo(req, "Sending messages not yet implemented.");
+
+        resp.sendRedirect(uri);
+
+    }
 
 }

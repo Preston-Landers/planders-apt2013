@@ -35,9 +35,10 @@ public abstract class CeeMeServletBase extends HttpServlet {
 
     /**
      * Set up things that are common to all pages including the currently logged in user, if any.
+     *
      * @param req servlet request
      */
-    static CeeMeContext InitializeContext(HttpServletRequest req)  {
+    static CeeMeContext InitializeContext(HttpServletRequest req) {
 
         // The Google User object - MAY BE NULL! if not logged in
         User guser = userService.getCurrentUser();
@@ -93,7 +94,7 @@ public abstract class CeeMeServletBase extends HttpServlet {
                 }
             }
         }
-        if (cssTheme == null || cssTheme.length() == 0 ) {
+        if (cssTheme == null || cssTheme.length() == 0) {
             cssTheme = defaultCssTheme;
         }
         return cssTheme;
@@ -149,13 +150,15 @@ public abstract class CeeMeServletBase extends HttpServlet {
     static void alertError(HttpServletRequest req, String msg) {
         alertMessage(req, StatusMessageType.ERROR, msg);
     }
+
     static void alertSuccess(HttpServletRequest req, String msg) {
         alertMessage(req, StatusMessageType.SUCCESS, msg);
     }
-    @SuppressWarnings("unused")
+
     static void alertInfo(HttpServletRequest req, String msg) {
         alertMessage(req, StatusMessageType.INFO, msg);
     }
+
     static void alertWarning(HttpServletRequest req, String msg) {
         alertMessage(req, StatusMessageType.WARNING, msg);
     }

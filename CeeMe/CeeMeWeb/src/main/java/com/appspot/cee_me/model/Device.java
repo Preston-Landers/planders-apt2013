@@ -254,4 +254,8 @@ public class Device {
     public boolean cUserIsNotOwner(Key<CUser> userKey) {
         return ! cUserIsOwner(userKey);
     }
+
+    public String getSendUri() {
+        return "/send?to=" + getKey().getString();
+    }
 }
