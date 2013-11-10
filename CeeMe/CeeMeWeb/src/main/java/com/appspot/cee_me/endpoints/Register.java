@@ -180,7 +180,7 @@ public class Register {
 
 
     private static com.appspot.cee_me.model.Device loadByKey(String keyStr) {
-        com.appspot.cee_me.model.Device device = com.appspot.cee_me.model.Device.loadByKey(keyStr);
+        com.appspot.cee_me.model.Device device = com.appspot.cee_me.model.Device.getByKey(keyStr);
         if (device == null) {
             String msg = "Can't find device with key: " + keyStr;
             log.severe("API device lookup fail: " + msg);

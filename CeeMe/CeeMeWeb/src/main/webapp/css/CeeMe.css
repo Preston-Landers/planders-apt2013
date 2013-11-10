@@ -68,7 +68,11 @@ div.thumbnail, img.img-thumbnail {
 .welcome-buttons-row A {
 	margin-top: 20px;
 }
-  
+
+.messageContainer .label {
+    margin-right: 10px;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 

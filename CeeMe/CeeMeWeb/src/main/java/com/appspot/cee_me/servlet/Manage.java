@@ -77,7 +77,7 @@ public class Manage extends CeeMeServletBase {
             if (objectIdStr == null || objectIdStr.length() < 1) {
                 continue;
             }
-            Device device = Device.loadByKey(objectIdStr);
+            Device device = Device.getByKey(objectIdStr);
             if (device == null) {
                 log.warning("Error deleting device: could not load device by key: " + objectIdStr);
                 continue;

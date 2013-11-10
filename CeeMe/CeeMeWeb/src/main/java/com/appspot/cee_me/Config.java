@@ -33,6 +33,7 @@ public class Config {
     // What do we say when we got a POST with an unknown or malformed command
     public static final String MSG_UNKNOWN_COMMAND = "Internal error: command unknown or not implemented yet.";
     public static final String MSG_NOT_DEVICE_OWNER = "You are not the device owner.";
+    public static final String MSG_UNKNOWN_DEVICE = "Invalid device or device not found.";
 
 
     public static int getMaxSearchResults() {

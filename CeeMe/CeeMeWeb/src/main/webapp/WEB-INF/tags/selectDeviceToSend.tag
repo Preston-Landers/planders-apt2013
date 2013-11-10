@@ -9,7 +9,12 @@
         <select name="to">
             <c:forEach var="device" items="${deviceSelector.deviceSelectorList}">
                 <%-- TODO: select the currently selected item --%>
-                <option value="<c:out value="${device.key.string}" />">
+                <option
+                        value="<c:out value="${device.key.string}" />"
+                        <c:if test="${device.key.string eq param['to'] }">
+                            selected
+                        </c:if>
+                        >
                     <c:out value="${device.name}"/>
                 </option>
             </c:forEach>

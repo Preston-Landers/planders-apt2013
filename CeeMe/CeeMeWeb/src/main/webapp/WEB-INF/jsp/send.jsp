@@ -35,6 +35,8 @@
 
                 </div>
             </div>
+
+            <t:recentlySent />
         </form>
 
     </jsp:body>

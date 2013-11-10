@@ -38,7 +38,15 @@ public class CUser implements Comparable<CUser> {
 		return ofy().load().type(CUser.class).id(userId).now();
 	}
 
-	
+    public static CUser getByKey(String objectIdStr) {
+        Key<CUser> key = Key.create(objectIdStr);
+        return getByKey(key);
+    }
+
+    public static CUser getByKey(Key<CUser> userKey) {
+        return ofy().load().key(userKey).now();
+    }
+
 	public Long getId() {
 		return id;
 	}

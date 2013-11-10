@@ -17,10 +17,8 @@ import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Cache;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.*;
 
 import com.appspot.cee_me.Config;
 import org.joda.time.DateTime;
@@ -46,7 +44,7 @@ public class Media implements Comparable<Media> {
     private @Index
     DateTime creationDate;
 
-    private Key<CUser> uploader; // in theory, could upload to other users streams?
+    private @Load Ref<CUser> uploader; // in theory, could upload to other users streams?
 
     private Long views;
 
@@ -78,11 +76,11 @@ public class Media implements Comparable<Media> {
 	}
 
 	public Media(Long id, BlobKey blobKey, Key<CUser> cuser) {
-		this.id = id;
-		this.blobKey = blobKey;
-		this.uploader = cuser;
-		this.creationDate = new DateTime();
-		this.views = (long) 0;
+        setId(id);
+        setBlobKey(blobKey);
+        setUploader(Ref.create(cuser));
+        setCreationDate(new DateTime());
+        setViews((long) 0);
 	}
 	
 	public Key<Media> getKey() {
@@ -154,14 +152,16 @@ public class Media implements Comparable<Media> {
 		this.mimeType = mimeType;
 	}
 
-	public Key<CUser> getUploader() {
+	public Ref<CUser> getUploader() {
 		return uploader;
 	}
+
 	public CUser getUploaderNow() {
-		return ofy().load().key(getUploader()).now();
+        Ref<CUser> uploader = getUploader();
+        return uploader == null ? null : uploader.get();
 	}
 
-	public void setUploader(Key<CUser> uploader) {
+	public void setUploader(Ref<CUser> uploader) {
 		this.uploader = uploader;
 	}
 

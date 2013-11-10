@@ -1,11 +1,14 @@
 package com.appspot.cee_me.model;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.Result;
-import com.googlecode.objectify.annotation.Cache;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.*;
+import com.googlecode.objectify.cmd.Query;
 import org.joda.time.DateTime;
+
+import java.util.List;
+import java.util.logging.Logger;
 
 import static com.appspot.cee_me.OfyService.ofy;
 
@@ -18,25 +21,34 @@ public class Message {
     private @Id
     Long id;
 
-    private Key<Device> fromDevice;
-    private Key<CUser> fromUser;
-    private Key<CUser> toUser;
-    private Key<Device> toDevice;
+    private @Load
+    Ref<Device> fromDevice;
+
+    private @Load
+    Ref<CUser> fromUser;
+
+    private @Index @Load
+    Ref<CUser> toUser;
+
+    private @Index @Load
+    Ref<Device> toDevice;
 
     // File attachment
-    private Key<Media> media;
+    private @Load
+    Ref<Media> media;
 
     // String message payload
     // NOT indexed!! Can be up to 1 MB strings
     private String text;
 
-    private DateTime creationDate;
+    private @Index DateTime creationDate;
     private DateTime lastRetrievalDate;
-    private Boolean accepted;
+    private Boolean accepted; // has been read / opened / accepted
 
     private Message() {
-        creationDate = new DateTime();
-        accepted = Boolean.FALSE;
+        setCreationDate(new DateTime());
+        setAccepted(Boolean.FALSE);
+        setLastRetrievalDate(null);
     }
 
     public Long getId() {
@@ -47,35 +59,35 @@ public class Message {
         this.id = id;
     }
 
-    public Key<CUser> getFromUser() {
-        return fromUser;
+    public CUser getFromUser() {
+        return fromUser == null ? null : fromUser.get();
     }
 
-    public void setFromUser(Key<CUser> fromUser) {
+    public void setFromUser(Ref<CUser> fromUser) {
         this.fromUser = fromUser;
     }
 
-    public Key<CUser> getToUser() {
-        return toUser;
+    public CUser getToUser() {
+        return toUser == null ? null : toUser.get();
     }
 
-    public void setToUser(Key<CUser> toUser) {
+    public void setToUser(Ref<CUser> toUser) {
         this.toUser = toUser;
     }
 
-    public Key<Device> getToDevice() {
-        return toDevice;
+    public Device getToDevice() {
+        return toDevice == null ? null : toDevice.get();
     }
 
-    public void setToDevice(Key<Device> toDevice) {
+    public void setToDevice(Ref<Device> toDevice) {
         this.toDevice = toDevice;
     }
 
-    public Key<Media> getMedia() {
-        return media;
+    public Media getMedia() {
+        return media == null ? null : media.get();
     }
 
-    public void setMedia(Key<Media> media) {
+    public void setMedia(Ref<Media> media) {
         this.media = media;
     }
 
@@ -95,11 +107,11 @@ public class Message {
         this.lastRetrievalDate = lastRetrievalDate;
     }
 
-    public Key<Device> getFromDevice() {
-        return fromDevice;
+    public Device getFromDevice() {
+        return fromDevice == null ? null : fromDevice.get();
     }
 
-    public void setFromDevice(Key<Device> fromDevice) {
+    public void setFromDevice(Ref<Device> fromDevice) {
         this.fromDevice = fromDevice;
     }
 
@@ -111,17 +123,49 @@ public class Message {
         this.text = text;
     }
 
+    public Boolean getAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
+    }
+
+    public Key<Message> getKey() {
+        return Key.create(Message.class, id);
+    }
+
+    /**
+     * Load a message by its key string
+     *
+     * @param objectIdStr should be result of getKey().getString()
+     * @return the Message
+     */
+    public static Message getByKey(String objectIdStr) {
+        Key<Message> key = Key.create(objectIdStr);
+        return getByKey(key);
+    }
+
+    /**
+     * Load a Message by its datastore Key
+     * @param key message key to load
+     * @return the Message
+     */
+    public static Message getByKey(Key<Message> key) {
+        return ofy().load().key(key).now();
+    }
+
     @Override
     public String toString() {
         return "Message{" +
-                "text=<" + text +
-                ">, id=" + id +
-                ", fromDevice=" + fromDevice +
-                ", fromUser=" + fromUser +
-                ", toUser=" + toUser +
-                ", toDevice=" + toDevice +
-                ", media=" + media +
-                ", creationDate=" + creationDate +
+                "text=<" + getText() +
+                ">, id=" + getId() +
+                ", fromDevice=" + getFromDevice() +
+                ", fromUser=" + getFromUser() +
+                ", toUser=" + getToUser() +
+                ", toDevice=" + getToDevice() +
+                ", media=" + getMedia() +
+                ", creationDate=" + getCreationDate() +
                 '}';
     }
 
@@ -149,11 +193,11 @@ public class Message {
      * @return the saved Message object
      */
     public static Message createMessage(
-            Key<Device> fromDevice,
-            Key<CUser> fromUser,
-            Key<CUser> toUser,
-            Key<Device> toDevice,
-            Key<Media> media,
+            Ref<Device> fromDevice,
+            Ref<CUser> fromUser,
+            Ref<CUser> toUser,
+            Ref<Device> toDevice,
+            Ref<Media> media,
 
             // String message payload
             // NOT indexed!! Can be up to 1 MB strings
@@ -171,4 +215,35 @@ public class Message {
 
         return message;
     }
+
+    public void send() {
+        // TODO: validate 'n send
+    }
+
+    public void delete(boolean now) {
+        Logger log = Logger.getLogger(getClass().getName());
+        log.info("Deleting message: " + toString());
+
+        Result result = ofy().delete().entities(this);
+        if (now) {
+            result.now();
+        }
+    }
+
+    /**
+     * Retrieve a list of all messages for the given device.
+     * @param deviceKey the key of the device to check
+     * @param since only retrieve messages sent after this time
+     * @param limit limit number of results (0 == all)
+     * @param offset index into results with this offset
+     * @return list of available messages
+     */
+    public static List<Message> getMessagesForDevice(Key<Device> deviceKey, DateTime since, int limit, int offset) {
+        Query query = ofy().load().type(Message.class).filter("toDevice =", deviceKey);
+        if (since != null) {
+            query.filter("creationDate >=", since);
+        }
+        return query.limit(limit).offset(offset).order("creationDate").list();
+    }
+
 }

@@ -37,7 +37,7 @@ public class Device implements Serializable {
         name = device.getName();
         comment = device.getComment();
         hardwareDescription = device.getHardwareDescription();
-        ownerKey = device.getOwner().getString();
+        ownerKey = device.getOwner().getKey().getString();
         gcmRegistrationId = device.getGcmRegistrationId();
         creationDate = device.getCreationDate();
         lastIncomingMessageDate = device.getLastIncomingMessageDate();

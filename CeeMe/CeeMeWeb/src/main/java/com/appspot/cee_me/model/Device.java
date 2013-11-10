@@ -1,11 +1,9 @@
 package com.appspot.cee_me.model;
 
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.Result;
-import com.googlecode.objectify.annotation.Cache;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.*;
 import org.joda.time.DateTime;
 
 import java.util.List;
@@ -30,8 +28,8 @@ public class Device {
     private String comment; // user-assignable extra comment field
     private String hardwareDescription; // something to identify the actual hardware (user-visible)
 
-    private @Index
-    Key<CUser> owner;
+    private @Index @Load
+    Ref<CUser> owner;
 
     private String gcmRegistrationId; // Google Cloud Messaging registration ID for this device.
 
@@ -94,12 +92,20 @@ public class Device {
         this.hardwareDescription = hardwareDescription;
     }
 
-    public Key<CUser> getOwner() {
-        return owner;
+    public void setOwner(Ref<CUser> owner) {
+        this.owner = owner;
     }
 
-    public void setOwner(Key<CUser> owner) {
-        this.owner = owner;
+    public CUser getOwner() {
+        return owner == null ? null : owner.get();
+    }
+
+    public void setOwner(CUser owner) {
+        setOwner(owner.getKey());
+    }
+
+    public void setOwner(Key<CUser> ownerKey) {
+        setOwner(Ref.create(ownerKey));
     }
 
     public String getGcmRegistrationId() {
@@ -201,9 +207,18 @@ public class Device {
      * @param objectIdStr should be result of getKey().getString()
      * @return the Device
      */
-    public static Device loadByKey(String objectIdStr) {
+    public static Device getByKey(String objectIdStr) {
         Key<Device> key = Key.create(objectIdStr);
-        return ofy().load().key(key).now();
+        return getByKey(key);
+    }
+
+    /**
+     * Load a Device by its datastore Key
+     * @param deviceKey device key to load
+     * @return the Device
+     */
+    public static Device getByKey(Key<Device> deviceKey) {
+        return ofy().load().key(deviceKey).now();
     }
 
     /**

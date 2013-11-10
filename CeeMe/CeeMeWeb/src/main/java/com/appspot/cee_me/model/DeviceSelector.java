@@ -1,5 +1,6 @@
 package com.appspot.cee_me.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static com.appspot.cee_me.OfyService.ofy;
@@ -7,7 +8,7 @@ import static com.appspot.cee_me.OfyService.ofy;
 /**
  * Choose a device to send a message.
  */
-public class DeviceSelector {
+public class DeviceSelector implements Serializable {
     public DeviceSelector() {}
 
     public List<Device> getDeviceSelectorList() {
