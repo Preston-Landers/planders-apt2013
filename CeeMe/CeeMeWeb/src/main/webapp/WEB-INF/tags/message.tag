@@ -6,7 +6,7 @@
 
 <div class="messageContainer">
     <div class="list-group">
-        <div class="list-group-item">
+        <div class="list-group-item active">
             <span class="h4">
                 <c:out value="${message.text}"/>
             </span>

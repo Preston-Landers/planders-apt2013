@@ -14,9 +14,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
-                            <label>
-                                <textarea cols="60" rows="6" name="messageText">
+                        <div class="col col-md-12">
+                            <label style="padding: 15px; width: 100%;">
+                                <textarea rows="6" name="messageText" style="width: 100%;">
 
                                 </textarea>
                                 <BR>
