@@ -229,8 +229,12 @@ public class Device {
      * @return true for success, false for failure
      */
     public boolean deleteDevice(boolean now) {
-        // TODO: would like a more permanent record than this log message.
         Logger log = Logger.getLogger(Device.class.getName());
+        if (!canUserDelete(null)) {
+            log.severe("User is not allowed to delete this device: " + toString());
+        }
+
+        // TODO: would like a more permanent record than this log message.
         log.severe("Deleting device registration: " + toString());
 
         Result result = ofy().delete().entities(this);
@@ -242,6 +246,16 @@ public class Device {
 
     public Key<Device> getKey() {
         return Key.create(Device.class, getId());
+    }
+
+    public boolean canUserDelete(Ref<CUser> cUserRef) {
+        if (CUser.isUserAdmin()) {
+            return true;
+        }
+        if (cUserRef != null && getOwner().getKey().equals(cUserRef.getKey())) {
+            return true;
+        }
+        return false;
     }
 
     @Override

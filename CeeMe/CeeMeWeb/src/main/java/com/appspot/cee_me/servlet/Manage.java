@@ -4,6 +4,7 @@ import com.appspot.cee_me.CeeMeContext;
 import com.appspot.cee_me.Config;
 import com.appspot.cee_me.model.CUser;
 import com.appspot.cee_me.model.Device;
+import com.googlecode.objectify.Ref;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -82,11 +83,10 @@ public class Manage extends CeeMeServletBase {
                 log.warning("Error deleting device: could not load device by key: " + objectIdStr);
                 continue;
             }
-            if (!device.getOwner().equals(cuser.getKey())) {
-                String delMsg = "Error: This device does not belong to you.";
+            if (!device.canUserDelete(Ref.create(cuser))) {
+                String delMsg = Config.MSG_NOT_DEVICE_OWNER;
                 log.severe("Tried to delete someone else's registration: " + cuser + " " + device);
                 alertError(req, delMsg);
-                // throw new IllegalArgumentException(Config.MSG_NOT_DEVICE_OWNER);
                 continue;
             }
             String deviceName = device.getName();

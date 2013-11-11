@@ -85,7 +85,14 @@ public class Send extends CeeMeServletBase {
                 return;
             }
 
-            message.delete(true);
+            if (!message.canUserDelete(Ref.create(context.getCuser()))) {
+                String errMsg = Config.MSG_NOT_ALLOWED;
+                log.severe(errMsg + " on delete: " + objectIdStr);
+                alertError(req, errMsg);
+                return;
+            }
+
+            message.deleteMessage(true);
             alertSuccess(req, "Message was deleted: " + message.getText());
 
         }
@@ -110,10 +117,11 @@ public class Send extends CeeMeServletBase {
             throws IOException {
         CUser fromUser = context.getCuser();
         String messageText = req.getParameter(paramMessageText);
-        if (messageText == null || messageText.length() == 0) {
+        if (messageText == null || messageText.trim().length() == 0) {
             alertError(req, "Must give a message.");
             return;
         }
+        messageText = messageText.trim();
 
         String destinationDeviceKey = req.getParameter(paramToDevice);
         if (destinationDeviceKey == null) {

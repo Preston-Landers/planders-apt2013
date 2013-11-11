@@ -1,12 +1,13 @@
 package com.appspot.cee_me.endpoints;
 
 import com.appspot.cee_me.Config;
+import com.appspot.cee_me.endpoints.model.Device;
 import com.appspot.cee_me.model.CUser;
 
-import com.appspot.cee_me.servlet.CeeMeServletBase;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.appengine.api.users.User;
+import com.googlecode.objectify.Ref;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,16 +31,8 @@ import javax.inject.Named;
 /**
  *
  */
-public class Register {
+public class Register extends EndpointBase {
     private final static Logger log = Logger.getLogger(Register.class.getName());
-
-    private static CUser getUser(User user) {
-        CUser cuser = CeeMeServletBase.getOrCreateUserRecord(user);
-        if (cuser == null) {
-            throw new IllegalArgumentException("Can't find your user record; try registering on the website.");
-        }
-        return cuser;
-    }
 
     /**
      * Register a new hardware device in the CeeMe system.
@@ -88,7 +81,7 @@ public class Register {
     ) {
 
         CUser owner = getUser(user);
-        com.appspot.cee_me.model.Device device = loadByKey(keyStr);
+        com.appspot.cee_me.model.Device device = loadDeviceByKey(keyStr);
         if (device.cUserIsNotOwner(owner.getKey())) {
             log.severe("Tried to update someone else's registration: " + owner + " " + device);
             throw new IllegalArgumentException(Config.MSG_NOT_DEVICE_OWNER);
@@ -135,7 +128,7 @@ public class Register {
     @ApiMethod(name = "getDevice", httpMethod = "get")
     public Device getDevice(User user, @Named("key") String keyStr) {
         CUser cuser = getUser(user);
-        com.appspot.cee_me.model.Device device = loadByKey(keyStr);
+        com.appspot.cee_me.model.Device device = loadDeviceByKey(keyStr);
         if (device.cUserIsNotOwner(cuser.getKey())) {
             log.severe("Tried to view someone else's registration: " + cuser + " " + device);
             throw new IllegalArgumentException(Config.MSG_NOT_DEVICE_OWNER);
@@ -169,8 +162,8 @@ public class Register {
     public void deleteRegistration(User user,
                                    @Named("key") String keyStr) {
         CUser cuser = getUser(user);
-        com.appspot.cee_me.model.Device device = loadByKey(keyStr);
-        if (device.cUserIsNotOwner(cuser.getKey())) {
+        com.appspot.cee_me.model.Device device = loadDeviceByKey(keyStr);
+        if (!device.canUserDelete(Ref.create(cuser))) {
             log.severe("Tried to delete someone else's registration: " + cuser + " " + device);
             throw new IllegalArgumentException(Config.MSG_NOT_DEVICE_OWNER);
         }
@@ -178,15 +171,5 @@ public class Register {
         device.deleteDevice(true);
     }
 
-
-    private static com.appspot.cee_me.model.Device loadByKey(String keyStr) {
-        com.appspot.cee_me.model.Device device = com.appspot.cee_me.model.Device.getByKey(keyStr);
-        if (device == null) {
-            String msg = "Can't find device with key: " + keyStr;
-            log.severe("API device lookup fail: " + msg);
-            throw new IllegalArgumentException(msg);
-        }
-        return device;
-    }
 
 }

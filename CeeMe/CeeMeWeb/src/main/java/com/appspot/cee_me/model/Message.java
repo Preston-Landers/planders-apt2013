@@ -18,30 +18,40 @@ import static com.appspot.cee_me.OfyService.ofy;
 @Entity
 @Cache
 public class Message {
-    private @Id
+    private
+    @Id
     Long id;
 
-    private @Load
+    private
+    @Load
     Ref<Device> fromDevice;
 
-    private @Load
+    private
+    @Load
     Ref<CUser> fromUser;
 
-    private @Index @Load
+    private
+    @Index
+    @Load
     Ref<CUser> toUser;
 
-    private @Index @Load
+    private
+    @Index
+    @Load
     Ref<Device> toDevice;
 
     // File attachment
-    private @Load
+    private
+    @Load
     Ref<Media> media;
 
     // String message payload
     // NOT indexed!! Can be up to 1 MB strings
     private String text;
 
-    private @Index DateTime creationDate;
+    private
+    @Index
+    DateTime creationDate;
     private DateTime lastRetrievalDate;
     private Boolean accepted; // has been read / opened / accepted
 
@@ -148,6 +158,7 @@ public class Message {
 
     /**
      * Load a Message by its datastore Key
+     *
      * @param key message key to load
      * @return the Message
      */
@@ -184,12 +195,13 @@ public class Message {
     /**
      * Creates a Message entity (saves it to datastore)
      * but does NOT initiate delivery
+     *
      * @param fromDevice source device (if any)
-     * @param fromUser source user
-     * @param toUser destination user
-     * @param toDevice destination device
-     * @param media media attachment
-     * @param text text payload / message
+     * @param fromUser   source user
+     * @param toUser     destination user
+     * @param toDevice   destination device
+     * @param media      media attachment
+     * @param text       text payload / message
      * @return the saved Message object
      */
     public static Message createMessage(
@@ -209,7 +221,7 @@ public class Message {
         message.setFromUser(fromUser);
         message.setToUser(toUser);
         message.setMedia(media);
-        message.setText(text);
+        message.setText(text.trim());
 
         message.save(true);
 
@@ -220,26 +232,56 @@ public class Message {
         // TODO: validate 'n send
     }
 
-    public void delete(boolean now) {
+    /**
+     * Is the given user allowed to read/retrieve this message?
+     * @param cUserRef user reference
+     * @return whether he can read this message
+     */
+    public boolean canUserRead(Ref<CUser> cUserRef) {
+        return canUserDelete(cUserRef);
+    }
+
+    public boolean canUserDelete(Ref<CUser> cUserRef) {
+        if (CUser.isUserAdmin()) {
+            return true;
+        }
+        if (cUserRef != null) {
+            if (getToUser().getKey().equals(cUserRef.getKey()) ||
+                    getFromUser().getKey().equals(cUserRef.getKey())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteMessage(boolean now) {
         Logger log = Logger.getLogger(getClass().getName());
+
+        if (!canUserDelete(null)) {
+            log.severe("Can't delete message");
+            return false;
+        }
+
         log.info("Deleting message: " + toString());
 
         Result result = ofy().delete().entities(this);
         if (now) {
             result.now();
         }
+        return true;
     }
 
     /**
      * Retrieve a list of all messages for the given device.
+     *
      * @param deviceKey the key of the device to check
-     * @param since only retrieve messages sent after this time
-     * @param limit limit number of results (0 == all)
-     * @param offset index into results with this offset
+     * @param since     only retrieve messages sent after this time
+     * @param limit     limit number of results (0 == all)
+     * @param offset    index into results with this offset
      * @return list of available messages
      */
     public static List<Message> getMessagesForDevice(Key<Device> deviceKey, DateTime since, int limit, int offset) {
-        Query query = ofy().load().type(Message.class).filter("toDevice =", deviceKey);
+        Query<Message> query = ofy().load().type(Message.class).filter("toDevice =", deviceKey);
         if (since != null) {
             query.filter("creationDate >=", since);
         }

@@ -259,7 +259,7 @@ public class Media implements Comparable<Media> {
 		this.comments = comments;
 	}
 
-	public boolean deleteMedia() {
+    public boolean deleteMedia() {
         Logger log = Logger.getLogger(getClass().getName());
         log.warning("Deleting media: " + this);
 

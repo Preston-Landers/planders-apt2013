@@ -4,7 +4,10 @@ import static com.appspot.cee_me.OfyService.ofy;
 
 
 import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.*;
 import org.joda.time.DateTime;
 
@@ -24,10 +27,11 @@ public class CUser implements Comparable<CUser> {
 	}
 
 	public CUser(Long id, String accountName, String realName) {
-		this.id = id;
-		this.accountName = accountName;
-		this.realName = realName;
-		this.creationDate = new DateTime();
+        setId(id);
+        setAccountName(accountName);
+        setRealName(realName);
+        setCreationDate(new DateTime());
+        setAdminNotes(null);
 	}
 	
 	public Key<CUser> getKey() {
@@ -92,10 +96,6 @@ public class CUser implements Comparable<CUser> {
 	}
 
 
-	public User getGUser() {
-		return guser;
-	}
-
 	public String getAdminNotes() {
 		return adminNotes;
 	}
@@ -109,12 +109,20 @@ public class CUser implements Comparable<CUser> {
     @Override
     public String toString() {
         return "CUser{" +
-                "id=" + id +
-                ", accountName='" + accountName + '\'' +
-                ", realName='" + realName + '\'' +
-                ", guser=" + guser +
-                ", adminNotes='" + adminNotes + '\'' +
-                ", creationDate=" + creationDate +
+                "id=" + getId() +
+                ", accountName='" + getAccountName() + '\'' +
+                ", realName='" + getRealName() + '\'' +
+                ", guser=" + getGuser()+
+                ", adminNotes='" + getAdminNotes() + '\'' +
+                ", creationDate=" + getCreationDate() +
                 '}';
+    }
+
+    public static boolean isUserAdmin() {
+        UserService userService = UserServiceFactory.getUserService();
+        if (userService.isUserAdmin()) {
+            return true;
+        }
+        return false;
     }
 }
