@@ -7,19 +7,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical">
 
-    <LinearLayout
-            android:orientation="horizontal"
+    <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-
-        <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/login_progressBar"
-                android:visibility="invisible"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="left|center_vertical"/>
 
         <com.qwerjk.better_text.MagicTextView
                 xmlns:qwerjk="http://schemas.android.com/apk/res-auto"
@@ -40,9 +30,25 @@
                 qwerjk:outerShadowRadius="10"
                 qwerjk:strokeJoinStyle="miter"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
                 />
-    </LinearLayout>
+
+        <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/login_progressBar"
+                android:visibility="invisible"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="left|center_vertical"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome_brag"
+                android:id="@+id/tv_welcome_brag"
+                android:layout_alignLeft="@+id/textView"
+                android:layout_below="@+id/textView"/>
+    </RelativeLayout>
 
     <ImageView
             android:layout_width="wrap_content"
@@ -68,22 +74,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/welcome_login_button"
-            android:id="@+id/login_button"
+            android:id="@+id/button_login"
             android:onClick="loginButton"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"/>
 
-    <Button
-            android:layout_width="wrap_content"
+    <RelativeLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings"
-            android:onClick="ViewStreamsButton"
-            android:id="@+id/nologin_button"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="20dp">
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings"
+                android:onClick="ViewStreamsButton"
+                android:id="@+id/button_settings"
+                android:layout_gravity="center_horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_alignTop="@+id/button_check_messages"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_check_messages"
+                android:id="@+id/button_check_messages"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:visibility="invisible"/>
+    </RelativeLayout>
 
 </LinearLayout>

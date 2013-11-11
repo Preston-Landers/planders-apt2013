@@ -125,16 +125,21 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void setSignInEnablement(boolean state) {
-        Button button = (Button) findViewById(R.id.login_button);
+        Button buttonLogin = (Button) findViewById(R.id.button_login);
         // TextView textView = (TextView) findViewById(R.id.welcome_status_textview);
+        Button buttonCheckMessages = (Button) findViewById(R.id.button_check_messages);
 
         if (state) {
             // textView.setText(" Signed out. ");
-            button.setText("Sign In");
+            buttonLogin.setText("Sign In");
+            buttonCheckMessages.setVisibility(View.INVISIBLE);
         } else {
             // textView.setText(" Signed in. ");
-            button.setText("Sign Out");
+            buttonLogin.setText("Sign Out");
+            buttonCheckMessages.setVisibility(View.VISIBLE);
         }
+
+
     }
 
     private void setAccountLabel(String label) {

@@ -3,9 +3,7 @@ package com.appspot.cee_me.android;
 
 import android.annotation.TargetApi;
 import android.app.Application;
-import android.content.Context;
 import android.os.Build;
-import android.os.StrictMode;
 
 /**
  *

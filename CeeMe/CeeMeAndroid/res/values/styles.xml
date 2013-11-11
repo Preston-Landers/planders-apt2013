@@ -18,7 +18,8 @@
     </style>
 
     <style name="welcome_header_style" parent="@android:style/TextAppearance.Medium">
-        <item name="android:textColor">#FF0000</item>
+        <item name="android:textColor">#8325A8</item>
+        <item name="android:fontFamily">sans-serif</item>
         <!--<item name="android:typeface">monospace</item>-->
     </style>
 

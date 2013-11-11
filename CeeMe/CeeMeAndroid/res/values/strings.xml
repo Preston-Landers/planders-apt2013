@@ -5,11 +5,11 @@
     <string name="hello">Hello Cee.me Android app!</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello, Cee.me!</string>
-    <string name="welcome_header">Welcome to Cee.me!</string>
+    <string name="welcome_header">Welcome to Cee.me</string>
     <string name="welcome_login_button">Sign in with Google</string>
     <string name="welcome_nologin_button">View Streams</string>
     <string name="welcome_not_signed_in">(Not Signed In)</string>
     <string name="action_search">Search</string>
-    <string name="search_hint">Type a search term...</string><string name="settings">Settings</string>
+    <string name="search_hint">Type a search term...</string><string name="settings">Settings</string><string name="btn_check_messages">Check Messages</string><string name="welcome_brag">The world\'s best sharing app!</string>
 
 </resources>
