@@ -8,20 +8,20 @@ import java.io.Serializable;
  * Represents a model.CUser in the API
  */
 public class User implements Serializable {
-    private String key;
+    private String userKey;
     private String accountName;
 
     public User() {
     }
 
-    public User(String key, String accountName) {
-        this.key = key;
+    public User(String userKey, String accountName) {
+        this.userKey = userKey;
         this.accountName = accountName;
     }
 
     public User(CUser cuser) {
         if (cuser != null) {
-            setKey(cuser.getKey().getString());
+            setUserKey(cuser.getKey().getString());
             setAccountName(cuser.getAccountName());
         }
     }
@@ -34,11 +34,11 @@ public class User implements Serializable {
         this.accountName = accountName;
     }
 
-    public String getKey() {
-        return key;
+    public String getUserKey() {
+        return userKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 }

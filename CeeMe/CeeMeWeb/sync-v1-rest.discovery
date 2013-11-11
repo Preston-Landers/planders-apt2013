@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/0aDECgH6uEQpdI1eXusdh3TFnbE\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/FEr75JFollc3jU6Xlxm6_lGygLw\"",
  "discoveryVersion": "v1",
  "id": "sync:v1",
  "name": "sync",
@@ -199,13 +199,13 @@
     "creationDate": {
      "$ref": "DateTime"
     },
+    "deviceKey": {
+     "type": "string"
+    },
     "gcmRegistrationId": {
      "type": "string"
     },
     "hardwareDescription": {
-     "type": "string"
-    },
-    "key": {
      "type": "string"
     },
     "lastIncomingMessageDate": {
@@ -238,9 +238,6 @@
     "fileName": {
      "type": "string"
     },
-    "key": {
-     "type": "string"
-    },
     "latitude": {
      "type": "number",
      "format": "double"
@@ -248,6 +245,9 @@
     "longitude": {
      "type": "number",
      "format": "double"
+    },
+    "mediaKey": {
+     "type": "string"
     },
     "mimeType": {
      "type": "string"
@@ -285,14 +285,14 @@
     "fromUser": {
      "$ref": "User"
     },
-    "key": {
-     "type": "string"
-    },
     "lastRetrievalDate": {
      "$ref": "DateTime"
     },
     "media": {
      "$ref": "Media"
+    },
+    "messageKey": {
+     "type": "string"
     },
     "text": {
      "type": "string"
@@ -338,7 +338,7 @@
     "accountName": {
      "type": "string"
     },
-    "key": {
+    "userKey": {
      "type": "string"
     }
    }
@@ -347,17 +347,17 @@
  "methods": {
   "deleteMessage": {
    "id": "sync.deleteMessage",
-   "path": "message/{key}",
+   "path": "message/{messageKey}",
    "httpMethod": "POST",
    "parameters": {
-    "key": {
+    "messageKey": {
      "type": "string",
      "required": true,
      "location": "path"
     }
    },
    "parameterOrder": [
-    "key"
+    "messageKey"
    ],
    "response": {
     "$ref": "Message"
@@ -368,17 +368,17 @@
   },
   "getMessage": {
    "id": "sync.getMessage",
-   "path": "message/{key}",
+   "path": "message/{messageKey}",
    "httpMethod": "GET",
    "parameters": {
-    "key": {
+    "messageKey": {
      "type": "string",
      "required": true,
      "location": "path"
     }
    },
    "parameterOrder": [
-    "key"
+    "messageKey"
    ],
    "response": {
     "$ref": "Message"
@@ -389,10 +389,10 @@
   },
   "getMessages": {
    "id": "sync.getMessages",
-   "path": "messagequery/{key}",
+   "path": "messagequery/{deviceKey}",
    "httpMethod": "GET",
    "parameters": {
-    "key": {
+    "deviceKey": {
      "type": "string",
      "required": true,
      "location": "path"
@@ -406,15 +406,16 @@
      "type": "integer",
      "format": "int32",
      "location": "query"
+    },
+    "since": {
+     "type": "string",
+     "format": "date-time",
+     "location": "query"
     }
    },
    "parameterOrder": [
-    "key"
+    "deviceKey"
    ],
-   "request": {
-    "$ref": "DateTime",
-    "parameterName": "resource"
-   },
    "response": {
     "$ref": "MessageQuery"
    },
@@ -424,17 +425,17 @@
   },
   "setMessageAccepted": {
    "id": "sync.setMessageAccepted",
-   "path": "setMessageAccepted/{key}",
+   "path": "setMessageAccepted/{messageKey}",
    "httpMethod": "POST",
    "parameters": {
-    "key": {
+    "messageKey": {
      "type": "string",
      "required": true,
      "location": "path"
     }
    },
    "parameterOrder": [
-    "key"
+    "messageKey"
    ],
    "response": {
     "$ref": "Message"

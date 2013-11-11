@@ -73,7 +73,7 @@ public class Register extends EndpointBase {
      */
     @ApiMethod(name = "updateDevice", httpMethod = "post")
     public Device updateDevice(User user,
-                               @Named("key") String keyStr,
+                               @Named("deviceKey") String keyStr,
                                @Named("name") @Nullable String name,
                                @Named("hardwareDescription") @Nullable String hardwareDescription,
                                @Named("gcmRegistrationId") @Nullable String gcmRegistrationId,
@@ -126,7 +126,7 @@ public class Register extends EndpointBase {
      * @return the Device description
      */
     @ApiMethod(name = "getDevice", httpMethod = "get")
-    public Device getDevice(User user, @Named("key") String keyStr) {
+    public Device getDevice(User user, @Named("deviceKey") String keyStr) {
         CUser cuser = getUser(user);
         com.appspot.cee_me.model.Device device = loadDeviceByKey(keyStr);
         if (device.cUserIsNotOwner(cuser.getKey())) {
@@ -160,7 +160,7 @@ public class Register extends EndpointBase {
      */
     @ApiMethod(name = "deleteRegistration", httpMethod = "post")
     public void deleteRegistration(User user,
-                                   @Named("key") String keyStr) {
+                                   @Named("deviceKey") String keyStr) {
         CUser cuser = getUser(user);
         com.appspot.cee_me.model.Device device = loadDeviceByKey(keyStr);
         if (!device.canUserDelete(Ref.create(cuser))) {

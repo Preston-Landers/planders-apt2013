@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Represents model.Media in the API endpoint
  */
 public class Media implements Serializable {
-    private String key;
+    private String mediaKey;
     private byte[] sha256;
     private String fileName;
     private String mimeType;
@@ -27,7 +27,7 @@ public class Media implements Serializable {
 
     public Media(com.appspot.cee_me.model.Media media) {
         if (media != null) {
-            setKey(media.getKey().getString());
+            setMediaKey(media.getKey().getString());
             setSha256(media.getSha256().getBytes());
             setFileName(media.getFileName());
             setMimeType(media.getMimeType());
@@ -41,12 +41,12 @@ public class Media implements Serializable {
         }
     }
 
-    public String getKey() {
-        return key;
+    public String getMediaKey() {
+        return mediaKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setMediaKey(String mediaKey) {
+        this.mediaKey = mediaKey;
     }
 
     public byte[] getSha256() {

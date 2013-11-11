@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Represents a Message in the endpoint API.
  */
 public class Message implements Serializable {
-    private String key;
+    private String messageKey;
     private Device fromDevice;
     private Device toDevice;
     private User fromUser;
@@ -22,13 +22,13 @@ public class Message implements Serializable {
     public Message() {
     }
 
-    public Message(String key) {
-        this.key = key;
+    public Message(String messageKey) {
+        this.messageKey = messageKey;
     }
 
     public Message(com.appspot.cee_me.model.Message message) {
         if (message != null) {
-            setKey(message.getKey().getString());
+            setMessageKey(message.getKey().getString());
             com.appspot.cee_me.model.Device fromDevice = message.getFromDevice();
             setFromDevice(fromDevice == null ? null : new Device(fromDevice));
             setToDevice(new Device(message.getToDevice()));
@@ -48,12 +48,12 @@ public class Message implements Serializable {
         }
     }
 
-    public String getKey() {
-        return key;
+    public String getMessageKey() {
+        return messageKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setMessageKey(String messageKey) {
+        this.messageKey = messageKey;
     }
 
     public Device getFromDevice() {

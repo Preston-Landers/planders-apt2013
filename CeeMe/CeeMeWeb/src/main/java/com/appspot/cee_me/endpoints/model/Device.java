@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Represents a Device for endpoint JSON responses
  */
 public class Device implements Serializable {
-    private String key;  // ID field - look it up by this key in several messages.
+    private String deviceKey;  // ID field - look it up by this key in several messages.
 
     private String publicId; // goes into public URL
 
@@ -28,7 +28,7 @@ public class Device implements Serializable {
 
     public Device(com.appspot.cee_me.model.Device device) {
         if (device != null) {
-            setKey(device.getKey().getString());
+            setDeviceKey(device.getKey().getString());
             setPublicId(device.getPublicId());
             setName(device.getName());
             setComment(device.getComment());
@@ -41,12 +41,12 @@ public class Device implements Serializable {
         }
     }
 
-    public String getKey() {
-        return key;
+    public String getDeviceKey() {
+        return deviceKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setDeviceKey(String deviceKey) {
+        this.deviceKey = deviceKey;
     }
 
     public String getPublicId() {

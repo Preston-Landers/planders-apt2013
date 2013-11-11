@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/D5OJZpRD7uwkCfH-62UGS2tf7_Y\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/ITXml_DJ2kk3E25k9ffwN5OaOLY\"",
  "discoveryVersion": "v1",
  "id": "register:v1",
  "name": "register",
@@ -199,13 +199,13 @@
     "creationDate": {
      "$ref": "DateTime"
     },
+    "deviceKey": {
+     "type": "string"
+    },
     "gcmRegistrationId": {
      "type": "string"
     },
     "hardwareDescription": {
-     "type": "string"
-    },
-    "key": {
      "type": "string"
     },
     "lastIncomingMessageDate": {
@@ -241,17 +241,17 @@
  "methods": {
   "deleteRegistration": {
    "id": "register.deleteRegistration",
-   "path": "registration/{key}",
+   "path": "registration/{deviceKey}",
    "httpMethod": "POST",
    "parameters": {
-    "key": {
+    "deviceKey": {
      "type": "string",
      "required": true,
      "location": "path"
     }
    },
    "parameterOrder": [
-    "key"
+    "deviceKey"
    ],
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
@@ -259,17 +259,17 @@
   },
   "getDevice": {
    "id": "register.getDevice",
-   "path": "device/{key}",
+   "path": "device/{deviceKey}",
    "httpMethod": "GET",
    "parameters": {
-    "key": {
+    "deviceKey": {
      "type": "string",
      "required": true,
      "location": "path"
     }
    },
    "parameterOrder": [
-    "key"
+    "deviceKey"
    ],
    "response": {
     "$ref": "Device"
@@ -328,12 +328,17 @@
   },
   "updateDevice": {
    "id": "register.updateDevice",
-   "path": "device/{key}",
+   "path": "device/{deviceKey}",
    "httpMethod": "POST",
    "parameters": {
     "comment": {
      "type": "string",
      "location": "query"
+    },
+    "deviceKey": {
+     "type": "string",
+     "required": true,
+     "location": "path"
     },
     "gcmRegistrationId": {
      "type": "string",
@@ -343,18 +348,13 @@
      "type": "string",
      "location": "query"
     },
-    "key": {
-     "type": "string",
-     "required": true,
-     "location": "path"
-    },
     "name": {
      "type": "string",
      "location": "query"
     }
    },
    "parameterOrder": [
-    "key"
+    "deviceKey"
    ],
    "response": {
     "$ref": "Device"

@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.appspot.cee_me.android.Account;
 import com.appspot.cee_me.android.Config;
-import com.appspot.cee_me.android.R;
+
 
 /**
  * Base activity for all activities. Has code for location and account services.
@@ -63,7 +63,6 @@ public class BaseActivity extends Activity {
      * subclass can override to take action upon gaining account credentials
      */
     protected void onSignIn() {
-        return;
     }
 
     /**

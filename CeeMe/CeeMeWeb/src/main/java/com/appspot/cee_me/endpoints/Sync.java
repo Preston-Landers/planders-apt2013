@@ -41,7 +41,7 @@ public class Sync extends EndpointBase {
      */
     @ApiMethod(name = "getMessage", httpMethod = "get")
     public Message getMessage(User user,
-                              @Named("key") String keyStr) {
+                              @Named("messageKey") String keyStr) {
         CUser cuser = getUser(user);
         com.appspot.cee_me.model.Message message = loadMessageByKey(keyStr);
         if (!message.canUserRead(Ref.create(cuser))) {
@@ -60,7 +60,7 @@ public class Sync extends EndpointBase {
      */
     @ApiMethod(name = "deleteMessage", httpMethod = "post")
     public Message deleteMessage(User user,
-                                 @Named("key") String keyStr) {
+                                 @Named("messageKey") String keyStr) {
         CUser cuser = getUser(user);
         com.appspot.cee_me.model.Message message = loadMessageByKey(keyStr);
         if (!message.canUserDelete(Ref.create(cuser))) {
@@ -80,7 +80,7 @@ public class Sync extends EndpointBase {
      */
     @ApiMethod(name = "setMessageAccepted", httpMethod = "post")
     public Message setMessageAccepted(User user,
-                                      @Named("key") String keyStr) {
+                                      @Named("messageKey") String keyStr) {
         CUser cuser = getUser(user);
         com.appspot.cee_me.model.Message message = loadMessageByKey(keyStr);
         if (!message.canUserRead(Ref.create(cuser))) {
@@ -106,7 +106,7 @@ public class Sync extends EndpointBase {
     @ApiMethod(name = "getMessages", httpMethod = "get")
     public MessageQuery getMessages(
             User user,
-            @Named("key") String keyStr,
+            @Named("deviceKey") String keyStr,
             @Named("since") @Nullable Date since,
             @Named("limit") @Nullable Integer limit,
             @Named("offset") @Nullable Integer offset) {
