@@ -5,6 +5,7 @@ public class Config {
     public static final String PREFS_NAME = "Cee.me";
     public static final String PREF_AUTH_TOKEN = "authToken";
     public static final String PREF_ACCOUNT_NAME = "accountName";
+    public static final String PREF_DEVICE_KEY = "deviceKey";
 
     public static final String AUDIENCE = "server:client_id:860742061992.apps.googleusercontent.com";
     public static final boolean DEVELOPER_MODE = true;

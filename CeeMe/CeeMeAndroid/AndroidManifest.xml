@@ -22,12 +22,23 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".activities.WelcomeActivity"
+                android:label="@string/app_name"
                 android:theme="@style/ActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+                android:name=".activities.CheckMessagesActivity"
+                android:label="@string/check_messages_activity_name"
+                android:theme="@style/ActionBar">
+        </activity>
+        <activity
+                android:name=".activities.RegisterActivity"
+                android:label="@string/register_activity_name"
+                android:theme="@style/ActionBar">
         </activity>
 
     </application>

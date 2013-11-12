@@ -2,7 +2,9 @@ package com.appspot.cee_me.android.activities;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -65,7 +67,7 @@ public class WelcomeActivity extends BaseActivity {
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putString(Config.PREF_ACCOUNT_NAME, accountName);
                         editor.commit();
-                        onSignIn();
+                        // onSignIn();
                     }
                 }
                 break;
@@ -98,10 +100,7 @@ public class WelcomeActivity extends BaseActivity {
         if (!this.signedIn) {
             chooseAccount();
         } else {
-            forgetAccount();
-            setSignInEnablement(true);
-            // setBoardEnablement(false);
-            setAccountLabel("(not signed in)");
+            signOut();
         }
     }
 
@@ -109,20 +108,31 @@ public class WelcomeActivity extends BaseActivity {
         startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 
+    @Override
+    protected void signOut() {
+        super.signOut();
+
+        // SharedPreferences.Editor editor2 = settings.edit();
+        // editor2.remove(Config.PREF_AUTH_TOKEN);
+        // editor2.commit();
+
+        setSignInEnablement(true);
+        setAccountLabel(getString(R.string.not_signed_in));
+    }
+
 
     @Override
-    protected void onSignIn() {
+    protected void
+    onSignIn() {
         super.onSignIn();
         setSignInEnablement(false);
         setAccountLabel(this.accountName);
+        if (isSignedIn() && !isDeviceRegistered()) {
+            // handle no device key
+            promptForRegistration();
+        }
     }
 
-    private void forgetAccount() {
-        setAccountName(null);
-        SharedPreferences.Editor editor2 = settings.edit();
-        editor2.remove(Config.PREF_AUTH_TOKEN);
-        editor2.commit();
-    }
 
     private void setSignInEnablement(boolean state) {
         Button buttonLogin = (Button) findViewById(R.id.button_login);
@@ -178,5 +188,30 @@ public class WelcomeActivity extends BaseActivity {
         });
     }
 
+    protected void promptForRegistration() {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog_goto_registration)
+                .setPositiveButton(R.string.do_go_registration, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // FIRE ZE MISSILES!
+                        doRegistration();
+                    }
+                })
+                .setNegativeButton(R.string.do_cancel_registration, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                        signOut();
+                    }
+                });
+        // Create the AlertDialog object and return it
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    protected void doRegistration() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
+    }
 }
 

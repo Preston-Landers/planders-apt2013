@@ -16,7 +16,7 @@ import com.appspot.cee_me.android.Config;
 
 /**
  * Base activity for all activities. Has code for location and account services.
- *
+ * <p/>
  * Handles location services - disabled by default, set useLocation in subclass onCreate.
  */
 public class BaseActivity extends Activity {
@@ -31,13 +31,14 @@ public class BaseActivity extends Activity {
     protected String accountName;
     protected GoogleAccountCredential credential;
     protected boolean signedIn = false;
+    protected String deviceKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Get user credentials for login
-        settings = getSharedPreferences( Config.PREFS_NAME, 0);
+        settings = getSharedPreferences(Config.PREFS_NAME, 0);
         credential = GoogleAccountCredential.usingAudience(this, Config.AUDIENCE);
         setAccountName(settings.getString(Config.PREF_ACCOUNT_NAME, null));
     }
@@ -52,17 +53,35 @@ public class BaseActivity extends Activity {
         if (accountName != null) {
             this.signedIn = true;
             onSignIn();
+        } else {
+            signOutExceptAccount();
         }
-        else {
-            this.signedIn = false;
-        }
-
     }
 
     /**
      * subclass can override to take action upon gaining account credentials
+     * but should call superclass version
      */
     protected void onSignIn() {
+        loadDeviceKey();
+    }
+
+    protected void signOutExceptAccount() {
+        signedIn = false;
+        deviceKey = null;
+    }
+
+    protected void signOut() {
+        // signOutExceptAccount();
+        setAccountName(null);
+    }
+
+    protected boolean isSignedIn() {
+        return signedIn;
+    }
+
+    protected boolean isDeviceRegistered() {
+        return deviceKey != null;
     }
 
     /**
@@ -93,6 +112,13 @@ public class BaseActivity extends Activity {
         startLocationServices();
     }
 
+    protected void loadDeviceKey() {
+        deviceKey = null;
+        if (credential != null) {
+            String accountName = credential.getSelectedAccountName();
+            deviceKey = settings.getString(Config.PREF_DEVICE_KEY + accountName, null);
+        }
+    }
 
     private void makeUseOfNewLocation(Location location) {
         if (isBetterLocation(location, currentBestLocation)) {
@@ -148,7 +174,7 @@ public class BaseActivity extends Activity {
     public Location waitForLocation() {
         int maxSleepCycle = Config.MAX_LOCATION_WAIT_SEC;
         int i = 0;
-        while(true) {
+        while (true) {
             if (currentBestLocation != null) {
                 return currentBestLocation;
             }
