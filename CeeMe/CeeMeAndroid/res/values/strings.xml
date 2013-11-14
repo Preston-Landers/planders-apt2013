@@ -21,5 +21,7 @@
     <string name="do_cancel_registration">Cancel</string>
     <string name="not_signed_in">(not signed in)</string>
     <string name="register_activity_name">Register Device</string>
+    <string name="dialog_signin_required_ok">Ok</string>
+    <string name="dialog_signin_required">You must be signed in with a Google Account to access this feature.</string>
 
 </resources>

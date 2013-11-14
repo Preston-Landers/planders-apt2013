@@ -77,7 +77,8 @@ public class WelcomeActivity extends BaseActivity {
                     Toast.makeText(WelcomeActivity.this, "Registration canceled.", Toast.LENGTH_SHORT).show();
                     signOut();
                 } else if (resultCode == RegisterActivity.RESULT_OK) {
-                    Toast.makeText(WelcomeActivity.this, "Thanks for registering!.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WelcomeActivity.this, "Thanks for registering!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WelcomeActivity.this, "Press Check Messages now.", Toast.LENGTH_SHORT).show();
                 }
         }
     }
@@ -200,25 +201,33 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     protected void promptForRegistration() {
+        // TODO: run on UI thread
         // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.dialog_goto_registration)
-                .setPositiveButton(R.string.do_go_registration, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
-                        doRegistration();
-                    }
-                })
-                .setNegativeButton(R.string.do_cancel_registration, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                        signOut();
-                    }
-                });
-        // Create the AlertDialog object and return it
-        AlertDialog dialog = builder.create();
-        dialog.show();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(WelcomeActivity.this);
+                builder.setMessage(R.string.dialog_goto_registration)
+                        .setPositiveButton(R.string.do_go_registration, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // FIRE ZE MISSILES!
+                                doRegistration();
+                            }
+                        })
+                        .setNegativeButton(R.string.do_cancel_registration, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                                signOut();
+                            }
+                        });
+                // Create the AlertDialog object and return it
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
     }
+
 
     protected void doRegistration() {
         Intent intent = new Intent(this, RegisterActivity.class);

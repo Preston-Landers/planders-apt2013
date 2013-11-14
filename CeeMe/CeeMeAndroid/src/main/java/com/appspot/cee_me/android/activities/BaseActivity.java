@@ -1,7 +1,9 @@
 package com.appspot.cee_me.android.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
@@ -9,9 +11,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.MenuItem;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.appspot.cee_me.android.Account;
 import com.appspot.cee_me.android.Config;
+import com.appspot.cee_me.android.R;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 
 /**
@@ -78,6 +81,30 @@ public class BaseActivity extends Activity {
 
     protected boolean isSignedIn() {
         return signedIn;
+    }
+
+    protected void requireSignIn() {
+        if (signedIn) {
+            return;
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
+                builder.setMessage(R.string.dialog_signin_required)
+                        .setPositiveButton(R.string.dialog_signin_required_ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // FIRE ZE MISSILES!
+                                setResult(RESULT_CANCELED);
+                                finish();
+                            }
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
     }
 
     protected boolean isDeviceRegistered() {

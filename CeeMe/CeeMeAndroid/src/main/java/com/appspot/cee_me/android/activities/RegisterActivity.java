@@ -34,6 +34,7 @@ public class RegisterActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.ac_register);
         super.onCreate(savedInstanceState);
+        requireSignIn();
 
         loadHardwareDescription();
 
