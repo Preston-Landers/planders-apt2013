@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.appspot.cee_me.android.Account;
@@ -23,9 +24,9 @@ import com.appspot.cee_me.android.R;
 public class WelcomeActivity extends BaseActivity {
     private static final String TAG = "WelcomeActivity";
 
-    // Not sure if these are just magic or what...?
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
     static final int REQUEST_ACCOUNT_PICKER = 1;
+    static final int REQUEST_REGISTER_DEVICE = 2;
 
     /**
      * Called when the activity is first created.
@@ -71,6 +72,13 @@ public class WelcomeActivity extends BaseActivity {
                     }
                 }
                 break;
+            case REQUEST_REGISTER_DEVICE:
+                if (resultCode == RegisterActivity.RESULT_CANCELED) {
+                    Toast.makeText(WelcomeActivity.this, "Registration canceled.", Toast.LENGTH_SHORT).show();
+                    signOut();
+                } else if (resultCode == RegisterActivity.RESULT_OK) {
+                    Toast.makeText(WelcomeActivity.this, "Thanks for registering!.", Toast.LENGTH_SHORT).show();
+                }
         }
     }
 
@@ -89,6 +97,9 @@ public class WelcomeActivity extends BaseActivity {
         signIn(view);
     }
 
+    public void settingsButton(View view) {
+        Toast.makeText(WelcomeActivity.this, "Settings not implemented yet.", Toast.LENGTH_SHORT).show();
+    }
 
     /**
      * Handles logic for clicking the sign in button.
@@ -211,7 +222,7 @@ public class WelcomeActivity extends BaseActivity {
 
     protected void doRegistration() {
         Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_REGISTER_DEVICE);
     }
 }
 

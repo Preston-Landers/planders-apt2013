@@ -1,12 +1,17 @@
 package com.appspot.cee_me.android.activities;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.appspot.cee_me.android.Config;
 import com.appspot.cee_me.android.R;
+import com.appspot.cee_me.android.RegisterEndpointService;
 import com.appspot.cee_me.register.Register;
 import com.appspot.cee_me.register.model.Device;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -32,17 +37,27 @@ public class RegisterActivity extends BaseActivity {
 
         loadHardwareDescription();
 
-//        // Get user credentials for login
-//        settings = getSharedPreferences( Config.PREFS_NAME, 0);
-//        credential = GoogleAccountCredential.usingAudience(this, Config.AUDIENCE);
-//        setAccountName(settings.getString(Config.PREF_ACCOUNT_NAME, null));
-
-        // new CheckMessagesTask().execute();
     }
 
     private void loadHardwareDescription() {
         TextView hwTextView = (TextView) findViewById(R.id.textViewRegisterHardwareDesc);
-        hwTextView.setText("CrappyVision 9000");
+        String hardwareDescription = Config.getDeviceName();
+        hwTextView.setText(hardwareDescription);
+
+        EditText deviceNameEditText = (EditText) findViewById(R.id.registerDeviceName);
+        String suggestedDeviceName = "My " + Build.MODEL;
+        deviceNameEditText.setText(suggestedDeviceName);
+    }
+
+    public void cancelButton(View view) {
+        setResult(RESULT_CANCELED);
+        this.finish();
+    }
+
+    public void registerButton(View view) {
+        Toast.makeText(RegisterActivity.this, "Please wait.", Toast.LENGTH_SHORT);
+        setResult(RESULT_OK);
+        this.finish();
     }
 
     private class RegisterTask extends AsyncTask<Void, Void, Void> {
@@ -56,6 +71,7 @@ public class RegisterActivity extends BaseActivity {
                 creds = credential;
             }
             try {
+                // service = RegisterEndpointService.getRegisterService();
                 /*
                 service = SyncEndpointService.getSyncService();
                 Sync.GetMessages getMessages = service.getMessages(deviceKey);
