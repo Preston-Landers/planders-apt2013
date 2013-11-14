@@ -18,6 +18,8 @@ public class Message implements Serializable {
     private DateTime creationDate;
     private DateTime lastRetrievalDate;
     private boolean accepted;
+    private String openWithApp;
+    private String openWithAppName;
 
     public Message() {
     }
@@ -45,6 +47,9 @@ public class Message implements Serializable {
             setLastRetrievalDate(message.getLastRetrievalDate());
 
             setAccepted(message.getAccepted());
+
+            setOpenWithApp(message.getOpenWithApp());
+            setOpenWithAppName(message.getOpenWithAppName());
         }
     }
 
@@ -126,5 +131,21 @@ public class Message implements Serializable {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public String getOpenWithApp() {
+        return openWithApp;
+    }
+
+    public void setOpenWithApp(String openWithApp) {
+        this.openWithApp = openWithApp;
+    }
+
+    public String getOpenWithAppName() {
+        return openWithAppName;
+    }
+
+    public void setOpenWithAppName(String openWithAppName) {
+        this.openWithAppName = openWithAppName;
     }
 }

@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings"
-                android:onClick="ViewStreamsButton"
+                android:onClick="settingsButton"
                 android:id="@+id/button_settings"
                 android:layout_gravity="center_horizontal"
                 android:layout_alignParentLeft="true"

@@ -55,6 +55,9 @@ public class Message {
     private DateTime lastRetrievalDate;
     private Boolean accepted; // has been read / opened / accepted
 
+    private String openWithApp;
+    private String openWithAppName;
+
     private Message() {
         setCreationDate(new DateTime());
         setAccepted(Boolean.FALSE);
@@ -139,6 +142,22 @@ public class Message {
 
     public void setAccepted(Boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public String getOpenWithApp() {
+        return openWithApp;
+    }
+
+    public void setOpenWithApp(String openWithApp) {
+        this.openWithApp = openWithApp;
+    }
+
+    public String getOpenWithAppName() {
+        return openWithAppName;
+    }
+
+    public void setOpenWithAppName(String openWithAppName) {
+        this.openWithAppName = openWithAppName;
     }
 
     public Key<Message> getKey() {
