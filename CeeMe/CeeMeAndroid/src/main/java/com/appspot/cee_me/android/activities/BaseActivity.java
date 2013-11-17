@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.appspot.cee_me.android.Account;
 import com.appspot.cee_me.android.Config;
 import com.appspot.cee_me.android.R;
@@ -41,8 +42,8 @@ public class BaseActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // Get user credentials for login
-        settings = getSharedPreferences(Config.PREFS_NAME, 0);
         credential = GoogleAccountCredential.usingAudience(this, Config.AUDIENCE);
+        settings = getSharedPreferences(Config.PREFS_NAME, 0);
         setAccountName(settings.getString(Config.PREF_ACCOUNT_NAME, null));
     }
 
@@ -142,8 +143,7 @@ public class BaseActivity extends Activity {
     protected void loadDeviceKey() {
         deviceKey = null;
         if (credential != null) {
-            String accountName = credential.getSelectedAccountName();
-            deviceKey = settings.getString(Config.PREF_DEVICE_KEY + accountName, null);
+            deviceKey = getDeviceKeyPref();
         }
     }
 
@@ -270,4 +270,23 @@ public class BaseActivity extends Activity {
         }
         return provider1.equals(provider2);
     }
+
+    public void shortToast(String msg) {
+        Toast.makeText(BaseActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    String getDeviceKeyPrefName() {
+        return Config.PREF_DEVICE_KEY + accountName;
+    }
+
+    void setDeviceKeyPref(String deviceKey) {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(getDeviceKeyPrefName(), deviceKey);
+        editor.commit();
+    }
+
+    String getDeviceKeyPref() {
+        return settings.getString(getDeviceKeyPrefName(), null);
+    }
+
 }

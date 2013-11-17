@@ -1,7 +1,6 @@
 package com.appspot.cee_me.android.activities;
 
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -13,13 +12,10 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import android.widget.Toast;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.appspot.cee_me.android.Account;
 import com.appspot.cee_me.android.Config;
 import com.appspot.cee_me.android.R;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class WelcomeActivity extends BaseActivity {
     private static final String TAG = "WelcomeActivity";
@@ -75,11 +71,16 @@ public class WelcomeActivity extends BaseActivity {
             case REQUEST_REGISTER_DEVICE:
                 if (resultCode == RegisterActivity.RESULT_CANCELED) {
                     Toast.makeText(WelcomeActivity.this, "Registration canceled.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WelcomeActivity.this, "Registration is required to use this app.", Toast.LENGTH_SHORT).show();
                     signOut();
                 } else if (resultCode == RegisterActivity.RESULT_OK) {
                     Toast.makeText(WelcomeActivity.this, "Thanks for registering!", Toast.LENGTH_SHORT).show();
                     Toast.makeText(WelcomeActivity.this, "Press Check Messages now.", Toast.LENGTH_SHORT).show();
+                } else if (resultCode == RegisterActivity.RESULT_ERROR) {
+                    Toast.makeText(WelcomeActivity.this, "Error during registration.", Toast.LENGTH_SHORT).show();
+                    signOut();
                 }
+
         }
     }
 
@@ -201,8 +202,6 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     protected void promptForRegistration() {
-        // TODO: run on UI thread
-        // Use the Builder class for convenient dialog construction
 
         runOnUiThread(new Runnable() {
             @Override

@@ -24,7 +24,7 @@
     <ImageButton
             android:layout_width="66dp"
             android:layout_height="wrap_content"
-            android:id="@+id/browseLeftButton"
+            android:id="@+id/checkMessagesLeftButton"
             android:background="@drawable/ic_navigation_previous_item"
 
             android:onClick="GoLeftButton"
@@ -35,7 +35,7 @@
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/browseRightButton"
+            android:id="@+id/checkMessagesRightButton"
             android:background="@drawable/ic_navigation_next_item"
             android:onClick="GoRightButton"
             android:layout_alignParentRight="true"
@@ -45,7 +45,7 @@
     <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/browse_progressBar"
+            android:id="@+id/checkMessages_progressBar"
             android:visibility="invisible"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/browse_status_textview"
+            android:id="@+id/checkMessages_status_textview"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
             android:layout_above="@+id/mysubs_button"/>

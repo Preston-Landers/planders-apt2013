@@ -13,8 +13,9 @@ public class SyncEndpointService {
     public static Sync getSyncService(GoogleAccountCredential creds) {
         Sync.Builder builder = new Sync.Builder(
                 AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), creds);
-        // builder.setRootUrl("http://192.168.56.1:8088/_ah/api/"); // for localhost development (genymotion)
-        // builder.setRootUrl("http://10.0.2.2:8088/_ah/api/"); // for localhost development (AVD)
+        if (Config.LOCAL_APP_SERVER) {
+            builder.setRootUrl(Config.LOCAL_APP_SERVER_URL + "/_ah/api/"); // for localhost development
+        }
         return builder.build();
     }
 }

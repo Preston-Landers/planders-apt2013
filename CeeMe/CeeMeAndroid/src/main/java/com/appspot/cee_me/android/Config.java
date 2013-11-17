@@ -12,6 +12,11 @@ public class Config {
     public static final String AUDIENCE = "server:client_id:860742061992.apps.googleusercontent.com";
     public static final boolean DEVELOPER_MODE = true;
 
+    public static final boolean LOCAL_APP_SERVER = true; // false;
+
+    // "http://10.0.2.2:8088"   // for localhost development (AVD)
+    public static final String LOCAL_APP_SERVER_URL = "http://192.168.56.1:8088"; // Genymotion
+
     // how long will we wait for a location fix?
     public static final int MAX_LOCATION_WAIT_SEC = 10;
 
