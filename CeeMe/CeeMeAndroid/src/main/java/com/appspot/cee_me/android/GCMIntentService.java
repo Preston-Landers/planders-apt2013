@@ -5,7 +5,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
+import com.appspot.cee_me.android.activities.IncomingShareActivity;
 import com.appspot.cee_me.android.activities.RegisterActivity;
 import com.appspot.cee_me.android.activities.WelcomeActivity;
 import com.google.android.gcm.GCMBaseIntentService;
@@ -57,10 +59,10 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onMessage(Context context, Intent intent) {
         Log.i(TAG, "Received message. Extras: " + intent.getExtras());
-        String message = getString(R.string.gcm_message);
-        displayMessage(context, message);
+        IncomingMessageParams params = IncomingMessageParams.getMessageParamsFromExtras(intent.getExtras());
+
         // notifies user
-        generateNotification(context, message);
+        generateNotification(context, params);
     }
 
     @Override
@@ -69,7 +71,7 @@ public class GCMIntentService extends GCMBaseIntentService {
         String message = getString(R.string.gcm_deleted, total);
         displayMessage(context, message);
         // notifies user
-        generateNotification(context, message);
+        // generateNotification(context, message);
     }
 
     @Override
@@ -90,15 +92,18 @@ public class GCMIntentService extends GCMBaseIntentService {
     /**
      * Issues a notification to inform the user that server has sent a message.
      */
-    private static void generateNotification(Context context, String message) {
+    private static void generateNotification(Context context, IncomingMessageParams messageParams) {
         int icon = R.drawable.ic_stat_gcm;
         long when = System.currentTimeMillis();
+
+        String message = messageParams.getMsgText();
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = new Notification(icon, message, when);
         String title = context.getString(R.string.app_name);
         // TODO: probably another activity here
-        Intent notificationIntent = new Intent(context, WelcomeActivity.class);
+        Intent notificationIntent = new Intent(context, IncomingShareActivity.class);
+        notificationIntent.putExtra()
         // set intent so it does not start a new activity
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -109,4 +114,28 @@ public class GCMIntentService extends GCMBaseIntentService {
         notificationManager.notify(0, notification);
     }
 
+    private static class IncomingMessageParams {
+        public String msgKey;
+        public String msgText;
+        public String msgUrl;
+
+        public static IncomingMessageParams getMessageParamsFromExtras(Bundle extras) {
+            IncomingMessageParams params = new IncomingMessageParams();
+            // mk, url, t
+            params.msgKey = extras.getString("mk", null);
+            params.msgText = extras.getString("t", null);
+            params.msgUrl = extras.getString("url", null);
+            return params;
+        }
+
+        public String getMsgText() {
+            return msgText == null ? "" : msgText;
+        }
+        public String getMsgUrl() {
+            return msgUrl== null ? "" : msgUrl;
+        }
+        public String getMsgKey() {
+            return msgKey == null ? "" : msgKey;
+        }
+    }
 }
