@@ -36,7 +36,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     private static final String TAG = "GCMIntentService";
 
     public GCMIntentService() {
-        super(Config.GOOGLE_PROJECT_ID);
+        super(Config.GCM_SENDER_KEY);
     }
 
     @Override

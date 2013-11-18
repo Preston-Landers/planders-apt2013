@@ -76,6 +76,7 @@ public class CheckMessagesActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(Void rv) {
+            // TODO: wrong progress
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.button_check_messages);
             progressBar.setVisibility(View.INVISIBLE);
             if (querySuccess) {
@@ -88,6 +89,7 @@ public class CheckMessagesActivity extends BaseActivity {
 
         @Override
         protected void onPreExecute() {
+            // TODO: wrong progress
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.button_check_messages);
             progressBar.setVisibility(View.VISIBLE);
         }
