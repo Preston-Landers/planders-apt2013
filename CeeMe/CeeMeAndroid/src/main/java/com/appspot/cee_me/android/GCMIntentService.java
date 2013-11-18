@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import com.appspot.cee_me.android.activities.IncomingShareActivity;
 import com.appspot.cee_me.android.activities.RegisterActivity;
-import com.appspot.cee_me.android.activities.WelcomeActivity;
 import com.google.android.gcm.GCMBaseIntentService;
 import static com.appspot.cee_me.android.Config.displayMessage;
 
@@ -35,7 +34,7 @@ import static com.appspot.cee_me.android.Config.displayMessage;
 public class GCMIntentService extends GCMBaseIntentService {
 
     @SuppressWarnings("hiding")
-    private static final String TAG = "GCMIntentService";
+    static final String TAG = "GCMIntentService";
 
     public GCMIntentService() {
         super(Config.GCM_SENDER_KEY);
@@ -91,19 +90,27 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     /**
      * Issues a notification to inform the user that server has sent a message.
+     * TODO: why is this deprecated?
+     * TODO: don't show the actual notification if app is in foreground, just open the intent.
      */
+    @SuppressWarnings("deprecation")
     private static void generateNotification(Context context, IncomingMessageParams messageParams) {
         int icon = R.drawable.ic_stat_gcm;
         long when = System.currentTimeMillis();
 
         String message = messageParams.getMsgText();
+        String msgUrl = messageParams.getMsgUrl();
+        String msgKey = messageParams.getMsgKey();
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = new Notification(icon, message, when);
         String title = context.getString(R.string.app_name);
-        // TODO: probably another activity here
+
         Intent notificationIntent = new Intent(context, IncomingShareActivity.class);
-        notificationIntent.putExtra()
+        notificationIntent.putExtra(Config.MESSAGE_KEY, msgKey);
+        notificationIntent.putExtra(Config.MESSAGE_TEXT, message);
+        notificationIntent.putExtra(Config.MESSAGE_URL, msgUrl);
+
         // set intent so it does not start a new activity
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -114,11 +121,19 @@ public class GCMIntentService extends GCMBaseIntentService {
         notificationManager.notify(0, notification);
     }
 
+    /**
+     * Handles extracting key bits of info from the GCM notification message
+     */
     private static class IncomingMessageParams {
         public String msgKey;
         public String msgText;
         public String msgUrl;
 
+        /**
+         * Extract basic info from intent extras bundle.
+         * @param extras extras bundle from GCM message
+         * @return new instance of this class
+         */
         public static IncomingMessageParams getMessageParamsFromExtras(Bundle extras) {
             IncomingMessageParams params = new IncomingMessageParams();
             // mk, url, t

@@ -48,17 +48,10 @@ public class Config {
     public static final String CEE_ME_ANDROID = "com.appspot.cee_me.android";
     public static final String NAV_OFFSET = CEE_ME_ANDROID + ".NAV_OFFSET";
     public static final String NAV_LIMIT = CEE_ME_ANDROID + ".NAV_LIMIT";
-    public static final String LOCATION_SEARCH = CEE_ME_ANDROID + ".LOCATION_SEARCH";
-    public static final String SHOW_MY_SUBS = CEE_ME_ANDROID + ".SHOW_MY_SUBS";
-    public static final String SEARCH_TERM = CEE_ME_ANDROID + ".SEARCH_TERM";
-    public static final String STREAM_NAME = CEE_ME_ANDROID + ".STREAM_NAME";
-    public static final String STREAM_ID = CEE_ME_ANDROID + ".STREAM_ID";
-    public static final String STREAM_OWNER_ID = CEE_ME_ANDROID + ".STREAM_OWNER_ID";
-    public static final String MY_ID = CEE_ME_ANDROID + ".MY_ID";
-    public static final String IMAGES = CEE_ME_ANDROID + ".IMAGES";
-    public static final String IMAGE_LABELS = CEE_ME_ANDROID + ".IMAGE_LABELS";
-    public static final String IMAGE_POSITION = CEE_ME_ANDROID + ".IMAGE_POSITION";
-    public static final String STREAM_UPLOAD_URL = CEE_ME_ANDROID + ".STREAM_UPLOAD_URL";
+
+    public static final String MESSAGE_KEY = CEE_ME_ANDROID + ".MESSAGE_KEY";
+    public static final String MESSAGE_TEXT = CEE_ME_ANDROID + ".MESSAGE_TEXT";
+    public static final String MESSAGE_URL = CEE_ME_ANDROID + ".MESSAGE_URL";
 
     /**
      * Intent used to display a message in the screen.

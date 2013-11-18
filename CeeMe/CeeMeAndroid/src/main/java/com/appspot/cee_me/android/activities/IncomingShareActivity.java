@@ -1,22 +1,23 @@
 package com.appspot.cee_me.android.activities;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import com.appspot.cee_me.android.Config;
 import com.appspot.cee_me.android.R;
 import com.appspot.cee_me.sync.Sync;
 import com.appspot.cee_me.sync.model.MessageQuery;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 public class IncomingShareActivity extends BaseActivity {
     private static final String TAG = "CheckMessagesActivity";
 
-    // query parameters for the server
-    private final static int defaultQueryLimit = 9;
-    private int queryLimit = defaultQueryLimit;
-    private int queryOffset = 0;
+    private String messageKey;
+    private String messageText;
+    private String messageUrl;
 
     private Sync service;
     private MessageQuery messageQuery;
@@ -30,30 +31,53 @@ public class IncomingShareActivity extends BaseActivity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.ac_check_messages);
+        setContentView(R.layout.ac_incoming_share);
         super.onCreate(savedInstanceState);
 
-//        // Get user credentials for login
-//        settings = getSharedPreferences( Config.PREFS_NAME, 0);
-//        credential = GoogleAccountCredential.usingAudience(this, Config.AUDIENCE);
-//        setAccountName(settings.getString(Config.PREF_ACCOUNT_NAME, null));
+        Intent intent = getIntent();
+        messageKey = intent.getStringExtra(Config.MESSAGE_KEY);
+        messageText = intent.getStringExtra(Config.MESSAGE_TEXT);
+        messageUrl = intent.getStringExtra(Config.MESSAGE_URL);
 
-        new CheckMessagesTask().execute();
+        // There must be a better way to handle this...?
+        if (messageKey == null) {
+            Log.i(TAG, "Null messageKey on " + this.getClass().getName());
+            throw new IllegalArgumentException("You must specify a message key!");
+
+        }
+
+        if (messageText != null) {
+            setMessageText(messageText);
+        }
+        if (messageUrl != null) {
+            setMessageURL(messageUrl);
+        }
+
+
+        new LoadMessageTask().execute();
     }
 
+    private void setMessageText(String messageText) {
+        TextView streamLabel = (TextView) findViewById(R.id.incomingShare_text_tv);
+        streamLabel.setText(messageText);
+    }
 
-    private class CheckMessagesTask extends AsyncTask<Void, Void, Void> {
+    private void setMessageURL(String messageUrl) {
+        TextView streamLabel = (TextView) findViewById(R.id.incomingShare_url_tv);
+        streamLabel.setText(messageUrl);
+    }
+
+    private void setStatusText(String message) {
+        TextView streamLabel = (TextView) findViewById(R.id.incomingShare_status_textview);
+        streamLabel.setText(message);
+    }
+
+    private class LoadMessageTask extends AsyncTask<Void, Void, Void> {
         private boolean querySuccess = false;
 
         @Override
         protected Void doInBackground(Void... params) {
             querySuccess = false;
-            int limit = queryLimit;
-            int offset = queryOffset;
-            GoogleAccountCredential creds = null;
-            if (signedIn) {
-                creds = credential;
-            }
             try {
                 /*
                 service = SyncEndpointService.getSyncService();
@@ -74,9 +98,9 @@ public class IncomingShareActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(Void rv) {
-            // TODO: wrong progress
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.button_check_messages);
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
             progressBar.setVisibility(View.INVISIBLE);
+            setStatusText("");
             if (querySuccess) {
                 if (messageQuery != null) {
                     // loadImages(messageQuery);
@@ -87,9 +111,9 @@ public class IncomingShareActivity extends BaseActivity {
 
         @Override
         protected void onPreExecute() {
-            // TODO: wrong progress
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.button_check_messages);
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
             progressBar.setVisibility(View.VISIBLE);
+            setStatusText("Please wait while I load the content.");
         }
     }
 }
