@@ -24,6 +24,15 @@
                             </label>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col col-md-12">
+                            <label style="padding: 15px; width: 100%;">
+                                <input placeholder="Optional Link" type="text" name="messageURL" size="100" style="width: 100%;">
+                                <BR>
+                                Link <small>(optional)</small>
+                            </label>
+                        </div>
+                    </div>
                     <div class="row" style="padding-top: 15px;">
                         <div class="col-md-6">
                             <button class="btn btn-success" type="submit" name="send">

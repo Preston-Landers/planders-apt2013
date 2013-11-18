@@ -26,6 +26,7 @@ public class Send extends CeeMeServletBase {
     static final String paramToDevice = "to";
     static final String paramSendButton = "send";
     static final String paramMessageText = "messageText";
+    static final String paramMessageURL = "messageURL";
     static final String paramDeleteMessageButton = "deleteMessages";
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -123,6 +124,11 @@ public class Send extends CeeMeServletBase {
         }
         messageText = messageText.trim();
 
+        String urlData = req.getParameter(paramMessageURL);
+        if (urlData == null || urlData.trim().length() == 0) {
+            urlData = ""; // not really sure why I'm doing this
+        }
+
         String destinationDeviceKey = req.getParameter(paramToDevice);
         if (destinationDeviceKey == null) {
             alertError(req, Config.MSG_UNKNOWN_DEVICE);
@@ -142,6 +148,7 @@ public class Send extends CeeMeServletBase {
                 Ref.create(toUser),
                 Ref.create(toDevice),
                 null,  // media
+                urlData,
                 messageText);
         message.send();
 

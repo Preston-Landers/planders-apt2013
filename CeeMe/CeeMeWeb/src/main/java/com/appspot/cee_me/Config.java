@@ -14,7 +14,12 @@ public class Config {
 	public static final String productURL = "http://" + productDomain;
 
 	// public static final String productAdminEmail = "planders@gmail.com";
-	
+
+    /**
+     * For notifications: the Google API Console project ID
+     */
+    public static final String GOOGLE_PROJECT_ID = "860742061992";
+
     // For the endpoints
     public static final String ANDROID_CLIENT_ID = "860742061992.apps.googleusercontent.com";
     public static final String WEB_CLIENT_ID = "860742061992-hluiaap2cfsl9dp1io7bc3au26vks2m6.apps.googleusercontent.com";

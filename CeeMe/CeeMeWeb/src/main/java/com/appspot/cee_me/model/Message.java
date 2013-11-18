@@ -40,13 +40,22 @@ public class Message {
     @Load
     Ref<Device> toDevice;
 
-    // File attachment
+    /**
+     * File attachment.
+     */
     private
     @Load
     Ref<Media> media;
 
-    // String message payload
-    // NOT indexed!! Can be up to 1 MB strings
+    /**
+     * Any URL to be included with the message.
+     */
+    private String urlData;
+
+    /**
+     * String message payload
+     * NOT indexed!! Can be up to 1 MB strings
+     */
     private String text;
 
     private
@@ -128,6 +137,14 @@ public class Message {
         this.fromDevice = fromDevice;
     }
 
+    public String getUrlData() {
+        return urlData;
+    }
+
+    public void setUrlData(String urlData) {
+        this.urlData = urlData;
+    }
+
     public String getText() {
         return text;
     }
@@ -195,6 +212,7 @@ public class Message {
                 ", toUser=" + getToUser() +
                 ", toDevice=" + getToDevice() +
                 ", media=" + getMedia() +
+                ", url=" + getUrlData() +
                 ", creationDate=" + getCreationDate() +
                 '}';
     }
@@ -231,8 +249,8 @@ public class Message {
             Ref<Media> media,
 
             // String message payload
-            // NOT indexed!! Can be up to 1 MB strings
-            String text
+            String text,
+            String urlData
     ) {
         Message message = new Message();
         message.setFromDevice(fromDevice);
@@ -241,14 +259,31 @@ public class Message {
         message.setToUser(toUser);
         message.setMedia(media);
         message.setText(text.trim());
+        message.setUrlData(urlData);
 
         message.save(true);
 
         return message;
     }
 
+    private void validateMessage() {
+        checkNotNull(getFromUser(), "From User");
+        checkNotNull(getToDevice(), "To Device");
+        checkNotNull(getToUser(), "To User");
+        checkNotNull(getText(), "Message Text");
+    }
+
+    private void checkNotNull(Object reference, String name) {
+        if (reference == null) {
+            throw new NullPointerException("Invalid message component: " + name);
+        }
+    }
+
     public void send() {
         // TODO: validate 'n send
+        validateMessage();
+
+        // TODO: create Task here and then create a service
     }
 
     /**

@@ -72,6 +72,7 @@
             <!--<version>15.0</version>-->
         <!--</dependency>-->
 
+        <!-- Google Cloud Messaging (GCM) -->
         <dependency>
             <groupId>com.google.android.gcm</groupId>
             <artifactId>gcm-client</artifactId>

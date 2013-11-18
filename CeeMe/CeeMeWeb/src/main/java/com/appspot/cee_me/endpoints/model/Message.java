@@ -14,6 +14,7 @@ public class Message implements Serializable {
     private User fromUser;
     private User toUser;
     private Media media;
+    private String urlData;
     private String text;
     private DateTime creationDate;
     private DateTime lastRetrievalDate;
@@ -40,6 +41,7 @@ public class Message implements Serializable {
             com.appspot.cee_me.model.Media media = message.getMedia();
             setMedia(media == null ? null : new Media(media));
 
+            setUrlData(message.getUrlData());
             setText(message.getText());
 
             setCreationDate(message.getCreationDate());
@@ -99,6 +101,14 @@ public class Message implements Serializable {
 
     public void setMedia(Media media) {
         this.media = media;
+    }
+
+    public String getUrlData() {
+        return urlData;
+    }
+
+    public void setUrlData(String urlData) {
+        this.urlData = urlData;
     }
 
     public String getText() {

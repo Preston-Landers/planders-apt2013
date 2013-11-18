@@ -5,28 +5,43 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+/**
+ * General static configuration strings and silly little utilities which should be split off into another class.
+ */
 public class Config {
     public static final String PREFS_NAME = "Cee.me";
     public static final String PREF_AUTH_TOKEN = "authToken";
     public static final String PREF_ACCOUNT_NAME = "accountName";
     public static final String PREF_DEVICE_KEY = "deviceKey";
 
-    public static final String GOOGLE_PROJECT_ID = "860742061992"; // sender ID for GCM, from G-API web console
+    /**
+     * Sender ID for GCM, from G-API web console
+     */
+    public static final String GOOGLE_PROJECT_ID = "860742061992";
 
-    // OAuth 2.0 "Web App" Client ID from G-API Console
+    /**
+     * OAuth 2.0 "Web App" Client ID from G-API Console
+     */
     public static final String AUDIENCE = "server:client_id:860742061992-hluiaap2cfsl9dp1io7bc3au26vks2m6.apps.googleusercontent.com";
 
+    /**
+     * Triggers various assertions and checks
+     */
     public static final boolean DEVELOPER_MODE = true;
 
-    // Use the local App Engine dev server instead of the real one?
-    // Note: this is virtually useless since authentication doesn't work
+    /**
+     * Use the local App Engine dev server instead of the real one.
+     * Address of server must be set in LOCAL_APP_SERVER_URL
+     */
     public static final boolean LOCAL_APP_SERVER = true;
 
     // "http://10.0.2.2:8088"   // for localhost development (AVD)
     // public static final String LOCAL_APP_SERVER_URL = "http://192.168.56.1:8088"; // Genymotion
     public static final String LOCAL_APP_SERVER_URL = "http://192.168.1.99:8088"; // Local Area Network devices
 
-    // how long will we wait for a location fix?
+    /**
+     * how long will we wait for a location fix?
+     */
     public static final int MAX_LOCATION_WAIT_SEC = 10;
 
     // Stuff for intents, could move somewhere else
@@ -62,6 +77,7 @@ public class Config {
     /**
      * Returns a descriptive device name, e.g. Samsung GT-S5830L
      * From: http://stackoverflow.com/a/12707479/858289
+     *
      * @return device description string
      */
     public static String getDeviceName() {
@@ -75,6 +91,12 @@ public class Config {
     }
 
 
+    /**
+     * Capitalize a string
+     *
+     * @param s string to capitalize
+     * @return capitalized string
+     */
     private static String capitalize(String s) {
         if (s == null || s.length() == 0) {
             return "";
@@ -89,7 +111,7 @@ public class Config {
 
     /**
      * Notifies UI to display a message.
-     * <p>
+     * <p/>
      * This method is defined in the common helper because it's used both by
      * the UI and the background service.
      *
