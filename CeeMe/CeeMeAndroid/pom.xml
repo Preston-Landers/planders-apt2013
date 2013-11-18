@@ -72,6 +72,11 @@
             <!--<version>15.0</version>-->
         <!--</dependency>-->
 
+        <dependency>
+            <groupId>com.google.android.gcm</groupId>
+            <artifactId>gcm-client</artifactId>
+            <version>1.0.2</version>
+        </dependency>
 
         <!-- Play Framework needed for making authenticated endpoint calls -->
         <dependency>

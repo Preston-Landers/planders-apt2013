@@ -16,12 +16,22 @@
     <string name="welcome_brag">The world\'s best sharing app!</string>
     <string name="check_messages_activity_name">Check Messages</string>
     <string name="refresh_messages">Refresh</string>
-    <string name="dialog_goto_registration">This device is not yet registered. You must register the device to use this app.</string>
+    <string name="dialog_goto_registration">This device is not yet registered. You must register the device to use this
+        app.
+    </string>
     <string name="do_go_registration">Register</string>
     <string name="do_cancel_registration">Cancel</string>
     <string name="not_signed_in">(not signed in)</string>
     <string name="register_activity_name">Register Device</string>
     <string name="dialog_signin_required_ok">Ok</string>
     <string name="dialog_signin_required">You must be signed in with a Google Account to access this feature.</string>
+    <string name="gcm_registered">From GCM: device successfully registered (regId = %1$s)!</string>
+    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
+    <string name="gcm_message">From GCM: you got message!</string>
+    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+    <string name="gcm_error">From GCM: error (%1$s).</string>
+    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
+    <string name="already_registered">This device is already registered on the GCM server</string>
+    <string name="device_registration_failed">Sorry, but device registration on Cee.me has failed.</string>
 
 </resources>

@@ -1,6 +1,8 @@
 package com.appspot.cee_me.android;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 public class Config {
@@ -9,13 +11,20 @@ public class Config {
     public static final String PREF_ACCOUNT_NAME = "accountName";
     public static final String PREF_DEVICE_KEY = "deviceKey";
 
-    public static final String AUDIENCE = "server:client_id:860742061992.apps.googleusercontent.com";
+    public static final String GOOGLE_PROJECT_ID = "860742061992"; // sender ID for GCM, from G-API web console
+
+    // OAuth 2.0 "Web App" Client ID from G-API Console
+    public static final String AUDIENCE = "server:client_id:860742061992-hluiaap2cfsl9dp1io7bc3au26vks2m6.apps.googleusercontent.com";
+
     public static final boolean DEVELOPER_MODE = true;
 
-    public static final boolean LOCAL_APP_SERVER = true; // false;
+    // Use the local App Engine dev server instead of the real one?
+    // Note: this is virtually useless since authentication doesn't work
+    public static final boolean LOCAL_APP_SERVER = true;
 
     // "http://10.0.2.2:8088"   // for localhost development (AVD)
-    public static final String LOCAL_APP_SERVER_URL = "http://192.168.56.1:8088"; // Genymotion
+    // public static final String LOCAL_APP_SERVER_URL = "http://192.168.56.1:8088"; // Genymotion
+    public static final String LOCAL_APP_SERVER_URL = "http://192.168.1.99:8088"; // Local Area Network devices
 
     // how long will we wait for a location fix?
     public static final int MAX_LOCATION_WAIT_SEC = 10;
@@ -35,6 +44,17 @@ public class Config {
     public static final String IMAGE_LABELS = CEE_ME_ANDROID + ".IMAGE_LABELS";
     public static final String IMAGE_POSITION = CEE_ME_ANDROID + ".IMAGE_POSITION";
     public static final String STREAM_UPLOAD_URL = CEE_ME_ANDROID + ".STREAM_UPLOAD_URL";
+
+    /**
+     * Intent used to display a message in the screen.
+     */
+    public static final String DISPLAY_MESSAGE_ACTION =
+            CEE_ME_ANDROID + "DISPLAY_MESSAGE";
+
+    /**
+     * Intent's extra that contains the message to be displayed.
+     */
+    public static final String EXTRA_MESSAGE = "message";
 
     // Extras for activity params/results
     public static final String EXTRAS_REGISTRATION_SUCCESS = CEE_ME_ANDROID + ".STREAM_UPLOAD_URL";
@@ -65,5 +85,20 @@ public class Config {
         } else {
             return Character.toUpperCase(first) + s.substring(1);
         }
+    }
+
+    /**
+     * Notifies UI to display a message.
+     * <p>
+     * This method is defined in the common helper because it's used both by
+     * the UI and the background service.
+     *
+     * @param context application's context.
+     * @param message message to be displayed.
+     */
+    static void displayMessage(Context context, String message) {
+        Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
+        intent.putExtra(EXTRA_MESSAGE, message);
+        context.sendBroadcast(intent);
     }
 }

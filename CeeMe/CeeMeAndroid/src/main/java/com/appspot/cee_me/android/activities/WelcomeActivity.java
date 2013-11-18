@@ -3,9 +3,7 @@ package com.appspot.cee_me.android.activities;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -35,6 +33,9 @@ public class WelcomeActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.ac_main);
         super.onCreate(savedInstanceState);
+
+        registerReceiver(mHandleMessageReceiver,
+                new IntentFilter(Config.DISPLAY_MESSAGE_ACTION));
 
 //        // Get user credentials for login
 //        settings = getSharedPreferences( Config.PREFS_NAME, 0);
@@ -232,5 +233,15 @@ public class WelcomeActivity extends BaseActivity {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivityForResult(intent, REQUEST_REGISTER_DEVICE);
     }
+
+    private final BroadcastReceiver mHandleMessageReceiver =
+            new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String newMessage = intent.getExtras().getString(Config.EXTRA_MESSAGE);
+                    shortToast(newMessage + "\n");
+                }
+            };
+
 }
 

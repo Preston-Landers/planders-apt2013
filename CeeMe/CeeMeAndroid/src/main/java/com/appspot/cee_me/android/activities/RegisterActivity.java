@@ -1,5 +1,8 @@
 package com.appspot.cee_me.android.activities;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,16 +12,19 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.appspot.cee_me.android.CeeMeApplication;
 import com.appspot.cee_me.android.Config;
 import com.appspot.cee_me.android.R;
 import com.appspot.cee_me.android.RegisterEndpointService;
 import com.appspot.cee_me.register.Register;
 import com.appspot.cee_me.register.model.Device;
+import com.google.android.gcm.GCMRegistrar;
 
 public class RegisterActivity extends BaseActivity {
     private static final String TAG = "RegisterActivity";
 
     static final int RESULT_ERROR = 42;
+    AsyncTask<Void, Void, Void> mRegisterTask;
 
     /**
      * Called when the activity is first created.
@@ -56,12 +62,34 @@ public class RegisterActivity extends BaseActivity {
     @SuppressWarnings("UnusedParameters")
     public void registerButton(View view) {
         Toast.makeText(RegisterActivity.this, "Please wait.", Toast.LENGTH_SHORT);
+        doRegisterWithGCM();
+    }
+
+    public static void registerServiceCallback(Context context, String registrationId) {
+        Log.i(TAG, "registerServiceCallback() called");
+        Activity currentActivity = ((CeeMeApplication)context.getApplicationContext()).getCurrentActivity();
+        if (currentActivity.getClass().equals(RegisterActivity.class)) {
+            RegisterActivity registerActivity = (RegisterActivity) currentActivity;
+            registerActivity.register(registrationId);
+        }
+
+    }
+
+    public void register(String registrationId) {
+        gcmRegistrationId = registrationId;
         new RegisterTask().execute();
+    }
+
+    public static void unRegisterServiceCallback(Context context, String registrationId) {
+        Log.i(TAG, "unRegisterServiceCallback() called");
+        // TODO: handle me
+
     }
 
     private class RegisterTask extends AsyncTask<Void, Void, Void> {
         private boolean registerSuccess = false;
         String deviceKey;
+        String errMsg = getString(R.string.device_registration_failed);
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -72,21 +100,19 @@ public class RegisterActivity extends BaseActivity {
             EditText deviceNameEditText = (EditText) findViewById(R.id.registerDeviceName);
             String hwDesc = hwTextView.getText().toString();
             String deviceName = deviceNameEditText.getText().toString();
-            String gcmId = "XXX TODO";
+            String gcmId = gcmRegistrationId;
 
             try {
                 Register service = RegisterEndpointService.getRegisterService(credential);
                 Register.RegisterDevice registerDevice = service.registerDevice(deviceName, hwDesc, gcmId);
                 Device device = registerDevice.execute();
                 deviceKey = device.getDeviceKey();
-                setDeviceKeyPref(deviceKey);
+                GCMRegistrar.setRegisteredOnServer(RegisterActivity.this, true);
                 registerSuccess = true;
 //            } catch (GoogleAuthIOException e) {
 //                Log.e(TAG, "Browse Streams fail: " + e.getCause());
             } catch (Exception e) {
-                String errMsg = "Device registration failed.";
                 Log.e(TAG, errMsg, e);
-                shortToast(errMsg);
             }
             return null;
         }
@@ -96,9 +122,12 @@ public class RegisterActivity extends BaseActivity {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.register_progressBar);
             progressBar.setVisibility(View.INVISIBLE);
             if (registerSuccess) {
+                setDeviceKeyPref(deviceKey);
                 setResult(RESULT_OK);
                 finish();
             } else {
+                shortToast(errMsg);
+                setDeviceKeyPref("");
                 setResult(RESULT_ERROR);
                 finish();
             }
@@ -111,6 +140,23 @@ public class RegisterActivity extends BaseActivity {
             progressBar.setVisibility(View.VISIBLE);
         }
     }
+
+    private void doRegisterWithGCM() {
+        if (gcmRegistrationId.equals("")) {
+            // Automatically registers application on startup.
+            GCMRegistrar.register(this, Config.GOOGLE_PROJECT_ID);
+        } else {
+            // Device is already registered on GCM, check server.
+            if (GCMRegistrar.isRegisteredOnServer(this)) {
+                // Skips registration.
+                Log.i(TAG, getString(R.string.already_registered) + "\n");
+            } else {
+                new RegisterTask().execute();
+            }
+        }
+
+    }
+
 
 }
 

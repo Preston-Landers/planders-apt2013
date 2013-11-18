@@ -2,6 +2,7 @@
 package com.appspot.cee_me.android;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 
@@ -22,4 +23,12 @@ public class CeeMeApplication extends Application {
         // initImageLoader(getApplicationContext());
     }
 
+    // http://stackoverflow.com/questions/11411395/how-to-get-current-foreground-activity-context-in-android
+    private Activity mCurrentActivity = null;
+    public Activity getCurrentActivity(){
+        return mCurrentActivity;
+    }
+    public void setCurrentActivity(Activity mCurrentActivity){
+        this.mCurrentActivity = mCurrentActivity;
+    }
 }

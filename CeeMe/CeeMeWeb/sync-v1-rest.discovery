@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/FEr75JFollc3jU6Xlxm6_lGygLw\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/VmDVsn-LFmnwWfV_kL3VEDSOZCs\"",
  "discoveryVersion": "v1",
  "id": "sync:v1",
  "name": "sync",
@@ -292,6 +292,12 @@
      "$ref": "Media"
     },
     "messageKey": {
+     "type": "string"
+    },
+    "openWithApp": {
+     "type": "string"
+    },
+    "openWithAppName": {
      "type": "string"
     },
     "text": {

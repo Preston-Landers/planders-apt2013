@@ -8,13 +8,16 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.appspot.cee_me.android.Account;
+import com.appspot.cee_me.android.CeeMeApplication;
 import com.appspot.cee_me.android.Config;
 import com.appspot.cee_me.android.R;
+import com.google.android.gcm.GCMRegistrar;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 
@@ -25,6 +28,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
  */
 public class BaseActivity extends Activity {
     private static final String TAG = "BaseActivity";
+    protected CeeMeApplication mMyApp;
+
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     LocationManager locationManager;
     LocationListener locationListener;
@@ -35,16 +40,22 @@ public class BaseActivity extends Activity {
     protected String accountName;
     protected GoogleAccountCredential credential;
     protected boolean signedIn = false;
-    protected String deviceKey;
+    protected String deviceKey = "";
+    protected String gcmRegistrationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mMyApp = (CeeMeApplication)this.getApplicationContext();
 
         // Get user credentials for login
         credential = GoogleAccountCredential.usingAudience(this, Config.AUDIENCE);
         settings = getSharedPreferences(Config.PREFS_NAME, 0);
         setAccountName(settings.getString(Config.PREF_ACCOUNT_NAME, null));
+
+        // Check for GCM (cloud notifications) device registration ID
+        // will return empty string if not registered yet
+        gcmRegistrationId = getGCMRegistration();
     }
 
     protected void setAccountName(String accountName) {
@@ -72,7 +83,7 @@ public class BaseActivity extends Activity {
 
     protected void signOutExceptAccount() {
         signedIn = false;
-        deviceKey = null;
+        deviceKey = "";
     }
 
     protected void signOut() {
@@ -109,7 +120,23 @@ public class BaseActivity extends Activity {
     }
 
     protected boolean isDeviceRegistered() {
-        return deviceKey != null;
+        return deviceKey != null && !deviceKey.equals("");
+    }
+
+
+    /**
+     * Loads the GCM registration ID. If the device is not currently registered,
+     * this will return an empty string.
+     */
+    private String getGCMRegistration() {
+        // Make sure the device has the proper dependencies.
+        GCMRegistrar.checkDevice(this);
+        // Make sure the manifest was properly set - comment out this line
+        // while developing the app, then uncomment it when it's ready.
+        if (Config.DEVELOPER_MODE) {
+            GCMRegistrar.checkManifest(this);
+        }
+        return GCMRegistrar.getRegistrationId(this);
     }
 
     /**
@@ -130,14 +157,28 @@ public class BaseActivity extends Activity {
 
     @Override
     protected void onPause() {
+        clearReferences();
         super.onPause();
         stopLocationServices();
+    }
+
+    @Override
+    protected void onDestroy() {
+        clearReferences();
+        super.onDestroy();
+    }
+
+    private void clearReferences(){
+        Activity currActivity = mMyApp.getCurrentActivity();
+        if (currActivity != null && currActivity.equals(this))
+            mMyApp.setCurrentActivity(null);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         startLocationServices();
+        mMyApp.setCurrentActivity(this);
     }
 
     protected void loadDeviceKey() {
@@ -279,9 +320,14 @@ public class BaseActivity extends Activity {
         return Config.PREF_DEVICE_KEY + accountName;
     }
 
-    void setDeviceKeyPref(String deviceKey) {
+    void deregisterDevice() {
+        setDeviceKeyPref("");
+        deviceKey = "";
+    }
+
+    void setDeviceKeyPref(String keyStr) {
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString(getDeviceKeyPrefName(), deviceKey);
+        editor.putString(getDeviceKeyPrefName(), keyStr);
         editor.commit();
     }
 
