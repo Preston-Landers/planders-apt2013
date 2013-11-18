@@ -106,11 +106,11 @@ public abstract class CeeMeServletBase extends HttpServlet {
         // Automatically create a CUser for any Google Users we recognize
         if (guser != null) {
             String normEmail = Config.norm(guser.getEmail());
-            log.fine("Searching for user " + normEmail);
+            log.info("Searching for user " + normEmail);
             cuser = ofy().load().type(CUser.class)
-                    .filter("guser", guser).first().now();
+                    .filter("accountName", normEmail).first().now();
             if (cuser == null) {
-                log.fine("Creating New User! " + guser + " guser ID: " + normEmail);
+                log.info("Creating New User! " + guser + " guser ID: " + normEmail);
                 cuser = createUser(guser);
                 log.fine("New User cuser id: " + cuser.getId());
             }
@@ -120,7 +120,7 @@ public abstract class CeeMeServletBase extends HttpServlet {
         return cuser;
     }
 
-    public static class UserCreateException extends RuntimeException {
+    static class UserCreateException extends RuntimeException {
         public UserCreateException(String message) {
             super(message);
         }

@@ -16,7 +16,7 @@ import org.joda.time.DateTime;
 @Cache
 public class CUser implements Comparable<CUser> {
 	private @Id Long id;
-    private String accountName; // Displayed username
+    private @Index String accountName; // Displayed username
     private String realName; // full name
     private @Index User guser;      // google account  // Need getByGUser for this to be useful?
     private String adminNotes;    // private / internal notes for this account.

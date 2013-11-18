@@ -15,9 +15,9 @@ public class Config {
     public static final String PREF_DEVICE_KEY = "deviceKey";
 
     /**
-     * Sender ID for GCM, from G-API web console
+     * Sender ID for GCM, from G-API web console - Simple API Access - API Key
      */
-    public static final String GOOGLE_PROJECT_ID = "860742061992";
+    public static final String GCM_SENDER_KEY = "860742061992";
 
     /**
      * OAuth 2.0 "Web App" Client ID from G-API Console
@@ -33,7 +33,7 @@ public class Config {
      * Use the local App Engine dev server instead of the real one.
      * Address of server must be set in LOCAL_APP_SERVER_URL
      */
-    public static final boolean LOCAL_APP_SERVER = true;
+    public static final boolean LOCAL_APP_SERVER = false; // true;
 
     // "http://10.0.2.2:8088"   // for localhost development (AVD)
     // public static final String LOCAL_APP_SERVER_URL = "http://192.168.56.1:8088"; // Genymotion

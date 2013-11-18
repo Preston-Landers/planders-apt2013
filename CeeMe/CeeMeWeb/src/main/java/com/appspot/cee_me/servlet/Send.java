@@ -25,9 +25,11 @@ public class Send extends CeeMeServletBase {
 
     static final String paramToDevice = "to";
     static final String paramSendButton = "send";
+    static final String paramSendNotificationButton = "sendnotify";
     static final String paramMessageText = "messageText";
     static final String paramMessageURL = "messageURL";
     static final String paramDeleteMessageButton = "deleteMessages";
+    private static final String MSG_KEY = "msgKey";
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
@@ -47,11 +49,11 @@ public class Send extends CeeMeServletBase {
 
         if (req.getParameter(paramSendButton) != null) {
             doSendMessage(ceeMeContext, req, resp);
-        }
-        else if (req.getParameter(paramDeleteMessageButton) != null) {
+        } else if (req.getParameter(paramSendNotificationButton) != null) {
+            doSendNotification(ceeMeContext, req, resp);
+        } else if (req.getParameter(paramDeleteMessageButton) != null) {
             doDeleteMessages(ceeMeContext, req, resp);
-        }
-        else {
+        } else {
             alertInfo(req, "Unknown operation; consult owner's manual.");
             resp.sendRedirect(uri);
         }
@@ -74,7 +76,7 @@ public class Send extends CeeMeServletBase {
     }
 
     private void doDeleteMessages(CeeMeContext context, HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        for (String objectIdStr : req.getParameterValues("delete")) {
+        for (String objectIdStr : req.getParameterValues(MSG_KEY)) {
             if (objectIdStr == null || objectIdStr.length() < 1) {
                 continue;
             }
@@ -114,6 +116,14 @@ public class Send extends CeeMeServletBase {
 
     }
 
+    /**
+     * Create a message and send the notification
+     *
+     * @param context the context object
+     * @param req     servlet request
+     * @param resp    servlet response
+     * @throws IOException
+     */
     private void doSendMessage(CeeMeContext context, HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         CUser fromUser = context.getCuser();
@@ -148,13 +158,55 @@ public class Send extends CeeMeServletBase {
                 Ref.create(toUser),
                 Ref.create(toDevice),
                 null,  // media
-                urlData,
-                messageText);
-        message.send();
+                messageText,
+                urlData);
+        message.sendNotification();
 
+        log.info("Message sent: " + message);
         alertSuccess(req, "Message was sent!");
 
         resp.sendRedirect(toDevice.getSendUri());
     }
+
+    /**
+     * Re-send the notification of an existing message.
+     *
+     * @param context the context object
+     * @param req     servlet request
+     * @param resp    servlet response
+     * @throws IOException
+     */
+    private void doSendNotification(CeeMeContext context, HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+        CUser fromUser = context.getCuser();
+        Device toDevice = null;
+
+        for (String objectIdStr : req.getParameterValues(MSG_KEY)) {
+            if (objectIdStr == null || objectIdStr.length() < 1) {
+                continue;
+            }
+            Message message = Message.getByKey(objectIdStr);
+            if (message == null) {
+                String errMsg = "Message does not exist " + objectIdStr;
+                log.severe(errMsg);
+                alertError(req, errMsg);
+                continue;
+            }
+            toDevice = message.getToDevice();
+            log.info(fromUser + " is sending notification to: " + toDevice + " message: " + message);
+
+            message.sendNotification();
+        }
+
+        alertSuccess(req, "Notifications will be sent shortly.");
+
+        if (toDevice != null) {
+            resp.sendRedirect(toDevice.getSendUri());
+        } else {
+            resp.sendRedirect(uri);
+        }
+
+    }
+
 
 }

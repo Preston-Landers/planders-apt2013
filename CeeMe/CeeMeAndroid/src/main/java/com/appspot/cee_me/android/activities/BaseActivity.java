@@ -321,6 +321,8 @@ public class BaseActivity extends Activity {
     }
 
     void deregisterDevice() {
+        GCMRegistrar.setRegisteredOnServer(this, false);
+        GCMRegistrar.unregister(this);
         setDeviceKeyPref("");
         deviceKey = "";
     }

@@ -50,6 +50,16 @@
         <url-pattern>/serve</url-pattern>
     </servlet-mapping>
 
+    <!-- Task queue workers -->
+    <servlet>
+        <servlet-name>gcm-notifications</servlet-name>
+        <servlet-class>com.appspot.cee_me.servlet.SendNotification</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>gcm-notifications</servlet-name>
+        <url-pattern>/task/gcm</url-pattern>
+    </servlet-mapping>
+
 
     <servlet>
         <servlet-name>error</servlet-name>

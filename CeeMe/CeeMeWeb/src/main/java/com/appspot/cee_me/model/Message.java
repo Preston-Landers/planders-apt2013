@@ -1,5 +1,6 @@
 package com.appspot.cee_me.model;
 
+import com.appspot.cee_me.servlet.SendNotification;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.Result;
@@ -230,8 +231,8 @@ public class Message {
     }
 
     /**
-     * Creates a Message entity (saves it to datastore)
-     * but does NOT initiate delivery
+     * Creates a Message entity AND saves it to datastore
+     * but does NOT initiate delivery - call sendNotification for that.
      *
      * @param fromDevice source device (if any)
      * @param fromUser   source user
@@ -279,15 +280,18 @@ public class Message {
         }
     }
 
-    public void send() {
-        // TODO: validate 'n send
+    /**
+     * Creates and queues an async Task to send the notification and returns immediately.
+     */
+    public void sendNotification() {
         validateMessage();
 
-        // TODO: create Task here and then create a service
+        SendNotification.sendMessageNotification(this);
     }
 
     /**
      * Is the given user allowed to read/retrieve this message?
+     *
      * @param cUserRef user reference
      * @return whether he can read this message
      */

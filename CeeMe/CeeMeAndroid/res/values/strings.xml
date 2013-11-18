@@ -33,5 +33,6 @@
     <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
     <string name="already_registered">This device is already registered on the GCM server</string>
     <string name="device_registration_failed">Sorry, but device registration on Cee.me has failed.</string>
+    <string name="deregister">De-register</string>
 
 </resources>

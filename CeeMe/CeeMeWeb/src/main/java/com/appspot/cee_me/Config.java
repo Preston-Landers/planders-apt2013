@@ -16,9 +16,9 @@ public class Config {
 	// public static final String productAdminEmail = "planders@gmail.com";
 
     /**
-     * For notifications: the Google API Console project ID
+     * For notifications: the Google API Simple API Key
      */
-    public static final String GOOGLE_PROJECT_ID = "860742061992";
+    public static final String GCM_SENDER_KEY = "AIzaSyBXLW21frp9UViG9C5ty2tbO9MW0H2NEbk";
 
     // For the endpoints
     public static final String ANDROID_CLIENT_ID = "860742061992.apps.googleusercontent.com";

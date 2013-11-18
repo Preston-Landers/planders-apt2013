@@ -65,7 +65,7 @@ public class RegisterActivity extends BaseActivity {
         doRegisterWithGCM();
     }
 
-    public static void registerServiceCallback(Context context, String registrationId) {
+    public static void registerServiceCallback(Context context, final String registrationId) {
         Log.i(TAG, "registerServiceCallback() called");
         Activity currentActivity = ((CeeMeApplication)context.getApplicationContext()).getCurrentActivity();
         if (currentActivity.getClass().equals(RegisterActivity.class)) {
@@ -75,9 +75,13 @@ public class RegisterActivity extends BaseActivity {
 
     }
 
-    public void register(String registrationId) {
-        gcmRegistrationId = registrationId;
-        new RegisterTask().execute();
+    public void register(final String registrationId) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                gcmRegistrationId = registrationId;
+                new RegisterTask().execute();
+            }
+        });
     }
 
     public static void unRegisterServiceCallback(Context context, String registrationId) {
@@ -144,12 +148,13 @@ public class RegisterActivity extends BaseActivity {
     private void doRegisterWithGCM() {
         if (gcmRegistrationId.equals("")) {
             // Automatically registers application on startup.
-            GCMRegistrar.register(this, Config.GOOGLE_PROJECT_ID);
+            GCMRegistrar.register(this, Config.GCM_SENDER_KEY);
         } else {
             // Device is already registered on GCM, check server.
             if (GCMRegistrar.isRegisteredOnServer(this)) {
                 // Skips registration.
                 Log.i(TAG, getString(R.string.already_registered) + "\n");
+                shortToast("Already registered...?");
             } else {
                 new RegisterTask().execute();
             }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<queue-entries>
+    <!--Change the default queue settings -->
+    <!--
+        <queue>
+            <name>default</name>
+            <rate>100/s</rate>
+            <bucket-size>100</bucket-size>
+            <retry-parameters>
+                <task-age-limit>3d</task-age-limit>
+            </retry-parameters>
+            <max-concurrent-requests>
+                300
+            </max-concurrent-requests>
+        </queue>
+    -->
+    <!-- queue for outgoing Google Cloud Messaging notifications -->
+    <queue>
+        <name>gcm-notifications</name>
+        <rate>10/s</rate>
+        <bucket-size>10</bucket-size>
+        <retry-parameters>
+            <task-age-limit>3d</task-age-limit>
+        </retry-parameters>
+        <max-concurrent-requests>
+            40
+        </max-concurrent-requests>
+    </queue>
+</queue-entries>

@@ -101,7 +101,12 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     public void settingsButton(View view) {
-        Toast.makeText(WelcomeActivity.this, "Settings not implemented yet.", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(WelcomeActivity.this, "Settings not implemented yet.", Toast.LENGTH_SHORT).show();
+
+        // For now, this will sign out and forget any device registration.
+        deregisterDevice();
+        signOut();
+        shortToast("De-registered device!");
     }
 
     /**

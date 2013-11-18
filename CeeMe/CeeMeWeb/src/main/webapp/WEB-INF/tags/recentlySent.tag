@@ -25,10 +25,18 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <button class="btn btn-danger btn-sm" type="submit" name="deleteMessages" value="deleteMessages">
+                        <button class="btn btn-danger btn-sm" type="submit"
+                                name="deleteMessages" value="deleteMessages">
                             <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;
                             Delete Messages
                         </button>
+
+                        <button class="btn btn-info btn-sm" type="submit" name="sendnotify" value="sendnotify"
+                                style="margin-left: 5px;">
+                            <span class="glyphicon glyphicon-send"></span>&nbsp;
+                            Notify Again
+                        </button>
+
                     </div>
                 </div>
             </div>
