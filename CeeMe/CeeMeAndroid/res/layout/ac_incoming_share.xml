@@ -12,17 +12,8 @@
             android:text="Incoming Content Share"
             android:id="@+id/incomingShare_title_tv"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"/>
-
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/refresh_messages"
-            android:onClick="MySubsButton"
-            android:id="@+id/incomingShare_refresh_button"
-            style="@android:style/Widget.Holo.Light.Button"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"/>
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"/>
 
     <ProgressBar
             android:layout_width="wrap_content"
@@ -31,7 +22,8 @@
             android:visibility="invisible"
             android:focusableInTouchMode="true"
             android:layout_centerHorizontal="true"
-            android:layout_above="@+id/incomingShare_refresh_button"/>
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="191dp"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -39,8 +31,9 @@
             android:text="New Text"
             android:id="@+id/incomingShare_status_textview"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="15dp"
-            android:layout_above="@+id/incomingShare_refresh_button"/>
+            android:layout_marginLeft="25dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"/>
 
     <LinearLayout
             android:orientation="vertical"

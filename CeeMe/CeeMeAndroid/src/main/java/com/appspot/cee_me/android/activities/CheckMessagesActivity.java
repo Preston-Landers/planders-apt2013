@@ -54,7 +54,7 @@ public class CheckMessagesActivity extends BaseActivity {
             int offset = queryOffset;
             GoogleAccountCredential creds = null;
             if (signedIn) {
-                creds = credential;
+                creds = getCredential();
             }
             try {
                 /*

@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.MenuItem;
@@ -38,7 +37,7 @@ public class BaseActivity extends Activity {
 
     protected SharedPreferences settings;
     protected String accountName;
-    protected GoogleAccountCredential credential;
+    private GoogleAccountCredential credential;
     protected boolean signedIn = false;
     protected String deviceKey = "";
     protected String gcmRegistrationId;
@@ -123,6 +122,13 @@ public class BaseActivity extends Activity {
         return deviceKey != null && !deviceKey.equals("");
     }
 
+    /**
+     * @return Returns the current Google Account credential object.
+     */
+    protected GoogleAccountCredential getCredential() {
+        // Uses the singleton instead of our private instance, in case 'somewhere outside' changes the singleton
+        return Account.getInstance().getCredential();
+    }
 
     /**
      * Loads the GCM registration ID. If the device is not currently registered,

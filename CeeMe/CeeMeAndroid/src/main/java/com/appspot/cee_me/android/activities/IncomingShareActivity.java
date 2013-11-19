@@ -9,8 +9,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.appspot.cee_me.android.Config;
 import com.appspot.cee_me.android.R;
+import com.appspot.cee_me.android.SyncEndpointService;
 import com.appspot.cee_me.sync.Sync;
-import com.appspot.cee_me.sync.model.MessageQuery;
+import com.appspot.cee_me.sync.model.Message;
 
 public class IncomingShareActivity extends BaseActivity {
     private static final String TAG = "CheckMessagesActivity";
@@ -20,7 +21,7 @@ public class IncomingShareActivity extends BaseActivity {
     private String messageUrl;
 
     private Sync service;
-    private MessageQuery messageQuery;
+    private Message message;
 
     /**
      * Called when the activity is first created.
@@ -45,6 +46,7 @@ public class IncomingShareActivity extends BaseActivity {
             throw new IllegalArgumentException("You must specify a message key!");
 
         }
+        setStatusText("");
 
         if (messageText != null) {
             setMessageText(messageText);
@@ -53,23 +55,37 @@ public class IncomingShareActivity extends BaseActivity {
             setMessageURL(messageUrl);
         }
 
-
         new LoadMessageTask().execute();
     }
 
-    private void setMessageText(String messageText) {
-        TextView streamLabel = (TextView) findViewById(R.id.incomingShare_text_tv);
-        streamLabel.setText(messageText);
+    private void setMessageText(String txt) {
+        setText(txt, R.id.incomingShare_text_tv);
     }
 
-    private void setMessageURL(String messageUrl) {
-        TextView streamLabel = (TextView) findViewById(R.id.incomingShare_url_tv);
-        streamLabel.setText(messageUrl);
+    private void setMessageURL(String txt) {
+        setText(txt, R.id.incomingShare_url_tv);
     }
 
-    private void setStatusText(String message) {
-        TextView streamLabel = (TextView) findViewById(R.id.incomingShare_status_textview);
-        streamLabel.setText(message);
+    private void setStatusText(String txt) {
+        setText(txt, R.id.incomingShare_status_textview);
+    }
+
+    private void setSenderIdentity(String txt) {
+        setText(txt, R.id.incomingShare_from_tv);
+    }
+
+    private void setText(String txt, int viewId) {
+        if (txt == null) {
+            txt = "";
+        }
+        TextView streamLabel = (TextView) findViewById(viewId);
+        streamLabel.setText(txt);
+    }
+
+    private void displayMessageDetails(Message message) {
+        setMessageText(message.getText());
+        setMessageURL(message.getUrlData());
+        setSenderIdentity(message.getFromUser().getAccountName());
     }
 
     private class LoadMessageTask extends AsyncTask<Void, Void, Void> {
@@ -79,19 +95,14 @@ public class IncomingShareActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             querySuccess = false;
             try {
-                /*
-                service = SyncEndpointService.getSyncService();
-                Sync.GetMessages getMessages = service.getMessages(deviceKey);
-
-
-                messageQuery = getMessages
-                        .execute();
-                */
+                service = SyncEndpointService.getSyncService(getCredential());
+                Sync.GetMessage getMessage = service.getMessage(messageKey);
+                message = getMessage.execute();
                 querySuccess = true;
 //            } catch (GoogleAuthIOException e) {
-//                Log.e(TAG, "Browse Streams fail: " + e.getCause());
+//                Log.e(TAG, "message retrieval fail: " + e.getCause());
             } catch (Exception e) {
-                Log.e(TAG, "Browse Streams failed.", e);
+                Log.e(TAG, "message retrieval failed: ", e);
             }
             return null;
         }
@@ -102,11 +113,13 @@ public class IncomingShareActivity extends BaseActivity {
             progressBar.setVisibility(View.INVISIBLE);
             setStatusText("");
             if (querySuccess) {
-                if (messageQuery != null) {
-                    // loadImages(messageQuery);
+                if (message != null) {
+                    displayMessageDetails(message);
                 }
+            } else {
+                setStatusText("Error: couldn't load this message.");
+                shortToast("Failed to load message :-(");
             }
-
         }
 
         @Override

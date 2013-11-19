@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/VmDVsn-LFmnwWfV_kL3VEDSOZCs\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/CsRaeBs1Z3-dJuvaMm4vwLIfuNo\"",
  "discoveryVersion": "v1",
  "id": "sync:v1",
  "name": "sync",
@@ -308,6 +308,9 @@
     },
     "toUser": {
      "$ref": "User"
+    },
+    "urlData": {
+     "type": "string"
     }
    }
   },

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.appspot.cee_me.android.Config;
 import com.appspot.cee_me.android.R;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 public class WelcomeActivity extends BaseActivity {
     private static final String TAG = "WelcomeActivity";
@@ -94,6 +95,7 @@ public class WelcomeActivity extends BaseActivity {
 
     // When you click the Sign in with Google button
     public void loginButton(View view) {
+        GoogleAccountCredential credential = getCredential();
         if (credential.getSelectedAccountName() != null) {
             Log.i(TAG, "You are logged into android as: " + credential.getSelectedAccountName());
         }
@@ -124,7 +126,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void chooseAccount() {
-        startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+        startActivityForResult(getCredential().newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
 
     @Override

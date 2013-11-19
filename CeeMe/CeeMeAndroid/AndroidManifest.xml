@@ -47,6 +47,11 @@
                 android:label="@string/register_activity_name"
                 android:theme="@style/ActionBar">
         </activity>
+        <activity
+                android:name=".activities.IncomingShareActivity"
+                android:label="@string/incoming_share_activity_name"
+                android:theme="@style/ActionBar">
+        </activity>
 
         <receiver
                 android:name="com.google.android.gcm.GCMBroadcastReceiver"

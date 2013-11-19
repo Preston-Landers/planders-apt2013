@@ -25,10 +25,16 @@ public class CeeMeApplication extends Application {
 
     // http://stackoverflow.com/questions/11411395/how-to-get-current-foreground-activity-context-in-android
     private Activity mCurrentActivity = null;
-    public Activity getCurrentActivity(){
+
+    /**
+     * Returns the foreground activity, if any, else null
+     * @return foreground activity if there is one, otherwise null
+     */
+    public Activity getCurrentActivity() {
         return mCurrentActivity;
     }
-    public void setCurrentActivity(Activity mCurrentActivity){
+
+    public void setCurrentActivity(Activity mCurrentActivity) {
         this.mCurrentActivity = mCurrentActivity;
     }
 }

@@ -19,6 +19,7 @@ import com.appspot.cee_me.android.RegisterEndpointService;
 import com.appspot.cee_me.register.Register;
 import com.appspot.cee_me.register.model.Device;
 import com.google.android.gcm.GCMRegistrar;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 public class RegisterActivity extends BaseActivity {
     private static final String TAG = "RegisterActivity";
@@ -99,6 +100,7 @@ public class RegisterActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             deviceKey = null;
             registerSuccess = false;
+            GoogleAccountCredential credential = getCredential();
             assert(credential != null);
             TextView hwTextView = (TextView) findViewById(R.id.textViewRegisterHardwareDesc);
             EditText deviceNameEditText = (EditText) findViewById(R.id.registerDeviceName);
