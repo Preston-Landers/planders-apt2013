@@ -114,8 +114,18 @@ public class SendNotification extends HttpServlet {
         }
     }
 
+    /**
+     * Create a GCM Message builder given a internal model.Message.
+     * May be good candidate for moving to another class
+     * @param modelMessage Internal model Message object
+     * @return a GCM Message Builder, call .build() to obtain the final msg.
+     */
     private static Message.Builder buildMessage(com.appspot.cee_me.model.Message modelMessage) {
+
+
         Message.Builder builder = new Message.Builder();
+
+        builder.delayWhileIdle(true); // Wait for device to become active before sending.
 
         int spaceLeft = GCM_MAX_PAYLOAD;
         final String MSG_KEY = "mk";

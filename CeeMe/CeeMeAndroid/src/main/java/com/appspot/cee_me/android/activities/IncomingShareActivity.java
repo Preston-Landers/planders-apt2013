@@ -47,13 +47,9 @@ public class IncomingShareActivity extends BaseActivity {
 
         }
         setStatusText("");
-
-        if (messageText != null) {
-            setMessageText(messageText);
-        }
-        if (messageUrl != null) {
-            setMessageURL(messageUrl);
-        }
+        setSenderIdentity("<Loading...>");
+        setMessageText(messageText);
+        setMessageURL(messageUrl);
 
         new LoadMessageTask().execute();
     }

@@ -20,6 +20,8 @@ import com.appspot.cee_me.register.Register;
 import com.appspot.cee_me.register.model.Device;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 
 public class RegisterActivity extends BaseActivity {
     private static final String TAG = "RegisterActivity";
@@ -115,8 +117,12 @@ public class RegisterActivity extends BaseActivity {
                 deviceKey = device.getDeviceKey();
                 GCMRegistrar.setRegisteredOnServer(RegisterActivity.this, true);
                 registerSuccess = true;
-//            } catch (GoogleAuthIOException e) {
-//                Log.e(TAG, "Browse Streams fail: " + e.getCause());
+            } catch (GoogleAuthIOException e) {
+                errMsg = "Authentication error";
+                Log.e(TAG, "Browse Streams fail: " + e.getCause());
+            } catch (GoogleJsonResponseException e) {
+                errMsg = e.getDetails().getMessage();
+                Log.e(TAG, errMsg, e);
             } catch (Exception e) {
                 Log.e(TAG, errMsg, e);
             }

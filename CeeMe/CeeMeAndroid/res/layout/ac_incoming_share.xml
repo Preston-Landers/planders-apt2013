@@ -15,16 +15,6 @@
             android:layout_marginBottom="10dp"
             android:textStyle="bold"/>
 
-    <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/incomingShare_progressBar"
-            android:visibility="invisible"
-            android:focusableInTouchMode="true"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="191dp"/>
-
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,12 +48,13 @@
                         android:layout_height="wrap_content"
                         android:text="New Text"
                         android:id="@+id/incomingShare_from_tv"
-                        android:layout_margin="10dp"/>
+                        android:layout_margin="10dp"
+                        android:textStyle="bold"/>
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Message FROM"
+                        android:text="From"
                         android:id="@+id/incomingShare_from_label_tv"
                         android:layout_marginLeft="5dp"
                         android:textStyle="italic"
@@ -93,7 +84,7 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Message Text"
+                        android:text="Message"
                         android:id="@+id/incomingShare_text_label_tv"
                         android:layout_marginLeft="5dp"
                         android:textStyle="italic"
@@ -120,7 +111,8 @@
                         android:layout_height="wrap_content"
                         android:text="New Text"
                         android:id="@+id/incomingShare_url_tv"
-                        android:layout_margin="10dp"/>
+                        android:layout_margin="10dp"
+                        android:textStyle="italic"/>
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -135,21 +127,40 @@
             </LinearLayout>
         </FrameLayout>
 
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Open Content"
-                android:id="@+id/incomingShare_open_button"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"/>
+        <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ignore Message"
-                android:id="@+id/incomingShare_cancel_button"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Open Content"
+                    android:id="@+id/incomingShare_open_button"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@+id/incomingShare_cancel_button"
+                    android:layout_marginBottom="10dp"/>
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ignore Message"
+                    android:id="@+id/incomingShare_cancel_button"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"/>
+
+            <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/incomingShare_progressBar"
+                    android:visibility="invisible"
+                    android:focusableInTouchMode="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@+id/incomingShare_open_button"
+                    android:layout_marginBottom="5dp"/>
+        </RelativeLayout>
 
     </LinearLayout>
 </RelativeLayout>
