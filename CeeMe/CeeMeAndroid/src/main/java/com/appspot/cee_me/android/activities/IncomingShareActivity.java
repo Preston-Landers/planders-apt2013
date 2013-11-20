@@ -78,10 +78,23 @@ public class IncomingShareActivity extends BaseActivity {
         streamLabel.setText(txt);
     }
 
+    /**
+     * Load the text views and such to display the contents of a server Message
+     * @param message API model Message to display
+     */
     private void displayMessageDetails(Message message) {
         setMessageText(message.getText());
         setMessageURL(message.getUrlData());
         setSenderIdentity(message.getFromUser().getAccountName());
+    }
+
+    public void openIncomingShareButton(View view) {
+
+    }
+
+    public void cancelIncomingShareButton(View view) {
+        shortToast("Ignoring this message.");
+
     }
 
     private class LoadMessageTask extends AsyncTask<Void, Void, Void> {

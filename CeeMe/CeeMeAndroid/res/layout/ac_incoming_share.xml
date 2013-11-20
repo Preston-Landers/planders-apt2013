@@ -18,7 +18,7 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"
+            android:text="Status message placeholder"
             android:id="@+id/incomingShare_status_textview"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="25dp"
@@ -30,12 +30,14 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_above="@+id/incomingShare_status_textview"
-            android:layout_below="@+id/incomingShare_title_tv">
+            android:layout_below="@+id/incomingShare_title_tv"
+            >
 
         <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/incomingShare_from_frameLayout"
+                style="@style/CeeMeMessageItemFrame"
                 >
 
             <LinearLayout
@@ -46,28 +48,31 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="New Text"
-                        android:id="@+id/incomingShare_from_tv"
-                        android:layout_margin="10dp"
-                        android:textStyle="bold"/>
+                        android:text="From:"
+                        android:id="@+id/incomingShare_from_label_tv"
+                        android:textStyle="italic"
+                        android:singleLine="true"
+                        android:layout_margin="8dp"
+                        style="@style/CeeMeMessageItemFrameHeaderText"/>
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="From"
-                        android:id="@+id/incomingShare_from_label_tv"
-                        android:layout_marginLeft="5dp"
-                        android:textStyle="italic"
-                        android:singleLine="true"
-                        android:layout_marginBottom="5dp"
-                        android:textColor="#0100ba"/>
+                        android:text="(from user placeholder)"
+                        android:id="@+id/incomingShare_from_tv"
+                        android:layout_margin="10dp"
+                        android:textStyle="bold"
+                        style="@style/CeeMeMessageItemFrameText"/>
+
             </LinearLayout>
         </FrameLayout>
 
         <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/incomingShare_text_frameLayout">
+                android:id="@+id/incomingShare_text_frameLayout"
+                style="@style/CeeMeMessageItemFrame"
+                android:layout_marginTop="5dp">
 
             <LinearLayout
                     android:orientation="vertical"
@@ -77,20 +82,22 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="New Text"
-                        android:id="@+id/incomingShare_text_tv"
-                        android:layout_margin="10dp"/>
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Message"
+                        android:text="Message:"
                         android:id="@+id/incomingShare_text_label_tv"
                         android:layout_marginLeft="5dp"
                         android:textStyle="italic"
                         android:layout_marginBottom="5dp"
-                        android:textColor="#009401"
-                        android:phoneNumber="true"/>
+                        android:phoneNumber="true"
+                        style="@style/CeeMeMessageItemFrameHeaderText"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(This is the message placeholder. It's a bit longer)"
+                        android:id="@+id/incomingShare_text_tv"
+                        android:layout_margin="10dp"
+                        style="@style/CeeMeMessageItemFrameText"/>
+
             </LinearLayout>
         </FrameLayout>
 
@@ -99,31 +106,34 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/incomingShare_url_frameLayout"
                 android:layout_alignLeft="@+id/incomingShare_text_frameLayout"
-                android:layout_below="@+id/incomingShare_text_frameLayout">
+                android:layout_below="@+id/incomingShare_text_frameLayout"
+                style="@style/CeeMeMessageItemFrame"
+                android:layout_marginTop="5dp">
 
             <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_height="fill_parent"
+                    android:onClick="openIncomingShareButton">
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="New Text"
-                        android:id="@+id/incomingShare_url_tv"
-                        android:layout_margin="10dp"
-                        android:textStyle="italic"/>
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="URL"
+                        android:text="URL:"
                         android:id="@+id/incomingShare_url_label_tv"
-                        android:layout_marginLeft="5dp"
                         android:textStyle="italic"
                         android:singleLine="true"
-                        android:layout_marginBottom="5dp"
-                        android:textColor="#ffaf01"/>
+                        style="@style/CeeMeMessageItemFrameHeaderText"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(url placeholder)"
+                        android:id="@+id/incomingShare_url_tv"
+                        android:layout_margin="10dp"
+                        android:textStyle="italic"
+                        style="@style/CeeMeMessageItemFrameText"/>
+
             </LinearLayout>
         </FrameLayout>
 
@@ -139,7 +149,9 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_centerHorizontal="true"
                     android:layout_above="@+id/incomingShare_cancel_button"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp"
+                    android:onClick="openIncomingShareButton"
+                    style="@style/GreenGradientButton"/>
 
             <Button
                     android:layout_width="wrap_content"
@@ -149,7 +161,9 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_marginBottom="5dp"
+                    android:onClick="cancelIncomingShareButton"
+                    style="@style/RedGradientButton"/>
 
             <ProgressBar
                     android:layout_width="wrap_content"
