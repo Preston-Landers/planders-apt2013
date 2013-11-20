@@ -1,6 +1,7 @@
 package com.appspot.cee_me.android.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -80,6 +81,7 @@ public class IncomingShareActivity extends BaseActivity {
 
     /**
      * Load the text views and such to display the contents of a server Message
+     *
      * @param message API model Message to display
      */
     private void displayMessageDetails(Message message) {
@@ -88,13 +90,29 @@ public class IncomingShareActivity extends BaseActivity {
         setSenderIdentity(message.getFromUser().getAccountName());
     }
 
-    public void openIncomingShareButton(View view) {
+    public void openIncomingShareURL(View view) {
+        openIncomingShareButton(view);
+    }
 
+    public void openIncomingShareButton(View view) {
+        String url = message.getUrlData();
+        if (url == null || url.length() == 0) {
+            shortToast("Can't open URL.");
+            return;
+        }
+        openExternalURL(url);
     }
 
     public void cancelIncomingShareButton(View view) {
         shortToast("Ignoring this message.");
+        setResult(RESULT_CANCELED);
+        finish();
+    }
 
+    private void openExternalURL(String theURL) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(theURL));
+        startActivity(i);
     }
 
     private class LoadMessageTask extends AsyncTask<Void, Void, Void> {

@@ -1,5 +1,6 @@
 package com.appspot.cee_me.android;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +11,9 @@ import android.util.Log;
 import com.appspot.cee_me.android.activities.IncomingShareActivity;
 import com.appspot.cee_me.android.activities.RegisterActivity;
 import com.google.android.gcm.GCMBaseIntentService;
+
+import java.util.List;
+
 import static com.appspot.cee_me.android.Config.displayMessage;
 
 /*
@@ -91,20 +95,13 @@ public class GCMIntentService extends GCMBaseIntentService {
     /**
      * Issues a notification to inform the user that server has sent a message.
      * TODO: why is this deprecated?
-     * TODO: don't show the actual notification if app is in foreground, just open the intent.
      */
     @SuppressWarnings("deprecation")
     private static void generateNotification(Context context, IncomingMessageParams messageParams) {
-        int icon = R.drawable.ic_stat_gcm;
-        long when = System.currentTimeMillis();
 
         String message = messageParams.getMsgText();
         String msgUrl = messageParams.getMsgUrl();
         String msgKey = messageParams.getMsgKey();
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification(icon, message, when);
-        String title = context.getString(R.string.app_name);
 
         Intent notificationIntent = new Intent(context, IncomingShareActivity.class);
         notificationIntent.putExtra(Config.MESSAGE_KEY, msgKey);
@@ -114,12 +111,56 @@ public class GCMIntentService extends GCMBaseIntentService {
         // set intent so it does not start a new activity
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        if (isAppInForeground(context)) {
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(notificationIntent);
+        } else {
+            NotificationManager notificationManager = (NotificationManager)
+                    context.getSystemService(Context.NOTIFICATION_SERVICE);
+            Notification notification = getNotification(context, message, notificationIntent);
+            notificationManager.notify(0, notification);
+        }
+
+    }
+
+    private static Notification getNotification(Context context, String message, Intent notificationIntent) {
+        int icon = R.drawable.ic_stat_gcm;
+        long when = System.currentTimeMillis();
+        Notification notification = new Notification(icon, message, when);
+        String title = context.getString(R.string.app_name);
+
+        // set intent so it does not start a new activity
+//        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+//                Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent intent =
                 PendingIntent.getActivity(context, 0, notificationIntent, 0);
         notification.setLatestEventInfo(context, title, message, intent);
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        notificationManager.notify(0, notification);
+        return notification;
     }
+
+    /**
+     * Returns true if the app is currently in the foreground.
+     * Requires GET_TASKS permission.
+     * See: http://stackoverflow.com/questions/5504632/how-can-i-tell-if-android-app-is-running-in-the-foreground
+     *
+     * @param context application context
+     * @return true if the app is currently in the foreground
+     */
+    static boolean isAppInForeground(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> services = activityManager
+                .getRunningTasks(Integer.MAX_VALUE);
+        boolean isActivityFound = false;
+
+        if (services.get(0).topActivity.getPackageName().toString()
+                .equalsIgnoreCase(context.getPackageName().toString())) {
+            isActivityFound = true;
+        }
+        return isActivityFound;
+    }
+
 
     /**
      * Handles extracting key bits of info from the GCM notification message
@@ -131,6 +172,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         /**
          * Extract basic info from intent extras bundle.
+         *
          * @param extras extras bundle from GCM message
          * @return new instance of this class
          */
@@ -146,9 +188,11 @@ public class GCMIntentService extends GCMBaseIntentService {
         public String getMsgText() {
             return msgText == null ? "" : msgText;
         }
+
         public String getMsgUrl() {
-            return msgUrl== null ? "" : msgUrl;
+            return msgUrl == null ? "" : msgUrl;
         }
+
         public String getMsgKey() {
             return msgKey == null ? "" : msgKey;
         }
