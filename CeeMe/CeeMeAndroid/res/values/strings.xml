@@ -35,5 +35,6 @@
     <string name="device_registration_failed">Sorry, but device registration on Cee.me has failed.</string>
     <string name="deregister">De-register</string>
     <string name="incoming_share_activity_name">Incoming Share</string>
+    <string name="outgoing_share_activity_name">Cee.me</string>
 
 </resources>

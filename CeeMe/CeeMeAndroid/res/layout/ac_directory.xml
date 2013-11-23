@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Share Recipient"
+            android:id="@+id/directory_title_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+
+    <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/directory_listView"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/directory_title_tv"/>
+
+    <Button
+            style="@style/GreenGradientButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Recipient"
+            android:id="@+id/directory_ok"
+            android:layout_gravity="center_horizontal"
+            android:onClick="openIncomingShareButton"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"/>
+</RelativeLayout>

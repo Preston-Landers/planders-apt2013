@@ -13,19 +13,23 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/> <!-- in order to see if app is in foreground -->
+
+    <!-- in order to see if app is in foreground -->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <permission android:name="com.appspot.cee_me.android.permission.C2D_MESSAGE"
-                android:protectionLevel="signature" />
-    <uses-permission android:name="com.appspot.cee_me.android.permission.C2D_MESSAGE"/>
 
+    <permission
+            android:name="com.appspot.cee_me.android.permission.C2D_MESSAGE"
+            android:protectionLevel="signature"/>
+    <uses-permission android:name="com.appspot.cee_me.android.permission.C2D_MESSAGE"/>
 
 
     <application
             android:name=".CeeMeApplication"
             android:allowBackup="true"
-            android:icon="@drawable/ic_launcher"
+            android:icon="@drawable/ceeme_logo_2"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
         <activity
@@ -53,18 +57,39 @@
                 android:label="@string/incoming_share_activity_name"
                 android:theme="@style/ActionBar">
         </activity>
+        <activity
+                android:name=".activities.OutgoingShareActivity"
+                android:label="@string/outgoing_share_activity_name"
+                android:theme="@style/ActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <!--<action android:name="android.intent.action.VIEW"/>-->
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="*"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <!--<action android:name="android.intent.action.VIEW"/>-->
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="http"/>
+                <category
+                        android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
 
         <receiver
                 android:name="com.google.android.gcm.GCMBroadcastReceiver"
-                android:permission="com.google.android.c2dm.permission.SEND" >
+                android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
                 <!-- Receives the registration id. -->
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="com.appspot.cee_me.android" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+                <category android:name="com.appspot.cee_me.android"/>
             </intent-filter>
         </receiver>
-        <service android:name=".GCMIntentService" />
+        <service android:name=".GCMIntentService"/>
 
     </application>
 

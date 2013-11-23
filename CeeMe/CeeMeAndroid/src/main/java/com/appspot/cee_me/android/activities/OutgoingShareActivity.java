@@ -14,8 +14,8 @@ import com.appspot.cee_me.android.SyncEndpointService;
 import com.appspot.cee_me.sync.Sync;
 import com.appspot.cee_me.sync.model.Message;
 
-public class IncomingShareActivity extends BaseActivity {
-    private static final String TAG = "IncomingShareActivity";
+public class OutgoingShareActivity extends BaseActivity {
+    private static final String TAG = "OutgoingShareActivity";
 
     private String messageKey;
     private String messageText;
@@ -33,42 +33,38 @@ public class IncomingShareActivity extends BaseActivity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.ac_incoming_share);
+        setContentView(R.layout.ac_outgoing_share);
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        messageKey = intent.getStringExtra(Config.MESSAGE_KEY);
-        messageText = intent.getStringExtra(Config.MESSAGE_TEXT);
-        messageUrl = intent.getStringExtra(Config.MESSAGE_URL);
 
-        // There must be a better way to handle this...?
-        if (messageKey == null) {
-            Log.i(TAG, "Null messageKey on " + this.getClass().getName());
-            throw new IllegalArgumentException("You must specify a message key!");
-
+        String data = intent.getDataString();
+        String action = intent.getAction();
+        if (action.equalsIgnoreCase(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
+            data = intent.getStringExtra(Intent.EXTRA_TEXT);
         }
-        setStatusText("");
-        setSenderIdentity("<Loading...>");
-        setMessageText(messageText);
-        setMessageURL(messageUrl);
 
-        new LoadMessageTask().execute();
+        setStatusText("");
+        setReceiverIdentity("<Select recipient...>");
+        // setMessageText(messageText);
+        setMessageURL(data);
+
     }
 
     private void setMessageText(String txt) {
-        setText(txt, R.id.incomingShare_text_tv);
+        setText(txt, R.id.outgoingShare_message_editText);
     }
 
     private void setMessageURL(String txt) {
-        setText(txt, R.id.incomingShare_url_tv);
+        setText(txt, R.id.outgoingShare_url_tv);
     }
 
     private void setStatusText(String txt) {
-        setText(txt, R.id.incomingShare_status_textview);
+        setText(txt, R.id.outgoingShare_status_textview);
     }
 
-    private void setSenderIdentity(String txt) {
-        setText(txt, R.id.incomingShare_from_tv);
+    private void setReceiverIdentity(String txt) {
+        setText(txt, R.id.outgoingShare_to_tv);
     }
 
     private void setText(String txt, int viewId) {
@@ -87,7 +83,7 @@ public class IncomingShareActivity extends BaseActivity {
     private void displayMessageDetails(Message message) {
         setMessageText(message.getText());
         setMessageURL(message.getUrlData());
-        setSenderIdentity(message.getFromUser().getAccountName());
+        setReceiverIdentity(message.getFromUser().getAccountName());
     }
 
     public void openIncomingShareURL(View view) {
@@ -103,7 +99,11 @@ public class IncomingShareActivity extends BaseActivity {
         openExternalURL(url);
     }
 
-    public void cancelIncomingShareButton(View view) {
+    public void sendShareNow(View view) {
+        shortToast("Not implemented yet.");
+    }
+
+    public void cancelOutgoingShare(View view) {
         shortToast("Ignoring this message.");
         setResult(RESULT_CANCELED);
         finish();
@@ -115,7 +115,7 @@ public class IncomingShareActivity extends BaseActivity {
         startActivity(i);
     }
 
-    private class LoadMessageTask extends AsyncTask<Void, Void, Void> {
+    private class SendMessageTask extends AsyncTask<Void, Void, Void> {
         private boolean querySuccess = false;
 
         @Override
@@ -127,9 +127,9 @@ public class IncomingShareActivity extends BaseActivity {
                 message = getMessage.execute();
                 querySuccess = true;
 //            } catch (GoogleAuthIOException e) {
-//                Log.e(TAG, "message retrieval fail: " + e.getCause());
+//                Log.e(TAG, "message send fail: " + e.getCause());
             } catch (Exception e) {
-                Log.e(TAG, "message retrieval failed: ", e);
+                Log.e(TAG, "message send failed: ", e);
             }
             return null;
         }
@@ -144,8 +144,8 @@ public class IncomingShareActivity extends BaseActivity {
                     displayMessageDetails(message);
                 }
             } else {
-                setStatusText("Error: couldn't load this message.");
-                shortToast("Failed to load message :-(");
+                setStatusText("Error: couldn't send this message.");
+                shortToast("Failed to send message :-(");
             }
         }
 
@@ -153,7 +153,7 @@ public class IncomingShareActivity extends BaseActivity {
         protected void onPreExecute() {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
             progressBar.setVisibility(View.VISIBLE);
-            setStatusText("Please wait while I load the content.");
+            setStatusText("Sending, please wait...");
         }
     }
 }
