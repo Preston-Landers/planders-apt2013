@@ -129,4 +129,53 @@ public class Sync extends EndpointBase {
                 limit,
                 offset);
     }
+
+    /**
+     * Send a new message to another device.
+     * @param user Google User account
+     * @param fromDeviceKey senders device key
+     * @param toDeviceKey recipient's device key
+     * @param mediaKey if including a media attachment, its key (optional)
+     * @param urlData URL to include with message (optional)
+     * @param text message text (optional)
+     * @return
+     */
+    @ApiMethod(name = "sendMessage", httpMethod = "post")
+    public Message sendMessage(
+            User user,
+            @Named("fromDevice") String fromDeviceKey,
+            @Named("toDevice") String toDeviceKey,
+            String mediaKey,
+            String urlData,
+            String text
+    ) {
+        CUser fromUser = getUser(user);
+        com.appspot.cee_me.model.Device fromDevice = loadDeviceByKey(fromDeviceKey);
+        com.appspot.cee_me.model.Device toDevice = loadDeviceByKey(toDeviceKey);
+        if (!fromDevice.getOwner().equals(fromUser)) {
+            String errMsg = fromUser + " tried to send message from device that wasn't his: " + fromDevice + " message: " + text + " url: " + urlData;
+            log.severe(errMsg);
+            throw new IllegalArgumentException(Config.MSG_NOT_DEVICE_OWNER);
+        }
+        CUser toUser = toDevice.getOwner();
+        com.appspot.cee_me.model.Media modelMedia = null;
+        if (mediaKey != null && !mediaKey.equals("")) {
+            modelMedia = loadMediaByKey(mediaKey);
+        }
+
+        // Creates and saves the message.
+        com.appspot.cee_me.model.Message message = com.appspot.cee_me.model.Message.createMessage(
+                Ref.create(fromDevice),
+                Ref.create(fromUser),
+                Ref.create(toUser),
+                Ref.create(toDevice),
+                Ref.create(modelMedia),
+                text,
+                urlData
+        );
+        log.fine("Endpoint: about to send new message: " + message);
+        message.sendNotification();
+
+        return new Message(message);
+    }
 }

@@ -2,6 +2,7 @@ package com.appspot.cee_me.endpoints;
 
 import com.appspot.cee_me.model.CUser;
 import com.appspot.cee_me.model.Device;
+import com.appspot.cee_me.model.Media;
 import com.appspot.cee_me.model.Message;
 import com.appspot.cee_me.servlet.CeeMeServletBase;
 import com.google.appengine.api.users.User;
@@ -41,6 +42,16 @@ public class EndpointBase {
             throw new IllegalArgumentException(msg);
         }
         return message;
+    }
+
+    protected static Media loadMediaByKey(String keyStr) {
+        Media media = Media.getByKey(keyStr);
+        if (media == null) {
+            String msg = "Can't find message with key: " + keyStr;
+            log.severe("API message lookup fail: " + msg);
+            throw new IllegalArgumentException(msg);
+        }
+        return media;
     }
 
 }

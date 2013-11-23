@@ -91,6 +91,26 @@ public class Media implements Comparable<Media> {
 		return ofy().load().type(Media.class).id(objectId).now();
 	}
 
+    /**
+     * Load a Media object by its key string
+     *
+     * @param objectIdStr should be result of getKey().getString()
+     * @return the Media object
+     */
+    public static Media getByKey(String objectIdStr) {
+        Key<Media> key = Key.create(objectIdStr);
+        return getByKey(key);
+    }
+
+    /**
+     * Load a Media object by its datastore Key
+     * @param mediaKey media key string to load
+     * @return the Media object
+     */
+    public static Media getByKey(Key<Media> mediaKey) {
+        return ofy().load().key(mediaKey).now();
+    }
+
 
     @Override
     public String toString() {
