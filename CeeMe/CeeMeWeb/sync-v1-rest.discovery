@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/CsRaeBs1Z3-dJuvaMm4vwLIfuNo\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/oP7GjO_4jG-I9Wp3oWESe9aSrP0\"",
  "discoveryVersion": "v1",
  "id": "sync:v1",
  "name": "sync",
@@ -217,6 +217,9 @@
     "name": {
      "type": "string"
     },
+    "ownerAccountName": {
+     "type": "string"
+    },
     "ownerKey": {
      "type": "string"
     },
@@ -427,6 +430,45 @@
    ],
    "response": {
     "$ref": "MessageQuery"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "sendMessage": {
+   "id": "sync.sendMessage",
+   "path": "sendMessage/{fromDevice}/{toDevice}",
+   "httpMethod": "POST",
+   "parameters": {
+    "fromDevice": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    },
+    "mediaKey": {
+     "type": "string",
+     "location": "query"
+    },
+    "text": {
+     "type": "string",
+     "location": "query"
+    },
+    "toDevice": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    },
+    "urlData": {
+     "type": "string",
+     "location": "query"
+    }
+   },
+   "parameterOrder": [
+    "fromDevice",
+    "toDevice"
+   ],
+   "response": {
+    "$ref": "Message"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

@@ -27,6 +27,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
  */
 public class BaseActivity extends Activity {
     private static final String TAG = "BaseActivity";
+    public static final String CEEME_PACKAGE = "com.appspot.cee_me.android";
     protected CeeMeApplication mMyApp;
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
@@ -104,7 +105,7 @@ public class BaseActivity extends Activity {
             public void run() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
                 builder.setMessage(R.string.dialog_signin_required)
-                        .setPositiveButton(R.string.dialog_signin_required_ok, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // FIRE ZE MISSILES!
                                 setResult(RESULT_CANCELED);
@@ -324,13 +325,6 @@ public class BaseActivity extends Activity {
 
     String getDeviceKeyPrefName() {
         return Config.PREF_DEVICE_KEY + accountName;
-    }
-
-    void deregisterDevice() {
-        GCMRegistrar.setRegisteredOnServer(this, false);
-        GCMRegistrar.unregister(this);
-        setDeviceKeyPref("");
-        deviceKey = "";
     }
 
     void setDeviceKeyPref(String keyStr) {

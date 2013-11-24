@@ -37,7 +37,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/outgoingShare_to_frameLayout"
-                style="@style/CeeMeMessageItemFrame"
+                style="@style/CeeMeMessageOutgoingItemFrame"
                 >
 
             <LinearLayout
@@ -58,7 +58,7 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="(from user placeholder)"
+                        android:text="Touch to choose the recipient"
                         android:id="@+id/outgoingShare_to_tv"
                         android:layout_margin="10dp"
                         android:textStyle="bold"
@@ -71,7 +71,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/outgoingShare_text_frameLayout"
-                style="@style/CeeMeMessageItemFrame"
+                style="@style/CeeMeMessageOutgoingItemFrame"
                 android:layout_marginTop="5dp">
 
             <LinearLayout
@@ -95,7 +95,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/outgoingShare_message_editText"
                         android:hint="Add a message here"
-                        style="@style/CeeMeMessageItemFrameText"/>
+                        style="@style/CeeMeMessageItemFrameText"
+                        android:textColor="@android:color/white"/>
 
             </LinearLayout>
         </FrameLayout>
@@ -106,7 +107,7 @@
                 android:id="@+id/outgoingShare_url_frameLayout"
                 android:layout_alignLeft="@+id/outgoingShare_text_frameLayout"
                 android:layout_below="@+id/outgoingShare_text_frameLayout"
-                style="@style/CeeMeMessageItemFrame"
+                style="@style/CeeMeMessageOutgoingItemFrame"
                 android:layout_marginTop="5dp">
 
             <LinearLayout
@@ -124,13 +125,11 @@
                         android:singleLine="true"
                         style="@style/CeeMeMessageItemFrameHeaderText"/>
 
-                <TextView
-                        android:layout_width="wrap_content"
+                <EditText
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="(url placeholder)"
-                        android:id="@+id/outgoingShare_url_tv"
-                        android:layout_margin="10dp"
-                        android:textStyle="italic"
+                        android:text="(url placeholder"
+                        android:id="@+id/outgoingShare_url_editText"
                         style="@style/CeeMeMessageItemFrameText"/>
 
             </LinearLayout>

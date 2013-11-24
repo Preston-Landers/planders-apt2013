@@ -131,13 +131,15 @@ public class Sync extends EndpointBase {
     }
 
     /**
-     * Send a new message to another device.
-     * @param user Google User account
+     * Send a new message to another device. One of these 3 options must be set:
+     * text, urlData, mediaKey (or any combination of those)
+     *
+     * @param user          Google User account
      * @param fromDeviceKey senders device key
-     * @param toDeviceKey recipient's device key
-     * @param mediaKey if including a media attachment, its key (optional)
-     * @param urlData URL to include with message (optional)
-     * @param text message text (optional)
+     * @param toDeviceKey   recipient's device key
+     * @param mediaKey      if including a media attachment, its key (optional)
+     * @param urlData       URL to include with message (optional)
+     * @param text          message text (optional)
      * @return
      */
     @ApiMethod(name = "sendMessage", httpMethod = "post")
@@ -145,9 +147,9 @@ public class Sync extends EndpointBase {
             User user,
             @Named("fromDevice") String fromDeviceKey,
             @Named("toDevice") String toDeviceKey,
-            String mediaKey,
-            String urlData,
-            String text
+            @Named("mediaKey") @Nullable String mediaKey,
+            @Named("urlData") @Nullable String urlData,
+            @Named("text") @Nullable String text
     ) {
         CUser fromUser = getUser(user);
         com.appspot.cee_me.model.Device fromDevice = loadDeviceByKey(fromDeviceKey);
@@ -161,6 +163,15 @@ public class Sync extends EndpointBase {
         com.appspot.cee_me.model.Media modelMedia = null;
         if (mediaKey != null && !mediaKey.equals("")) {
             modelMedia = loadMediaByKey(mediaKey);
+        }
+
+        // Prevent null messages
+        if ((mediaKey == null || (mediaKey.equals(""))) &&
+                (urlData == null || (urlData.equals(""))) &&
+                (text == null || (text.equals("")))
+                ) {
+            log.warning("Endpoint: this user tried to send a null message: " + fromUser);
+            throw new IllegalArgumentException("You must set at least one of these parameters: mediaKey, urlData, text");
         }
 
         // Creates and saves the message.

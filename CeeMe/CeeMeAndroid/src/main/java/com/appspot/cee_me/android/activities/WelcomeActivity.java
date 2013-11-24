@@ -21,7 +21,8 @@ public class WelcomeActivity extends BaseActivity {
 
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
     static final int REQUEST_ACCOUNT_PICKER = 1;
-    static final int REQUEST_REGISTER_DEVICE = 2;
+    public static final int REQUEST_REGISTER_DEVICE = 2;
+    public static final int REQUEST_DEREGISTER_DEVICE = 3;
 
     /**
      * Called when the activity is first created.
@@ -82,7 +83,17 @@ public class WelcomeActivity extends BaseActivity {
                     Toast.makeText(WelcomeActivity.this, "Error during registration.", Toast.LENGTH_SHORT).show();
                     signOut();
                 }
-
+                break;
+            case REQUEST_DEREGISTER_DEVICE:
+                if (resultCode == RegisterActivity.RESULT_CANCELED) {
+                    Toast.makeText(WelcomeActivity.this, "De-registration was canceled.", Toast.LENGTH_SHORT).show();
+                } else if (resultCode == RegisterActivity.RESULT_OK) {
+                    signOut();
+                    shortToast("De-registered device!");
+                } else if (resultCode == RegisterActivity.RESULT_ERROR) {
+                    shortToast("Error during de-registration");
+                }
+                break;
         }
     }
 
@@ -105,10 +116,9 @@ public class WelcomeActivity extends BaseActivity {
     public void settingsButton(View view) {
         // Toast.makeText(WelcomeActivity.this, "Settings not implemented yet.", Toast.LENGTH_SHORT).show();
 
-        // For now, this will sign out and forget any device registration.
-        deregisterDevice();
-        signOut();
-        shortToast("De-registered device!");
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra(RegisterActivity.EXTRA_DEREGISTER, true);
+        startActivityForResult(intent, REQUEST_DEREGISTER_DEVICE);
     }
 
     /**

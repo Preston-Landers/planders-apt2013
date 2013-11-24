@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="5dp">
+
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account Name"
+                android:id="@+id/directory_result_accountName_textView"
+                android:singleLine="false"
+                style="@android:style/TextAppearance.Medium"
+                android:textStyle="bold"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Device Name"
+                android:id="@+id/directory_result_deviceName_textView"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/directory_result_accountName_textView"
+                style="@android:style/TextAppearance.Medium"
+                android:textStyle="italic"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hardware Desc."
+                android:id="@+id/directory_result_hwdesc_textView"
+                android:singleLine="false"
+                style="@android:style/TextAppearance.Small"
+                android:layout_toRightOf="@+id/directory_result_publicid_textView"
+                android:layout_below="@+id/directory_result_accountName_textView"
+                android:layout_marginLeft="10dp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment"
+                android:id="@+id/directory_result_comment_textView"
+                android:layout_alignRight="@+id/directory_result_deviceName_textView"
+                android:layout_below="@+id/directory_result_accountName_textView"
+                android:singleLine="false"
+                style="@android:style/TextAppearance.Small"
+                android:layout_alignParentRight="false"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="publicId"
+                android:id="@+id/directory_result_publicid_textView"
+                android:layout_alignLeft="@+id/directory_result_accountName_textView"
+                android:layout_below="@+id/directory_result_accountName_textView"
+                android:textStyle="bold"/>
+    </RelativeLayout>
+</LinearLayout>

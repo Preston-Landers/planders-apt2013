@@ -1,6 +1,7 @@
 package com.appspot.cee_me.endpoints;
 
 import com.appspot.cee_me.Config;
+import com.appspot.cee_me.LatLong;
 import com.appspot.cee_me.endpoints.model.Device;
 import com.appspot.cee_me.model.CUser;
 
@@ -8,6 +9,7 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.appengine.api.users.User;
 import com.googlecode.objectify.Ref;
+import com.javadocmd.simplelatlng.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -171,5 +173,43 @@ public class Register extends EndpointBase {
         device.deleteDevice(true);
     }
 
+    /**
+     * Gets a list of devices available for
+     * @param user Google User account
+     * @param limit limit result count
+     * @param offset offset within results for pagination
+     * @param queryString optional search string
+     * @param latitude optional search latitude
+     * @param longitude optional search longitude
+     * @return a list of Device results
+     */
+    @ApiMethod(name = "getDeviceDirectory", httpMethod = "get")
+    public List<Device> getDeviceDirectory(
+            User user,
+            @Named("limit") Integer limit,
+            @Named("offset") Integer offset,
+            @Named("query") @Nullable String queryString,
+            @Named("lat") @Nullable Double latitude,
+            @Named("long") @Nullable Double longitude
+    ) {
+        getUser(user); // simply verify that this user is registered
+        List<Device> returnList = new ArrayList<Device>();
+        LatLong latLng = null;
+        if (latitude != null && longitude != null) {
+            latLng = new LatLong();
+            latLng.setLatitude(latitude);
+            latLng.setLongitude(longitude);
 
+        }
+        new LatLong();
+        for (com.appspot.cee_me.model.Device device :
+                com.appspot.cee_me.model.Device.getDirectorySearch(
+                        limit,
+                        offset,
+                        queryString,
+                        latLng)) {
+            returnList.add(new Device(device));
+        }
+        return returnList;
+    }
 }

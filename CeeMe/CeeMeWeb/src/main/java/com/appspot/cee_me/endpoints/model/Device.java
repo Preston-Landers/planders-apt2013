@@ -17,6 +17,7 @@ public class Device implements Serializable {
     private String hardwareDescription; // something to identify the actual hardware (user-visible)
 
     private String ownerKey;
+    private String ownerAccountName;
 
     private String gcmRegistrationId; // Google Cloud Messaging registration ID for this device.
 
@@ -34,6 +35,7 @@ public class Device implements Serializable {
             setComment(device.getComment());
             setHardwareDescription(device.getHardwareDescription());
             setOwnerKey(device.getOwner().getKey().getString());
+            setOwnerAccountName(device.getOwner().getAccountName());
             setGcmRegistrationId(device.getGcmRegistrationId());
             setCreationDate(device.getCreationDate());
             setLastIncomingMessageDate(device.getLastIncomingMessageDate());
@@ -87,6 +89,14 @@ public class Device implements Serializable {
 
     public void setOwnerKey(String ownerKey) {
         this.ownerKey = ownerKey;
+    }
+
+    public String getOwnerAccountName() {
+        return ownerAccountName;
+    }
+
+    public void setOwnerAccountName(String ownerAccountName) {
+        this.ownerAccountName = ownerAccountName;
     }
 
     public String getGcmRegistrationId() {

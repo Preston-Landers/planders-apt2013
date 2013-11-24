@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/ITXml_DJ2kk3E25k9ffwN5OaOLY\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/962CemdGUN-4-mjI2ov3_na9NW4\"",
  "discoveryVersion": "v1",
  "id": "register:v1",
  "name": "register",
@@ -217,6 +217,9 @@
     "name": {
      "type": "string"
     },
+    "ownerAccountName": {
+     "type": "string"
+    },
     "ownerKey": {
      "type": "string"
     },
@@ -273,6 +276,49 @@
    ],
    "response": {
     "$ref": "Device"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "getDeviceDirectory": {
+   "id": "register.getDeviceDirectory",
+   "path": "devicecollection/{limit}/{offset}",
+   "httpMethod": "GET",
+   "parameters": {
+    "lat": {
+     "type": "number",
+     "format": "double",
+     "location": "query"
+    },
+    "limit": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "long": {
+     "type": "number",
+     "format": "double",
+     "location": "query"
+    },
+    "offset": {
+     "type": "integer",
+     "required": true,
+     "format": "int32",
+     "location": "path"
+    },
+    "query": {
+     "type": "string",
+     "location": "query"
+    }
+   },
+   "parameterOrder": [
+    "limit",
+    "offset"
+   ],
+   "response": {
+    "$ref": "DeviceCollection"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"

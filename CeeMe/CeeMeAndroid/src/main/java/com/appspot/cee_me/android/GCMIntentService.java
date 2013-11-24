@@ -47,15 +47,15 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onRegistered(Context context, String registrationId) {
         Log.i(TAG, "Device registered: regId = " + registrationId);
-        displayMessage(context, getString(R.string.gcm_registered,
-                registrationId));
+//        displayMessage(context, getString(R.string.gcm_registered,
+//                registrationId));
         RegisterActivity.registerServiceCallback(context, registrationId);
     }
 
     @Override
     protected void onUnregistered(Context context, String registrationId) {
         Log.i(TAG, "Device unregistered");
-        displayMessage(context, getString(R.string.gcm_unregistered));
+        // displayMessage(context, getString(R.string.gcm_unregistered));
         RegisterActivity.unRegisterServiceCallback(context, registrationId);
     }
 
@@ -154,8 +154,8 @@ public class GCMIntentService extends GCMBaseIntentService {
                 .getRunningTasks(Integer.MAX_VALUE);
         boolean isActivityFound = false;
 
-        if (services.get(0).topActivity.getPackageName().toString()
-                .equalsIgnoreCase(context.getPackageName().toString())) {
+        if (services.get(0).topActivity.getPackageName()
+                .equalsIgnoreCase(context.getPackageName())) {
             isActivityFound = true;
         }
         return isActivityFound;

@@ -1,12 +1,17 @@
 package com.appspot.cee_me.model;
 
+import com.appspot.cee_me.Config;
+import com.appspot.cee_me.LatLong;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.Result;
 import com.googlecode.objectify.annotation.*;
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import static com.appspot.cee_me.OfyService.ofy;
@@ -17,18 +22,22 @@ import static com.appspot.cee_me.OfyService.ofy;
  */
 @Entity
 @Cache
-public class Device {
-    private @Id
+public class Device implements Comparable<Device> {
+    private
+    @Id
     Long id;
 
-    private @Index
+    private
+    @Index
     String publicId; // goes into public URL
 
     private String name; // Displayed user-assignable name
     private String comment; // user-assignable extra comment field
     private String hardwareDescription; // something to identify the actual hardware (user-visible)
 
-    private @Index @Load
+    private
+    @Index
+    @Load
     Ref<CUser> owner;
 
     private String gcmRegistrationId; // Google Cloud Messaging registration ID for this device.
@@ -40,6 +49,8 @@ public class Device {
     @SuppressWarnings("unused")
     private Device() {
     }
+
+    private static final char[] publicIdChars = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 
     public Device(String name, String hardwareDescription, Key<CUser> owner, String gcmRegistrationId) {
         setName(name);
@@ -141,6 +152,24 @@ public class Device {
     }
 
     /**
+     * Compare first by owner account name and then by publicId.
+     * @param other other device to compare to
+     * @return -1 if this is less than other, 0 is equal, otherwise 1
+     */
+    @Override
+    public int compareTo(Device other) {
+        String myAccountName = getOwner().getAccountName();
+        String otherAccountName = other.getOwner().getAccountName();
+
+        if (myAccountName.equals(otherAccountName)) {
+            return getPublicId().compareTo(other.getPublicId());
+        } else {
+            return myAccountName.compareTo(otherAccountName);
+        }
+    }
+
+
+    /**
      * Saves the entity to the data store.
      *
      * @param now set to true if the save should be finished before returning.
@@ -150,6 +179,34 @@ public class Device {
         if (now) {
             result.now();
         }
+    }
+
+    /**
+     * Generates a new, random device ID that is not already in use.
+     * @return the generated device ID
+     */
+    public static String generatePublicId() {
+        Logger log = Logger.getLogger(Device.class.getName());
+        Random rand = new Random();
+        char[] result = new char[Config.sizePublicDeviceId];
+        for (int i=0; i<result.length; i++) {
+            result[i] = publicIdChars[rand.nextInt(publicIdChars.length)];
+        }
+        String publicId = new String(result);
+        if (isPublicIdInUse(publicId)) {
+            log.warning("Generated a public device ID that is already in use: " + publicId);
+            return generatePublicId();
+        }
+        log.info("Generated a public device ID: " + publicId);
+        return publicId;
+    }
+
+    public static boolean isPublicIdInUse(String publicId) {
+        int count = ofy().load().type(Device.class).filter("publicId =", publicId).count();
+        if (count > 0) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -189,9 +246,10 @@ public class Device {
 
         Device device = new Device(name, hardwareDescription, owner, gcmRegistrationId);
         device.setComment(comment);
+        device.setPublicId(generatePublicId());
 
-        log.info(String.format("Registering new device: %s  HW: <%s> GCM: <%s> %s",
-                name, hardwareDescription, gcmRegistrationId, comment));
+        log.info(String.format("Registering new device: %s - %s  HW: <%s> GCM: <%s> %s",
+                device.getPublicId(), name, hardwareDescription, gcmRegistrationId, comment));
 
         device.save(true); // now
         return device;
@@ -199,6 +257,10 @@ public class Device {
 
     public static List<Device> getAllUserDevices(Key<CUser> owner) {
         return ofy().load().type(Device.class).filter("owner =", owner).list();
+    }
+
+    public static Device getByPublicId(String publicId) {
+        return ofy().load().type(Device.class).filter("publicId =", publicId.toLowerCase()).first().now();
     }
 
     /**
@@ -214,6 +276,7 @@ public class Device {
 
     /**
      * Load a Device by its datastore Key
+     *
      * @param deviceKey device key to load
      * @return the Device
      */
@@ -277,14 +340,75 @@ public class Device {
      * @return true if userKey is the owner of this device
      */
     public boolean cUserIsOwner(Key<CUser> userKey) {
-        return getOwner().equals(userKey);
+        return getOwner().getKey().equals(userKey);
     }
 
     public boolean cUserIsNotOwner(Key<CUser> userKey) {
-        return ! cUserIsOwner(userKey);
+        return !cUserIsOwner(userKey);
     }
 
     public String getSendUri() {
         return "/send?to=" + getKey().getString();
+    }
+
+    /**
+     * Determine if this device matches a search term. Assumes the search string has been trimmed and lowercased
+     *
+     * @param term a search term
+     * @return true if the term is empty, or if the term matches any of our search-enabled strings
+     */
+    public boolean matchesSearchTerm(String term) {
+        if (term == null || term.equals("")) {
+            return true;
+        }
+        CUser owner = getOwner();
+        if (owner.getAccountName().contains(term) ||
+                owner.getRealName().contains(term) ||
+                getName().contains(term) ||
+                getPublicId().contains(term) ||
+                getComment().contains(term)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Perform a device directory search. This is a good candidate for a unit test.
+     *
+     * @param limit       limit results, 0 == unlimited
+     * @param offset      offset within results
+     * @param queryString optional search string
+     * @param latLng      optional search coordinates (find results near this) TODO: not yet implemented
+     * @return
+     */
+    public static List<Device> getDirectorySearch(int limit, int offset, String queryString, LatLong latLng) {
+        List<Device> returnList = new ArrayList<Device>();
+        List<Device> allDevices = ofy().load().type(Device.class).list();
+        int included = 0;
+        int usedOffset = 0;
+        int i = -1;
+        if (queryString != null) {
+            queryString = queryString.trim().toLowerCase();
+        }
+
+        // TODO: if latLng is set, order the devices by distance to that point.
+
+        for (Device device : allDevices) {
+            i++;
+            if ((limit > 0) && (included > limit)) {
+                break;
+            }
+            if (device.matchesSearchTerm(queryString)) {
+                if ((offset > 0) && (usedOffset < offset)) {
+                    usedOffset++;
+                    continue;
+                }
+                included++;
+                returnList.add(device);
+            }
+        }
+        Collections.sort(returnList);
+        return returnList;
     }
 }

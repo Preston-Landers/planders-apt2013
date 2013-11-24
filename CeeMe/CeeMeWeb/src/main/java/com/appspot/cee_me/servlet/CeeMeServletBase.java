@@ -106,7 +106,7 @@ public abstract class CeeMeServletBase extends HttpServlet {
         // Automatically create a CUser for any Google Users we recognize
         if (guser != null) {
             String normEmail = Config.norm(guser.getEmail());
-            log.info("Searching for user " + normEmail);
+            log.fine("Searching for user " + normEmail);
             cuser = ofy().load().type(CUser.class)
                     .filter("accountName", normEmail).first().now();
             if (cuser == null) {

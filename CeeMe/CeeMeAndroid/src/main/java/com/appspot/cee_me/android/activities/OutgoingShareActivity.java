@@ -35,6 +35,7 @@ public class OutgoingShareActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.ac_outgoing_share);
         super.onCreate(savedInstanceState);
+        requireSignIn();
 
         Intent intent = getIntent();
 
@@ -56,7 +57,7 @@ public class OutgoingShareActivity extends BaseActivity {
     }
 
     private void setMessageURL(String txt) {
-        setText(txt, R.id.outgoingShare_url_tv);
+        setText(txt, R.id.outgoingShare_url_editText);
     }
 
     private void setStatusText(String txt) {
@@ -84,19 +85,6 @@ public class OutgoingShareActivity extends BaseActivity {
         setMessageText(message.getText());
         setMessageURL(message.getUrlData());
         setReceiverIdentity(message.getFromUser().getAccountName());
-    }
-
-    public void openIncomingShareURL(View view) {
-        openIncomingShareButton(view);
-    }
-
-    public void openIncomingShareButton(View view) {
-        String url = message.getUrlData();
-        if (url == null || url.length() == 0) {
-            shortToast("Can't open URL.");
-            return;
-        }
-        openExternalURL(url);
     }
 
     public void sendShareNow(View view) {

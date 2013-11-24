@@ -13,6 +13,8 @@ public class Config {
 	public static final String productDomain = "cee-me.appspot.com";
 	public static final String productURL = "http://" + productDomain;
 
+    public static final int sizePublicDeviceId = 6;
+
 	// public static final String productAdminEmail = "planders@gmail.com";
 
     /**

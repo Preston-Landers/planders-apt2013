@@ -29,7 +29,7 @@
     <application
             android:name=".CeeMeApplication"
             android:allowBackup="true"
-            android:icon="@drawable/ceeme_logo_2"
+            android:icon="@drawable/ceeme_logo"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
         <activity
@@ -53,6 +53,17 @@
                 android:theme="@style/ActionBar">
         </activity>
         <activity
+                android:name=".activities.DirectoryActivity"
+                android:label="@string/directory_activity_name"
+                android:theme="@style/ActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data
+                    android:name="android.app.searchable"
+                    android:resource="@xml/directory_searchable"/>
+        </activity>
+        <activity
                 android:name=".activities.IncomingShareActivity"
                 android:label="@string/incoming_share_activity_name"
                 android:theme="@style/ActionBar">
@@ -63,15 +74,11 @@
                 android:theme="@style/ActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
-                <!--<action android:name="android.intent.action.VIEW"/>-->
-
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="*"/>
+                <data android:mimeType="text/*"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
-                <!--<action android:name="android.intent.action.VIEW"/>-->
-
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:scheme="http"/>
                 <category

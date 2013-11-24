@@ -8,7 +8,7 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your device is not yet registered. Please register this device to use Cee.me."
+            android:text="Your device is not yet registered. Please register this device to use Cee.me. The name and comment will be publicly visible."
             android:id="@+id/textViewRegisterNotice"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
@@ -23,7 +23,7 @@
             android:id="@+id/registerDeviceName"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="90dp"
             android:hint="My Device Name"/>
 
     <TextView
@@ -55,7 +55,7 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Comment"
+            android:text="Publicly visible comment"
             android:id="@+id/textViewDeviceComment"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/editTextDeviceComment"/>

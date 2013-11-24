@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+    <style name="AppBaseTheme" parent="android:Theme.Holo">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -23,14 +23,18 @@
         <!--<item name="android:typeface">monospace</item>-->
     </style>
 
-    <style name="ActionBar" parent="android:Theme.Holo.Light">
+    <style name="ActionBar" parent="android:Theme.Holo">
         <item name="android:actionBarStyle">
             @android:style/Widget.Holo.ActionBar
         </item>
     </style>
 
     <style name="CeeMeMessageItemFrame">
-        <item name="android:background">@drawable/nice_buttonshape</item>
+        <item name="android:background">@drawable/blue_buttonshape</item>
+    </style>
+
+    <style name="CeeMeMessageOutgoingItemFrame">
+        <item name="android:background">@drawable/darkgreen_buttonshape</item>
     </style>
 
     <style name="CeeMeMessageItemFrameText">
