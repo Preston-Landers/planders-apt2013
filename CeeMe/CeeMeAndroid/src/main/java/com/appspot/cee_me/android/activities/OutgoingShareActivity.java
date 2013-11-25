@@ -8,19 +8,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.appspot.cee_me.android.Config;
 import com.appspot.cee_me.android.R;
 import com.appspot.cee_me.android.SyncEndpointService;
+import com.appspot.cee_me.register.model.Device;
 import com.appspot.cee_me.sync.Sync;
 import com.appspot.cee_me.sync.model.Message;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.json.JsonFactory;
+
+import java.io.IOException;
 
 public class OutgoingShareActivity extends BaseActivity {
-    private static final String TAG = "OutgoingShareActivity";
+    private static final String TAG = CEEME + ".OutgoingShareActivity";
 
-    private String messageKey;
-    private String messageText;
-    private String messageUrl;
+    private static final int REQUEST_DIRECTORY_LOOKUP = 23;
 
+    private String toDeviceKey;
     private Sync service;
     private Message message;
 
@@ -51,14 +55,64 @@ public class OutgoingShareActivity extends BaseActivity {
         setMessageURL(data);
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_DIRECTORY_LOOKUP:
+                if (resultCode == DirectoryActivity.RESULT_CANCELED) {
+                    shortToast("Directory lookup canceled.");
+                } else if (resultCode == DirectoryActivity.RESULT_OK) {
+                    handleDirectoryLookup(data);
+                } else if (resultCode == DirectoryActivity.RESULT_ERROR) {
+                    shortToast("Error during directory lookup.");
+                }
+                break;
+        }
+    }
 
-    private void setMessageText(String txt) {
-        setText(txt, R.id.outgoingShare_message_editText);
+    private void handleDirectoryLookup(Intent data) {
+        String deviceStr = data.getStringExtra(DirectoryActivity.EXTRA_DEVICE_JSON);
+        // Log.i(TAG, "Got device from directory: " + deviceStr);
+
+        // Reconstitute the device
+//        Gson gson = new Gson();
+//        Device device = gson.fromJson(deviceStr, Device.class);
+        Device device;
+        try {
+            JsonFactory factory = new AndroidJsonFactory();
+            device = factory.fromString(deviceStr, Device.class);
+            Log.i(TAG, "Got device from directory: " + device);
+        } catch (Exception e) {
+            Log.e(TAG, "Unable to deserialize device from lookup: " + deviceStr, e);
+            return;
+        }
+
+        String deviceDesc = device.getOwnerAccountName() + ": " + device.getPublicId() + " " + device.getName() ;
+        setText(deviceDesc, R.id.outgoingShare_to_tv);
+        toDeviceKey = device.getDeviceKey();
+    }
+
+    private void logSentMessageAndFinish(Message message) {
+        Log.i(TAG, "Successfully sent message: " + message);
+        setResult(RESULT_OK);
+        finish();
     }
 
     private void setMessageURL(String txt) {
         setText(txt, R.id.outgoingShare_url_editText);
     }
+
+    private String getMessageURL() {
+        TextView textView = (TextView) findViewById(R.id.outgoingShare_url_editText);
+        return textView.getText().toString();
+    }
+
+    private String getMessageText() {
+        TextView textView = (TextView) findViewById(R.id.outgoingShare_message_editText);
+        return textView.getText().toString();
+    }
+
 
     private void setStatusText(String txt) {
         setText(txt, R.id.outgoingShare_status_textview);
@@ -76,19 +130,18 @@ public class OutgoingShareActivity extends BaseActivity {
         streamLabel.setText(txt);
     }
 
-    /**
-     * Load the text views and such to display the contents of a server Message
-     *
-     * @param message API model Message to display
-     */
-    private void displayMessageDetails(Message message) {
-        setMessageText(message.getText());
-        setMessageURL(message.getUrlData());
-        setReceiverIdentity(message.getFromUser().getAccountName());
+    public void chooseMessageRecipient(View view) {
+        Intent intent = new Intent(this, DirectoryActivity.class);
+        startActivityForResult(intent, REQUEST_DIRECTORY_LOOKUP);
     }
 
     public void sendShareNow(View view) {
-        shortToast("Not implemented yet.");
+        // Validate that we can send the message.
+        if (toDeviceKey == null || toDeviceKey.equals("")) {
+            shortToast("You must select a recipient first.");
+            return;
+        }
+        new SendMessageTask().execute();
     }
 
     public void cancelOutgoingShare(View view) {
@@ -109,10 +162,15 @@ public class OutgoingShareActivity extends BaseActivity {
         @Override
         protected Void doInBackground(Void... params) {
             querySuccess = false;
+            String msgText = getMessageText();
+            String urlData = getMessageURL();
             try {
                 service = SyncEndpointService.getSyncService(getCredential());
-                Sync.GetMessage getMessage = service.getMessage(messageKey);
-                message = getMessage.execute();
+                Sync.SendMessage sendMessage = service.sendMessage(deviceKey, toDeviceKey);
+                // TODO: deal with media attachments here
+                sendMessage.setText(msgText);
+                sendMessage.setUrlData(urlData);
+                message = sendMessage.execute();
                 querySuccess = true;
 //            } catch (GoogleAuthIOException e) {
 //                Log.e(TAG, "message send fail: " + e.getCause());
@@ -124,12 +182,12 @@ public class OutgoingShareActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(Void rv) {
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.outgoingShare_progressBar);
             progressBar.setVisibility(View.INVISIBLE);
             setStatusText("");
             if (querySuccess) {
                 if (message != null) {
-                    displayMessageDetails(message);
+                    logSentMessageAndFinish(message);
                 }
             } else {
                 setStatusText("Error: couldn't send this message.");
@@ -139,7 +197,7 @@ public class OutgoingShareActivity extends BaseActivity {
 
         @Override
         protected void onPreExecute() {
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.outgoingShare_progressBar);
             progressBar.setVisibility(View.VISIBLE);
             setStatusText("Sending, please wait...");
         }

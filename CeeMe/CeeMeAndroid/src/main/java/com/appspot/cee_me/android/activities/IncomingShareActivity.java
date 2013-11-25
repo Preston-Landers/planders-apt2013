@@ -15,7 +15,7 @@ import com.appspot.cee_me.sync.Sync;
 import com.appspot.cee_me.sync.model.Message;
 
 public class IncomingShareActivity extends BaseActivity {
-    private static final String TAG = "IncomingShareActivity";
+    private static final String TAG = CEEME + ".IncomingShareActivity";
 
     private String messageKey;
     private String messageText;

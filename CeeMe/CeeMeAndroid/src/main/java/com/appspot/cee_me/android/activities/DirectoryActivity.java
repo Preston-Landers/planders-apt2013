@@ -1,9 +1,12 @@
 package com.appspot.cee_me.android.activities;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -13,12 +16,18 @@ import com.appspot.cee_me.android.adapters.DirectoryListAdapter;
 import com.appspot.cee_me.register.Register;
 import com.appspot.cee_me.register.model.Device;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DirectoryActivity extends BaseActivity
         implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
-    private static final String TAG = "DirectoryActivity";
+    private static final String TAG = CEEME + ".DirectoryActivity";
+    public static final String EXTRA_DEVICE_JSON = CEEME_EXTRAS + "selectedDevice";
+    public static final int RESULT_ERROR = 99;
     private SearchView searchView;
+    private DirectoryListAdapter listAdapter;
+    private ListView listView;
 
     /**
      * Called when the activity is first created.
@@ -39,10 +48,18 @@ public class DirectoryActivity extends BaseActivity
 
         requireSignIn();
 
+        listAdapter = new DirectoryListAdapter(this, R.layout.item_directory_result, new ArrayList<Device>());
+
+        listView = (ListView) findViewById(R.id.directory_listView);
+        View header = getLayoutInflater().inflate(R.layout.item_directory_header_row, null);
+        listView.addHeaderView(header);
+        listView.setAdapter(listAdapter);
+
         // TODO: use location here!
 
         Log.i(TAG, "DirectoryActivity started.");
 
+        showResults("");
     }
 
     @Override
@@ -64,7 +81,7 @@ public class DirectoryActivity extends BaseActivity
     }
 
     public boolean onClose() {
-        showResults("");
+        // showResults("");
         return false;
     }
 
@@ -73,15 +90,31 @@ public class DirectoryActivity extends BaseActivity
         new SearchDirectoryTask().execute(params);
     }
 
-    private void loadSearchResults(List<Device> deviceList) {
-        shortToast("Got " + deviceList.size() + " results!");
-        DirectoryListAdapter listAdapter = new DirectoryListAdapter(this, R.layout.item_directory_result, deviceList);
-        ListView listView = (ListView) findViewById(R.id.directory_listView);
+    private void loadSearchResults(final List<Device> deviceList) {
+        // shortToast("Got " + deviceList.size() + " results!");
+        listAdapter.setDeviceList(deviceList);
 
-        View header = getLayoutInflater().inflate(R.layout.item_directory_header_row, null);
-        listView.addHeaderView(header);
+        // Define the on-click listener for the list items
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the cursor, positioned to the corresponding row in the result set
+                // Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+                // Log.i(TAG, "cursor: " + cursor.toString());
+                shortToast("Clicked: " + position + " id: " + id);
+                Device device = deviceList.get(position-1);
+                Log.i(TAG, "click device : " + device);
 
-        listView.setAdapter(listAdapter);
+                try {
+                    String deviceStr = device.toPrettyString();
+                    setResult(RESULT_OK, new Intent().putExtra(EXTRA_DEVICE_JSON, deviceStr));
+                } catch (IOException e) {
+                    Log.e(TAG, "Can't serialized directory choice", e);
+                    setResult(RESULT_ERROR);
+                }
+                finish();
+
+            }
+        });
     }
 
     @SuppressWarnings("UnusedParameters")

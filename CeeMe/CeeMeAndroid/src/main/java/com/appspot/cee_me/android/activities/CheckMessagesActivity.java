@@ -13,7 +13,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIOException;
 
 public class CheckMessagesActivity extends BaseActivity {
-    private static final String TAG = "CheckMessagesActivity";
+    private static final String TAG = CEEME + ".CheckMessagesActivity";
 
     // query parameters for the server
     private final static int defaultQueryLimit = 9;

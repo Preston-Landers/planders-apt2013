@@ -24,7 +24,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAuthIO
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 
 public class RegisterActivity extends BaseActivity {
-    private static final String TAG = "RegisterActivity";
+    private static final String TAG = CEEME + ".RegisterActivity";
 
     public static final int RESULT_ERROR = 42;
     public static final String EXTRA_DEREGISTER = CEEME_PACKAGE + ".extra.deregister";

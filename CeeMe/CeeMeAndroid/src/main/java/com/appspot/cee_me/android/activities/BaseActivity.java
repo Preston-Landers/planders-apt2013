@@ -10,6 +10,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.appspot.cee_me.android.Account;
@@ -26,8 +27,10 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
  * Handles location services - disabled by default, set useLocation in subclass onCreate.
  */
 public class BaseActivity extends Activity {
-    private static final String TAG = "BaseActivity";
+    public static final String CEEME = "Cee.me";
     public static final String CEEME_PACKAGE = "com.appspot.cee_me.android";
+    private static final String TAG = CEEME + ".BaseActivity";
+    public static final String CEEME_EXTRAS = CEEME_PACKAGE + ".extras.";
     protected CeeMeApplication mMyApp;
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
@@ -89,6 +92,7 @@ public class BaseActivity extends Activity {
     protected void signOut() {
         // signOutExceptAccount();
         setAccountName(null);
+        Log.i(TAG, "Signed out.");
     }
 
     protected boolean isSignedIn() {

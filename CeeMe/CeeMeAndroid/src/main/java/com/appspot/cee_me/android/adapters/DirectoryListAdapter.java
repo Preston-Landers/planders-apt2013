@@ -28,6 +28,16 @@ public class DirectoryListAdapter extends ArrayAdapter<Device> {
         this.deviceList = deviceList;
     }
 
+    public List<Device> getDeviceList() {
+        return deviceList;
+    }
+
+    public void setDeviceList(List<Device> deviceList) {
+        clear();
+        this.deviceList = deviceList;
+        addAll(deviceList);
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
@@ -44,6 +54,7 @@ public class DirectoryListAdapter extends ArrayAdapter<Device> {
             holder.hwDesc = (TextView)row.findViewById(R.id.directory_result_hwdesc_textView);
             holder.comment = (TextView)row.findViewById(R.id.directory_result_comment_textView);
             holder.publicId = (TextView)row.findViewById(R.id.directory_result_publicid_textView);
+            holder.device = null;
 
             row.setTag(holder);
         }
@@ -52,13 +63,16 @@ public class DirectoryListAdapter extends ArrayAdapter<Device> {
             holder = (DeviceHolder)row.getTag();
         }
 
-        Device device = deviceList.get(position);
-        holder.accountName.setText(device.getOwnerAccountName());
-        holder.deviceName.setText(device.getName());
-        holder.hwDesc.setText(device.getHardwareDescription());
-        holder.comment.setText(device.getComment());
-        holder.publicId.setText(device.getPublicId());
-
+        List<Device> devices = getDeviceList();
+        if (devices != null) {
+            Device device = devices.get(position);
+            holder.accountName.setText(device.getOwnerAccountName());
+            holder.deviceName.setText(device.getName());
+            holder.hwDesc.setText(device.getHardwareDescription());
+            holder.comment.setText(device.getComment());
+            holder.publicId.setText(device.getPublicId());
+            holder.device = device; // TODO: Check this!!
+        }
         return row;
     }
 
@@ -70,5 +84,7 @@ public class DirectoryListAdapter extends ArrayAdapter<Device> {
         TextView hwDesc;
         TextView comment;
         TextView publicId;
+
+        Device device;
     }
 }

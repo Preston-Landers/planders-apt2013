@@ -72,7 +72,7 @@ public class Device implements Comparable<Device> {
     }
 
     public String getPublicId() {
-        return publicId;
+        return publicId == null ? "" : publicId;
     }
 
     public void setPublicId(String publicId) {
@@ -80,7 +80,7 @@ public class Device implements Comparable<Device> {
     }
 
     public String getName() {
-        return name;
+        return name == null ? "" : name;
     }
 
     public void setName(String name) {
@@ -88,7 +88,7 @@ public class Device implements Comparable<Device> {
     }
 
     public String getComment() {
-        return comment;
+        return comment == null ? "" : comment;
     }
 
     public void setComment(String comment) {
@@ -362,11 +362,11 @@ public class Device implements Comparable<Device> {
             return true;
         }
         CUser owner = getOwner();
-        if (owner.getAccountName().contains(term) ||
-                owner.getRealName().contains(term) ||
-                getName().contains(term) ||
-                getPublicId().contains(term) ||
-                getComment().contains(term)) {
+        if (owner.getAccountName().toLowerCase().contains(term) ||
+                owner.getRealName().toLowerCase().contains(term) ||
+                getName().toLowerCase().contains(term) ||
+                getPublicId().toLowerCase().contains(term) ||
+                getComment().toLowerCase().contains(term)) {
             return true;
         }
 

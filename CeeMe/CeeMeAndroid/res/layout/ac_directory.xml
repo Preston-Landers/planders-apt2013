@@ -5,16 +5,6 @@
         android:layout_height="fill_parent"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Directory Search"
-            android:id="@+id/directory_title_tv"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"/>
-
     <SearchView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,9 +20,8 @@
             android:id="@+id/directory_ok"
             android:layout_gravity="center_horizontal"
             android:onClick="chooseRecipientDirectoryButton"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@+id/directory_cancel_button"
-            android:layout_marginBottom="20dp"/>
+            android:layout_alignRight="@+id/directory_listView"
+            android:layout_alignParentBottom="true"/>
 
     <Button
             style="@style/RedGradientButton"
@@ -42,22 +31,23 @@
             android:id="@+id/directory_cancel_button"
             android:layout_gravity="center_horizontal"
             android:onClick="cancelDirectoryButton"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"/>
+            android:layout_alignLeft="@+id/directory_searchView"
+            android:layout_alignBottom="@+id/directory_ok"/>
 
     <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/directory_listView"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/directory_searchView"/>
+            android:layout_below="@+id/directory_searchView"
+            android:layout_above="@+id/directory_cancel_button"/>
 
     <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/directory_progressBar"
-            android:layout_centerHorizontal="true"
-            android:layout_above="@+id/directory_ok"
-            android:layout_marginBottom="10dp"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            android:layout_toRightOf="@+id/directory_cancel_button"
+            android:layout_alignTop="@+id/directory_ok"
+            android:layout_marginLeft="10dp"/>
 </RelativeLayout>

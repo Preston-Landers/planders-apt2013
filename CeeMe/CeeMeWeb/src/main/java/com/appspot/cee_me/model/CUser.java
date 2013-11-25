@@ -79,7 +79,7 @@ public class CUser implements Comparable<CUser> {
     }
 
     public String getRealName() {
-        return realName;
+        return realName == null ? "" : realName;
     }
 
     public void setRealName(String realName) {

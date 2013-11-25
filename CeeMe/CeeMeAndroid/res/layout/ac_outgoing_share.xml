@@ -38,10 +38,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/outgoingShare_to_frameLayout"
                 style="@style/CeeMeMessageOutgoingItemFrame"
-                >
+                android:onClick="chooseMessageRecipient">
 
             <LinearLayout
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
@@ -84,11 +84,10 @@
                         android:layout_height="wrap_content"
                         android:text="Message:"
                         android:id="@+id/outgoingShare_text_label_tv"
-                        android:layout_marginLeft="5dp"
                         android:textStyle="italic"
-                        android:layout_marginBottom="5dp"
                         android:phoneNumber="true"
-                        style="@style/CeeMeMessageItemFrameHeaderText"/>
+                        style="@style/CeeMeMessageItemFrameHeaderText"
+                        android:layout_margin="5dp"/>
 
                 <EditText
                         android:layout_width="wrap_content"
@@ -123,14 +122,16 @@
                         android:id="@+id/outgoingShare_url_label_tv"
                         android:textStyle="italic"
                         android:singleLine="true"
-                        style="@style/CeeMeMessageItemFrameHeaderText"/>
+                        style="@style/CeeMeMessageItemFrameHeaderText"
+                        />
 
                 <EditText
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="(url placeholder"
+                        android:text="(url placeholder)"
                         android:id="@+id/outgoingShare_url_editText"
-                        style="@style/CeeMeMessageItemFrameText"/>
+                        style="@style/CeeMeMessageItemFrameText"
+                        />
 
             </LinearLayout>
         </FrameLayout>
@@ -145,11 +146,10 @@
                     android:text="Send Now"
                     android:id="@+id/outgoingShare_send_button"
                     android:layout_gravity="center_horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_above="@+id/outgoingShare_cancel_button"
-                    android:layout_marginBottom="10dp"
                     android:onClick="sendShareNow"
-                    style="@style/GreenGradientButton"/>
+                    style="@style/GreenGradientButton"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"/>
 
             <Button
                     android:layout_width="wrap_content"
@@ -157,11 +157,10 @@
                     android:text="Cancel"
                     android:id="@+id/outgoingShare_cancel_button"
                     android:layout_gravity="center_horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="5dp"
                     android:onClick="cancelOutgoingShare"
-                    style="@style/RedGradientButton"/>
+                    style="@style/RedGradientButton"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignTop="@+id/outgoingShare_send_button"/>
 
             <ProgressBar
                     android:layout_width="wrap_content"
