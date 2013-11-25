@@ -97,10 +97,7 @@ public class DirectoryActivity extends BaseActivity
         // Define the on-click listener for the list items
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Get the cursor, positioned to the corresponding row in the result set
-                // Cursor cursor = (Cursor) listView.getItemAtPosition(position);
-                // Log.i(TAG, "cursor: " + cursor.toString());
-                shortToast("Clicked: " + position + " id: " + id);
+                // shortToast("Clicked: " + position + " id: " + id);
                 Device device = deviceList.get(position-1);
                 Log.i(TAG, "click device : " + device);
 

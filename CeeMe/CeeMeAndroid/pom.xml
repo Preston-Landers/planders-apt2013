@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <platform.version>4.1.1.4
         </platform.version>
-        <android.plugin.version>3.7.0</android.plugin.version>
+        <android.plugin.version>3.8.0</android.plugin.version>
         <!--<android-platform>10</android-platform>-->
         <!--<android.sdk.path>C:\Users\Preston\AppData\Local\Android\android-sdk\</android.sdk.path>-->
     </properties>
@@ -83,13 +83,13 @@
         <dependency>
             <groupId>com.google.android.gms</groupId>
             <artifactId>google-play-services</artifactId>
-            <version>12</version>
+            <version>13</version>
             <type>apklib</type>
         </dependency>
         <dependency>
             <groupId>com.google.android.gms</groupId>
             <artifactId>google-play-services</artifactId>
-            <version>12</version>
+            <version>13</version>
             <type>jar</type>
         </dependency>
 

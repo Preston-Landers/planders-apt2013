@@ -13,11 +13,8 @@ import com.appspot.cee_me.android.SyncEndpointService;
 import com.appspot.cee_me.register.model.Device;
 import com.appspot.cee_me.sync.Sync;
 import com.appspot.cee_me.sync.model.Message;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.json.JsonFactory;
-
-import java.io.IOException;
 
 public class OutgoingShareActivity extends BaseActivity {
     private static final String TAG = CEEME + ".OutgoingShareActivity";

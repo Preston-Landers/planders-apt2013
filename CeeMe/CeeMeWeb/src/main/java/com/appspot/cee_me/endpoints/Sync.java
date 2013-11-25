@@ -180,7 +180,7 @@ public class Sync extends EndpointBase {
                 Ref.create(fromUser),
                 Ref.create(toUser),
                 Ref.create(toDevice),
-                Ref.create(modelMedia),
+                modelMedia == null ? null : Ref.create(modelMedia),
                 text,
                 urlData
         );
