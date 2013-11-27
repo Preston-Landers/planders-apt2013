@@ -1,6 +1,7 @@
 package com.appspot.cee_me.endpoints;
 
 import com.appspot.cee_me.Config;
+import com.appspot.cee_me.endpoints.model.Media;
 import com.appspot.cee_me.endpoints.model.Message;
 import com.appspot.cee_me.endpoints.model.MessageQuery;
 import com.appspot.cee_me.model.CUser;
@@ -12,9 +13,7 @@ import org.joda.time.DateTime;
 
 import javax.annotation.Nullable;
 import javax.inject.Named;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -188,5 +187,52 @@ public class Sync extends EndpointBase {
         message.sendNotification();
 
         return new Message(message);
+    }
+
+    /**
+     * Create a media entry corresponding to a file in Google Cloud Storage.
+     * The GCS bucket is not a parameter, it's set internally by the server.
+     * This assumes you have already transfered the file to GCS under the given gcsFilename.
+     *
+     * @param user        Google user
+     * @param gcsFilename the GCS filename
+     * @param fileName    the original name of the file to be preserved
+     * @param mimeType    the file's mime type
+     * @param size        size in bytes
+     * @param comments    optional - comment string
+     * @param sha256      optional - the SHA-256 digest
+     * @param latitude    optional - media latitude point
+     * @param longitude   optional - media longitude point
+     * @return
+     */
+    @ApiMethod(name = "createMedia", httpMethod = "post")
+    public Media createMedia(
+            User user,
+            @Named("gcsFilename") String gcsFilename,
+            @Named("fileName") String fileName,
+            @Named("mimeType") String mimeType,
+            @Named("size") Long size,
+            @Named("comments") @Nullable String comments,
+            @Named("sha256") @Nullable String sha256,
+            @Named("latitude") @Nullable Double latitude,
+            @Named("longitude") @Nullable Double longitude
+    ) {
+        CUser fromUser = getUser(user);
+        String gcsBucket = Config.GCS_UPLOAD_BUCKET;
+        com.appspot.cee_me.model.Media media = com.appspot.cee_me.model.Media.createMediaFromGCS(
+                fromUser.getKey(),
+                gcsBucket,
+                gcsFilename,
+                fileName,
+                mimeType,
+                size,
+                comments,
+                sha256,
+                latitude,
+                longitude
+        );
+        log.fine("Endpoint: created media attachment: " + media);
+
+        return new Media(media);
     }
 }

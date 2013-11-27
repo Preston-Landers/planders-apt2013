@@ -38,6 +38,8 @@ public class Config {
     public static final String MSG_NOT_DEVICE_OWNER = "You are not the device owner.";
     public static final String MSG_UNKNOWN_DEVICE = "Invalid device or device not found.";
     public static final String MSG_NOT_ALLOWED = "You are not allowed to perform this action.";
+    public static final String GCS_UPLOAD_BUCKET = "ceeme_upload";
+
 
 
     public static int safeLongToInt(long l) {

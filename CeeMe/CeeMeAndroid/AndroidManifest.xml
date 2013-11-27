@@ -76,8 +76,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/*"/>
+                <data android:mimeType="*/*"/>
             </intent-filter>
+            <!-- Not really sure if this second one is required -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>

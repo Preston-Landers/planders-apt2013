@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/oP7GjO_4jG-I9Wp3oWESe9aSrP0\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/QkpmN_r5geLT2cCaSu10YVVufG8\"",
  "discoveryVersion": "v1",
  "id": "sync:v1",
  "name": "sync",
@@ -357,6 +357,64 @@
   }
  },
  "methods": {
+  "createMedia": {
+   "id": "sync.createMedia",
+   "path": "createMedia/{gcsFilename}/{fileName}/{mimeType}/{size}",
+   "httpMethod": "POST",
+   "parameters": {
+    "comments": {
+     "type": "string",
+     "location": "query"
+    },
+    "fileName": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    },
+    "gcsFilename": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    },
+    "latitude": {
+     "type": "number",
+     "format": "double",
+     "location": "query"
+    },
+    "longitude": {
+     "type": "number",
+     "format": "double",
+     "location": "query"
+    },
+    "mimeType": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    },
+    "sha256": {
+     "type": "string",
+     "location": "query"
+    },
+    "size": {
+     "type": "string",
+     "required": true,
+     "format": "int64",
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "gcsFilename",
+    "fileName",
+    "mimeType",
+    "size"
+   ],
+   "response": {
+    "$ref": "Media"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
   "deleteMessage": {
    "id": "sync.deleteMessage",
    "path": "message/{messageKey}",

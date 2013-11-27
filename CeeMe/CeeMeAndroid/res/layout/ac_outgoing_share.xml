@@ -95,7 +95,8 @@
                         android:id="@+id/outgoingShare_message_editText"
                         android:hint="Add a message here"
                         style="@style/CeeMeMessageItemFrameText"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white"/>
 
             </LinearLayout>
         </FrameLayout>
@@ -163,14 +164,24 @@
                     android:layout_alignTop="@+id/outgoingShare_send_button"/>
 
             <ProgressBar
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/outgoingShare_progressBar"
                     android:visibility="invisible"
                     android:focusableInTouchMode="true"
                     android:layout_centerHorizontal="true"
                     android:layout_above="@+id/outgoingShare_send_button"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_marginBottom="5dp"
+                    style="@android:style/Widget.ProgressBar.Horizontal"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Progress Text"
+                    android:id="@+id/outgoingShare_progress_textView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@+id/outgoingShare_progressBar"
+                    android:visibility="invisible"/>
         </RelativeLayout>
 
     </LinearLayout>

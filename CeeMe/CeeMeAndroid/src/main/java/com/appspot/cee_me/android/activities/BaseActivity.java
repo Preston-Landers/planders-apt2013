@@ -20,6 +20,8 @@ import com.appspot.cee_me.android.R;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
+import java.util.List;
+
 
 /**
  * Base activity for all activities. Has code for location and account services.
@@ -27,8 +29,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
  * Handles location services - disabled by default, set useLocation in subclass onCreate.
  */
 public class BaseActivity extends Activity {
-    public static final String CEEME = "Cee.me";
-    public static final String CEEME_PACKAGE = "com.appspot.cee_me.android";
+    public static final String CEEME = Config.APPNAME;
+    public static final String CEEME_PACKAGE = Config.CEE_ME_ANDROID;
     private static final String TAG = CEEME + ".BaseActivity";
     public static final String CEEME_EXTRAS = CEEME_PACKAGE + ".extras.";
     protected CeeMeApplication mMyApp;
@@ -128,7 +130,7 @@ public class BaseActivity extends Activity {
     }
 
     /**
-     * @return Returns the current Google Account credential object.
+     * @return Returns the current Google Account credential object used with Cloud Endpoints (App Server) calls.
      */
     protected GoogleAccountCredential getCredential() {
         // Uses the singleton instead of our private instance, in case 'somewhere outside' changes the singleton
@@ -136,7 +138,22 @@ public class BaseActivity extends Activity {
     }
 
     /**
-     * Loads the GCM registration ID. If the device is not currently registered,
+     * Get an OAuth 2.0 credential object that can be used with general Google APIs such as Cloud Storage (GCS)
+     * @param scopesList list of API defined scopes to be used with this operation
+     * @return Google API OAuth 2.0 credential that uses the given scopes
+     */
+    protected GoogleAccountCredential getGoogleAPICredential(List<String> scopesList) {
+        GoogleAccountCredential cred = GoogleAccountCredential.usingOAuth2(
+                this,
+                scopesList
+                );
+        cred.setSelectedAccountName(getCredential().getSelectedAccountName());
+        return cred;
+    }
+
+
+    /**
+     * Loads the Google Cloud Messaging registration ID. If the device is not currently registered,
      * this will return an empty string.
      */
     private String getGCMRegistration() {

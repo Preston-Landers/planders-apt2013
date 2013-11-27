@@ -34,6 +34,8 @@ public class Media implements Comparable<Media> {
     private String fileName;
 
     private @Index BlobKey blobKey;
+    private String gcsBucket;
+    private String gcsFilename;
 
     private String mimeType;
 
@@ -131,7 +133,23 @@ public class Media implements Comparable<Media> {
 		this.id = id;
 	}
 
-	public String getFileName() {
+    public String getGcsBucket() {
+        return gcsBucket;
+    }
+
+    public void setGcsBucket(String gcsBucket) {
+        this.gcsBucket = gcsBucket;
+    }
+
+    public String getGcsFilename() {
+        return gcsFilename;
+    }
+
+    public void setGcsFilename(String gcsFilename) {
+        this.gcsFilename = gcsFilename;
+    }
+
+    public String getFileName() {
 		return fileName;
 	}
 
@@ -323,5 +341,49 @@ public class Media implements Comparable<Media> {
         this.sha256 = sha256;
     }
 
+    public static Media createMediaFromGCS(
+            Key<CUser> uploader,
+            String gcsBucket,
+            String gcsFilename,
+            String fileName,
+            String mimeType,
+            Long size,
+            String comments,
+            String sha256,
+            Double latitude,
+            Double longitude) {
+        Logger log = Logger.getLogger(Media.class.getName());
+
+        if (uploader == null) {
+            throw new IllegalArgumentException("Can't have null uploader");
+        }
+        Media media = new Media();
+
+        media.setUploader(Ref.create(uploader));
+        media.setViews((long) 0);
+        media.setGcsBucket(gcsBucket);
+        media.setGcsFilename(gcsFilename);
+
+
+
+        media.setCreationDate(new DateTime());
+        if (latitude != null) {
+            media.setLatitude(latitude);
+        }
+        if (longitude != null) {
+            media.setLongitude(longitude);
+        }
+        media.setComments(comments);
+        media.setSize(size);
+        media.setMimeType(mimeType);
+        media.setFileName(fileName);
+
+        // TODO: interpret string into shortblob?
+        // media.setSha256(sha256);
+
+        log.info("createMediaFromGCS: " + media);
+        media.save();
+        return media;
+    }
 
 }

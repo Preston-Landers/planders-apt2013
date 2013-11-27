@@ -9,6 +9,7 @@ import android.os.Build;
  * General static configuration strings and silly little utilities which should be split off into another class.
  */
 public class Config {
+    public static final String APPNAME = "Cee.me";
     public static final String PREFS_NAME = "Cee.me";
     public static final String PREF_AUTH_TOKEN = "authToken";
     public static final String PREF_ACCOUNT_NAME = "accountName";
@@ -23,6 +24,11 @@ public class Config {
      * OAuth 2.0 "Web App" Client ID from G-API Console
      */
     public static final String AUDIENCE = "server:client_id:860742061992-hluiaap2cfsl9dp1io7bc3au26vks2m6.apps.googleusercontent.com";
+
+    /**
+     * The Google Cloud Storage bucket used for all uploads.
+     */
+    public static final String GCS_BUCKET = "ceeme_media";
 
     /**
      * Triggers various assertions and checks
