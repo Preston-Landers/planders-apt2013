@@ -358,7 +358,7 @@ public class OutgoingShareActivity extends BaseActivity {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.outgoingShare_progressBar);
             progressBar.setProgress(params.progress);
             TextView progressText = (TextView) findViewById(R.id.outgoingShare_progress_textView);
-            String progressString = params.bytesSent + " sent / " + params.totalBytes + " total";
+            String progressString = params.getProgressString();
             progressText.setText(progressString);
         }
     }
@@ -376,6 +376,11 @@ public class OutgoingShareActivity extends BaseActivity {
             this.bytesSent = bytesSent;
             this.totalBytes = totalBytes;
         }
+
+        public String getProgressString() {
+            return progress + "% - " + FileUtils.byteCountToDisplaySize(bytesSent) + " of " + FileUtils.byteCountToDisplaySize(totalBytes);
+        }
+
     }
 }
 

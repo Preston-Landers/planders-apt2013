@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
-
 import java.io.File;
 
 /**
@@ -84,5 +83,14 @@ public class FileUtils {
      */
     public static String getBaseFilenameFromPath(String filePath) {
         return new File(filePath).getName();
+    }
+
+    /**
+     * Get a human readable file size
+     * @param bytes size of the file to interpret
+     * @return human readable string describing file size
+     */
+    public static String byteCountToDisplaySize(long bytes) {
+        return org.apache.commons.io.FileUtils.byteCountToDisplaySize(bytes);
     }
 }

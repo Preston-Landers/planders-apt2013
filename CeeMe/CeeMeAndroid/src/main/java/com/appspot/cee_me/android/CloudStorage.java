@@ -258,15 +258,15 @@ public class CloudStorage {
                     // Do not use if the specified AbstractInputStreamContent has no content length specified. Instead, consider using getNumBytesUploaded() to denote progress.
                     // are we handling that?
                     int currentProgress;
+/*
                     try {
                         currentProgress = new Double(uploader.getProgress() * 100.0).intValue();
                     } catch (IllegalArgumentException e) {
                         currentProgress = -1;
                     }
+*/
                     long bytesXfered = uploader.getNumBytesUploaded();
-                    if (currentProgress == -1) {
-                        currentProgress = (int) ((double) fileSize * (double) 100 / (double) bytesXfered);
-                    }
+                    currentProgress = (int) ((double) bytesXfered  * 100.0 / (double) fileSize);
                     Log.i(TAG, "Upload percentage: " + currentProgress);
                     if (ioProgress != null) {
                         ioProgress.setProgress(currentProgress, bytesXfered, fileSize);
