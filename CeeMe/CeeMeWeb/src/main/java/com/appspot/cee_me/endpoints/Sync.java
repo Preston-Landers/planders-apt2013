@@ -235,4 +235,31 @@ public class Sync extends EndpointBase {
 
         return new Media(media);
     }
+
+    /**
+     * Test method, please ignore.
+     * @param user user
+     * @param text a string to test
+     * @return a dummy message that is not sent
+     */
+    @ApiMethod(name = "echoMessage", httpMethod = "get")
+    public EchoResult echoMessage(User user,
+                               @Named("text") String text) {
+        EchoResult result = new EchoResult();
+        result.setText(text);
+        return result;
+
+    }
+
+    public static class EchoResult {
+        String text;
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+    }
 }

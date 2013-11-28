@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/QkpmN_r5geLT2cCaSu10YVVufG8\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/OnFs-nfNiK3t6HxcISMxQl4aMe8\"",
  "discoveryVersion": "v1",
  "id": "sync:v1",
  "name": "sync",
@@ -228,6 +228,15 @@
     }
    }
   },
+  "EchoResult": {
+   "id": "EchoResult",
+   "type": "object",
+   "properties": {
+    "text": {
+     "type": "string"
+    }
+   }
+  },
   "Media": {
    "id": "Media",
    "type": "object",
@@ -431,6 +440,27 @@
    ],
    "response": {
     "$ref": "Message"
+   },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "echoMessage": {
+   "id": "sync.echoMessage",
+   "path": "echoMessage/{text}",
+   "httpMethod": "GET",
+   "parameters": {
+    "text": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    }
+   },
+   "parameterOrder": [
+    "text"
+   ],
+   "response": {
+    "$ref": "EchoResult"
    },
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
