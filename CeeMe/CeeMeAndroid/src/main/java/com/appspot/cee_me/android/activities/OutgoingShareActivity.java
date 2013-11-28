@@ -1,10 +1,7 @@
 package com.appspot.cee_me.android.activities;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,21 +15,16 @@ import com.appspot.cee_me.register.model.Device;
 import com.appspot.cee_me.sync.Sync;
 import com.appspot.cee_me.sync.model.Media;
 import com.appspot.cee_me.sync.model.Message;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
-import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.JsonFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
 import java.util.UUID;
 
 public class OutgoingShareActivity extends BaseActivity {
     private static final String TAG = CEEME + ".OutgoingShareActivity";
-
-    public static final int REQUEST_AUTHORIZE_API = 19;
 
     private static final int REQUEST_DIRECTORY_LOOKUP = 23;
 
@@ -40,7 +32,6 @@ public class OutgoingShareActivity extends BaseActivity {
     private Sync service;
     private Message message;
 
-    private GoogleAccountCredential gapiCredential; // for Cloud Storage calls
     private boolean usingMediaAttachment = false;
     private Uri mediaUri = null;
     private ContentResolver contentResolver;
@@ -86,42 +77,6 @@ public class OutgoingShareActivity extends BaseActivity {
         setReceiverIdentity("<Select recipient...>");
         // setMessageText(messageText);
 
-        // getCloudStorageCredential();
-        getAndUseAuthTokenInAsyncTask();
-
-    }
-
-    void getAndUseAuthTokenInAsyncTask() {
-        new LoadGoogleAPIAuthorizationTask().execute();
-    }
-
-    private void getCloudStorageCredential() {
-
-        // Test our Google API credential - we may require user authorization
-        gapiCredential = getGoogleAPICredential(CloudStorage.getStorageScopes());
-        try {
-            String token = gapiCredential.getToken();
-            Log.i(TAG, "Got API token: " + token);
-        } catch (GooglePlayServicesAvailabilityException playEx) {
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
-                    playEx.getConnectionStatusCode(),
-                    this,
-                    REQUEST_AUTHORIZE_API);
-            // Use the dialog to present to the user.
-            dialog.show();
-        } catch (UserRecoverableAuthException recoverableException) {
-            Intent recoveryIntent = recoverableException.getIntent();
-            // Use the intent in a custom dialog or just startActivityForResult.
-            startActivityForResult(recoveryIntent, REQUEST_AUTHORIZE_API);
-        } catch (IOException e) {
-            // The next two exceptions are likely non-recoverable...
-            Log.e(TAG, "Failed to get Google API credential.", e);
-            gapiCredential = null;
-        } catch (GoogleAuthException e) {
-            Log.e(TAG, "Failed to get Google API credential.", e);
-            gapiCredential = null;
-        }
-
     }
 
     @Override
@@ -137,10 +92,6 @@ public class OutgoingShareActivity extends BaseActivity {
                     shortToast("Error during directory lookup.");
                 }
                 break;
-            case REQUEST_AUTHORIZE_API:
-                if (resultCode == RESULT_OK) {
-                    getAndUseAuthTokenInAsyncTask();
-                }
         }
     }
 
@@ -229,18 +180,6 @@ public class OutgoingShareActivity extends BaseActivity {
         startActivity(i);
     }
 
-    private class LoadGoogleAPIAuthorizationTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            getCloudStorageCredential();
-            return null;
-        }
-        @Override
-        protected void onPostExecute(Void rv) {
-            return;
-        }
-    }
-
     private class SendMessageTask extends AsyncTask<Void, ProgressParams, Void> {
         private boolean querySuccess = false;
         private String mimeType;
@@ -296,7 +235,7 @@ public class OutgoingShareActivity extends BaseActivity {
             // Upload the content to the app's GCS bucket.
             try {
                 uploadFileToGCS();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Log.e(TAG, "Unable to upload file to GCS: " + logDesc, e);
                 return null;
             }
@@ -305,7 +244,7 @@ public class OutgoingShareActivity extends BaseActivity {
             return createMediaRecord(GCSFilename);
         }
 
-        private void uploadFileToGCS() throws IOException {
+        private void uploadFileToGCS() throws IOException, GeneralSecurityException {
             // Create a progress updater.
             IOProgress ioProgress = new IOProgress() {
                 @Override
@@ -325,12 +264,14 @@ public class OutgoingShareActivity extends BaseActivity {
                 public void completed() {
                 }
             };
-            if (gapiCredential == null) {
-                throw new IllegalArgumentException("Could not get Google Cloud Storage authorization");
+            InputStream keyStream = getResources().openRawResource(R.raw.serviceaccount);
+            if (keyStream == null) {
+                throw new IllegalArgumentException("Could not get Google Cloud Storage authorization key");
             }
-            CloudStorage cloudStorage = new CloudStorage(gapiCredential);
-            // CloudStorage cloudStorage = new CloudStorage(getCredential());
-            cloudStorage.uploadFile(Config.GCS_BUCKET, filePath, GCSFilename, ioProgress);
+            CloudStorage cloudStorage = new CloudStorage(keyStream);
+            cloudStorage.uploadFile(Config.GCS_BUCKET, filePath, mimeType, GCSFilename, ioProgress);
+            // List<String> bucketList = cloudStorage.listBucket(Config.GCS_BUCKET);
+            // Log.i(TAG, "Seeing buckets: " + bucketList);
 
         }
 
@@ -347,7 +288,6 @@ public class OutgoingShareActivity extends BaseActivity {
                 return createMedia.execute();
             } catch (Exception e) {
                 Log.e(TAG, "Failed to create media description object.", e);
-                shortToast("The file upload failed. :-(");
                 return null;
             }
         }
@@ -356,13 +296,20 @@ public class OutgoingShareActivity extends BaseActivity {
          * Decides the name within Google Cloud Storage for this file. Incorporates the sender's deviceKey,
          * a random UUID, and the original filename.
          *
-         * @param deviceKey
-         * @return
+         * @param deviceKey sending device's key
+         * @param filePath  original local file path (complete path)
+         * @return a new filename suitable for GCS.
          */
         private String getNewGCSFilename(String deviceKey, String filePath) {
             UUID newUUID = UUID.randomUUID();
             String baseFilename = FileUtils.getBaseFilenameFromPath(filePath);
-            return "s/" + deviceKey + "/" + newUUID + "/" + baseFilename;
+            String prefix = "s";
+            if (Config.LOCAL_APP_SERVER) {
+                // so we can distinguish which GCS files are associated with my
+                // development app server as opposed to the live website.
+                prefix = "l";
+            }
+            return prefix + "/" + deviceKey + "/" + newUUID + "/" + baseFilename;
         }
 
         @Override

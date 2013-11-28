@@ -138,10 +138,12 @@ public class BaseActivity extends Activity {
     }
 
     /**
-     * Get an OAuth 2.0 credential object that can be used with general Google APIs such as Cloud Storage (GCS)
+     * Get an OAuth 2.0 credential object that can be used with general Google APIs on behalf of the user
+     * (not using the Service account). Not using this for now, but might be useful to access Google+ or other APIs
      * @param scopesList list of API defined scopes to be used with this operation
      * @return Google API OAuth 2.0 credential that uses the given scopes
      */
+    @SuppressWarnings("unused")
     protected GoogleAccountCredential getGoogleAPICredential(List<String> scopesList) {
         GoogleAccountCredential cred = GoogleAccountCredential.usingOAuth2(
                 this,
@@ -267,6 +269,7 @@ public class BaseActivity extends Activity {
         locationManager.removeUpdates(locationListener);
     }
 
+    @SuppressWarnings("unused")
     public Location waitForLocation() {
         int maxSleepCycle = Config.MAX_LOCATION_WAIT_SEC;
         int i = 0;

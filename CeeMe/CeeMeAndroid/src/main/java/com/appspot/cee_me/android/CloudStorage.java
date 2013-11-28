@@ -1,7 +1,7 @@
 package com.appspot.cee_me.android;
 
 import android.util.Log;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.media.MediaHttpDownloader;
 import com.google.api.client.googleapis.media.MediaHttpDownloaderProgressListener;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
@@ -11,6 +11,7 @@ import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.SecurityUtils;
 import com.google.api.services.storage.Storage;
 import com.google.api.services.storage.StorageScopes;
 import com.google.api.services.storage.model.Bucket;
@@ -18,10 +19,10 @@ import com.google.api.services.storage.model.StorageObject;
 
 import java.io.*;
 import java.net.URLConnection;
+import java.security.GeneralSecurityException;
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
-
-// import com.google.api.client.auth.oauth2.Credential;
 
 
 /**
@@ -31,15 +32,19 @@ import java.util.List;
  */
 public class CloudStorage {
 
-    private GoogleAccountCredential credential;
     private Storage storage;
 
     private static final String TAG = Config.APPNAME + ".CloudStorage";
     private static final String PROJECT_ID = Config.GCM_SENDER_KEY;
-    private static final String APPLICATION_NAME = Config.APPNAME;
+    private static final String APPLICATION_NAME = Config.APPNAME + "/1.0";
 
-    public CloudStorage(GoogleAccountCredential credential) {
-        this.credential = credential;
+    private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+    private PrivateKey privateKey;
+
+    public CloudStorage(InputStream keyStream) throws GeneralSecurityException, IOException {
+        privateKey = SecurityUtils.loadPrivateKeyFromKeyStore(
+                SecurityUtils.getPkcs12KeyStore(), keyStream, "notasecret", "privatekey", "notasecret");
         storage = getStorage();
     }
 
@@ -53,7 +58,7 @@ public class CloudStorage {
      * @param ioProgress  an object to report upload progress for the GUI
      * @throws IOException
      */
-    public void uploadFile(String bucketName, String filePath, String gcsFilename, IOProgress ioProgress)
+    public void uploadFile(String bucketName, String filePath, String mimeType, String gcsFilename, IOProgress ioProgress)
             throws IOException {
 
         StorageObject object = new StorageObject();
@@ -64,15 +69,18 @@ public class CloudStorage {
         Log.d(TAG, "uploadFile START: " + bucketName + ":" + gcsFilename + " -> " + filePath);
 
         try (InputStream stream = new FileInputStream(file)) {
-            String contentType = URLConnection
-                    .guessContentTypeFromStream(stream);
-            InputStreamContent content = new InputStreamContent(contentType,
+            InputStreamContent content = new InputStreamContent(mimeType,
                     stream);
 
             Storage.Objects.Insert insert = storage.objects().insert(
                     bucketName, null, content);
             insert.setName(gcsFilename);
-            insert.getMediaHttpUploader().setProgressListener(new CloudUploadProgressListener(ioProgress, fileSize));
+            insert.getMediaHttpUploader().setDisableGZipContent(true); // this seems to help to disable... at least when debugging
+            // insert.getMediaHttpUploader().setDirectUploadEnabled(true);
+            insert.getMediaHttpUploader().setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE * 2);
+            if (ioProgress != null) {
+                insert.getMediaHttpUploader().setProgressListener(new CloudUploadProgressListener(ioProgress, fileSize));
+            }
 
             insert.execute();
             Log.d(TAG, "uploadFile FINISH: " + bucketName + ":" + gcsFilename + " -> " + filePath);
@@ -149,7 +157,7 @@ public class CloudStorage {
      * @return Array of object names
      * @throws Exception
      */
-    public List<String> listBucket(String bucketName) throws Exception {
+    public List<String> listBucket(String bucketName) throws IOException {
 
         List<String> list = new ArrayList<String>();
 
@@ -188,12 +196,19 @@ public class CloudStorage {
 
         if (storage == null) {
 
-            HttpTransport httpTransport = new NetHttpTransport();
-            JsonFactory jsonFactory = new JacksonFactory();
-
             List<String> scopes = getStorageScopes();
 
-            storage = new Storage.Builder(httpTransport, jsonFactory, credential)
+            GoogleCredential credential = new GoogleCredential.Builder()
+                    .setTransport(HTTP_TRANSPORT)
+                    .setJsonFactory(JSON_FACTORY)
+                    .setServiceAccountId(Config.SERVICE_ACCOUNT_EMAIL)
+                    .setServiceAccountScopes(scopes)
+                    .setServiceAccountPrivateKey(privateKey)
+                    // .setServiceAccountPrivateKeyFromP12File(keyStream)
+                    // .setServiceAccountUser("user@example.com")
+                    .build();
+
+            storage = new Storage.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                     .setApplicationName(APPLICATION_NAME)
                     .build();
         }
@@ -242,11 +257,19 @@ public class CloudStorage {
                     // API Javadoc comment says:
                     // Do not use if the specified AbstractInputStreamContent has no content length specified. Instead, consider using getNumBytesUploaded() to denote progress.
                     // are we handling that?
-                    int currentProgress = new Double(uploader.getProgress() * 100.0).intValue();
-                    long bytesSent = uploader.getNumBytesUploaded();
+                    int currentProgress;
+                    try {
+                        currentProgress = new Double(uploader.getProgress() * 100.0).intValue();
+                    } catch (IllegalArgumentException e) {
+                        currentProgress = -1;
+                    }
+                    long bytesXfered = uploader.getNumBytesUploaded();
+                    if (currentProgress == -1) {
+                        currentProgress = (int) ((double) fileSize * (double) 100 / (double) bytesXfered);
+                    }
                     Log.i(TAG, "Upload percentage: " + currentProgress);
                     if (ioProgress != null) {
-                        ioProgress.setProgress(currentProgress, bytesSent, fileSize);
+                        ioProgress.setProgress(currentProgress, bytesXfered, fileSize);
                     }
                     break;
                 case MEDIA_COMPLETE:
@@ -274,8 +297,16 @@ public class CloudStorage {
         public void progressChanged(MediaHttpDownloader downloader) throws IOException {
             switch (downloader.getDownloadState()) {
                 case MEDIA_IN_PROGRESS:
-                    int currentProgress = new Double(downloader.getProgress() * 100.0).intValue();
+                    int currentProgress;
+                    try {
+                        currentProgress = new Double(downloader.getProgress() * 100.0).intValue();
+                    } catch (IllegalArgumentException e) {
+                        currentProgress = -1;
+                    }
                     long bytesReceived = downloader.getNumBytesDownloaded();
+                    if (currentProgress == -1) {
+                        currentProgress = (int) ((double) fileSize * (double) 100 / (double) bytesReceived);
+                    }
                     Log.i(TAG, "Download percentage: " + currentProgress);
                     if (ioProgress != null) {
                         ioProgress.setProgress(currentProgress, bytesReceived, fileSize);

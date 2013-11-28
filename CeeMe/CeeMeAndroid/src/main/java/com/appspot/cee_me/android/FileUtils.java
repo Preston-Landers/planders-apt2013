@@ -70,7 +70,7 @@ public class FileUtils {
      * @return size in bytes
      */
     public static Long getFileSize(Uri uri, ContentResolver contentResolver) {
-        String filePath = getPath(uri, contentResolver, true);
+        String filePath = getPath(uri, contentResolver, false);
         File f = new File(filePath);
         return f.length();
     }

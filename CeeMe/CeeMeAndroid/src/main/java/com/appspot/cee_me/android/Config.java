@@ -16,6 +16,13 @@ public class Config {
     public static final String PREF_DEVICE_KEY = "deviceKey";
 
     /**
+     * Used for Google APIs (Cloud Storage) calls along with the service secret key file in res/raw
+     */
+    public static final String SERVICE_ACCOUNT_EMAIL = "860742061992-sfafni5qmjudm67fhj5esvkna7nkrf4o@developer.gserviceaccount.com";
+    // public static final String SERVICE_ACCOUNT_EMAIL = "860742061992-sfafni5qmjudm67fhj5esvkna7nkrf4o.apps.googleusercontent.com";
+
+
+    /**
      * Sender ID for GCM, from G-API web console - Simple API Access - API Key
      */
     public static final String GCM_SENDER_KEY = "860742061992";

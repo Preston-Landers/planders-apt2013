@@ -55,14 +55,14 @@ public class RegisterActivity extends BaseActivity {
 
     private void deregisterDevice() {
         shortToast("Please wait for deregistration...");
+        GCMRegistrar.unregister(this);
+        deviceKey = "";
+        setDeviceKeyPref(deviceKey);
         new DeRegisterTask().execute();
     }
 
     private void afterServerDeregisterDevice() {
         GCMRegistrar.setRegisteredOnServer(this, false);
-        GCMRegistrar.unregister(this);
-        deviceKey = "";
-        setDeviceKeyPref(deviceKey);
         setResult(RESULT_OK);
         finish();
     }
