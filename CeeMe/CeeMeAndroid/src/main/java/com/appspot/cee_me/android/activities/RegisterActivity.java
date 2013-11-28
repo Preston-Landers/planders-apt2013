@@ -141,7 +141,11 @@ public class RegisterActivity extends BaseActivity {
                 errMsg = "Authentication error";
                 Log.e(TAG, "Browse Streams fail: " + e.getCause());
             } catch (GoogleJsonResponseException e) {
-                errMsg = e.getDetails().getMessage();
+                try {
+                    errMsg = e.getDetails().getMessage();
+                } catch (NullPointerException npe) {
+                    errMsg = "<unknown>";
+                }
                 Log.e(TAG, errMsg, e);
             } catch (Exception e) {
                 Log.e(TAG, errMsg, e);

@@ -58,19 +58,20 @@ public class OutgoingShareActivity extends BaseActivity {
         if (action.equalsIgnoreCase(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
             String textData = intent.getStringExtra(Intent.EXTRA_TEXT);
             setMessageURL(textData);
-        }
+        } else {
 
-        ClipData clipData = intent.getClipData();
-        if (clipData != null) {
-            ClipData.Item item = clipData.getItemAt(0);
+            ClipData clipData = intent.getClipData();
+            if (clipData != null) {
+                ClipData.Item item = clipData.getItemAt(0);
 
-            mediaUri = item.getUri();
-            usingMediaAttachment = true;
-            String mimeType = FileUtils.getMimeType(mediaUri, contentResolver);
-            String filePath = FileUtils.getPath(mediaUri, contentResolver, true);
+                mediaUri = item.getUri();
+                usingMediaAttachment = true;
+                String mimeType = FileUtils.getMimeType(mediaUri, contentResolver);
+                String filePath = FileUtils.getPath(mediaUri, contentResolver, true);
 
-            Log.i(TAG, "Got uri: " + mediaUri + "\nmimeType: " + mimeType + "\n" + filePath + "\n");
-            setMessageURL(filePath);
+                Log.i(TAG, "Got uri: " + mediaUri + "\nmimeType: " + mimeType + "\n" + filePath + "\n");
+                setMessageURL(filePath);
+            }
         }
 
         setStatusText("");
@@ -119,6 +120,7 @@ public class OutgoingShareActivity extends BaseActivity {
 
     private void logSentMessageAndFinish(Message message) {
         Log.i(TAG, "Successfully sent message: " + message);
+        shortToast("Item successfully shared.");
         setResult(RESULT_OK);
         finish();
     }

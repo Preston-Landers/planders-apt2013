@@ -77,7 +77,7 @@ public class CloudStorage {
             insert.setName(gcsFilename);
             insert.getMediaHttpUploader().setDisableGZipContent(true); // this seems to help to disable... at least when debugging
             // insert.getMediaHttpUploader().setDirectUploadEnabled(true);
-            insert.getMediaHttpUploader().setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE * 2);
+            insert.getMediaHttpUploader().setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE);
             if (ioProgress != null) {
                 insert.getMediaHttpUploader().setProgressListener(new CloudUploadProgressListener(ioProgress, fileSize));
             }
