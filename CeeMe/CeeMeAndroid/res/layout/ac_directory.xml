@@ -10,7 +10,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/directory_searchView"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/directory_title_tv"/>
+            android:layout_below="@+id/directory_title_tv"
+            android:iconifiedByDefault="true"/>
 
     <Button
             style="@style/GreenGradientButton"

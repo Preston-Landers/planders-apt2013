@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.appspot.cee_me.android.*;
@@ -171,7 +172,7 @@ public class OutgoingShareActivity extends BaseActivity {
     }
 
     public void cancelOutgoingShare(View view) {
-        shortToast("Ignoring this message.");
+        shortToast("Canceled sharing.");
         setResult(RESULT_CANCELED);
         finish();
     }
@@ -316,6 +317,10 @@ public class OutgoingShareActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(Void rv) {
+            // Re-enable the send button
+            Button sendButton = (Button) findViewById(R.id.outgoingShare_send_button);
+            sendButton.setEnabled(true);
+
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.outgoingShare_progressBar);
             TextView progressText = (TextView) findViewById(R.id.outgoingShare_progress_textView);
             progressBar.setVisibility(View.INVISIBLE);
@@ -334,6 +339,10 @@ public class OutgoingShareActivity extends BaseActivity {
 
         @Override
         protected void onPreExecute() {
+            // Disable the send button
+            Button sendButton = (Button) findViewById(R.id.outgoingShare_send_button);
+            sendButton.setEnabled(false);
+
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.outgoingShare_progressBar);
             progressBar.setMax(100);
             progressBar.setVisibility(View.VISIBLE);
