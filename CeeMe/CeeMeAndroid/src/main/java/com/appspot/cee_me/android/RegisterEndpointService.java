@@ -13,7 +13,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 public class RegisterEndpointService {
     public static Register getRegisterService(GoogleAccountCredential creds) {
         Register.Builder builder = new Register.Builder(
-                AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), creds);
+                HttpTransport.getInstance().getHttpTransport(),
+                new AndroidJsonFactory(), creds);
         if (Config.LOCAL_APP_SERVER) {
             // Apparently gzip doesn't work in the dev server
             // possibly this https://code.google.com/p/googleappengine/issues/detail?id=9140

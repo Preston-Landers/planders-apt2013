@@ -38,11 +38,12 @@ public class CloudStorage {
     private static final String PROJECT_ID = Config.GCM_SENDER_KEY;
     private static final String APPLICATION_NAME = Config.APPNAME + "/1.0";
 
-    private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    private static HttpTransport HTTP_TRANSPORT; // = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     private PrivateKey privateKey;
 
     public CloudStorage(InputStream keyStream) throws GeneralSecurityException, IOException {
+        HTTP_TRANSPORT  = com.appspot.cee_me.android.HttpTransport.getInstance().getHttpTransport();
         privateKey = SecurityUtils.loadPrivateKeyFromKeyStore(
                 SecurityUtils.getPkcs12KeyStore(), keyStream, "notasecret", "privatekey", "notasecret");
         storage = getStorage();
@@ -77,7 +78,7 @@ public class CloudStorage {
             insert.setName(gcsFilename);
             insert.getMediaHttpUploader().setDisableGZipContent(true); // this seems to help to disable... at least when debugging
             // insert.getMediaHttpUploader().setDirectUploadEnabled(true);
-            insert.getMediaHttpUploader().setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE);
+            insert.getMediaHttpUploader().setChunkSize(MediaHttpUploader.DEFAULT_CHUNK_SIZE);
             if (ioProgress != null) {
                 insert.getMediaHttpUploader().setProgressListener(new CloudUploadProgressListener(ioProgress, fileSize));
             }

@@ -21,6 +21,9 @@ public class CeeMeApplication extends Application {
         super.onCreate();
 
         // initImageLoader(getApplicationContext());
+
+        // initialize HttpTransport object used for API & Endpoint calls
+        HttpTransport.getInstance().initialize();
     }
 
     // http://stackoverflow.com/questions/11411395/how-to-get-current-foreground-activity-context-in-android
