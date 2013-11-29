@@ -104,7 +104,7 @@ public class IncomingShareActivity extends BaseActivity {
     }
 
     public void cancelIncomingShareButton(View view) {
-        shortToast("Ignoring this message.");
+        // shortToast("Ignoring this message.");
         setResult(RESULT_CANCELED);
         finish();
     }

@@ -35,7 +35,7 @@
                 android:text="Hardware Desc."
                 android:id="@+id/directory_result_hwdesc_textView"
                 android:singleLine="false"
-                style="@android:style/TextAppearance.Small.Inverse"
+                style="@android:style/TextAppearance.Small"
                 android:layout_alignLeft="@+id/directory_result_accountName_textView"
                 android:layout_below="@+id/directory_result_comment_textView"/>
 

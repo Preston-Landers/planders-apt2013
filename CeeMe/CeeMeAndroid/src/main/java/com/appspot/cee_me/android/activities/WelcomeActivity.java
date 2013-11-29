@@ -121,6 +121,11 @@ public class WelcomeActivity extends BaseActivity {
         startActivityForResult(intent, REQUEST_DEREGISTER_DEVICE);
     }
 
+    public void checkMessagesFromWelcomeButton(View view) {
+        Intent intent = new Intent(this, CheckMessagesActivity.class);
+        startActivity(intent);
+    }
+
     /**
      * Handles logic for clicking the sign in button.
      * From the tictactoe sample app https://github.com/GoogleCloudPlatform/appengine-endpoints-tictactoe-android/blob/master/src/com/google/devrel/samples/ttt/TictactoeActivity.java

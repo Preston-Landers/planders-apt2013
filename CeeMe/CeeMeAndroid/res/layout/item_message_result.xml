@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="From: "
+            android:id="@+id/message_result_from_textView"
+            android:singleLine="false"
+            style="@android:style/TextAppearance.Medium"
+            android:textStyle="bold"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message Text"
+            android:id="@+id/message_result_msgText_textView"
+            style="@android:style/TextAppearance.Medium"
+            android:layout_alignLeft="@+id/message_result_from_textView"
+            android:layout_below="@+id/message_result_from_textView"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(Date)"
+            android:id="@+id/message_result_date_textView"
+            android:singleLine="false"
+            style="@android:style/TextAppearance.Small"
+            android:layout_alignLeft="@+id/message_result_from_textView"
+            android:layout_below="@+id/message_result_url_textView"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="URL"
+            android:id="@+id/message_result_url_textView"
+            android:singleLine="false"
+            style="@android:style/TextAppearance.Small"
+            android:layout_alignLeft="@+id/message_result_from_textView"
+            android:layout_below="@+id/message_result_msgText_textView"
+            android:textStyle="italic"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="publicId"
+            android:id="@+id/message_result_publicid_textView"
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/message_result_from_textView"/>
+</RelativeLayout>

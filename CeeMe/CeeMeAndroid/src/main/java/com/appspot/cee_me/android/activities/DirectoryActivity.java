@@ -42,7 +42,7 @@ public class DirectoryActivity extends BaseActivity
         super.onCreate(savedInstanceState);
 
         searchView = (SearchView) findViewById(R.id.directory_searchView);
-        searchView.setIconifiedByDefault(false);
+        searchView.setIconifiedByDefault(true);
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
 

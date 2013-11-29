@@ -31,7 +31,9 @@
     <string name="outgoing_share_activity_name">Cee.me</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="directory_activity_name">CeeMe Directory</string>
-    <string name="directory_search_hint">Search the directory...</string>
+    <string name="directory_search_hint">Search the directory…</string>
     <string name="welcome_login_button">Sign In</string>
+    <string name="btn_open">Open</string>
+    <string name="canceled">Canceled.</string>
 
 </resources>
