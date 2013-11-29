@@ -1,10 +1,8 @@
 package com.appspot.cee_me.android;
 
 import com.appspot.cee_me.sync.Sync;
-
 import com.appspot.cee_me.sync.SyncRequest;
 import com.appspot.cee_me.sync.SyncRequestInitializer;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 

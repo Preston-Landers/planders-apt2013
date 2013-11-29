@@ -3,7 +3,6 @@ package com.appspot.cee_me.android;
 import com.appspot.cee_me.register.Register;
 import com.appspot.cee_me.register.RegisterRequest;
 import com.appspot.cee_me.register.RegisterRequestInitializer;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
