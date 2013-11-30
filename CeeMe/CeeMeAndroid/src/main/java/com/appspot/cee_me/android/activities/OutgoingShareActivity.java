@@ -283,8 +283,8 @@ public class OutgoingShareActivity extends BaseActivity {
             service = SyncEndpointService.getSyncService(getCredential());
             try {
                 Sync.CreateMedia createMedia = service.createMedia(
-                        GCSFilename,
                         FileUtils.getBaseFilenameFromPath(filePath),
+                        GCSFilename,
                         mimeType,
                         fileSize
                 );
