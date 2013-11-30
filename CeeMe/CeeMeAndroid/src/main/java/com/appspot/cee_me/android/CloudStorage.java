@@ -9,7 +9,6 @@ import com.google.api.client.googleapis.media.MediaHttpUploaderProgressListener;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.client.http.apache.ApacheHttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.SecurityUtils;
@@ -17,9 +16,11 @@ import com.google.api.services.storage.Storage;
 import com.google.api.services.storage.StorageScopes;
 import com.google.api.services.storage.model.Bucket;
 import com.google.api.services.storage.model.StorageObject;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormat;
 
 import java.io.*;
-import java.net.URLConnection;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.util.ArrayList;
@@ -40,7 +41,8 @@ public class CloudStorage {
     private static final String APPLICATION_NAME = Config.APPNAME + "/1.0";
 
     // private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    private static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
+    // private static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
+    private static HttpTransport HTTP_TRANSPORT;
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     private PrivateKey privateKey;
 
@@ -69,7 +71,8 @@ public class CloudStorage {
 
         File file = new File(filePath);
         Long fileSize = file.length();
-        Log.d(TAG, "uploadFile START: " + bucketName + ":" + gcsFilename + " -> " + filePath);
+        DateTime startTime = new DateTime();
+        Log.d(TAG, "uploadFile START: " + bucketName + ":" + gcsFilename + " -> " + filePath + " time: " + startTime);
 
         try (InputStream stream = new FileInputStream(file)) {
             InputStreamContent content = new InputStreamContent(mimeType,
@@ -86,7 +89,12 @@ public class CloudStorage {
             }
 
             insert.execute();
-            Log.d(TAG, "uploadFile FINISH: " + bucketName + ":" + gcsFilename + " -> " + filePath);
+            DateTime endTime = new DateTime();
+            Period period = new Period(startTime, endTime);
+            String periodStr = PeriodFormat.getDefault().print(period);
+            Double bytesPerSecond = fileSize / (double) period.getSeconds();
+            String logMsg = "uploadFile FINISH: " + bucketName + ":" + gcsFilename + " -> " + filePath + " total time: " + periodStr + " rate: " + bytesPerSecond;
+            Log.d(TAG, logMsg);
         }
     }
 
@@ -198,9 +206,8 @@ public class CloudStorage {
     private Storage getStorage() {
 
         if (storage == null) {
-
+            HTTP_TRANSPORT = new ApacheHttpTransport();
             List<String> scopes = getStorageScopes();
-
             GoogleCredential credential = new GoogleCredential.Builder()
                     .setTransport(HTTP_TRANSPORT)
                     .setJsonFactory(JSON_FACTORY)
