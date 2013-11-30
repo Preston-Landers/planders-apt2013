@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/OnFs-nfNiK3t6HxcISMxQl4aMe8\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/JSqOLnDHENvGNMplENXZtG8iDMw\"",
  "discoveryVersion": "v1",
  "id": "sync:v1",
  "name": "sync",
@@ -368,7 +368,7 @@
  "methods": {
   "createMedia": {
    "id": "sync.createMedia",
-   "path": "createMedia/{gcsFilename}/{fileName}/{mimeType}/{size}",
+   "path": "createMedia",
    "httpMethod": "POST",
    "parameters": {
     "comments": {
@@ -378,12 +378,12 @@
     "fileName": {
      "type": "string",
      "required": true,
-     "location": "path"
+     "location": "query"
     },
     "gcsFilename": {
      "type": "string",
      "required": true,
-     "location": "path"
+     "location": "query"
     },
     "latitude": {
      "type": "number",
@@ -398,7 +398,7 @@
     "mimeType": {
      "type": "string",
      "required": true,
-     "location": "path"
+     "location": "query"
     },
     "sha256": {
      "type": "string",
@@ -408,12 +408,12 @@
      "type": "string",
      "required": true,
      "format": "int64",
-     "location": "path"
+     "location": "query"
     }
    },
    "parameterOrder": [
-    "gcsFilename",
     "fileName",
+    "gcsFilename",
     "mimeType",
     "size"
    ],

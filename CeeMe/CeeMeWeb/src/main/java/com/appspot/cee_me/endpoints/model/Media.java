@@ -3,6 +3,7 @@ package com.appspot.cee_me.endpoints.model;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
+import java.nio.ShortBuffer;
 
 /**
  * Represents model.Media in the API endpoint
@@ -17,8 +18,8 @@ public class Media implements Serializable {
     private DateTime creationDate;
     private User uploader;
     private long views;
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
 
     // TODO: need URL to access or blobkey or sumpin
 
@@ -28,7 +29,7 @@ public class Media implements Serializable {
     public Media(com.appspot.cee_me.model.Media media) {
         if (media != null) {
             setMediaKey(media.getKey().getString());
-            setSha256(media.getSha256().getBytes());
+            setSha256(media.getSha256() == null ? null : media.getSha256().getBytes());
             setFileName(media.getFileName());
             setMimeType(media.getMimeType());
             setSize(media.getSize());
@@ -113,19 +114,19 @@ public class Media implements Serializable {
         this.views = views;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 }

@@ -46,6 +46,7 @@
         <activity
                 android:name=".activities.CheckMessagesActivity"
                 android:label="@string/check_messages_activity_name"
+                android:windowSoftInputMode="stateUnchanged"
                 android:theme="@style/ActionBar">
         </activity>
         <activity
@@ -56,6 +57,7 @@
         <activity
                 android:name=".activities.DirectoryActivity"
                 android:label="@string/directory_activity_name"
+                android:windowSoftInputMode="stateUnchanged"
                 android:theme="@style/ActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
@@ -67,11 +69,13 @@
         <activity
                 android:name=".activities.IncomingShareActivity"
                 android:label="@string/incoming_share_activity_name"
+                android:windowSoftInputMode="stateUnchanged"
                 android:theme="@style/ActionBar">
         </activity>
         <activity
                 android:name=".activities.OutgoingShareActivity"
                 android:label="@string/outgoing_share_activity_name"
+                android:windowSoftInputMode="stateUnchanged"
                 android:theme="@style/ActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>

@@ -8,6 +8,7 @@ import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.client.googleapis.media.MediaHttpUploaderProgressListener;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.InputStreamContent;
+import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -38,12 +39,13 @@ public class CloudStorage {
     private static final String PROJECT_ID = Config.GCM_SENDER_KEY;
     private static final String APPLICATION_NAME = Config.APPNAME + "/1.0";
 
-    private static HttpTransport HTTP_TRANSPORT; // = new NetHttpTransport();
+    // private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    private static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     private PrivateKey privateKey;
 
     public CloudStorage(InputStream keyStream) throws GeneralSecurityException, IOException {
-        HTTP_TRANSPORT  = com.appspot.cee_me.android.HttpTransport.getInstance().getHttpTransport();
+        // HTTP_TRANSPORT  = com.appspot.cee_me.android.HttpTransport.getInstance().getHttpTransport();
         privateKey = SecurityUtils.loadPrivateKeyFromKeyStore(
                 SecurityUtils.getPkcs12KeyStore(), keyStream, "notasecret", "privatekey", "notasecret");
         storage = getStorage();

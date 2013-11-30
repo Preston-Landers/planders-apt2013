@@ -348,6 +348,9 @@ public class BaseActivity extends Activity {
     }
 
     String getDeviceKeyPrefName() {
+        if (Config.LOCAL_APP_SERVER) {
+            return Config.PREF_DEVICE_KEY + "_dev_" + accountName;
+        }
         return Config.PREF_DEVICE_KEY + accountName;
     }
 

@@ -140,7 +140,7 @@ public class DirectoryActivity extends BaseActivity
             String query = params[0];
             try {
                 service = RegisterEndpointService.getRegisterService(getCredential());
-                Register.GetDeviceDirectory getDeviceDirectory = service.getDeviceDirectory(limit, offset);
+                Register.GetDeviceDirectory getDeviceDirectory = service.getDeviceDirectory(deviceKey, limit, offset);
                 getDeviceDirectory.setQuery(query);
                 deviceList = getDeviceDirectory.execute().getItems();
                 querySuccess = true;

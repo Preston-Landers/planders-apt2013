@@ -8,6 +8,7 @@ import com.appspot.cee_me.model.CUser;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.appengine.api.users.User;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.javadocmd.simplelatlng.LatLng;
 
@@ -45,7 +46,7 @@ public class Register extends EndpointBase {
      * @param comment User-assigned additional comment
      * @return New device description
      */
-    @ApiMethod(name = "registerDevice", httpMethod = "post")
+    @ApiMethod(name = "registerDevice", httpMethod = "post", path="registerDevice")
     public Device registerDevice(User user,
                                  @Named("name") String name,
                                  @Named("hardwareDescription") String hardwareDescription,
@@ -73,7 +74,7 @@ public class Register extends EndpointBase {
      * @param comment New device comment
      * @return the updated Device
      */
-    @ApiMethod(name = "updateDevice", httpMethod = "post")
+    @ApiMethod(name = "updateDevice", httpMethod = "post", path="updateDevice/{deviceKey}")
     public Device updateDevice(User user,
                                @Named("deviceKey") String keyStr,
                                @Named("name") @Nullable String name,
@@ -176,6 +177,7 @@ public class Register extends EndpointBase {
     /**
      * Gets a list of devices available for
      * @param user Google User account
+     * @param deviceKey device key of the searching device - to be excluded from results
      * @param limit limit result count
      * @param offset offset within results for pagination
      * @param queryString optional search string
@@ -183,9 +185,10 @@ public class Register extends EndpointBase {
      * @param longitude optional search longitude
      * @return a list of Device results
      */
-    @ApiMethod(name = "getDeviceDirectory", httpMethod = "get")
+    @ApiMethod(name = "getDeviceDirectory", httpMethod = "get", path="getDeviceDirectory/{deviceKey}/{limit}/{offset}")
     public List<Device> getDeviceDirectory(
             User user,
+            @Named("deviceKey") String deviceKey,
             @Named("limit") Integer limit,
             @Named("offset") Integer offset,
             @Named("query") @Nullable String queryString,
@@ -201,9 +204,10 @@ public class Register extends EndpointBase {
             latLng.setLongitude(longitude);
 
         }
-        new LatLong();
+        Key<com.appspot.cee_me.model.Device> deviceKeyObj = com.appspot.cee_me.model.Device.getByKey(deviceKey).getKey();
         for (com.appspot.cee_me.model.Device device :
                 com.appspot.cee_me.model.Device.getDirectorySearch(
+                        deviceKeyObj,
                         limit,
                         offset,
                         queryString,

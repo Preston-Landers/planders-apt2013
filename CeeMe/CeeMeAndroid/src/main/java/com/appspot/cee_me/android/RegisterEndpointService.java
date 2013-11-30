@@ -5,6 +5,7 @@ import com.appspot.cee_me.register.RegisterRequest;
 import com.appspot.cee_me.register.RegisterRequestInitializer;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.javanet.NetHttpTransport;
 
 /**
  * Endpoint service for device registration.
@@ -12,7 +13,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 public class RegisterEndpointService {
     public static Register getRegisterService(GoogleAccountCredential creds) {
         Register.Builder builder = new Register.Builder(
-                HttpTransport.getInstance().getHttpTransport(),
+                // HttpTransport.getInstance().getHttpTransport(),
+                new NetHttpTransport(),
                 new AndroidJsonFactory(), creds);
         if (Config.LOCAL_APP_SERVER) {
             // Apparently gzip doesn't work in the dev server

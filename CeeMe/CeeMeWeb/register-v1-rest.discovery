@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/962CemdGUN-4-mjI2ov3_na9NW4\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/Yo6sFvwyYv-6V9sf7mQ433lLYWA\"",
  "discoveryVersion": "v1",
  "id": "register:v1",
  "name": "register",
@@ -283,9 +283,14 @@
   },
   "getDeviceDirectory": {
    "id": "register.getDeviceDirectory",
-   "path": "devicecollection/{limit}/{offset}",
+   "path": "getDeviceDirectory/{deviceKey}/{limit}/{offset}",
    "httpMethod": "GET",
    "parameters": {
+    "deviceKey": {
+     "type": "string",
+     "required": true,
+     "location": "path"
+    },
     "lat": {
      "type": "number",
      "format": "double",
@@ -314,6 +319,7 @@
     }
    },
    "parameterOrder": [
+    "deviceKey",
     "limit",
     "offset"
    ],
@@ -337,7 +343,7 @@
   },
   "registerDevice": {
    "id": "register.registerDevice",
-   "path": "registerDevice/{name}/{hardwareDescription}/{gcmRegistrationId}",
+   "path": "registerDevice",
    "httpMethod": "POST",
    "parameters": {
     "comment": {
@@ -347,23 +353,23 @@
     "gcmRegistrationId": {
      "type": "string",
      "required": true,
-     "location": "path"
+     "location": "query"
     },
     "hardwareDescription": {
      "type": "string",
      "required": true,
-     "location": "path"
+     "location": "query"
     },
     "name": {
      "type": "string",
      "required": true,
-     "location": "path"
+     "location": "query"
     }
    },
    "parameterOrder": [
-    "name",
+    "gcmRegistrationId",
     "hardwareDescription",
-    "gcmRegistrationId"
+    "name"
    ],
    "response": {
     "$ref": "Device"
@@ -374,7 +380,7 @@
   },
   "updateDevice": {
    "id": "register.updateDevice",
-   "path": "device/{deviceKey}",
+   "path": "updateDevice/{deviceKey}",
    "httpMethod": "POST",
    "parameters": {
     "comment": {

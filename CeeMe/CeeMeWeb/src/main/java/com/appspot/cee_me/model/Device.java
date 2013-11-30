@@ -376,13 +376,14 @@ public class Device implements Comparable<Device> {
     /**
      * Perform a device directory search. This is a good candidate for a unit test.
      *
+     * @param sourceDeviceKey   originating device key - to exclude from results
      * @param limit       limit results, 0 == unlimited
      * @param offset      offset within results
      * @param queryString optional search string
      * @param latLng      optional search coordinates (find results near this) TODO: not yet implemented
      * @return
      */
-    public static List<Device> getDirectorySearch(int limit, int offset, String queryString, LatLong latLng) {
+    public static List<Device> getDirectorySearch(Key<Device> sourceDeviceKey, int limit, int offset, String queryString, LatLong latLng) {
         List<Device> returnList = new ArrayList<Device>();
         List<Device> allDevices = ofy().load().type(Device.class).list();
         int included = 0;
@@ -398,6 +399,9 @@ public class Device implements Comparable<Device> {
             i++;
             if ((limit > 0) && (included > limit)) {
                 break;
+            }
+            if (sourceDeviceKey != null && device.getKey().equals(sourceDeviceKey)) {
+                continue;
             }
             if (device.matchesSearchTerm(queryString)) {
                 if ((offset > 0) && (usedOffset < offset)) {

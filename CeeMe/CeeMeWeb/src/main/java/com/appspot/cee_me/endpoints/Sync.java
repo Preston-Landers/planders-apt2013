@@ -141,7 +141,7 @@ public class Sync extends EndpointBase {
      * @param text          message text (optional)
      * @return
      */
-    @ApiMethod(name = "sendMessage", httpMethod = "post")
+    @ApiMethod(name = "sendMessage", httpMethod = "post", path="sendMessage/{fromDevice}/{toDevice}")
     public Message sendMessage(
             User user,
             @Named("fromDevice") String fromDeviceKey,
@@ -205,7 +205,8 @@ public class Sync extends EndpointBase {
      * @param longitude   optional - media longitude point
      * @return
      */
-    @ApiMethod(name = "createMedia", httpMethod = "post")
+    // @ApiMethod(name = "createMedia", httpMethod = "post", path="createMedia/{gcsFilename}")
+    @ApiMethod(name = "createMedia", httpMethod = "post", path="createMedia")
     public Media createMedia(
             User user,
             @Named("gcsFilename") String gcsFilename,

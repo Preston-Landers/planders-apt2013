@@ -19,7 +19,7 @@
 package com.appspot.cee_me.sync.model;
 
 /**
- * Model definition for User.
+ * Model definition for EchoResult.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the sync. For a detailed explanation see:
@@ -29,58 +29,37 @@ package com.appspot.cee_me.sync.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class User extends com.google.api.client.json.GenericJson {
+public final class EchoResult extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private java.lang.String accountName;
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private java.lang.String userKey;
+  private java.lang.String text;
 
   /**
    * @return value or {@code null} for none
    */
-  public java.lang.String getAccountName() {
-    return accountName;
+  public java.lang.String getText() {
+    return text;
   }
 
   /**
-   * @param accountName accountName or {@code null} for none
+   * @param text text or {@code null} for none
    */
-  public User setAccountName(java.lang.String accountName) {
-    this.accountName = accountName;
-    return this;
-  }
-
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.String getUserKey() {
-    return userKey;
-  }
-
-  /**
-   * @param userKey userKey or {@code null} for none
-   */
-  public User setUserKey(java.lang.String userKey) {
-    this.userKey = userKey;
+  public EchoResult setText(java.lang.String text) {
+    this.text = text;
     return this;
   }
 
   @Override
-  public User set(String fieldName, Object value) {
-    return (User) super.set(fieldName, value);
+  public EchoResult set(String fieldName, Object value) {
+    return (EchoResult) super.set(fieldName, value);
   }
 
   @Override
-  public User clone() {
-    return (User) super.clone();
+  public EchoResult clone() {
+    return (EchoResult) super.clone();
   }
 
 }
