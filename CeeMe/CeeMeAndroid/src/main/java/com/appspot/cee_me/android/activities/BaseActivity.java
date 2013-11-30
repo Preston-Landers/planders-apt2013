@@ -13,13 +13,13 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
-import com.appspot.cee_me.android.Account;
-import com.appspot.cee_me.android.CeeMeApplication;
-import com.appspot.cee_me.android.Config;
-import com.appspot.cee_me.android.R;
+import com.appspot.cee_me.android.*;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 
@@ -362,6 +362,33 @@ public class BaseActivity extends Activity {
 
     String getDeviceKeyPref() {
         return settings.getString(getDeviceKeyPrefName(), null);
+    }
+
+    protected CloudStorage getCloudStorage()  throws IOException, GeneralSecurityException {
+        InputStream keyStream = getResources().openRawResource(R.raw.serviceaccount);
+        if (keyStream == null) {
+            throw new IllegalArgumentException("Could not get Google Cloud Storage authorization key");
+        }
+        return new CloudStorage(keyStream);
+    }
+
+    /**
+     * packages the items we need to update the upload progress indicators
+     */
+    protected static class ProgressParams {
+        public int progress;
+        public long bytesSent;
+        public long totalBytes;
+
+        public ProgressParams(int progress, long bytesSent, long totalBytes) {
+            this.progress = progress;
+            this.bytesSent = bytesSent;
+            this.totalBytes = totalBytes;
+        }
+
+        public String getProgressString() {
+            return progress + "% - " + FileUtils.byteCountToDisplaySize(bytesSent) + " of " + FileUtils.byteCountToDisplaySize(totalBytes);
+        }
     }
 
 }

@@ -17,8 +17,8 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/../../CeeMeWeb/target/unpack/~apklib-com.google.android.gms_google-play-services_13" />
-    <output-test url="file://$MODULE_DIR$/../../CeeMeWeb/target/test-unpack/~apklib-com.google.android.gms_google-play-services_13" />
+    <output url="file://$MODULE_DIR$/../target/unpack/~apklib-com.google.android.gms_google-play-services_13" />
+    <output-test url="file://$MODULE_DIR$/../target/test-unpack/~apklib-com.google.android.gms_google-play-services_13" />
     <content url="file://$MODULE_DIR$/com.google.android.gms_google-play-services_13">
       <sourceFolder url="file://$MODULE_DIR$/com.google.android.gms_google-play-services_13/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/com.google.android.gms_google-play-services_13/gen" isTestSource="false" />

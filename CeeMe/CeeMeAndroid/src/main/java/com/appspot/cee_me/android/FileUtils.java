@@ -3,14 +3,18 @@ package com.appspot.cee_me.android;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
+
 import java.io.File;
+import java.util.UUID;
 
 /**
  * File utilities.
  */
 public class FileUtils {
-
+    private static final String TAG = Config.APPNAME + ".FileUtils";
     /**
      * Get the mimetype of a file, including content: uris
      *
@@ -93,4 +97,62 @@ public class FileUtils {
     public static String byteCountToDisplaySize(long bytes) {
         return org.apache.commons.io.FileUtils.byteCountToDisplaySize(bytes);
     }
+
+    /**
+     * Check whether external storage is writeable
+     * @return true if external storage is writeable
+     */
+    public static boolean isStorageWritable() {
+        boolean mExternalStorageAvailable = false;
+        boolean mExternalStorageWriteable = false;
+        String state = Environment.getExternalStorageState();
+
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            // We can read and write the media
+            mExternalStorageAvailable = mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            // We can only read the media
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            // Something else is wrong. It may be one of many other states, but all we need
+            //  to know is we can neither read nor write
+            mExternalStorageAvailable = mExternalStorageWriteable = false;
+        }
+        return mExternalStorageAvailable && mExternalStorageWriteable;
+    }
+
+    /**
+     * Decides the name within Google Cloud Storage for this file. Incorporates the sender's deviceKey,
+     * a random UUID, and the original filename.
+     *
+     * @param deviceKey sending device's key
+     * @param filePath  original local file path (complete path)
+     * @return a new filename suitable for GCS.
+     */
+    public static String getNewGCSFilename(String deviceKey, String filePath) {
+        UUID newUUID = UUID.randomUUID();
+        String baseFilename = FileUtils.getBaseFilenameFromPath(filePath);
+        String prefix = "";
+        if (Config.LOCAL_APP_SERVER) {
+            // so we can distinguish which GCS files are associated with my
+            // development app server as opposed to the live website.
+            prefix = "dev/";
+        }
+        return prefix + newUUID + "/" + baseFilename;
+    }
+
+    /**
+     * Ensure that the directory containing the file exists
+     * @param file a file to check
+     */
+    public static void ensureDirectory(File file) {
+        if (file.exists()) {
+            return;
+        }
+        if (!file.getParentFile().mkdirs()) {
+            Log.e(TAG, "Failed to create directory for: " + file);
+        }
+    }
+
 }

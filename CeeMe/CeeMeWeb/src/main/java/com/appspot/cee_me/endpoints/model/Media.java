@@ -11,6 +11,7 @@ import java.nio.ShortBuffer;
 public class Media implements Serializable {
     private String mediaKey;
     private byte[] sha256;
+    private String gcsFilename;
     private String fileName;
     private String mimeType;
     private long size;
@@ -30,6 +31,7 @@ public class Media implements Serializable {
         if (media != null) {
             setMediaKey(media.getKey().getString());
             setSha256(media.getSha256() == null ? null : media.getSha256().getBytes());
+            setGcsFilename(media.getGcsFilename());
             setFileName(media.getFileName());
             setMimeType(media.getMimeType());
             setSize(media.getSize());
@@ -56,6 +58,14 @@ public class Media implements Serializable {
 
     public void setSha256(byte[] sha256) {
         this.sha256 = sha256;
+    }
+
+    public String getGcsFilename() {
+        return gcsFilename;
+    }
+
+    public void setGcsFilename(String gcsFilename) {
+        this.gcsFilename = gcsFilename;
     }
 
     public String getFileName() {

@@ -386,4 +386,13 @@ public class Media implements Comparable<Media> {
         return media;
     }
 
+    public static void fixMediaBugs() {
+        // A One time thing...
+        for (Media media: ofy().load().type(Media.class).list()) {
+            String gcsFn = media.getFileName();
+            media.setFileName(media.getGcsFilename());
+            media.setGcsFilename(gcsFn);
+            media.save(false);
+        }
+    }
 }

@@ -99,14 +99,17 @@ public class CloudStorage {
     }
 
 
-    public void downloadFile(String bucketName, String gcsFilename, String destinationDirectory, IOProgress ioProgress) throws IOException {
+    public void downloadFile(String bucketName, String gcsFilename, File destFile, IOProgress ioProgress) throws IOException {
 
+/*
         File directory = new File(destinationDirectory);
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException("Provided destinationDirectory path is not a directory");
         }
         File file = new File(directory.getAbsolutePath() + "/" + gcsFilename);
-        Log.d(TAG, "downloadFile START: " + bucketName + ":" + gcsFilename);
+*/
+        DateTime startTime = new DateTime();
+        Log.d(TAG, "downloadFile START: " + bucketName + ":" + gcsFilename + " time: " + startTime);
 
         Storage.Objects.Get get = storage.objects().get(bucketName, gcsFilename);
         StorageObject SO = get.execute();
@@ -116,10 +119,17 @@ public class CloudStorage {
             Log.i(TAG, "found file size " + fileSize + "  for download: " + gcsFilename);
         }
         get.getMediaHttpDownloader().setProgressListener(new CloudDownloadProgressListener(ioProgress, fileSize));
-        try (FileOutputStream stream = new FileOutputStream(file)) {
+        try (FileOutputStream stream = new FileOutputStream(destFile)) {
             // get.executeAndDownloadTo(stream);   /// what's the difference?
             get.executeMediaAndDownloadTo(stream); /// this is the one in docs
         }
+
+        DateTime endTime = new DateTime();
+        Period period = new Period(startTime, endTime);
+        String periodStr = PeriodFormat.getDefault().print(period);
+        Double bytesPerSecond = fileSize / (double) period.getSeconds();
+        String logMsg = "downloadFile FINISH: " + bucketName + ":" + gcsFilename + " -> " + destFile.getPath() + " total time: " + periodStr + " rate: " + bytesPerSecond;
+        Log.d(TAG, logMsg);
 
     }
 
@@ -214,8 +224,8 @@ public class CloudStorage {
                     .setServiceAccountId(Config.SERVICE_ACCOUNT_EMAIL)
                     .setServiceAccountScopes(scopes)
                     .setServiceAccountPrivateKey(privateKey)
-                    // .setServiceAccountPrivateKeyFromP12File(keyStream)
-                    // .setServiceAccountUser("user@example.com")
+                            // .setServiceAccountPrivateKeyFromP12File(keyStream)
+                            // .setServiceAccountUser("user@example.com")
                     .build();
 
             storage = new Storage.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
@@ -229,6 +239,7 @@ public class CloudStorage {
     /**
      * Return a list of the Google API scopes used by our storage operations.
      * Needed to procure the GoogleAccountCredential.
+     *
      * @return list of storage scopes
      */
     public static List<String> getStorageScopes() {
@@ -276,7 +287,7 @@ public class CloudStorage {
                     }
 */
                     long bytesXfered = uploader.getNumBytesUploaded();
-                    currentProgress = (int) ((double) bytesXfered  * 100.0 / (double) fileSize);
+                    currentProgress = (int) ((double) bytesXfered * 100.0 / (double) fileSize);
                     Log.i(TAG, "Upload percentage: " + currentProgress);
                     if (ioProgress != null) {
                         ioProgress.setProgress(currentProgress, bytesXfered, fileSize);

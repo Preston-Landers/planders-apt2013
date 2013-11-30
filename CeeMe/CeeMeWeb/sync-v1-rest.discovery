@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/JSqOLnDHENvGNMplENXZtG8iDMw\"",
+ "etag": "\"doS0mIKix6_L3_LoT-sZZjofha4/fmM43cxofOopK3DYHxNcXHl3e_c\"",
  "discoveryVersion": "v1",
  "id": "sync:v1",
  "name": "sync",
@@ -248,6 +248,9 @@
      "$ref": "DateTime"
     },
     "fileName": {
+     "type": "string"
+    },
+    "gcsFilename": {
      "type": "string"
     },
     "latitude": {

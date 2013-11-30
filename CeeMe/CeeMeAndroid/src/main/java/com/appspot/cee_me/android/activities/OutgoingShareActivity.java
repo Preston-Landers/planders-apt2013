@@ -232,7 +232,7 @@ public class OutgoingShareActivity extends BaseActivity {
             mimeType = FileUtils.getMimeType(mediaUri, contentResolver);
             filePath = FileUtils.getPath(mediaUri, contentResolver, false);
             fileSize = FileUtils.getFileSize(mediaUri, contentResolver);
-            GCSFilename = getNewGCSFilename(deviceKey, filePath);
+            GCSFilename = FileUtils.getNewGCSFilename(deviceKey, filePath);
             String logDesc = filePath + " - gcs filename: " + GCSFilename;
 
             // Upload the content to the app's GCS bucket.
@@ -271,7 +271,7 @@ public class OutgoingShareActivity extends BaseActivity {
             if (keyStream == null) {
                 throw new IllegalArgumentException("Could not get Google Cloud Storage authorization key");
             }
-            CloudStorage cloudStorage = new CloudStorage(keyStream);
+            CloudStorage cloudStorage = getCloudStorage();
             cloudStorage.uploadFile(Config.GCS_BUCKET, filePath, mimeType, GCSFilename, ioProgress);
             // List<String> bucketList = cloudStorage.listBucket(Config.GCS_BUCKET);
             // Log.i(TAG, "Seeing buckets: " + bucketList);
@@ -293,26 +293,6 @@ public class OutgoingShareActivity extends BaseActivity {
                 Log.e(TAG, "Failed to create media description object.", e);
                 return null;
             }
-        }
-
-        /**
-         * Decides the name within Google Cloud Storage for this file. Incorporates the sender's deviceKey,
-         * a random UUID, and the original filename.
-         *
-         * @param deviceKey sending device's key
-         * @param filePath  original local file path (complete path)
-         * @return a new filename suitable for GCS.
-         */
-        private String getNewGCSFilename(String deviceKey, String filePath) {
-            UUID newUUID = UUID.randomUUID();
-            String baseFilename = FileUtils.getBaseFilenameFromPath(filePath);
-            String prefix = "s";
-            if (Config.LOCAL_APP_SERVER) {
-                // so we can distinguish which GCS files are associated with my
-                // development app server as opposed to the live website.
-                prefix = "l";
-            }
-            return prefix + "/" + deviceKey + "/" + newUUID + "/" + baseFilename;
         }
 
         @Override
@@ -363,24 +343,5 @@ public class OutgoingShareActivity extends BaseActivity {
         }
     }
 
-    /**
-     * packages the items we need to update the upload progress indicators
-     */
-    private static class ProgressParams {
-        public int progress;
-        public long bytesSent;
-        public long totalBytes;
-
-        public ProgressParams(int progress, long bytesSent, long totalBytes) {
-            this.progress = progress;
-            this.bytesSent = bytesSent;
-            this.totalBytes = totalBytes;
-        }
-
-        public String getProgressString() {
-            return progress + "% - " + FileUtils.byteCountToDisplaySize(bytesSent) + " of " + FileUtils.byteCountToDisplaySize(totalBytes);
-        }
-
-    }
 }
 

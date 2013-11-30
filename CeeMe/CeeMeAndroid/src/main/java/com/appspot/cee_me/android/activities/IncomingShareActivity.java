@@ -1,5 +1,6 @@
 package com.appspot.cee_me.android.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -8,11 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.appspot.cee_me.android.Config;
-import com.appspot.cee_me.android.R;
-import com.appspot.cee_me.android.SyncEndpointService;
+import com.appspot.cee_me.android.*;
 import com.appspot.cee_me.sync.Sync;
+import com.appspot.cee_me.sync.model.Media;
 import com.appspot.cee_me.sync.model.Message;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 
 public class IncomingShareActivity extends BaseActivity {
     private static final String TAG = CEEME + ".IncomingShareActivity";
@@ -23,6 +27,8 @@ public class IncomingShareActivity extends BaseActivity {
 
     private Sync service;
     private Message message;
+    private Media media;
+    private File localFile;
 
     /**
      * Called when the activity is first created.
@@ -86,7 +92,11 @@ public class IncomingShareActivity extends BaseActivity {
      */
     private void displayMessageDetails(Message message) {
         setMessageText(message.getText());
-        setMessageURL(message.getUrlData());
+        if (localFile != null) {
+            setMessageURL(localFile.getPath());
+        } else {
+            setMessageURL(message.getUrlData());
+        }
         setSenderIdentity(message.getFromUser().getAccountName());
     }
 
@@ -95,12 +105,16 @@ public class IncomingShareActivity extends BaseActivity {
     }
 
     public void openIncomingShareButton(View view) {
-        String url = message.getUrlData();
-        if (url == null || url.length() == 0) {
-            shortToast("Can't open URL.");
-            return;
+        if (localFile != null && media != null) {
+            openExternalFile(localFile, media.getMimeType());
+        } else {
+            String url = message.getUrlData();
+            if (url == null || url.length() == 0) {
+                shortToast("Can't open URL.");
+                return;
+            }
+            openExternalURL(url);
         }
-        openExternalURL(url);
     }
 
     public void cancelIncomingShareButton(View view) {
@@ -115,7 +129,17 @@ public class IncomingShareActivity extends BaseActivity {
         startActivity(i);
     }
 
-    private class LoadMessageTask extends AsyncTask<Void, Void, Void> {
+    private void openExternalFile(File localFile, String mimeType) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setDataAndType(Uri.fromFile(localFile), mimeType);
+        try {
+            startActivity(i);
+        } catch (ActivityNotFoundException notFound) {
+            shortToast("Can't find an app to view this file.");
+        }
+    }
+
+    private class LoadMessageTask extends AsyncTask<Void, ProgressParams, Void> {
         private boolean querySuccess = false;
 
         @Override
@@ -125,11 +149,19 @@ public class IncomingShareActivity extends BaseActivity {
                 service = SyncEndpointService.getSyncService(getCredential());
                 Sync.GetMessage getMessage = service.getMessage(messageKey);
                 message = getMessage.execute();
+
+                media = message.getMedia();
+                if (media != null) {
+                    loadMedia(media);
+                }
                 querySuccess = true;
 //            } catch (GoogleAuthIOException e) {
 //                Log.e(TAG, "message retrieval fail: " + e.getCause());
             } catch (Exception e) {
                 Log.e(TAG, "message retrieval failed: ", e);
+                localFile = null;
+                media = null;
+                message = null;
             }
             return null;
         }
@@ -155,6 +187,54 @@ public class IncomingShareActivity extends BaseActivity {
             progressBar.setVisibility(View.VISIBLE);
             setStatusText("Please wait while I load the content.");
         }
+
+        private IOProgress getIoProgress() {
+            // Create a progress updater.
+            IOProgress ioProgress = new IOProgress() {
+                @Override
+                public void setProgress(int progress, long bytesTransferred, long totalBytes) {
+                    publishProgress(new ProgressParams(progress, bytesTransferred, totalBytes));
+                }
+
+                @Override
+                public void started() {
+                }
+
+                @Override
+                public void initiationCompleted() {
+                }
+
+                @Override
+                public void completed() {
+                }
+            };
+            return ioProgress;
+        }
+
+        private void loadMedia(Media media) throws IOException, GeneralSecurityException {
+            if (media == null) {
+                Log.e(TAG, "Error: passed null media to loadMedia");
+                return;
+            }
+            // See if we already have the file
+
+            if (!FileUtils.isStorageWritable()) {
+                Log.e(TAG, "Can't write to storage in order to download media!");
+                shortToast("Error: can't write to storage media.");
+                return;
+            }
+            localFile = new File(getExternalFilesDir(null) + "/" + media.getGcsFilename());
+            if (localFile.exists()) {
+                Log.d(TAG, "Local file already exists: " + localFile);
+            } else {
+                FileUtils.ensureDirectory(localFile);
+                CloudStorage cloudStorage = getCloudStorage();
+                cloudStorage.downloadFile(Config.GCS_BUCKET, media.getGcsFilename(), localFile, getIoProgress());
+                Log.d(TAG, "Media download complete.");
+            }
+
+        }
+
     }
 }
 
