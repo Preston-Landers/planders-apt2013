@@ -189,6 +189,7 @@ public class OutgoingShareActivity extends BaseActivity {
         private String filePath;
         private Long fileSize;
         private String GCSFilename;
+        private double rate;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -266,6 +267,12 @@ public class OutgoingShareActivity extends BaseActivity {
                 @Override
                 public void completed() {
                 }
+
+                @Override
+                public void setCurrentRate(double thisRate) {
+                    rate = thisRate;
+                }
+
             };
             InputStream keyStream = getResources().openRawResource(R.raw.serviceaccount);
             if (keyStream == null) {
@@ -304,14 +311,19 @@ public class OutgoingShareActivity extends BaseActivity {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.outgoingShare_progressBar);
             TextView progressText = (TextView) findViewById(R.id.outgoingShare_progress_textView);
             progressBar.setVisibility(View.INVISIBLE);
+            String rateTxt = "";
+            if (rate != 0) {
+                rateTxt = " in " + rate + " Bytes/sec";
+                shortToast("Transfer rate: " + rateTxt);
+            }
             setStatusText("");
             if (querySuccess) {
                 if (message != null) {
-                    progressText.setText("Finished!");
-                    logSentMessageAndFinish(message);
+                    progressText.setText("Finished" + rateTxt);
+                   logSentMessageAndFinish(message);
                 }
             } else {
-                progressText.setText("Upload failed.");
+                progressText.setText("Upload failed." + rateTxt);
                 setStatusText("Error: couldn't send this message.");
                 shortToast("Failed to send message :-(");
             }

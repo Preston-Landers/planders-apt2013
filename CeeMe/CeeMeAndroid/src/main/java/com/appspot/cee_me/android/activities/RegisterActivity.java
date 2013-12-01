@@ -12,10 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.appspot.cee_me.android.CeeMeApplication;
-import com.appspot.cee_me.android.Config;
-import com.appspot.cee_me.android.R;
-import com.appspot.cee_me.android.RegisterEndpointService;
+import com.appspot.cee_me.android.*;
 import com.appspot.cee_me.register.Register;
 import com.appspot.cee_me.register.model.Device;
 import com.google.android.gcm.GCMRegistrar;
@@ -74,7 +71,7 @@ public class RegisterActivity extends BaseActivity {
 
     private void loadHardwareDescription() {
         TextView hwTextView = (TextView) findViewById(R.id.textViewRegisterHardwareDesc);
-        String hardwareDescription = Config.getDeviceName();
+        String hardwareDescription = Utils.getDeviceName();
         hwTextView.setText(hardwareDescription);
 
         EditText deviceNameEditText = (EditText) findViewById(R.id.registerDeviceName);
@@ -132,7 +129,7 @@ public class RegisterActivity extends BaseActivity {
 
             try {
                 Register service = RegisterEndpointService.getRegisterService(credential);
-                Register.RegisterDevice registerDevice = service.registerDevice(deviceName, hwDesc, gcmId);
+                Register.RegisterDevice registerDevice = service.registerDevice(gcmId, hwDesc, deviceName );
                 Device device = registerDevice.execute();
                 deviceKey = device.getDeviceKey();
                 GCMRegistrar.setRegisteredOnServer(RegisterActivity.this, true);
@@ -180,7 +177,7 @@ public class RegisterActivity extends BaseActivity {
     private void doRegisterWithGCM() {
         if (gcmRegistrationId.equals("")) {
             // Automatically registers application on startup.
-            GCMRegistrar.register(this, Config.GCM_SENDER_KEY);
+            GCMRegistrar.register(this, Config.GOOGLE_PROJECT_NUMBER);
         } else {
             // Device is already registered on GCM, check server.
             if (GCMRegistrar.isRegisteredOnServer(this)) {

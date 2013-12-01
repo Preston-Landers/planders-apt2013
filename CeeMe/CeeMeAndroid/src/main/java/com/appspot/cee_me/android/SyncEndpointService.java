@@ -5,7 +5,8 @@ import com.appspot.cee_me.sync.SyncRequest;
 import com.appspot.cee_me.sync.SyncRequestInitializer;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.http.apache.ApacheHttpTransport;
+// import com.google.api.client.http.javanet.NetHttpTransport;
 
 /**
  * Endpoint service for message sync.
@@ -14,7 +15,8 @@ public class SyncEndpointService {
     public static Sync getSyncService(GoogleAccountCredential creds) {
         Sync.Builder builder = new Sync.Builder(
                 // HttpTransport.getInstance().getHttpTransport(),
-                new NetHttpTransport(),
+                // new NetHttpTransport(),
+                new ApacheHttpTransport(),
                 new AndroidJsonFactory(), creds);
         if (Config.LOCAL_APP_SERVER) {
             // Apparently gzip doesn't work in the dev server

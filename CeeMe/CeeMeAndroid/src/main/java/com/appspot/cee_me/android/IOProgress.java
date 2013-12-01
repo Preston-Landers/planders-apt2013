@@ -27,4 +27,6 @@ public interface IOProgress {
      * Called when the transfer is complete.
      */
     abstract void completed();
+
+    abstract void setCurrentRate(double bytesPerSec);
 }

@@ -141,6 +141,7 @@ public class IncomingShareActivity extends BaseActivity {
 
     private class LoadMessageTask extends AsyncTask<Void, ProgressParams, Void> {
         private boolean querySuccess = false;
+        private double rate = 0;
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -170,6 +171,11 @@ public class IncomingShareActivity extends BaseActivity {
         protected void onPostExecute(Void rv) {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
             progressBar.setVisibility(View.INVISIBLE);
+            String rateTxt = "";
+            if (rate != 0) {
+                rateTxt = " " + rate + " bytes/sec";
+                shortToast("Transfer rate: " + rateTxt);
+            }
             setStatusText("");
             if (querySuccess) {
                 if (message != null) {
@@ -183,14 +189,17 @@ public class IncomingShareActivity extends BaseActivity {
 
         @Override
         protected void onPreExecute() {
+            TextView progressText = (TextView) findViewById(R.id.incomingShare_progress_textView);
+            progressText.setVisibility(View.VISIBLE);
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
             progressBar.setVisibility(View.VISIBLE);
+            progressText.setText("Starting download.");
             setStatusText("Please wait while I load the content.");
         }
 
-        private IOProgress getIoProgress() {
+        private IOProgress getAsyncTaskIOProgress() {
             // Create a progress updater.
-            IOProgress ioProgress = new IOProgress() {
+            return new IOProgress() {
                 @Override
                 public void setProgress(int progress, long bytesTransferred, long totalBytes) {
                     publishProgress(new ProgressParams(progress, bytesTransferred, totalBytes));
@@ -207,8 +216,12 @@ public class IncomingShareActivity extends BaseActivity {
                 @Override
                 public void completed() {
                 }
+
+                @Override
+                public void setCurrentRate(double thisRate) {
+                    rate = thisRate;
+                }
             };
-            return ioProgress;
         }
 
         private void loadMedia(Media media) throws IOException, GeneralSecurityException {
@@ -229,10 +242,19 @@ public class IncomingShareActivity extends BaseActivity {
             } else {
                 FileUtils.ensureDirectory(localFile);
                 CloudStorage cloudStorage = getCloudStorage();
-                cloudStorage.downloadFile(Config.GCS_BUCKET, media.getGcsFilename(), localFile, getIoProgress());
+                cloudStorage.downloadFile(Config.GCS_BUCKET, media.getGcsFilename(), localFile, getAsyncTaskIOProgress());
                 Log.d(TAG, "Media download complete.");
             }
+        }
 
+        @Override
+        protected void onProgressUpdate(ProgressParams... progressParams) {
+            ProgressParams params = progressParams[0];
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
+            progressBar.setProgress(params.progress);
+            TextView progressText = (TextView) findViewById(R.id.incomingShare_progress_textView);
+            String progressString = params.getProgressString();
+            progressText.setText(progressString);
         }
 
     }

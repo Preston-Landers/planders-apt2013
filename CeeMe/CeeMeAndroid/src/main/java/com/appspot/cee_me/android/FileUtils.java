@@ -8,6 +8,9 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.UUID;
 
 /**
@@ -89,13 +92,38 @@ public class FileUtils {
         return new File(filePath).getName();
     }
 
+    private static final BigDecimal KILO_DIVISOR = new BigDecimal(1024L);
+
+    enum SizeSuffix {
+        B, KB, MB, GB, TB, PB, EB, ZB, YB
+    }
     /**
      * Get a human readable file size
-     * @param bytes size of the file to interpret
+     * @param size size of the file to interpret
      * @return human readable string describing file size
      */
-    public static String byteCountToDisplaySize(long bytes) {
-        return org.apache.commons.io.FileUtils.byteCountToDisplaySize(bytes);
+    public static String byteCountToDisplaySize(BigInteger size, int maxChars) {
+        // return org.apache.commons.io.FileUtils.byteCountToDisplaySize(bytes);
+        // From: https://issues.apache.org/jira/browse/IO-373
+        String displaySize;
+        BigDecimal bdSize = new BigDecimal(size);
+        SizeSuffix selectedSuffix = SizeSuffix.B;
+        for (SizeSuffix sizeSuffix : SizeSuffix.values()) {
+            if (sizeSuffix.equals(SizeSuffix.B)) {
+                continue;
+            }
+            if (bdSize.setScale(0, RoundingMode.HALF_UP).toString().length() <= maxChars) {
+                break;
+            }
+            selectedSuffix = sizeSuffix;
+            bdSize = bdSize.divide(KILO_DIVISOR);
+        }
+        displaySize = bdSize.setScale(0, RoundingMode.HALF_UP).toString();
+        if (displaySize.length() < maxChars - 1) {
+            displaySize = bdSize.setScale(
+                    maxChars - 1 - displaySize.length(), RoundingMode.HALF_UP).toString();
+        }
+        return displaySize + " " + selectedSuffix.toString();
     }
 
     /**
@@ -131,6 +159,7 @@ public class FileUtils {
      * @return a new filename suitable for GCS.
      */
     public static String getNewGCSFilename(String deviceKey, String filePath) {
+        String dateStr = DateUtils.getF8Date(null); // current date in YYYYMMDD format
         UUID newUUID = UUID.randomUUID();
         String baseFilename = FileUtils.getBaseFilenameFromPath(filePath);
         String prefix = "";
@@ -139,7 +168,7 @@ public class FileUtils {
             // development app server as opposed to the live website.
             prefix = "dev/";
         }
-        return prefix + newUUID + "/" + baseFilename;
+        return prefix + dateStr + "/" + newUUID + "/" + baseFilename;
     }
 
     /**

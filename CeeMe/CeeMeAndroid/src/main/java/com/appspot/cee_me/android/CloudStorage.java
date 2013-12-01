@@ -37,12 +37,12 @@ public class CloudStorage {
     private Storage storage;
 
     private static final String TAG = Config.APPNAME + ".CloudStorage";
-    private static final String PROJECT_ID = Config.GCM_SENDER_KEY;
+    private static final String PROJECT_ID = Config.GOOGLE_PROJECT_NUMBER;
     private static final String APPLICATION_NAME = Config.APPNAME + "/1.0";
 
     // private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     // private static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
-    private static HttpTransport HTTP_TRANSPORT;
+    private HttpTransport HTTP_TRANSPORT;
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     private PrivateKey privateKey;
 
@@ -83,21 +83,50 @@ public class CloudStorage {
             insert.setName(gcsFilename);
             insert.getMediaHttpUploader().setDisableGZipContent(true); // this seems to help to disable... at least when debugging
             // insert.getMediaHttpUploader().setDirectUploadEnabled(true);
-            insert.getMediaHttpUploader().setChunkSize(MediaHttpUploader.DEFAULT_CHUNK_SIZE);
+            insert.getMediaHttpUploader().setChunkSize(getChunkSize(fileSize));
             if (ioProgress != null) {
                 insert.getMediaHttpUploader().setProgressListener(new CloudUploadProgressListener(ioProgress, fileSize));
             }
 
+            startTime = new DateTime();
             insert.execute();
             DateTime endTime = new DateTime();
             Period period = new Period(startTime, endTime);
             String periodStr = PeriodFormat.getDefault().print(period);
             Double bytesPerSecond = fileSize / (double) period.getSeconds();
-            String logMsg = "uploadFile FINISH: " + bucketName + ":" + gcsFilename + " -> " + filePath + " total time: " + periodStr + " rate: " + bytesPerSecond;
+            if (ioProgress != null) {
+                ioProgress.setCurrentRate(bytesPerSecond);
+            }
+            String logMsg = "uploadFile FINISH: " + bucketName + ":" + gcsFilename + " -> " + filePath + " size(bytes): " + fileSize + " total time: " + periodStr + " Bytes/sec: " + bytesPerSecond;
             Log.d(TAG, logMsg);
         }
     }
 
+
+    private int getChunkSize(long fileSize) {
+        final long ONE_MB = 1024 * 1024;
+        final long TEN_MB = ONE_MB * 10;
+        final long HUNDRED_MB = TEN_MB * 10;
+        final long ONE_GB = HUNDRED_MB * 10;
+
+        if (fileSize <= MediaHttpUploader.MINIMUM_CHUNK_SIZE) {
+            return MediaHttpUploader.MINIMUM_CHUNK_SIZE;
+        }
+        if (fileSize <= ONE_MB) {
+            return MediaHttpUploader.MINIMUM_CHUNK_SIZE * 2;
+        }
+        if (fileSize <= TEN_MB) {
+            return MediaHttpUploader.MINIMUM_CHUNK_SIZE * 8;
+        }
+        if (fileSize <= HUNDRED_MB) {
+            return MediaHttpUploader.DEFAULT_CHUNK_SIZE;
+        }
+        if (fileSize <= ONE_GB) {
+            return MediaHttpUploader.DEFAULT_CHUNK_SIZE * 5;
+        }
+        // Bigger than 1 GB? do 100 MB chunks
+        return MediaHttpUploader.DEFAULT_CHUNK_SIZE * 10;
+    }
 
     public void downloadFile(String bucketName, String gcsFilename, File destFile, IOProgress ioProgress) throws IOException {
 
@@ -119,6 +148,7 @@ public class CloudStorage {
             Log.i(TAG, "found file size " + fileSize + "  for download: " + gcsFilename);
         }
         get.getMediaHttpDownloader().setProgressListener(new CloudDownloadProgressListener(ioProgress, fileSize));
+        get.getMediaHttpDownloader().setChunkSize(getChunkSize(fileSize));
         try (FileOutputStream stream = new FileOutputStream(destFile)) {
             // get.executeAndDownloadTo(stream);   /// what's the difference?
             get.executeMediaAndDownloadTo(stream); /// this is the one in docs
@@ -128,7 +158,10 @@ public class CloudStorage {
         Period period = new Period(startTime, endTime);
         String periodStr = PeriodFormat.getDefault().print(period);
         Double bytesPerSecond = fileSize / (double) period.getSeconds();
-        String logMsg = "downloadFile FINISH: " + bucketName + ":" + gcsFilename + " -> " + destFile.getPath() + " total time: " + periodStr + " rate: " + bytesPerSecond;
+        if (ioProgress != null) {
+            ioProgress.setCurrentRate(bytesPerSecond);
+        }
+        String logMsg = "downloadFile FINISH: " + bucketName + ":" + gcsFilename + " -> " + destFile.getPath() + " total time: " + periodStr + " size: " + fileSize + " bytes/ec: " + bytesPerSecond;
         Log.d(TAG, logMsg);
 
     }
@@ -216,6 +249,7 @@ public class CloudStorage {
     private Storage getStorage() {
 
         if (storage == null) {
+            // HTTP_TRANSPORT = new NetHttpTransport();
             HTTP_TRANSPORT = new ApacheHttpTransport();
             List<String> scopes = getStorageScopes();
             GoogleCredential credential = new GoogleCredential.Builder()

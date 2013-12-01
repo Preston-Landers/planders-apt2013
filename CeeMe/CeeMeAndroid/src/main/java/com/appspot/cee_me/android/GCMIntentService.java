@@ -14,7 +14,7 @@ import com.google.android.gcm.GCMBaseIntentService;
 
 import java.util.List;
 
-import static com.appspot.cee_me.android.Config.displayMessage;
+import static com.appspot.cee_me.android.Utils.displayMessage;
 
 /*
  * Copyright 2012 Google Inc.
@@ -41,7 +41,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     static final String TAG = "GCMIntentService";
 
     public GCMIntentService() {
-        super(Config.GCM_SENDER_KEY);
+        super(Config.GOOGLE_PROJECT_NUMBER);
     }
 
     @Override

@@ -19,6 +19,7 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
@@ -387,7 +388,11 @@ public class BaseActivity extends Activity {
         }
 
         public String getProgressString() {
-            return progress + "% - " + FileUtils.byteCountToDisplaySize(bytesSent) + " of " + FileUtils.byteCountToDisplaySize(totalBytes);
+            final int maxSize = 4;
+            return progress + "% - " +
+                    FileUtils.byteCountToDisplaySize(BigInteger.valueOf(bytesSent), maxSize) +
+                    " of " +
+                    FileUtils.byteCountToDisplaySize(BigInteger.valueOf(totalBytes), maxSize);
         }
     }
 

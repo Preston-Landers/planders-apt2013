@@ -17,14 +17,6 @@
         <!--<android.sdk.path>C:\Users\Preston\AppData\Local\Android\android-sdk\</android.sdk.path>-->
     </properties>
 
-    <repositories>
-        <repository>
-            <name>jets3t</name>
-            <id>jets3t</id>
-            <url>http://www.jets3t.org/maven2</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <!--<dependency>-->
             <!--<groupId>com.google.android</groupId>-->
@@ -117,14 +109,6 @@
              <artifactId>google-api-client-android</artifactId>
              <version>1.17.0-rc</version>
          </dependency>
-
-
-        <!-- JetS3T for Google Cloud Storage -->
-        <dependency>
-            <groupId>net.java.dev.jets3t</groupId>
-            <artifactId>jets3t</artifactId>
-            <version>0.9.0</version>
-        </dependency>
 
     </dependencies>
 

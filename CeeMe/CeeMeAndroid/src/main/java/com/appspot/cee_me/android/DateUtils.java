@@ -33,4 +33,17 @@ public class DateUtils {
     public static DateTimeFormatter getFormatter() {
         return DateTimeFormat.forStyle("MS");
     }
+
+    /**
+     * Turn a DateTime to a YYYYMMDD style (f8) string
+     * @param dateTime use null for current date
+     * @return F8 style string YYYYMMDD
+     */
+    public static String getF8Date(DateTime dateTime) {
+        if (dateTime == null) {
+            dateTime = new DateTime();
+        }
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyyMMdd");
+        return fmt.print(dateTime);
+    }
 }
