@@ -20,8 +20,9 @@
             android:id="@+id/checkMessages_ok"
             android:layout_gravity="center_horizontal"
             android:onClick="checkMessagesOpenButton"
-            android:layout_alignRight="@+id/checkMessages_listView"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"/>
 
     <Button
             style="@style/RedGradientButton"
@@ -31,8 +32,9 @@
             android:id="@+id/checkMessages_cancel_button"
             android:layout_gravity="center_horizontal"
             android:onClick="checkMessagesCancelButton"
-            android:layout_alignLeft="@+id/checkMessages_searchView"
-            android:layout_alignBottom="@+id/checkMessages_ok"/>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="5dp"/>
 
     <ListView
             android:layout_width="wrap_content"
