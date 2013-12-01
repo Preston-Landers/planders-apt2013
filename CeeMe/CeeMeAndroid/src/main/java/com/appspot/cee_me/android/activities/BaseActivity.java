@@ -348,6 +348,10 @@ public class BaseActivity extends Activity {
         Toast.makeText(BaseActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 
+    public void longToast(String msg) {
+        Toast.makeText(BaseActivity.this, msg, Toast.LENGTH_LONG).show();
+    }
+
     String getDeviceKeyPrefName() {
         if (Config.LOCAL_APP_SERVER) {
             return Config.PREF_DEVICE_KEY + "_dev_" + accountName;
@@ -359,6 +363,7 @@ public class BaseActivity extends Activity {
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(getDeviceKeyPrefName(), keyStr);
         editor.commit();
+        deviceKey = keyStr;
     }
 
     String getDeviceKeyPref() {

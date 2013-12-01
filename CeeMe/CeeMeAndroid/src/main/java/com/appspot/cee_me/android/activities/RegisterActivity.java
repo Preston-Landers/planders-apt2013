@@ -39,35 +39,9 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         requireSignIn();
 
-        Intent intent = getIntent();
-        final boolean doDeregister = intent.getBooleanExtra(EXTRA_DEREGISTER, false);
-
-        if (doDeregister) {
-            deregisterDevice();
-        } else {
-            loadHardwareDescription();
-        }
+        loadHardwareDescription();
 
     }
-
-    private void deregisterDevice() {
-        shortToast("Please wait for deregistration...");
-        GCMRegistrar.unregister(this);
-        deviceKey = "";
-        setDeviceKeyPref(deviceKey);
-        new DeRegisterTask().execute();
-    }
-
-    private void afterServerDeregisterDevice() {
-        GCMRegistrar.setRegisteredOnServer(this, false);
-        setResult(RESULT_OK);
-        finish();
-    }
-
-    public static void unRegisterServiceCallback(Context context, String registrationId) {
-        Log.i(TAG, "unRegisterServiceCallback() called");
-    }
-
 
     private void loadHardwareDescription() {
         TextView hwTextView = (TextView) findViewById(R.id.textViewRegisterHardwareDesc);
@@ -189,56 +163,6 @@ public class RegisterActivity extends BaseActivity {
             }
         }
 
-    }
-
-    private class DeRegisterTask extends AsyncTask<Void, Void, Void> {
-        private boolean deregisterSuccess = false;
-        String errMsg = getString(R.string.device_registration_failed);
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            deregisterSuccess = false;
-            GoogleAccountCredential credential = getCredential();
-            assert(credential != null);
-            assert(deviceKey != null);
-            assert(!deviceKey.equals(""));
-
-            try {
-                Register service = RegisterEndpointService.getRegisterService(credential);
-                Register.DeleteRegistration deleteRegistration = service.deleteRegistration(deviceKey);
-                deleteRegistration.execute();
-                deregisterSuccess = true;
-            } catch (GoogleAuthIOException e) {
-                errMsg = "Authentication error";
-                Log.e(TAG, "deregister fail: " + e.getCause());
-            } catch (GoogleJsonResponseException e) {
-                errMsg = e.getDetails().getMessage();
-                Log.e(TAG, errMsg, e);
-            } catch (Exception e) {
-                Log.e(TAG, errMsg, e);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void rv) {
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.register_progressBar);
-            progressBar.setVisibility(View.INVISIBLE);
-            if (deregisterSuccess) {
-                afterServerDeregisterDevice();
-            } else {
-                shortToast(errMsg);
-                setResult(RESULT_ERROR);
-                finish();
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.register_progressBar);
-            progressBar.setVisibility(View.VISIBLE);
-        }
     }
 
 }

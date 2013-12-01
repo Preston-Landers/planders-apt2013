@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+            android:title="@string/pref_open_share_title"
+            android:key="pref_key_open_share_settings">
+        <CheckBoxPreference
+                android:key="pref_auto_open_incoming"
+                android:title="@string/pref_auto_open_incoming"
+                android:summary="@string/pref_auto_open_incoming_summary"
+                android:defaultValue="false"/>
+        <CheckBoxPreference
+                android:key="pref_force_app_open_choose"
+                android:title="@string/pref_force_app_open_choose"
+                android:summary="@string/pref_force_app_open_choose_summary"
+                android:defaultValue="false"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

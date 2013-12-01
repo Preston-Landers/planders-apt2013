@@ -7,6 +7,7 @@ import android.content.*;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ public class WelcomeActivity extends BaseActivity {
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
     static final int REQUEST_ACCOUNT_PICKER = 1;
     public static final int REQUEST_REGISTER_DEVICE = 2;
-    public static final int REQUEST_DEREGISTER_DEVICE = 3;
+    public static final int REQUEST_SETTINGS = 4;
 
     /**
      * Called when the activity is first created.
@@ -84,16 +85,15 @@ public class WelcomeActivity extends BaseActivity {
                     signOut();
                 }
                 break;
-            case REQUEST_DEREGISTER_DEVICE:
-                if (resultCode == RegisterActivity.RESULT_CANCELED) {
-                    Toast.makeText(WelcomeActivity.this, "De-registration was canceled.", Toast.LENGTH_SHORT).show();
-                } else if (resultCode == RegisterActivity.RESULT_OK) {
-                    signOut();
+            case REQUEST_SETTINGS:
+                if (resultCode == SettingsActivity.RESULT_DEREGISTERED) {
                     shortToast("De-registered device!");
-                } else if (resultCode == RegisterActivity.RESULT_ERROR) {
-                    shortToast("Error during de-registration");
+                    signOut();
                 }
-                break;
+                else if (resultCode == SettingsActivity.RESULT_DEREGISTERED_ERROR) {
+                    shortToast("De-registration may have failed...");
+                    signOut();
+                }
         }
     }
 
@@ -101,7 +101,19 @@ public class WelcomeActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(com.appspot.cee_me.android.R.menu.main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                openSettings();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     // When you click the Sign in with Google button
@@ -113,12 +125,13 @@ public class WelcomeActivity extends BaseActivity {
         signIn(view);
     }
 
-    public void settingsButton(View view) {
-        // Toast.makeText(WelcomeActivity.this, "Settings not implemented yet.", Toast.LENGTH_SHORT).show();
+    public void welcomeSettingsButton(View view ) {
+        openSettings();
+    }
 
-        Intent intent = new Intent(this, RegisterActivity.class);
-        intent.putExtra(RegisterActivity.EXTRA_DEREGISTER, true);
-        startActivityForResult(intent, REQUEST_DEREGISTER_DEVICE);
+    private void openSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivityForResult(intent, REQUEST_SETTINGS);
     }
 
     public void checkMessagesFromWelcomeButton(View view) {

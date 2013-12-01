@@ -44,6 +44,11 @@
             </intent-filter>
         </activity>
         <activity
+                android:name=".activities.SettingsActivity"
+                android:label="@string/settings_activity_name"
+                android:theme="@style/ActionBar">
+        </activity>
+        <activity
                 android:name=".activities.CheckMessagesActivity"
                 android:label="@string/check_messages_activity_name"
                 android:windowSoftInputMode="stateUnchanged"
@@ -52,6 +57,11 @@
         <activity
                 android:name=".activities.RegisterActivity"
                 android:label="@string/register_activity_name"
+                android:theme="@style/ActionBar">
+        </activity>
+        <activity
+                android:name=".activities.DeRegisterActivity"
+                android:label="@string/deregister_activity_name"
                 android:theme="@style/ActionBar">
         </activity>
         <activity

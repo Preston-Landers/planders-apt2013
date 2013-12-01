@@ -83,8 +83,8 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/deregister"
-            android:onClick="settingsButton"
+            android:text="@string/action_settings"
+            android:onClick="welcomeSettingsButton"
             android:id="@+id/button_settings"
             android:layout_gravity="center_horizontal"
             android:layout_alignParentLeft="true"

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import com.appspot.cee_me.android.activities.DeRegisterActivity;
 import com.appspot.cee_me.android.activities.IncomingShareActivity;
 import com.appspot.cee_me.android.activities.RegisterActivity;
 import com.google.android.gcm.GCMBaseIntentService;
@@ -56,7 +57,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     protected void onUnregistered(Context context, String registrationId) {
         Log.i(TAG, "Device unregistered");
         // displayMessage(context, getString(R.string.gcm_unregistered));
-        RegisterActivity.unRegisterServiceCallback(context, registrationId);
+        DeRegisterActivity.unRegisterServiceCallback(context, registrationId);
     }
 
     @Override
