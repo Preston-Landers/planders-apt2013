@@ -2,9 +2,11 @@ package com.appspot.cee_me.android.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -98,6 +100,13 @@ public class IncomingShareActivity extends BaseActivity {
             setMessageURL(message.getUrlData());
         }
         setSenderIdentity(message.getFromUser().getAccountName());
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean autoOpen = sharedPref.getBoolean(SettingsActivity.KEY_PREF_AUTO_OPEN_INCOMING, false);
+        if (autoOpen) {
+            openIncomingShareButton(null); // pretty sure this null is ok?
+        }
+
     }
 
     public void openIncomingShareURL(View view) {
@@ -124,16 +133,32 @@ public class IncomingShareActivity extends BaseActivity {
     }
 
     private void openExternalURL(String theURL) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean alwaysChooseApp = sharedPref.getBoolean(SettingsActivity.KEY_PREF_FORCE_APP_OPEN_CHOOSE, false);
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(theURL));
-        startActivity(i);
+        try {
+        if (alwaysChooseApp) {
+            startActivity(Intent.createChooser(i, "Choose app for this link"));
+        } else {
+            startActivity(i);
+        }
+        } catch (ActivityNotFoundException notFound) {
+            shortToast("Can't find an app to view this link.");
+        }
     }
 
     private void openExternalFile(File localFile, String mimeType) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean alwaysChooseApp = sharedPref.getBoolean(SettingsActivity.KEY_PREF_FORCE_APP_OPEN_CHOOSE, false);
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setDataAndType(Uri.fromFile(localFile), mimeType);
         try {
-            startActivity(i);
+            if (alwaysChooseApp) {
+                startActivity(Intent.createChooser(i, "Choose app to open this file"));
+            } else {
+                startActivity(i);
+            }
         } catch (ActivityNotFoundException notFound) {
             shortToast("Can't find an app to view this file.");
         }

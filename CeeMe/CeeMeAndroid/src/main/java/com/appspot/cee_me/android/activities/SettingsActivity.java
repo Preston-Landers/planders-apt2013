@@ -15,6 +15,9 @@ public class SettingsActivity extends BaseActivity {
     public final static int RESULT_DEREGISTERED = 2;
     public final static int RESULT_DEREGISTERED_ERROR = 3;
 
+    public final static String KEY_PREF_FORCE_APP_OPEN_CHOOSE = "pref_force_app_open_choose";
+    public final static String KEY_PREF_AUTO_OPEN_INCOMING = "pref_auto_open_incoming";
+
     /**
      * Called when the activity is first created.
      *
