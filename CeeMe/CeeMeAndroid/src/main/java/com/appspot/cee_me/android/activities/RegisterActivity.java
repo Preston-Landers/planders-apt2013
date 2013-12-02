@@ -2,7 +2,6 @@ package com.appspot.cee_me.android.activities;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ public class RegisterActivity extends BaseActivity {
     private static final String TAG = CEEME + ".RegisterActivity";
 
     public static final int RESULT_ERROR = 42;
-    public static final String EXTRA_DEREGISTER = CEEME_PACKAGE + ".extra.deregister";
 
     /**
      * Called when the activity is first created.

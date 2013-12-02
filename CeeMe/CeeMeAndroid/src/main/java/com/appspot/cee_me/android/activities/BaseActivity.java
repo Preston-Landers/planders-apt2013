@@ -52,7 +52,7 @@ public class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMyApp = (CeeMeApplication)this.getApplicationContext();
+        mMyApp = (CeeMeApplication) this.getApplicationContext();
 
         // Get user credentials for login
         credential = GoogleAccountCredential.usingAudience(this, Config.AUDIENCE);
@@ -141,6 +141,7 @@ public class BaseActivity extends Activity {
     /**
      * Get an OAuth 2.0 credential object that can be used with general Google APIs on behalf of the user
      * (not using the Service account). Not using this for now, but might be useful to access Google+ or other APIs
+     *
      * @param scopesList list of API defined scopes to be used with this operation
      * @return Google API OAuth 2.0 credential that uses the given scopes
      */
@@ -149,7 +150,7 @@ public class BaseActivity extends Activity {
         GoogleAccountCredential cred = GoogleAccountCredential.usingOAuth2(
                 this,
                 scopesList
-                );
+        );
         cred.setSelectedAccountName(getCredential().getSelectedAccountName());
         return cred;
     }
@@ -199,7 +200,7 @@ public class BaseActivity extends Activity {
         super.onDestroy();
     }
 
-    private void clearReferences(){
+    private void clearReferences() {
         Activity currActivity = mMyApp.getCurrentActivity();
         if (currActivity != null && currActivity.equals(this))
             mMyApp.setCurrentActivity(null);
@@ -370,7 +371,7 @@ public class BaseActivity extends Activity {
         return settings.getString(getDeviceKeyPrefName(), null);
     }
 
-    protected CloudStorage getCloudStorage()  throws IOException, GeneralSecurityException {
+    protected CloudStorage getCloudStorage() throws IOException, GeneralSecurityException {
         InputStream keyStream = getResources().openRawResource(R.raw.serviceaccount);
         if (keyStream == null) {
             throw new IllegalArgumentException("Could not get Google Cloud Storage authorization key");

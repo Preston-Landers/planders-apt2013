@@ -6,7 +6,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
 import com.appspot.cee_me.android.Config;
 import com.appspot.cee_me.android.R;
 import com.appspot.cee_me.android.SyncEndpointService;
@@ -14,7 +17,6 @@ import com.appspot.cee_me.android.adapters.MessageListAdapter;
 import com.appspot.cee_me.sync.Sync;
 import com.appspot.cee_me.sync.model.Message;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +25,11 @@ public class CheckMessagesActivity extends BaseActivity
     private static final String TAG = CEEME + ".CheckMessagesActivity";
     private static final int REQUEST_SHOW_MESSAGE = 82;
 
-    private SearchView searchView;
     private MessageListAdapter listAdapter;
     private ListView listView;
 
     // query parameters for the server
     private final static int defaultQueryLimit = 10;
-    private int queryLimit = defaultQueryLimit;
-    private int queryOffset = 0;
 
     /**
      * Called when the activity is first created.
@@ -47,7 +46,7 @@ public class CheckMessagesActivity extends BaseActivity
 
         requireSignIn();
 
-        searchView = (SearchView) findViewById(R.id.checkMessages_searchView);
+        SearchView searchView = (SearchView) findViewById(R.id.checkMessages_searchView);
         searchView.setIconifiedByDefault(true);
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
@@ -61,17 +60,20 @@ public class CheckMessagesActivity extends BaseActivity
         // new CheckMessagesTask().execute();
     }
 
+    @SuppressWarnings("UnusedParameters")
     public void checkMessagesCancelButton(View view) {
         setResult(RESULT_CANCELED);
         finish();
     }
 
+    @SuppressWarnings("UnusedParameters")
     public void checkMessagesOpenButton(View view) {
         shortToast("Not implemented yet");
         setResult(RESULT_OK);
         finish();
     }
 
+    // Need to handle searching messages...
     private void showResults(String query) {
         // String[] params = { query };
         new CheckMessagesTask().execute();
@@ -122,8 +124,8 @@ public class CheckMessagesActivity extends BaseActivity
         @Override
         protected Void doInBackground(Void... params) {
             querySuccess = false;
-            int limit = queryLimit;
-            int offset = queryOffset;
+            int limit = defaultQueryLimit;
+            int offset = 0;
             try {
                 service = SyncEndpointService.getSyncService(getCredential());
                 Sync.GetMessages getMessages = service.getMessages(deviceKey);

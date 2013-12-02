@@ -40,9 +40,6 @@ public class CloudStorage {
     private static final String PROJECT_ID = Config.GOOGLE_PROJECT_NUMBER;
     private static final String APPLICATION_NAME = Config.APPNAME + "/1.0";
 
-    // private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    // private static final HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
-    private HttpTransport HTTP_TRANSPORT;
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     private PrivateKey privateKey;
 
@@ -250,7 +247,7 @@ public class CloudStorage {
 
         if (storage == null) {
             // HTTP_TRANSPORT = new NetHttpTransport();
-            HTTP_TRANSPORT = new ApacheHttpTransport();
+            HttpTransport HTTP_TRANSPORT = new ApacheHttpTransport();
             List<String> scopes = getStorageScopes();
             GoogleCredential credential = new GoogleCredential.Builder()
                     .setTransport(HTTP_TRANSPORT)

@@ -17,17 +17,19 @@ import java.util.UUID;
  * File utilities.
  */
 public class FileUtils {
+
     private static final String TAG = Config.APPNAME + ".FileUtils";
+
     /**
      * Get the mimetype of a file, including content: uris
      *
-     * @param fileUri
-     * @param cR
-     * @return
+     * @param fileUri a file URI to find the mimetype for
+     * @param cR a content resolver to use to find the mimetype
+     * @return mimetype of the file
      */
     public static String getMimeType(Uri fileUri, ContentResolver cR) {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
-        String type = null;
+        String type;
         // type = mime.getExtensionFromMimeType(cR.getType(fileUri));
         if (fileUri.getScheme().equals("file")) {
             // guess based on the extension
@@ -53,8 +55,8 @@ public class FileUtils {
         if (_uri == null) {
             return null;
         }
-        String filePath = "";
-        if (_uri != null && "content".equals(_uri.getScheme())) {
+        String filePath;
+        if ("content".equals(_uri.getScheme())) {
             Cursor cursor = contentResolver.query(_uri, new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
             cursor.moveToFirst();
             filePath = cursor.getString(0);
@@ -97,8 +99,10 @@ public class FileUtils {
     enum SizeSuffix {
         B, KB, MB, GB, TB, PB, EB, ZB, YB
     }
+
     /**
      * Get a human readable file size
+     *
      * @param size size of the file to interpret
      * @return human readable string describing file size
      */
@@ -128,37 +132,41 @@ public class FileUtils {
 
     /**
      * Check whether external storage is writeable
+     *
      * @return true if external storage is writeable
      */
     public static boolean isStorageWritable() {
-        boolean mExternalStorageAvailable = false;
-        boolean mExternalStorageWriteable = false;
+        boolean mExternalStorageAvailable;
+        boolean mExternalStorageWriteable;
         String state = Environment.getExternalStorageState();
 
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            // We can read and write the media
-            mExternalStorageAvailable = mExternalStorageWriteable = true;
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            // We can only read the media
-            mExternalStorageAvailable = true;
-            mExternalStorageWriteable = false;
-        } else {
-            // Something else is wrong. It may be one of many other states, but all we need
-            //  to know is we can neither read nor write
-            mExternalStorageAvailable = mExternalStorageWriteable = false;
+        switch (state) {
+            case Environment.MEDIA_MOUNTED:
+                // We can read and write the media
+                mExternalStorageAvailable = mExternalStorageWriteable = true;
+                break;
+            case Environment.MEDIA_MOUNTED_READ_ONLY:
+                // We can only read the media
+                mExternalStorageAvailable = true;
+                mExternalStorageWriteable = false;
+                break;
+            default:
+                // Something else is wrong. It may be one of many other states, but all we need
+                //  to know is we can neither read nor write
+                mExternalStorageAvailable = mExternalStorageWriteable = false;
+                break;
         }
         return mExternalStorageAvailable && mExternalStorageWriteable;
     }
 
     /**
-     * Decides the name within Google Cloud Storage for this file. Incorporates the sender's deviceKey,
-     * a random UUID, and the original filename.
+     * Decides the name within Google Cloud Storage for this file. Incorporates
+     * a random UUID and the original filename.
      *
-     * @param deviceKey sending device's key
-     * @param filePath  original local file path (complete path)
+     * @param filePath original local file path (complete path)
      * @return a new filename suitable for GCS.
      */
-    public static String getNewGCSFilename(String deviceKey, String filePath) {
+    public static String getNewGCSFilename(String filePath) {
         String dateStr = DateUtils.getF8Date(null); // current date in YYYYMMDD format
         UUID newUUID = UUID.randomUUID();
         String baseFilename = FileUtils.getBaseFilenameFromPath(filePath);
@@ -173,6 +181,7 @@ public class FileUtils {
 
     /**
      * Ensure that the directory containing the file exists
+     *
      * @param file a file to check
      */
     public static void ensureDirectory(File file) {

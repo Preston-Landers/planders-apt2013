@@ -22,7 +22,6 @@ import com.google.api.client.json.JsonFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
-import java.util.UUID;
 
 public class OutgoingShareActivity extends BaseActivity {
     private static final String TAG = CEEME + ".OutgoingShareActivity";
@@ -157,11 +156,13 @@ public class OutgoingShareActivity extends BaseActivity {
         streamLabel.setText(txt);
     }
 
+    @SuppressWarnings("UnusedParameters")
     public void chooseMessageRecipient(View view) {
         Intent intent = new Intent(this, DirectoryActivity.class);
         startActivityForResult(intent, REQUEST_DIRECTORY_LOOKUP);
     }
 
+    @SuppressWarnings("UnusedParameters")
     public void sendShareNow(View view) {
         // Validate that we can send the message.
         if (toDeviceKey == null || toDeviceKey.equals("")) {
@@ -171,17 +172,20 @@ public class OutgoingShareActivity extends BaseActivity {
         new SendMessageTask().execute();
     }
 
+    @SuppressWarnings("UnusedParameters")
     public void cancelOutgoingShare(View view) {
         shortToast("Canceled sharing.");
         setResult(RESULT_CANCELED);
         finish();
     }
 
+/*
     private void openExternalURL(String theURL) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(theURL));
         startActivity(i);
     }
+*/
 
     private class SendMessageTask extends AsyncTask<Void, ProgressParams, Void> {
         private boolean querySuccess = false;
@@ -233,7 +237,7 @@ public class OutgoingShareActivity extends BaseActivity {
             mimeType = FileUtils.getMimeType(mediaUri, contentResolver);
             filePath = FileUtils.getPath(mediaUri, contentResolver, false);
             fileSize = FileUtils.getFileSize(mediaUri, contentResolver);
-            GCSFilename = FileUtils.getNewGCSFilename(deviceKey, filePath);
+            GCSFilename = FileUtils.getNewGCSFilename(filePath);
             String logDesc = filePath + " - gcs filename: " + GCSFilename;
 
             // Upload the content to the app's GCS bucket.
@@ -320,7 +324,7 @@ public class OutgoingShareActivity extends BaseActivity {
             if (querySuccess) {
                 if (message != null) {
                     progressText.setText("Finished" + rateTxt);
-                   logSentMessageAndFinish(message);
+                    logSentMessageAndFinish(message);
                 }
             } else {
                 progressText.setText("Upload failed." + rateTxt);

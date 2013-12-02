@@ -24,10 +24,7 @@ public class IncomingShareActivity extends BaseActivity {
     private static final String TAG = CEEME + ".IncomingShareActivity";
 
     private String messageKey;
-    private String messageText;
-    private String messageUrl;
 
-    private Sync service;
     private Message message;
     private Media media;
     private File localFile;
@@ -46,8 +43,8 @@ public class IncomingShareActivity extends BaseActivity {
 
         Intent intent = getIntent();
         messageKey = intent.getStringExtra(Config.MESSAGE_KEY);
-        messageText = intent.getStringExtra(Config.MESSAGE_TEXT);
-        messageUrl = intent.getStringExtra(Config.MESSAGE_URL);
+        String messageText = intent.getStringExtra(Config.MESSAGE_TEXT);
+        String messageUrl = intent.getStringExtra(Config.MESSAGE_URL);
 
         // There must be a better way to handle this...?
         if (messageKey == null) {
@@ -113,6 +110,7 @@ public class IncomingShareActivity extends BaseActivity {
         openIncomingShareButton(view);
     }
 
+    @SuppressWarnings("UnusedParameters")
     public void openIncomingShareButton(View view) {
         if (localFile != null && media != null) {
             openExternalFile(localFile, media.getMimeType());
@@ -126,6 +124,7 @@ public class IncomingShareActivity extends BaseActivity {
         }
     }
 
+    @SuppressWarnings("UnusedParameters")
     public void cancelIncomingShareButton(View view) {
         // shortToast("Ignoring this message.");
         setResult(RESULT_CANCELED);
@@ -138,11 +137,11 @@ public class IncomingShareActivity extends BaseActivity {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(theURL));
         try {
-        if (alwaysChooseApp) {
-            startActivity(Intent.createChooser(i, "Choose app for this link"));
-        } else {
-            startActivity(i);
-        }
+            if (alwaysChooseApp) {
+                startActivity(Intent.createChooser(i, "Choose app for this link"));
+            } else {
+                startActivity(i);
+            }
         } catch (ActivityNotFoundException notFound) {
             shortToast("Can't find an app to view this link.");
         }
@@ -172,7 +171,7 @@ public class IncomingShareActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             querySuccess = false;
             try {
-                service = SyncEndpointService.getSyncService(getCredential());
+                Sync service = SyncEndpointService.getSyncService(getCredential());
                 Sync.GetMessage getMessage = service.getMessage(messageKey);
                 message = getMessage.execute();
 
@@ -196,7 +195,7 @@ public class IncomingShareActivity extends BaseActivity {
         protected void onPostExecute(Void rv) {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
             progressBar.setVisibility(View.INVISIBLE);
-            String rateTxt = "";
+            String rateTxt;
             if (rate != 0) {
                 rateTxt = " " + rate + " bytes/sec";
                 shortToast("Transfer rate: " + rateTxt);

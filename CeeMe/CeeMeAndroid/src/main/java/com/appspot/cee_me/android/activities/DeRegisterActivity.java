@@ -59,6 +59,7 @@ public class DeRegisterActivity extends BaseActivity {
         finish();
     }
 
+    @SuppressWarnings("UnusedParameters")
     public static void unRegisterServiceCallback(Context context, String registrationId) {
         Log.i(TAG, "unRegisterServiceCallback() called");
     }

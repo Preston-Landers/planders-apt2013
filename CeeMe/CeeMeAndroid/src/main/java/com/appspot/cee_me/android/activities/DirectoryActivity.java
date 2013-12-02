@@ -1,7 +1,6 @@
 package com.appspot.cee_me.android.activities;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +24,6 @@ public class DirectoryActivity extends BaseActivity
     private static final String TAG = CEEME + ".DirectoryActivity";
     public static final String EXTRA_DEVICE_JSON = CEEME_EXTRAS + "selectedDevice";
     public static final int RESULT_ERROR = 99;
-    private SearchView searchView;
     private DirectoryListAdapter listAdapter;
     private ListView listView;
 
@@ -42,7 +40,7 @@ public class DirectoryActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        searchView = (SearchView) findViewById(R.id.directory_searchView);
+        SearchView searchView = (SearchView) findViewById(R.id.directory_searchView);
         searchView.setIconifiedByDefault(true);
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
@@ -87,7 +85,7 @@ public class DirectoryActivity extends BaseActivity
     }
 
     private void showResults(String query) {
-        String[] params = { query };
+        String[] params = {query};
         new SearchDirectoryTask().execute(params);
     }
 
@@ -99,7 +97,7 @@ public class DirectoryActivity extends BaseActivity
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // shortToast("Clicked: " + position + " id: " + id);
-                Device device = deviceList.get(position-1);
+                Device device = deviceList.get(position - 1);
                 Log.i(TAG, "click device : " + device);
 
                 try {
@@ -121,6 +119,7 @@ public class DirectoryActivity extends BaseActivity
         this.finish();
     }
 
+    @SuppressWarnings("UnusedParameters")
     public void chooseRecipientDirectoryButton(View view) {
         // TODO: set data value!
         setResult(RESULT_OK);

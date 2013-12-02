@@ -125,6 +125,7 @@ public class WelcomeActivity extends BaseActivity {
         signIn(view);
     }
 
+    @SuppressWarnings("UnusedParameters")
     public void welcomeSettingsButton(View view ) {
         openSettings();
     }
@@ -134,6 +135,7 @@ public class WelcomeActivity extends BaseActivity {
         startActivityForResult(intent, REQUEST_SETTINGS);
     }
 
+    @SuppressWarnings("UnusedParameters")
     public void checkMessagesFromWelcomeButton(View view) {
         Intent intent = new Intent(this, CheckMessagesActivity.class);
         startActivity(intent);
@@ -145,6 +147,7 @@ public class WelcomeActivity extends BaseActivity {
      *
      * @param v current view within the application, for rendering updates
      */
+    @SuppressWarnings("UnusedParameters")
     public void signIn(View v) {
         if (!this.signedIn) {
             chooseAccount();
