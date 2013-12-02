@@ -43,6 +43,8 @@ public class CheckMessagesActivity extends BaseActivity
     public void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.ac_check_messages);
         super.onCreate(savedInstanceState);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         requireSignIn();
 
         searchView = (SearchView) findViewById(R.id.checkMessages_searchView);

@@ -40,6 +40,7 @@ public class DirectoryActivity extends BaseActivity
     public void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.ac_directory);
         super.onCreate(savedInstanceState);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         searchView = (SearchView) findViewById(R.id.directory_searchView);
         searchView.setIconifiedByDefault(true);
