@@ -148,6 +148,9 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/outgoingShare_message_editText"
                             android:hint="Add a message here"
+                            android:inputType=
+                                    "textCapSentences|textAutoCorrect"
+                            android:imeOptions="actionDone"
                             style="@style/CeeMeMessageItemFrameText"
                             android:textColor="@android:color/white"
                             android:textColorHint="@android:color/white"

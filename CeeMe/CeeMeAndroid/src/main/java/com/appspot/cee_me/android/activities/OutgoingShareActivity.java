@@ -78,6 +78,8 @@ public class OutgoingShareActivity extends BaseActivity {
         setReceiverIdentity("<Select recipient...>");
         // setMessageText(messageText);
 
+        chooseMessageRecipient(getCurrentFocus());
+
     }
 
     @Override

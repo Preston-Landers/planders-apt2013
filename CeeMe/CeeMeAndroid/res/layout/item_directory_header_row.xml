@@ -14,7 +14,7 @@
             android:textSize="18dp"
             android:textColor="#FFFFFF"
             android:padding="6dp"
-            android:text="Directory Search"
+            android:text="Select destination of message"
             android:background="#336699"/>
 
 </LinearLayout>
