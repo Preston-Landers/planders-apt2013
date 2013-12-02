@@ -219,7 +219,7 @@ public class IncomingShareActivity extends BaseActivity {
             progressText.setVisibility(View.VISIBLE);
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
             progressBar.setVisibility(View.VISIBLE);
-            progressText.setText("Starting download.");
+            progressText.setText("");
             setStatusText("Please wait while I load the content.");
         }
 

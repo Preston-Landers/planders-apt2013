@@ -35,7 +35,7 @@ public class Config {
     /**
      * Triggers various assertions and checks
      */
-    public static final boolean DEVELOPER_MODE = true;
+    public static final boolean DEVELOPER_MODE = false; // true;
 
     /**
      * Use the local App Engine dev server instead of the real one.
@@ -43,7 +43,7 @@ public class Config {
      */
     public static final boolean LOCAL_APP_SERVER = false;
 
-    // TODO: have this be automatic somehow
+    // Would be nice to have this be automatic somehow
     // "http://10.0.2.2:8088"   // for localhost development (AVD)
     // public static final String LOCAL_APP_SERVER_URL = "http://192.168.56.1:8088"; // Genymotion
     public static final String LOCAL_APP_SERVER_URL = "http://192.168.1.99:8088"; // Local Area Network devices
