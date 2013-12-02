@@ -195,10 +195,12 @@ public class IncomingShareActivity extends BaseActivity {
         protected void onPostExecute(Void rv) {
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.incomingShare_progressBar);
             progressBar.setVisibility(View.INVISIBLE);
+            TextView progressText = (TextView) findViewById(R.id.incomingShare_progress_textView);
             String rateTxt;
             if (rate != 0) {
                 rateTxt = " " + rate + " bytes/sec";
-                shortToast("Transfer rate: " + rateTxt);
+                progressText.setText("Complete. Speed: " + rateTxt);
+                // shortToast("Transfer rate: " + rateTxt);
             }
             setStatusText("");
             if (querySuccess) {

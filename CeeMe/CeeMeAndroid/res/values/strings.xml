@@ -36,9 +36,9 @@
     <string name="btn_open">Open</string>
     <string name="canceled">Canceled.</string>
     <string name="pref_auto_open_incoming">Automatically open</string>
-    <string name="pref_auto_open_incoming_summary">Automatically open incoming shares</string>
+    <string name="pref_auto_open_incoming_summary">Automatically open incoming shares (Warning: may be dangerous)</string>
     <string name="pref_force_app_open_choose">Always choose media app</string>
-    <string name="pref_force_app_open_choose_summary">Always prompt for the app when opening a file</string>
+    <string name="pref_force_app_open_choose_summary">Always choose the app when opening a file</string>
     <string name="pref_open_share_title">Incoming Shares</string>
     <string name="settings_activity_name">Settings</string>
     <string name="deregister_activity_name">De-register device</string>
