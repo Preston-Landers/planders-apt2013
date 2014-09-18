@@ -32,7 +32,7 @@ public class UpdateLeaderboard extends HttpServlet {
 		LB.maybeRunStreamViewCleanup();
 			
 		// Run the leaderboard report email if necessary
-		LB.maybeRunTrendingReport();
+		// LB.maybeRunTrendingReport();
 		
 		pw.println("Done.");
 		pw.flush();
